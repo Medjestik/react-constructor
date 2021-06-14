@@ -1,0 +1,95 @@
+.header-top-bar {
+  position: relative;
+  width: 100%;
+  border-bottom: rgba(0,0,0,0.05) 1px solid;
+}
+.header-top-bar__container {
+  width: 100%;
+  padding: 10px 0px;
+  display: flex;
+  align-items: center;
+}
+.header-top-bar__logo {
+  height: 50px;
+  object-position: center;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+.header-top-bar__info {
+  margin: 0px 0px 0px auto;
+}
+.header-top-bar__greeting {
+  margin: 0px 30px 0px 0px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 1.15;
+  color: var(--subtitle-color);
+}
+.header-top-bar__person {
+  position: relative;
+  margin: 0px 15px 0px 0px;
+  padding: 7px 10px 7px 35px;
+  background-color: var(--secondary-color);
+  color: var(--white-color);
+  text-decoration: none;
+  border-radius: 5px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 1.15;
+  transition: .3s ease-in-out;
+}
+.header-top-bar__person:hover {
+  cursor: pointer;
+  opacity: .7;
+}
+.header-top-bar__person_type_active {
+  pointer-events: none;
+  user-select: none;
+}
+.header-top-bar__person::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 6px;
+  background-image: url('../../images/person.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 18px 18px;
+  width: 18px;
+  height: 18px;
+}
+.header-top-bar__logout {
+  position: relative;
+  margin: 0px;
+  padding: 7px 10px 7px 40px;
+  background-color: var(--main-color);
+  color: var(--white-color);
+  text-decoration: none;
+  border-radius: 5px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 1.15;
+  border: none;
+  outline: none;
+  transition: .3s ease-in-out;
+}
+.header-top-bar__logout:hover {
+  cursor: pointer;
+  opacity: .7;
+}
+.header-top-bar__logout::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 5px;
+  background-image: url('../../images/logout.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  width: 20px;
+  height: 20px;
+}

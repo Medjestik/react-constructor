@@ -1,0 +1,237 @@
+.header {
+  margin: 0px;
+  padding: 0px;
+  background-color: var(--secondary-color);
+  min-height: 100vh;
+  width: 350px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  position: fixed;
+  transition: all 0.5s ease-in-out;
+  z-index: 20;
+}
+.header_type_show {
+  left: 0px;
+  top: 0px;
+  transition-delay: 0.5s;
+}
+.header_type_hide {
+  left: -350px;
+  top: 0px;
+}
+.header__container {
+  padding: 50px 25px;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 100px);
+  position: relative;
+}
+.header__arrow {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  transition: all ease-in-out .3s;
+}
+.header__arrow:hover {
+  cursor: pointer;
+  opacity: .7;
+}
+.header__user-info {
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.header__user-img {
+  margin: 0px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-position: center;
+  object-fit: contain;
+}
+.header__user-name {
+  margin: 15px 0px 0px 0px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 1.15;
+  color: var(--white-color);
+  text-align: center;
+}
+.header__user-group {
+  margin: 10px 0px 0px 0px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 1.15;
+  color: var(--white-color);
+  text-align: center;
+}
+.header__nav {
+  margin: 30px 0px 0px 0px;
+  padding: 0px;
+}
+.header__nav-list {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  padding: 0px;
+  margin: 0px;
+}
+.header__nav-item {
+  margin: 0px 0px 10px 0px;
+}
+.header__nav-item:last-of-type {
+  margin: 0px;
+}
+.header__nav-link {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: inherit;
+  transition: all ease-in-out .3s;
+  border-radius: 5px;
+  text-decoration: none;
+}
+.header__nav-link:hover {
+  background-color: rgba(255, 255, 255, .3);
+  cursor: pointer;
+}
+.header__nav-link_type_active {
+  background-color: rgba(255, 255, 255, .3);
+}
+.header__nav-img {
+  margin-right: 15px;
+  width: 30px;
+  height: 30px;
+}
+.header__nav-text {
+  margin: 0px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 1.15;
+  color: var(--white-color);
+}
+.header__button-logout {
+  position: relative;
+  margin: auto 0px 0px 0px;
+  padding: 10px 20px 10px 65px;
+  background-color: inherit;
+  color: var(--white-color);
+  text-decoration: none;
+  text-align: left;
+  border-radius: 5px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 1.15;
+  border: none;
+  outline: none;
+  transition: .3s ease-in-out;
+}
+.header__button-logout:hover {
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, .3);
+}
+.header__button-logout::before {
+  content: '';
+  position: absolute;
+  left: 20px;
+  top: 5px;
+  background-image: url('../../images/header/logout-white.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 30px 30px;
+  width: 30px;
+  height: 30px;
+}
+
+.header__menu {
+  margin: 0px;
+  padding: 0px;
+  width: 80px;
+  background-color: var(--secondary-color);
+  min-height: 100vh;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  position: fixed;
+  transition: all 0.5s ease-in-out;
+}
+.header__menu_type_show {
+  left: 0px;
+  top: 0px;
+  transition-delay: 0.5s;
+}
+.header__menu_type_hide {
+  left: -80px;
+  top: 0px;
+}
+.header__menu-arrow {
+  right: 25px;
+  top: 20px;
+}
+.header__menu-container {
+  padding: 50px 5px;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 100px);
+  position: relative;
+}
+.header__menu-nav {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  padding: 0px;
+  margin: 100px 0px 0px 0px;
+}
+.header__menu-link {
+  margin: 0px 0px 30px 0px;
+  transition: .3s ease-in-out;
+  border-radius: 10px;
+}
+.header__menu-link:last-of-type {
+  margin: 0px;
+}
+.header__menu-link:hover {
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, .3);
+}
+.header__menu-link_type_active {
+  background-color: rgba(255, 255, 255, .3);
+}
+.header__menu-img {
+  object-fit: contain;
+  object-position: center;
+  margin: 0px;
+  width: 30px;
+  height: 30px;
+  padding: 15px 20px;
+}
+.header__menu-logout {
+  padding: 30px 20px;
+  border-radius: 10px;
+  background-image: url('../../images/header/logout-white.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 30px 30px;
+  position: relative;
+  margin: auto 0px 0px 0px;
+  background-color: inherit;
+  color: var(--white-color);
+  text-decoration: none;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 1.15;
+  border: none;
+  outline: none;
+  transition: .3s ease-in-out;
+}
+.header__menu-logout:hover {
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, .3);
+}

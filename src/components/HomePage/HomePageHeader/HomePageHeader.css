@@ -1,0 +1,65 @@
+.header-homepage {
+  width: 100%;
+  padding: 30px 0px;
+}
+.header-homepage__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.header-homepage__logo-link {
+  transition: .3s ease-in-out;
+}
+.header-homepage__logo {
+  height: 60px;
+  object-fit: contain;
+  object-position: center;
+  pointer-events: none;
+}
+.header-homepage__logo-link:hover {
+  opacity: .7;
+}
+.header-homepage__links {
+  display: flex;
+  align-items: center;
+  list-style-type: none;
+  padding: 0px;
+}
+.header-homepage__link {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 19px;
+  color: var(--subtitle-color);
+  margin-right: 40px;
+  transition: .3s ease-in-out;
+}
+.header-homepage__link:hover {
+  cursor: pointer;
+  color: var(--third-light-color);
+}
+.header-homepage__link:last-of-type {
+  margin-right: 0px;
+}
+.header-homepage__button {
+  background-color: transparent;
+  border: 1px solid var(--secondary-light-color);
+  color: var(--secondary-light-color);
+  box-sizing: border-box;
+  border-radius: 50px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: center;
+  letter-spacing: 2px;
+  padding: 13px 45px;
+  outline: none;
+  transition: .3s ease-in-out;
+  text-decoration: none;
+}
+.header-homepage__button:hover {
+  cursor: pointer;
+  background-color: var(--secondary-light-color);
+  color: var(--white-color);
+}

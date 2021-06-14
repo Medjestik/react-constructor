@@ -1,0 +1,43 @@
+.main {
+  min-width: 100%;
+  min-height: 100vh;
+  background-color: var(--background-secondary-color);
+  position: relative;
+}
+.main__translation {
+  transition: all 0.5s ease-in-out;
+}
+.main__show-menu {
+  margin-left: 350px;
+  margin-right: 80px;
+  transition-delay: .55s;
+}
+.main__hide-menu {
+  margin-left: 80px;
+  margin-right: 80px;
+}
+.main__container {
+  padding: 80px 40px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.5s ease-in-out;
+  margin: 0px;
+}
+.main__title {
+  margin: 0px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 36px;
+  line-height: 1.3;
+  text-align: left;
+  color: var(--title-color);
+}
+.main__subtitle {
+  margin: 20px 0px 0px 0px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 1.3;
+  text-align: left;
+  color: var(--subtitle-color);
+}

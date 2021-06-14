@@ -1,0 +1,1 @@
+export const API_URL = 'https://api.emiit.ru/_wt/router';

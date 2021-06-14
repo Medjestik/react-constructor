@@ -1,0 +1,60 @@
+.popup {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  background-color: rgba(0, 0 , 0, .5);
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease-in-out, visibility 0s linear 0.5s;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  z-index: 10;
+}
+.popup_opened {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+.popup__container {
+  margin: 20vh auto 0px;
+  padding: 34px 36px 28px;
+  width: max-content;
+  min-height: 114px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background-secondary-color);
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
+  border-radius: 16px;
+}
+.popup__close-button {
+  position: absolute;
+  padding: 0;
+  right: -45px;
+  top: -45px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  box-sizing: border-box;
+  background-color: transparent;
+  background-image: url(../../images/close-button.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  -webkit-background-size: contain;        
+  -moz-background-size: contain;          
+  -o-background-size: contain;        
+  cursor: pointer;
+  transition: opacity .3s ease-in-out;
+  outline: none;
+  z-index: -1;
+}
+.popup__close-button:hover {
+  opacity: .7;
+}
