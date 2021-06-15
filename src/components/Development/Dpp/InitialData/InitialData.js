@@ -11,10 +11,12 @@ function InitialData() {
       <ul className="initial-data__list">
         <li className="initial-data__item initial-data__item_type_basis">
           <h3 className="initial-data__item-name">Нормативные правовые основания разработки</h3>
+          <p className="initial-data__item-subtitle">Выберите нормативные документы, на основе которых разрабатывается ДПП.</p>
+          <p className="initial-data__item-subtitle">Программа разработана на&nbsp;основе:</p>
         </li>
         <li className="initial-data__item initial-data__item_type_requirements">
           <h3 className="initial-data__item-name">Требования к обучающимся</h3>
-          <h5 className="initial-data__item-requirements-title">Требования к уровню профессионального образования</h5>
+          <h5 className="initial-data__item-title">Требования к уровню профессионального образования</h5>
           <ul className="initial-data__item-requirements-list">
             <li className="initial-data__item-requirements-item">
               <label className="checkbox">
@@ -41,22 +43,22 @@ function InitialData() {
               </label>
             </li>
           </ul>
-          <h5 className="initial-data__item-requirements-title">Требования к квалификации</h5>
+          <h5 className="initial-data__item-title">Требования к квалификации</h5>
           <textarea className="initial-data__item-qualification-text" name="qualification-text" placeholder="Опишите требования к квалификации обучающегося"></textarea>
 
         </li>
         <li className="initial-data__item initial-data__item_type_target">
           <h3 className="initial-data__item-name">Цель и задачи освоения</h3>
-          <p className="initial-data__item-target-subtitle">Укажите, формирует ли ДПП новую компетенцию или совершенствует имеющуюся. Цель и задачи ДПП.</p>
-          <h5 className="initial-data__item-target-title">Цель освоения</h5>
-          <p className="initial-data__item-target-subtitle">Целью освоения программы являются совершенствование и (или) получение новой компетенции, необходимой для профессиональной деятельности, и (или) повышение профессионального уровня в рамках имеющейся квалификации в области профессиональной деятельности.</p>
-          <h5 className="initial-data__item-target-title">Задачи освоения</h5>
+          <p className="initial-data__item-subtitle">Укажите, формирует ли ДПП новую компетенцию или совершенствует имеющуюся. Цель и задачи ДПП.</p>
+          <h5 className="initial-data__item-title">Цель освоения</h5>
+          <p className="initial-data__item-subtitle">Целью освоения программы являются совершенствование и (или) получение новой компетенции, необходимой для профессиональной деятельности, и (или) повышение профессионального уровня в рамках имеющейся квалификации в области профессиональной деятельности.</p>
+          <h5 className="initial-data__item-title">Задачи освоения</h5>
           <ul className="initial-data__item-target-tasks">
             <li className="initial-data__item-target-task target-task_type_first">приобретение обучающимися знаний, умений и навыков в соответствии с учебным планом и календарным графиком учебного процесса</li>
             <li className="initial-data__item-target-task target-task_type_second">оценка достижений обучающимися планируемых результатов обучения</li>
           </ul>
-          <h5 className="initial-data__item-target-title">Планируемые результаты освоения</h5>
-          <p className="initial-data__item-target-subtitle">Программа направлена на:</p>
+          <h5 className="initial-data__item-title">Планируемые результаты освоения</h5>
+          <p className="initial-data__item-subtitle">Программа направлена на:</p>
           <ul className="initial-data__item-target-list">
             <li className="initial-data__item-target-item">
               <label className="radio">
@@ -66,7 +68,7 @@ function InitialData() {
             </li>
             <li className="initial-data__item-target-item">
               <label className="radio">
-                <input className="radio" name="6" type="radio" value="Совершенствование компетенции, необходимой для профессиональной деятельности и (или) повышение профессионального уровня в рамках имеющейся квалификации" defaultChecked={false}></input>
+                <input className="radio" name="5" type="radio" value="Совершенствование компетенции, необходимой для профессиональной деятельности и (или) повышение профессионального уровня в рамках имеющейся квалификации" defaultChecked={false}></input>
                 <span>Совершенствование компетенции, необходимой для профессиональной деятельности и (или) повышение профессионального уровня в рамках имеющейся квалификации</span>
               </label>
             </li>
@@ -74,8 +76,40 @@ function InitialData() {
         </li>
         <li className="initial-data__item initial-data__item_type_structure">
           <h3 className="initial-data__item-name">Типовая структура ДПП</h3>
-          <p className="initial-data__item-structure-subtitle">Выберите наиболее подходящую типовую структуру ДПП. Типовая структура состоит из разделов, которых следует придерживаться во время разработки ДПП.</p>
-          <h5 className="initial-data__item-target-title">Виды типовых структур</h5>
+          <p className="initial-data__item-subtitle">Выберите наиболее подходящую типовую структуру ДПП. Типовая структура состоит из разделов, которых следует придерживаться во время разработки ДПП.</p>
+          <h5 className="initial-data__item-title">Виды типовых структур</h5>
+          <ul className="initial-data__item-target-list">
+            <li className="initial-data__item-target-item">
+              <label className="radio">
+                <input className="radio" name="6" type="radio" value="Тестовая структура №1" defaultChecked={false}></input>
+                <span>Тестовая структура №1</span>
+              </label>
+            </li>
+            <li className="initial-data__item-target-item">
+              <label className="radio">
+                <input className="radio" name="6" type="radio" value="Тестовая структура №2" defaultChecked={false}></input>
+                <span>Тестовая структура №2</span>
+              </label>
+            </li>
+            <li className="initial-data__item-target-item">
+              <label className="radio">
+                <input className="radio" name="6" type="radio" value="Тестовая структура №3" defaultChecked={false}></input>
+                <span>Тестовая структура №3</span>
+              </label>
+            </li>
+            <li className="initial-data__item-target-item">
+              <label className="radio">
+                <input className="radio" name="6" type="radio" value="Тестовая структура №4" defaultChecked={false}></input>
+                <span>Тестовая структура №4</span>
+              </label>
+            </li>
+            <li className="initial-data__item-target-item">
+              <label className="radio">
+                <input className="radio" name="6" type="radio" value="Тестовая структура №5" defaultChecked={false}></input>
+                <span>Тестовая структура №5</span>
+              </label>
+            </li>
+          </ul>
         </li>
         <li className="initial-data__item initial-data__item_type_info">
           <h3 className="initial-data__item-name">Нормативно-справочная информация</h3>
