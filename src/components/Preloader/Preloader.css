@@ -5,10 +5,8 @@
 }
 
 .preloader {
-  --subtitle-color: #4F5665;
-  --background-main-color: #ffffff;
   color: var(--subtitle-color);
-  background-color: var(--background-main-color);
+  background-color: var(--background-secondary-color);
   box-sizing: border-box;
   font-family: 'Raleway', Arial, sans-serif;
   font-weight: normal;

@@ -16,6 +16,19 @@ function Header({ onLogout, showHeaderMenu, setShowHeaderMenu }) {
 
   const user = React.useContext(CurrentUserContext);
 
+  const defineUserRights = (rights) => {
+    if (rights === 'superadmin') {
+      return 'Суперадминистратор'
+    }
+    if (rights === 'admin') {
+      return 'Администратор'
+    }
+    if (rights === 'user') {
+      return 'Пользователь'
+    }
+    return rights;
+  }
+
   const menu = (
     <div className={`header__menu ${showHeaderMenu ? "header__menu_type_hide" : "header__menu_type_show"}`}>
       <div className="header__menu-container">
@@ -59,7 +72,7 @@ function Header({ onLogout, showHeaderMenu, setShowHeaderMenu }) {
         <div className="header__user-info">
           <img className="header__user-img" alt="аватар пользователя" src={avatar}></img>
           <h3 className="header__user-name">{user.fullname}</h3>
-          <p className="header__user-group">{user.access_role}</p>
+          <p className="header__user-group">{defineUserRights(user.rights)}</p>
         </div>
         
         <nav className="header__nav">

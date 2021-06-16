@@ -18,11 +18,11 @@ function App() {
   const { pathname } = useLocation();
   const history = useHistory();
 
-  function handleLogin ({ login, password }) {
+  function handleLogin ({ email, password }) {
 
-    api.login({ login, password })
+    api.login({ email, password })
       .then((res) => {
-        localStorage.setItem("token", res.id);
+        localStorage.setItem("token", res.token);
         tokenCheck();
       })
       .catch((err) => {
@@ -35,13 +35,13 @@ function App() {
 
   function tokenCheck () {
     const token = localStorage.getItem("token");
-    setIsLoadingPage(true);
     if (token) {
+      setIsLoadingPage(true);
       api.getMe({ token: token })
         .then((res) => {
           if (res) {
             setLoggedIn(true);
-            setCurrentUser(res.user);
+            setCurrentUser(res.data);
             if (pathname === "/") {
               history.push("/main");
             } else {

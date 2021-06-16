@@ -8,26 +8,38 @@ function handleResponse (res) {
     }
 }
 
-export const login = ({ login, password }) => {
+export const login= ({ email, password }) => {
   return fetch(`${API_URL}/auth/login`, {
     method: 'POST', 
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ login, password })
+    body: JSON.stringify({ email, password })
   })
   .then(res => handleResponse(res));
 };
 
 export const getMe = ({ token }) => {
-  return fetch(`${API_URL}/auth/get_user`, {
-    method: 'POST', 
+  return fetch(`${API_URL}/auth/user`, {
+    method: 'GET',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ token })
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
   })
-  .then(res => handleResponse(res));
+  .then(res => handleResponse(res))
+};
+
+export const getPrograms = ({ token }) => {
+  return fetch(`${API_URL}/my_dpps`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
 };

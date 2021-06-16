@@ -3,7 +3,7 @@ import './Preloader.css';
 
 function Preloader() {
     return (
-        <figure className="container preloader">
+        <figure className="preloader">
             <i className="preloader__circle"></i>
             <figcaption className="preloader__caption">Идёт загрузка...</figcaption>
         </figure>

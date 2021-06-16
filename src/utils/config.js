@@ -1,1 +1,1 @@
-export const API_URL = 'https://api.emiit.ru/_wt/router';
+export const API_URL = 'https://constructor.emiit.ru/api';

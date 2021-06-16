@@ -121,40 +121,6 @@
   cursor: pointer;
   opacity: .7;
 }
-.development__item-button-proceed {
-  margin: 0px;
-  background-color: var(--secondary-color);
-  color: var(--white-color);
-  box-sizing: border-box;
-  border: none;
-  border-radius: 5px;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 25px;
-  text-align: center;
-  letter-spacing: 1.5px;
-  padding: 6.5px 45px 6px 15px;
-  max-width: max-content;
-  outline: none;
-  transition: .3s ease-in-out;
-  position: relative;
-}
-.development__item-button-proceed::after {
-  content: '';
-  background-image: url('../../images/arrows/arrow-right-white.png');
-  background-size: 20px;
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  z-index: 5;
-}
-.development__item-button-proceed:hover {
-  cursor: pointer;
-  opacity: .7;
-}
 .development__performers-list {
   padding: 0px;
   margin: 20px 0px 0px 0px;
@@ -218,6 +184,9 @@
 .performers-role_type_validator {
   background-color: var(--secondary-color);
 }
+.performers-role_type_supervisor {
+  background-color: var(--fourth-light-color);
+}
 .development__performers-contacts {
   margin: 0px 0px 0px auto;
   display: flex;
@@ -266,5 +235,5 @@
 }
 
 .ReactCollapse--collapse {
-  transition: height 500ms;
+  transition: height 700ms;
 }

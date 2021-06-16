@@ -117,8 +117,8 @@ function InitialData() {
       </ul>
 
       <div className="initial-data__buttons">
-        <button className="initial-data__button initial-data__button_type_save" type="button">Сохранить данные</button>
-        <button className="initial-data__button initial-data__button_type_next" type="button">Перейти к следующему этапу</button>
+        <button className="btn btn_type_save" type="button">Сохранить данные</button>
+        <button className="btn btn_type_next" type="button">Перейти к следующему этапу</button>
       </div>
 
     </section>
