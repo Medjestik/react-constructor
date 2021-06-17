@@ -70,7 +70,7 @@ function App() {
   }
 
   React.useEffect(() => {
-    tokenCheck();
+    //tokenCheck();
     // eslint-disable-next-line
   }, []);
 
