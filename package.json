@@ -1,6 +1,9 @@
 {
   "name": "react-constructor",
   "version": "0.1.0",
+  "description": "constructor",
+  "homepage": "./",
+  "author": "Ivan Kostyulin",
   "private": true,
   "dependencies": {
     "@balkangraph/orgchart.js": "^7.9.8",
