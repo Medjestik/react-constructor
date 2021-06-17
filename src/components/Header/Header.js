@@ -2,7 +2,7 @@ import React from 'react';
 import './Header.css';
 import { NavLink } from 'react-router-dom';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
-import avatar from '../../images/avatars/7.jpg';
+import Avatar from '../Avatar/Avatar.js';
 import home from '../../images/header/home-white.png';
 import person from '../../images/header/person-white.png';
 import development from '../../images/header/development-white.png';
@@ -70,7 +70,7 @@ function Header({ onLogout, showHeaderMenu, setShowHeaderMenu }) {
         <img className="header__arrow" src={hide} alt="стрелка" onClick={() => {setShowHeaderMenu(false)}}></img>
 
         <div className="header__user-info">
-          <img className="header__user-img" alt="аватар пользователя" src={avatar}></img>
+          <Avatar />
           <h3 className="header__user-name">{user.fullname}</h3>
           <p className="header__user-group">{defineUserRights(user.rights)}</p>
         </div>

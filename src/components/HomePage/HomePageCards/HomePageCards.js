@@ -10,15 +10,15 @@ function HomePageCards() {
     <ul className="homepage__cards">
       <li className="homepage__card homepage__card_color_red">
         <img className="homepage__card-img" alt="знать" src={book}></img>
-        <span className="homepage__card-caption">Знать</span>
+        <span className="homepage__card-caption">Знания</span>
       </li>
       <li className="homepage__card homepage__card_color_blue">
         <img className="homepage__card-img" alt="уметь" src={pencil}></img>
-        <span className="homepage__card-caption">Уметь</span>
+        <span className="homepage__card-caption">Умения</span>
       </li>
       <li className="homepage__card homepage__card_color_green">
         <img className="homepage__card-img" alt="владеть" src={idea}></img>
-        <span className="homepage__card-caption">Владеть</span>
+        <span className="homepage__card-caption">Навыки</span>
       </li>
     </ul>
   )
