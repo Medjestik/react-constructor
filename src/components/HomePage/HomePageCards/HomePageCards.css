@@ -11,8 +11,8 @@
   border: 2px solid var(--border-card-color);
   box-sizing: border-box;
   border-radius: 10px;
-  width: 350px;
-  height: 350px;
+  width: 300px;
+  height: 300px;
   box-shadow: 0 2px 4px rgb(0 0 0 / 20%);
   padding: 40px 80px;
   display: -webkit-flex;
@@ -42,8 +42,8 @@
   transform: translateX(-30px);
 }
 .homepage__card-img {
-  width: 180px;
-  height: 180px;
+  width: 150px;
+  height: 150px;
   object-fit: contain;
   object-position: center;
 }
