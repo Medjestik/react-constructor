@@ -33,7 +33,6 @@
   max-width: 1280px;
   margin: 0px auto;
 }
-
 .btn {
   margin: 0px;
   color: var(--white-color);
@@ -80,7 +79,6 @@
   content: '';
   background-image: url('../../images/save-block.png');
 }
-
 .btn_type_next {
   background-color: var(--secondary-color);
 }
@@ -95,7 +93,6 @@
   top: 13px;
   z-index: 5;
 }
-
 .radio {
   margin: 24px 0;
   display: block;
@@ -150,7 +147,6 @@
 .radio:hover input:checked + span:after {
   transform: scale(0.4);
 }
-
 .checkbox {
   margin: 24px 0px;
   display: block;
