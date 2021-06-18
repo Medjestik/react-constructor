@@ -43,3 +43,16 @@ export const getPrograms = ({ token }) => {
   })
   .then(res => handleResponse(res))
 };
+
+export const updateUserInfo = (userInfoUpdate, token) => {
+  return fetch(`${API_URL}/users/update_user`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ userInfoUpdate })
+  })
+  .then(res => handleResponse(res))
+};

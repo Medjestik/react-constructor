@@ -2,9 +2,10 @@ import React from 'react';
 import './Person.css';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
 
-function HeaderTopBar() {
+function Person({ onUpdateUser }) {
 
   const user = React.useContext(CurrentUserContext);
+
   const [firstname, setFirstname] = React.useState(user.firstname);
   const [errorFirstname, setErrorFirstname] = React.useState({});
   const [lastname, setLastname] = React.useState(user.lastname);
@@ -20,8 +21,9 @@ function HeaderTopBar() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(firstname, lastname, middlename, phone, email);
+    onUpdateUser({ firstname, lastname, middlename, phone, email })
   }
+  
 
   function handleChangeFirstname(e) {
     setFirstname(e.target.value);
@@ -223,4 +225,4 @@ function HeaderTopBar() {
   );
 }
 
-export default HeaderTopBar;
+export default Person;

@@ -1,13 +1,16 @@
 import React from 'react';
 import './Avatar.css';
-import avatar from '../../images/avatars/7.jpg';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
+import avatar from '../../images/avatar-default.png';
 
-function Avatar() {
+function Avatar({ onOpenAvatarPopup }) {
 
+  const user = React.useContext(CurrentUserContext);
+  
   return (
-    <div className="avatar">
-      <img className="avatar__user-img" alt="аватар пользователя" src={avatar}></img>
-    </div>
+    <button className="avatar" type="button" onClick={onOpenAvatarPopup}>
+      <img className="avatar__user-img" alt="аватар пользователя" src={user.img || avatar}></img>
+    </button>
   );
 }
 

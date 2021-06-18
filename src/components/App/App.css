@@ -62,11 +62,28 @@
   content: '';
   background-image: url('../../images/save-white.png');
   background-size: 20px;
+  background-repeat: no-repeat;
   width: 20px;
   height: 20px;
   position: absolute;
   right: 12px;
   top: 13px;
+  z-index: 5;
+}
+.btn_type_upload {
+  background-color: var(--main-color);
+  margin-top: 15px;
+}
+.btn_type_upload::after {
+  content: '';
+  background-image: url('../../images/upload.png');
+  background-size: 25px;
+  background-repeat: no-repeat;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  right: 10px;
+  top: 6px;
   z-index: 5;
 }
 .btn_type_block {
@@ -78,6 +95,7 @@
 .btn_type_block::after {
   content: '';
   background-image: url('../../images/save-block.png');
+  background-repeat: no-repeat;
 }
 .btn_type_next {
   background-color: var(--secondary-color);

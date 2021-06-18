@@ -69,6 +69,27 @@ function App() {
     history.push('/');
   }
 
+  function handleUpdateUser ({ firstname, lastname, middlename, phone, email, }) {
+    const userInfoUpdate = {
+      firstname: firstname,
+      lastname: lastname,
+      middlename: middlename,
+      phone: phone,
+      email: email,
+      id: currentUser.id,
+    }
+    if (loggedIn) {
+      api.updateUserInfo(userInfoUpdate, localStorage.token)
+      .then((res) => {
+        setCurrentUser({ ...currentUser, firstname, lastname, middlename, phone, email })
+        console.log(currentUser)
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
+}
+
   React.useEffect(() => {
     tokenCheck();
     // eslint-disable-next-line
@@ -95,6 +116,7 @@ function App() {
               loggedIn={loggedIn}
               pathname={pathname}
               onLogout={handleLogout}
+              onUpdateUser={handleUpdateUser}
               history={history}
             />
           </Switch> 

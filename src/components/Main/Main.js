@@ -9,16 +9,33 @@ import Dpp from '../Development/Dpp/Dpp.js';
 import Control from '../Control/Control.js';
 import Method from '../Method/Method.js';
 import Discussion from '../Discussion/Discussion.js';
+import ChangeAvatarPopup  from '../Popup/ChangeAvatarPopup/ChangeAvatarPopup';
+import useOnClickOverlay from "../../hooks/useOnClickOverlay.js";
+import useOnPushEsc from '../../hooks/useOnPushEsc.js';
 
-function Main({ pathname, onLogout, history }) {
+function Main({ loggedIn, pathname, onLogout, history, onUpdateUser }) {
 
   const [showHeaderMenu, setShowHeaderMenu] = React.useState(true);
+  const [isAvatarPopupOpen, setIsAvatarPopupOpen] = React.useState(false);
+
+  function closeMainPopups() {
+    setIsAvatarPopupOpen(false);
+  }
+
+  useOnClickOverlay(closeMainPopups);
+  useOnPushEsc(closeMainPopups);
+
+  function openAvatarPopup() {
+    closeMainPopups();
+    setIsAvatarPopupOpen(true);
+  }
 
   return (
     <div className="main">
 
       <Header
         onLogout={onLogout}
+        onOpenAvatarPopup={openAvatarPopup}
         showHeaderMenu={showHeaderMenu}
         setShowHeaderMenu={setShowHeaderMenu}
       />
@@ -34,7 +51,9 @@ function Main({ pathname, onLogout, history }) {
 
           <Switch>    
             <Route path="/main/person" exact>
-              <Person />
+              <Person
+                onUpdateUser={onUpdateUser} 
+              />
             </Route>
           </Switch>
 
@@ -72,6 +91,11 @@ function Main({ pathname, onLogout, history }) {
               <Control />
             </Route>
           </Switch>
+
+          <ChangeAvatarPopup
+            isOpen={isAvatarPopupOpen}
+            onClose={closeMainPopups}
+          />
 
         </div>
       </div>

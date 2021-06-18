@@ -1,7 +1,7 @@
 import React from 'react';
 import './Program.css';
 import { Collapse } from 'react-collapse';
-import avatar from '../../../../images/avatars/7.jpg';
+import avatar from '../../../../images/avatar-default.png';
 import status from '../../../../images/status.png';
 import stage from '../../../../images/stage.png';
 import role from '../../../../images/role.png';

@@ -12,7 +12,7 @@ import discussion from '../../images/header/discussion-white.png';
 import hide from '../../images/arrows/arrow-hide.png';
 import show from '../../images/arrows/arrow-show.png';
 
-function Header({ onLogout, showHeaderMenu, setShowHeaderMenu }) {
+function Header({ onLogout, showHeaderMenu, setShowHeaderMenu, onOpenAvatarPopup }) {
 
   const user = React.useContext(CurrentUserContext);
 
@@ -70,7 +70,9 @@ function Header({ onLogout, showHeaderMenu, setShowHeaderMenu }) {
         <img className="header__arrow" src={hide} alt="стрелка" onClick={() => {setShowHeaderMenu(false)}}></img>
 
         <div className="header__user-info">
-          <Avatar />
+          <Avatar
+          onOpenAvatarPopup={onOpenAvatarPopup} 
+          />
           <h3 className="header__user-name">{user.fullname}</h3>
           <p className="header__user-group">{defineUserRights(user.rights)}</p>
         </div>

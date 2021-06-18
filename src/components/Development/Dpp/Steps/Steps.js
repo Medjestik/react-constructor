@@ -54,8 +54,6 @@ function Steps({ pathname }) {
     })
   }, [pathname]);
 
-  console.log(pathname)
-
   function previousStepHandler (count) {
     setCurrentStep(count);
   }
