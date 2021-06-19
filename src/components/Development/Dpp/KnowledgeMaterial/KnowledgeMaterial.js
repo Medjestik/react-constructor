@@ -1,29 +1,125 @@
 import React from 'react';
 import './KnowledgeMaterial.css';
+import Question from './Question/Question.js';
 import oneAnswerIcon from '../../../../images/quiz/one-answer-icon.png';
+import multiAnswerIcon from '../../../../images/quiz/multi-answer-icon.png';
+import openAnswerIcon from '../../../../images/quiz/open-answer-icon.png';
+import sequenceAnswerIcon from '../../../../images/quiz/sequence-answer-icon.png';
+import conformityAnswerIcon from '../../../../images/quiz/conformity-answer-icon.png';
 
-function KnowledgeMaterial({ knowledge }) {
+function KnowledgeMaterial({ currentKnowledge, setCurrentKnowledge }) {
 
-  console.log(knowledge)
+  const [currentQuestion, setCurrentQuestion] = React.useState({});
+  const [currentQuestions, setCurrentQuestions] = React.useState(currentKnowledge.questions);
+  const [editQuestion, setEditQuestion] = React.useState({});
+  const [isRenderQuestion, setIsRenderQuestion] = React.useState(false);
+  const [textQuestion, setTextQuestion] = React.useState('');
+
+  const defineQuestionType = (type) => {
+    if (type === 'multi-answer') {
+      return (<img className="questions__nav-item-img" src={multiAnswerIcon} alt="иконка"></img>)
+    }
+    if (type === 'open-answer') {
+      return (<img className="questions__nav-item-img" src={openAnswerIcon} alt="иконка"></img>)
+    }
+    if (type === 'sequence-answer') {
+      return (<img className="questions__nav-item-img" src={sequenceAnswerIcon} alt="иконка"></img>)
+    }
+    if (type === 'conformity-answer') {
+      return (<img className="questions__nav-item-img" src={conformityAnswerIcon} alt="иконка"></img>)
+    }
+    return (<img className="questions__nav-item-img" src={oneAnswerIcon} alt="иконка"></img>);
+  }
+
+  function chooseQuestion(question) {
+    setCurrentQuestion(question);
+    setIsRenderQuestion(true);
+  }
+
+  function handleChangeTextQuestion(e) {
+    setTextQuestion(e.target.value);
+  }
+
+  function handleDeleteQuestion() {
+    const knowledgeQuestions = currentKnowledge.questions.filter((item) => item.id !== currentQuestion.id);
+    setCurrentKnowledge({ ...currentKnowledge, questions: knowledgeQuestions });
+  }
+
+  function handleSaveQuestion() {
+    const newQuestions = [];
+    currentQuestions.forEach((elem) => {
+      if (elem.id === editQuestion.id) {
+        elem.text = editQuestion.text;
+      }
+      newQuestions.push(elem);
+    })
+    setCurrentQuestions(newQuestions);
+  }
+
+  React.useEffect(() => {
+    setCurrentQuestions(currentKnowledge.questions);
+    setTextQuestion('');
+    setIsRenderQuestion(false);
+  }, [currentKnowledge]);
+
+  React.useEffect(() => {
+    setEditQuestion(currentQuestion);
+  }, [currentQuestion]);
+
+
+  React.useEffect(() => {
+    setCurrentQuestions(currentKnowledge.questions.filter((item) => item.text.toLowerCase().includes(textQuestion.toLowerCase())));
+  }, [currentKnowledge, textQuestion]);
 
   return (
     <div className="knowledge-material">
       <div className="questions__container">
-        <div>123</div>
+        <div className="questions__main">
+          <div className="questions__control"> 
+            <button className="btn btn_type_add" type="button">Новый вопрос</button>
+            {
+              isRenderQuestion &&
+              <div className="questions__control-edit">
+                <button className="btn btn_type_save questions__btn_type_save" onClick={handleSaveQuestion} type="button">Сохранить вопрос</button>
+                <button className="btn btn_type_delete" onClick={handleDeleteQuestion} type="button">Удалить вопрос</button>
+              </div>
+            }
+          </div>
+          {
+            isRenderQuestion &&
+            <Question 
+              currentQuestion={currentQuestion}
+              setEditQuestion={setEditQuestion}
+            />
+          }
+        </div>
         <nav className="questions__nav-menu">
           <div className="questions__info">
             <p className="questions__title">Вопросы</p>
-            <span className="questions__count">{knowledge.questions.length}</span>
+            <span className="questions__count">{currentKnowledge.questions.length}</span>
           </div>
           <div className="questions__nav-search">
-            <input className="questions__nav-input" placeholder="поиск по вопросу"></input>
+            <input 
+            className="questions__nav-input" 
+            placeholder="поиск по вопросу"
+            type="email" 
+            id="searchQuestion"
+            name="searchQuestion" 
+            value={textQuestion}
+            onChange={handleChangeTextQuestion}
+            >
+            </input>
           </div>
           <ul className="questions__nav-list">
             {
-            knowledge.questions.map((elem, i) => (
-              <li key={i} className="questions__nav-item">
-                  <img className="questions__nav-item-img" src={oneAnswerIcon} alt="иконка"></img>
-                  <h5 className="questions__nav-item-text">{elem.text}</h5>
+            currentQuestions.map((elem, i) => (
+              <li 
+              key={i}
+              className={`questions__nav-item ${currentQuestion === elem ? "questions__nav-item_type_active" : ""}`}
+              onClick={() => chooseQuestion(elem)}
+              >
+                {defineQuestionType(elem.type)}
+                <h5 className="questions__nav-item-text">{elem.text}</h5>
               </li>
             ))
             }
