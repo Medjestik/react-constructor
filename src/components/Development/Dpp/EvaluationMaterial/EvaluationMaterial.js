@@ -34,7 +34,7 @@ const data = [
     {
       text: 'Сколько сейчас время?',
       type: 'open-answer',
-      answers: ['5', '2', '3', '4'],
+      answers: ['16:00',],
       id: 12,
     },
     {
@@ -46,7 +46,24 @@ const data = [
     {
       text: 'Соответсвие?',
       type: 'conformity-answer',
-      answers: ['5', '2', '3', '4'],
+      answers: [
+        {
+          firstPart: '1',
+          secondPart: '1',
+        },
+        {
+          firstPart: '2',
+          secondPart: '2',
+        },
+        {
+          firstPart: '3',
+          secondPart: '3',
+        },
+        {
+          firstPart: '4',
+          secondPart: '4',
+        },
+      ],
       id: 14,
     }
   ] },
@@ -86,7 +103,7 @@ function EvaluationMaterial() {
       
       <AccordionChoose 
         children={knowledge} 
-        renderKnowledge={findKnowledge} 
+        renderKnowledge={findKnowledge}
       />
 
       {

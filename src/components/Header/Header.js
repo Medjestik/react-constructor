@@ -29,6 +29,8 @@ function Header({ onLogout, showHeaderMenu, setShowHeaderMenu, onOpenAvatarPopup
     return rights;
   }
 
+  console.log(user)
+
   const menu = (
     <div className={`header__menu ${showHeaderMenu ? "header__menu_type_hide" : "header__menu_type_show"}`}>
       <div className="header__menu-container">
@@ -73,7 +75,7 @@ function Header({ onLogout, showHeaderMenu, setShowHeaderMenu, onOpenAvatarPopup
           <Avatar
           onOpenAvatarPopup={onOpenAvatarPopup} 
           />
-          <h3 className="header__user-name">{user.fullname}</h3>
+          <h3 className="header__user-name">{`${user.lastname} ${user.firstname} ${user.middlename}`}</h3>
           <p className="header__user-group">{defineUserRights(user.rights)}</p>
         </div>
         

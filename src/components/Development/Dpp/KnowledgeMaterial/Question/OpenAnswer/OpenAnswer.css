@@ -1,15 +1,12 @@
-.one-answer {
+.open-answer {
   margin: 0px 0px 15px 0px;
   display: flex;
   align-items: center;
 }
-.one-answer__radio {
-  margin: 0px;
+.open-answer__count {
+  margin: 0px 5px 0px 5px;
 }
-.one-answer__radio input + span {
-  margin-top: -10px;
-}
-.one-answer__input {
+.open-answer__input {
   margin: 0px 0px 0px 10px;
   background-color: #fff;
   border-radius: 100px;

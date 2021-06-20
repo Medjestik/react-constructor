@@ -1,7 +1,7 @@
 import React from 'react';
-import './OneAnswer.css';
+import './SequenceAnswer.css';
 
-function OneAnswer({ questionAnswers, questionText, onDelete, answer, index }) {
+function SequenceAnswer({ questionAnswers, onDelete, answer, index }) {
 
   const [answerText, setAnswerText] = React.useState(answer);
 
@@ -19,19 +19,16 @@ function OneAnswer({ questionAnswers, questionText, onDelete, answer, index }) {
 
 
   return (
-    <li className="one-answer">
-      <label className="radio one-answer__radio">
-        <input className="radio" name="radio" type="radio" value="" defaultChecked={false}></input>
-        <span></span>
-      </label>
+    <li className="sequence-answer">
+      <span className="sequence-answer__count">{`${index + 1}.`}</span>
       <input
-        className="one-answer__input"
+        className="sequence-answer__input"
         placeholder="Введите ответ"
         value={answerText || ''}
         onChange={handleChangeAnswerText}
         type="text"
-        id={`one-answer ${index}`}
-        name={`one-answer ${index}`}
+        id={`sequence-answer ${index}`}
+        name={`sequence-answer ${index}`}
       >
       </input>
       <button className="questions__btn_type_delete" type="button" onClick={handleClickDelete}></button>
@@ -40,4 +37,4 @@ function OneAnswer({ questionAnswers, questionText, onDelete, answer, index }) {
 }
 
 
-export default OneAnswer;
+export default SequenceAnswer;

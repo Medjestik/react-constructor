@@ -116,27 +116,6 @@ function Person({ onUpdateUser }) {
       <form className="form" name="person-form" action="#" noValidate onSubmit={handleSubmit}>
 
         <label className="form__field">
-          <span className="form__input-caption">Имя</span>
-          <div className="form__line">
-            <input 
-              className="popup__input"
-              placeholder="Введите имя"
-              minLength="2"
-              type="text"
-              id="personFirstname"
-              name="personFirstname"
-              value={firstname}
-              onChange={handleChangeFirstname}
-              required
-            >
-            </input>
-            <span className={`form__input-error ${errorFirstname.error ? "form__input-error_active" : ""}`}>
-            {errorFirstname.errorText}
-            </span>
-          </div>
-        </label>
-
-        <label className="form__field">
           <span className="form__input-caption">Фамилия</span>
           <div className="form__line">
             <input 
@@ -153,6 +132,27 @@ function Person({ onUpdateUser }) {
             </input>
             <span className={`form__input-error ${errorLastname.error ? "form__input-error_active" : ""}`}>
             {errorLastname.errorText}
+            </span>
+          </div>
+        </label>
+
+        <label className="form__field">
+          <span className="form__input-caption">Имя</span>
+          <div className="form__line">
+            <input 
+              className="popup__input"
+              placeholder="Введите имя"
+              minLength="2"
+              type="text"
+              id="personFirstname"
+              name="personFirstname"
+              value={firstname}
+              onChange={handleChangeFirstname}
+              required
+            >
+            </input>
+            <span className={`form__input-error ${errorFirstname.error ? "form__input-error_active" : ""}`}>
+            {errorFirstname.errorText}
             </span>
           </div>
         </label>

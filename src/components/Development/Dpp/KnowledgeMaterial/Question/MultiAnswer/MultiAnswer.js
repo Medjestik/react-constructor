@@ -1,7 +1,7 @@
 import React from 'react';
-import './OneAnswer.css';
+import './MultiAnswer.css';
 
-function OneAnswer({ questionAnswers, questionText, onDelete, answer, index }) {
+function MultiAnswer({ questionAnswers, questionText, onDelete, answer, index }) {
 
   const [answerText, setAnswerText] = React.useState(answer);
 
@@ -19,19 +19,19 @@ function OneAnswer({ questionAnswers, questionText, onDelete, answer, index }) {
 
 
   return (
-    <li className="one-answer">
-      <label className="radio one-answer__radio">
-        <input className="radio" name="radio" type="radio" value="" defaultChecked={false}></input>
-        <span></span>
+    <li className="multi-answer">
+      <label className="checkbox multi-answer__checkbox">
+        <input name="checkbox" type="checkbox" value=""></input>
+        <span className="test"></span>
       </label>
       <input
-        className="one-answer__input"
+        className="multi-answer__input"
         placeholder="Введите ответ"
         value={answerText || ''}
         onChange={handleChangeAnswerText}
         type="text"
-        id={`one-answer ${index}`}
-        name={`one-answer ${index}`}
+        id={`multi-answer ${index}`}
+        name={`multi-answer ${index}`}
       >
       </input>
       <button className="questions__btn_type_delete" type="button" onClick={handleClickDelete}></button>
@@ -40,4 +40,4 @@ function OneAnswer({ questionAnswers, questionText, onDelete, answer, index }) {
 }
 
 
-export default OneAnswer;
+export default MultiAnswer;

@@ -14,7 +14,7 @@ function Dpp({ history, pathname }) {
   return (
     <div className="dpp">
       
-      <h1 className="main__title dpp__title">Информационное сопровождение проектов</h1>
+      <h2 className="main__title dpp__title">Информационное сопровождение проектов</h2>
       <Steps
         pathname={pathname} 
       />

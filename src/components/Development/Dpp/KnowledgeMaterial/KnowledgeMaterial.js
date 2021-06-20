@@ -31,8 +31,10 @@ function KnowledgeMaterial({ currentKnowledge, setCurrentKnowledge }) {
     return (<img className="questions__nav-item-img" src={oneAnswerIcon} alt="иконка"></img>);
   }
 
+  
   function chooseQuestion(question) {
     setCurrentQuestion(question);
+    setEditQuestion(question);
     setIsRenderQuestion(true);
   }
 
@@ -49,7 +51,7 @@ function KnowledgeMaterial({ currentKnowledge, setCurrentKnowledge }) {
     const newQuestions = [];
     currentQuestions.forEach((elem) => {
       if (elem.id === editQuestion.id) {
-        elem.text = editQuestion.text;
+        elem = editQuestion;
       }
       newQuestions.push(elem);
     })
@@ -89,6 +91,7 @@ function KnowledgeMaterial({ currentKnowledge, setCurrentKnowledge }) {
             isRenderQuestion &&
             <Question 
               currentQuestion={currentQuestion}
+              editQuestion={editQuestion}
               setEditQuestion={setEditQuestion}
             />
           }
@@ -115,7 +118,7 @@ function KnowledgeMaterial({ currentKnowledge, setCurrentKnowledge }) {
             currentQuestions.map((elem, i) => (
               <li 
               key={i}
-              className={`questions__nav-item ${currentQuestion === elem ? "questions__nav-item_type_active" : ""}`}
+              className={`questions__nav-item ${currentQuestion.id === elem.id ? "questions__nav-item_type_active" : ""}`}
               onClick={() => chooseQuestion(elem)}
               >
                 {defineQuestionType(elem.type)}
