@@ -1,37 +1,37 @@
 import React from 'react';
 import './MultiAnswer.css';
 
-function MultiAnswer({ questionAnswers, questionText, onDelete, answer, index }) {
+function MultiAnswer({ questionAnswers, onDelete, answerText, answerId, isCorrect, onChangeAnswer }) {
 
-  const [answerText, setAnswerText] = React.useState(answer);
+  const [isAnswerText, setIsAnswerText] = React.useState(answerText);
 
   function handleChangeAnswerText(e) {
-    setAnswerText(e.target.value);
+    setIsAnswerText(e.target.value);
   }
 
   function handleClickDelete() {
-    onDelete(answer);
+    onDelete(answerId);
   }
 
   React.useEffect(() => {
-    setAnswerText(answer);
-  }, [answer, questionAnswers]);
+    setIsAnswerText(answerText);
+  }, [answerText, questionAnswers]);
 
 
   return (
-    <li className="multi-answer">
+    <li className="multi-answer" id={answerId}>
       <label className="checkbox multi-answer__checkbox">
-        <input name="checkbox" type="checkbox" value=""></input>
+        <input name="checkbox" type="checkbox" value="" defaultChecked={isCorrect ? true : false} onChange={() => {onChangeAnswer(answerId)}}></input>
         <span className="test"></span>
       </label>
       <input
         className="multi-answer__input"
         placeholder="Введите ответ"
-        value={answerText || ''}
+        value={isAnswerText || ''}
         onChange={handleChangeAnswerText}
         type="text"
-        id={`multi-answer ${index}`}
-        name={`multi-answer ${index}`}
+        id={`multi-answer ${answerId}`}
+        name={`multi-answer ${answerId}`}
       >
       </input>
       <button className="questions__btn_type_delete" type="button" onClick={handleClickDelete}></button>

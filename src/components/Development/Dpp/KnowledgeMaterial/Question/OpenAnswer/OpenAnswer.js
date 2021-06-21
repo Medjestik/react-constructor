@@ -1,34 +1,34 @@
 import React from 'react';
 import './OpenAnswer.css';
 
-function OpenAnswer({ questionAnswers, onDelete, answer, index }) {
+function OpenAnswer({ questionAnswers, onDelete, answerText, answerId, index, }) {
 
-  const [answerText, setAnswerText] = React.useState(answer);
+  const [isAnswerText, setIsAnswerText] = React.useState(answerText);
 
   function handleChangeAnswerText(e) {
-    setAnswerText(e.target.value);
+    setIsAnswerText(e.target.value);
   }
 
   function handleClickDelete() {
-    onDelete(answer);
+    onDelete(answerId);
   }
 
   React.useEffect(() => {
-    setAnswerText(answer);
-  }, [answer, questionAnswers]);
+    setIsAnswerText(answerText);
+  }, [answerText, questionAnswers]);
 
 
   return (
-    <li className="open-answer">
+    <li className="open-answer" id={answerId}>
       <span className="open-answer__count">{`${index + 1}.`}</span>
       <input
         className="open-answer__input"
         placeholder="Введите ответ"
-        value={answerText || ''}
+        value={isAnswerText || ''}
         onChange={handleChangeAnswerText}
         type="text"
-        id={`open-answer ${index}`}
-        name={`open-answer ${index}`}
+        id={`open-answer ${answerId}`}
+        name={`open-answer ${answerId}`}
       >
       </input>
       <button className="questions__btn_type_delete" type="button" onClick={handleClickDelete}></button>

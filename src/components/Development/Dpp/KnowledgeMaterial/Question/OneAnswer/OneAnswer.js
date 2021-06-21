@@ -1,37 +1,44 @@
 import React from 'react';
 import './OneAnswer.css';
 
-function OneAnswer({ questionAnswers, questionText, onDelete, answer, index }) {
+function OneAnswer({ questionAnswers, onDelete, answerText, answerId, isCorrect, onChangeAnswer }) {
 
-  const [answerText, setAnswerText] = React.useState(answer);
+  const [isAnswerText, setIsAnswerText] = React.useState(answerText);
 
   function handleChangeAnswerText(e) {
-    setAnswerText(e.target.value);
+    setIsAnswerText(e.target.value);
   }
 
   function handleClickDelete() {
-    onDelete(answer);
+    onDelete(answerId);
   }
 
   React.useEffect(() => {
-    setAnswerText(answer);
-  }, [answer, questionAnswers]);
+    setIsAnswerText(answerText);
+  }, [answerText, questionAnswers]);
 
 
   return (
-    <li className="one-answer">
+    <li className="one-answer" id={answerId}>
       <label className="radio one-answer__radio">
-        <input className="radio" name="radio" type="radio" value="" defaultChecked={false}></input>
+        <input
+          className="radio"
+          name="radio"
+          type="radio"
+          defaultChecked={isCorrect ? true : false}
+          onChange={() => {onChangeAnswer(answerId)}}
+        >
+        </input>
         <span></span>
       </label>
       <input
         className="one-answer__input"
         placeholder="Введите ответ"
-        value={answerText || ''}
+        value={isAnswerText || ''}
         onChange={handleChangeAnswerText}
         type="text"
-        id={`one-answer ${index}`}
-        name={`one-answer ${index}`}
+        id={`one-answer ${answerId}`}
+        name={`one-answer ${answerId}`}
       >
       </input>
       <button className="questions__btn_type_delete" type="button" onClick={handleClickDelete}></button>

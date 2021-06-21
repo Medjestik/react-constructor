@@ -7,10 +7,10 @@ import openAnswerIcon from '../../../../images/quiz/open-answer-icon.png';
 import sequenceAnswerIcon from '../../../../images/quiz/sequence-answer-icon.png';
 import conformityAnswerIcon from '../../../../images/quiz/conformity-answer-icon.png';
 
-function KnowledgeMaterial({ currentKnowledge, setCurrentKnowledge }) {
+function KnowledgeMaterial({ currentKnowledge, currentKnowledgeQuestions, setCurrentKnowledge }) {
 
   const [currentQuestion, setCurrentQuestion] = React.useState({});
-  const [currentQuestions, setCurrentQuestions] = React.useState(currentKnowledge.questions);
+  const [currentQuestions, setCurrentQuestions] = React.useState(currentKnowledgeQuestions);
   const [editQuestion, setEditQuestion] = React.useState({});
   const [isRenderQuestion, setIsRenderQuestion] = React.useState(false);
   const [textQuestion, setTextQuestion] = React.useState('');
@@ -38,17 +38,55 @@ function KnowledgeMaterial({ currentKnowledge, setCurrentKnowledge }) {
     setIsRenderQuestion(true);
   }
 
+  function addNewQuestion() {
+    const newQuestion = {
+      text: '',
+      type: 'one-answer',
+      answers: [
+        {
+          id: parseInt(new Date().getTime()) + 1,
+          answerText: '',
+          isCorrect: false,
+        },
+        {
+          id: parseInt(new Date().getTime()) + 2,
+          answerText: '',
+          isCorrect: false,
+        },
+        {
+          id: parseInt(new Date().getTime()) + 3,
+          answerText: '',
+          isCorrect: false,
+        },
+        {
+          id: parseInt(new Date().getTime()) + 4,
+          answerText: '',
+          isCorrect: false,
+        },
+      ],
+      id: parseInt(new Date().getTime()),
+    }
+    
+    const newQuestions = [newQuestion, ...currentQuestions];
+    setEditQuestion(newQuestions[0]);
+    setIsRenderQuestion(true);
+  }
+
   function handleChangeTextQuestion(e) {
     setTextQuestion(e.target.value);
   }
 
   function handleDeleteQuestion() {
-    const knowledgeQuestions = currentKnowledge.questions.filter((item) => item.id !== currentQuestion.id);
-    setCurrentKnowledge({ ...currentKnowledge, questions: knowledgeQuestions });
+    const newQuestions = currentQuestions.filter((item) => item.id !== currentQuestion.id);
+    setCurrentQuestions(newQuestions);
+    setIsRenderQuestion(false);
   }
 
   function handleSaveQuestion() {
     const newQuestions = [];
+    if (currentQuestions.find(elem => (elem.id === editQuestion.id)) === undefined) {
+      newQuestions.unshift(editQuestion);
+    }
     currentQuestions.forEach((elem) => {
       if (elem.id === editQuestion.id) {
         elem = editQuestion;
@@ -68,7 +106,6 @@ function KnowledgeMaterial({ currentKnowledge, setCurrentKnowledge }) {
     setEditQuestion(currentQuestion);
   }, [currentQuestion]);
 
-
   React.useEffect(() => {
     setCurrentQuestions(currentKnowledge.questions.filter((item) => item.text.toLowerCase().includes(textQuestion.toLowerCase())));
   }, [currentKnowledge, textQuestion]);
@@ -78,7 +115,7 @@ function KnowledgeMaterial({ currentKnowledge, setCurrentKnowledge }) {
       <div className="questions__container">
         <div className="questions__main">
           <div className="questions__control"> 
-            <button className="btn btn_type_add" type="button">Новый вопрос</button>
+            <button className="btn btn_type_add" onClick={addNewQuestion} type="button">Новый вопрос</button>
             {
               isRenderQuestion &&
               <div className="questions__control-edit">
@@ -99,7 +136,7 @@ function KnowledgeMaterial({ currentKnowledge, setCurrentKnowledge }) {
         <nav className="questions__nav-menu">
           <div className="questions__info">
             <p className="questions__title">Вопросы</p>
-            <span className="questions__count">{currentKnowledge.questions.length}</span>
+            <span className="questions__count">{currentQuestions.length}</span>
           </div>
           <div className="questions__nav-search">
             <input 
@@ -118,7 +155,7 @@ function KnowledgeMaterial({ currentKnowledge, setCurrentKnowledge }) {
             currentQuestions.map((elem, i) => (
               <li 
               key={i}
-              className={`questions__nav-item ${currentQuestion.id === elem.id ? "questions__nav-item_type_active" : ""}`}
+              className={`questions__nav-item ${editQuestion.id === elem.id ? "questions__nav-item_type_active" : ""}`}
               onClick={() => chooseQuestion(elem)}
               >
                 {defineQuestionType(elem.type)}

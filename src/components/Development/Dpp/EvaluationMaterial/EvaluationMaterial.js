@@ -8,7 +8,24 @@ const data = [
     {
       text: 'Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет?',
       type: 'one-answer',
-      answers: ['зеленый', 'синий', 'белый', 'красный'],
+      answers: [
+        {
+          id: 1,
+          answerText: 'зеленый',
+        },
+        {
+          id: 2,
+          answerText: 'красный',
+        },
+        {
+          id: 3,
+          answerText: 'синий',
+        },
+        {
+          id: 4,
+          answerText: 'белый',
+        },
+      ],
       id: 7,
     },
     {
@@ -20,27 +37,91 @@ const data = [
   ] },
   { id: 2, value: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu sagittis quam. Proin risus purus, malesuada ac ipsum id, euismod dapibus sem.', questions: [
     {
-      text: 'Какой это цвет?',
+      text: 'Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет?',
       type: 'one-answer',
-      answers: ['зеленый', 'синий', 'белый', 'красный'],
-      id: 10,
+      answers: [
+        {
+          id: 1,
+          answerText: 'зеленый',
+          isCorrect: false,
+        },
+        {
+          id: 2,
+          answerText: 'красный',
+          isCorrect: false,
+        },
+        {
+          id: 3,
+          answerText: 'синий',
+          isCorrect: true,
+        },
+        {
+          id: 4,
+          answerText: 'белый',
+          isCorrect: false,
+        },
+      ],
+      id: 15,
     },
     {
       text: 'Какая это буква?',
       type: 'multi-answer',
-      answers: ['a', 's', 'd', 'h'],
+      answers: [
+        {
+          id: 30,
+          answerText: 'A',
+          isCorrect: true,
+        },
+        {
+          id: 31,
+          answerText: 'B',
+          isCorrect: false,
+        },
+        {
+          id: 32,
+          answerText: 'C',
+          isCorrect: true,
+        },
+        {
+          id: 33,
+          answerText: 'D',
+          isCorrect: false,
+        },
+      ],
       id: 11,
     }, 
     {
-      text: 'Сколько сейчас время?',
-      type: 'open-answer',
-      answers: ['16:00',],
+      text: 'Расставьте цифры в порядке убивания?',
+      type: 'sequence-answer',
+      answers: [
+        {
+          id: 20,
+          answerText: '7',
+        },
+        {
+          id: 21,
+          answerText: '6',
+        },
+        {
+          id: 22,
+          answerText: '4',
+        },
+        {
+          id: 23,
+          answerText: '2',
+        },
+      ],
       id: 12,
     },
     {
       text: 'Вопрос вопрос вопрос?',
-      type: 'sequence-answer',
-      answers: ['5', '2', '3', '4'],
+      type: 'open-answer',
+      answers: [
+        {
+          id: 12,
+          answerText: '16:00',
+        },
+      ],
       id: 13,
     },
     {
@@ -48,18 +129,22 @@ const data = [
       type: 'conformity-answer',
       answers: [
         {
+          id: 40,
           firstPart: '1',
           secondPart: '1',
         },
         {
+          id: 41,
           firstPart: '2',
           secondPart: '2',
         },
         {
+          id: 42,
           firstPart: '3',
           secondPart: '3',
         },
         {
+          id: 43,
           firstPart: '4',
           secondPart: '4',
         },
@@ -110,6 +195,7 @@ function EvaluationMaterial() {
         isRenderKnowledge &&
         <KnowledgeMaterial
           currentKnowledge={currentKnowledge}
+          currentKnowledgeQuestions={currentKnowledge.questions}
           setCurrentKnowledge={setCurrentKnowledge}
         />
       }

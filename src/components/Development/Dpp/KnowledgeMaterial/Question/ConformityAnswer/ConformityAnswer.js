@@ -1,50 +1,50 @@
 import React from 'react';
 import './ConformityAnswer.css';
 
-function ConformityAnswer({ questionAnswers, onDelete, answer, index }) {
+function ConformityAnswer({ questionAnswers, onDelete, firstPartText, secondPartText, answerId, index, }) {
 
-  const [firstPartText, setFirstPartText] = React.useState(answer.firstPart);
-  const [secondPartText, setSecondPartText] = React.useState(answer.secondPart);
+  const [isFirstPartText, setIsFirstPartText] = React.useState(firstPartText);
+  const [isSecondPartText, setIsSecondPartText] = React.useState(secondPartText);
 
   function handleChangeFirstPartText(e) {
-    setFirstPartText(e.target.value);
+    setIsFirstPartText(e.target.value);
   }
 
   function handleChangeSecondPartText(e) {
-    setSecondPartText(e.target.value);
+    setIsSecondPartText(e.target.value);
   }
 
   function handleClickDelete() {
-    onDelete(answer);
+    onDelete(answerId);
   }
 
   React.useEffect(() => {
-    setFirstPartText(answer.firstPart);
-    setSecondPartText(answer.secondPart);
-  }, [answer, questionAnswers]);
+    setIsFirstPartText(firstPartText);
+    setIsSecondPartText(secondPartText);
+  }, [firstPartText, secondPartText, questionAnswers]);
 
 
   return (
-    <li className="conformity-answer">
+    <li className="conformity-answer" id={answerId}>
       <span className="conformity-answer__count">{`${index + 1}.`}</span>
       <input
         className="conformity-answer__input"
         placeholder="Введите ответ"
-        value={firstPartText || ''}
+        value={isFirstPartText || ''}
         onChange={handleChangeFirstPartText}
         type="text"
-        id={`firstPartText ${index}`}
-        name={`firstPartText ${index}`}
+        id={`firstPartText ${answerId}`}
+        name={`firstPartText ${answerId}`}
       >
       </input>
       <input
         className="conformity-answer__input"
         placeholder="Введите ответ"
-        value={secondPartText || ''}
+        value={isSecondPartText || ''}
         onChange={handleChangeSecondPartText}
         type="text"
-        id={`secondPartText ${index}`}
-        name={`secondPartText ${index}`}
+        id={`secondPartText ${answerId}`}
+        name={`secondPartText ${answerId}`}
       >
       </input>
       <button className="questions__btn_type_delete" type="button" onClick={handleClickDelete}></button>

@@ -29,8 +29,6 @@ function Header({ onLogout, showHeaderMenu, setShowHeaderMenu, onOpenAvatarPopup
     return rights;
   }
 
-  console.log(user)
-
   const menu = (
     <div className={`header__menu ${showHeaderMenu ? "header__menu_type_hide" : "header__menu_type_show"}`}>
       <div className="header__menu-container">
