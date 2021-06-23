@@ -17,6 +17,45 @@ function Question({ currentQuestion, editQuestion, setEditQuestion, }) {
     setEditQuestion({ ...editQuestion, text: e.target.value });
   }
 
+  function handleChangeAnswerText(text, id) {
+    let newAnswers = [];
+    questionAnswers.forEach((elem) => {
+      if (elem.id === id) {
+        newAnswers.push({ ...elem, answerText: text });
+      } else {
+        newAnswers.push(elem);
+      }
+    })
+    setQuestionAnswers(newAnswers);
+    setEditQuestion({ ...editQuestion, answers: newAnswers });
+  }
+
+  function handleChangeFirstPartText(text, id) {
+    let newAnswers = [];
+    questionAnswers.forEach((elem) => {
+      if (elem.id === id) {
+        newAnswers.push({ ...elem, firstPart: text });
+      } else {
+        newAnswers.push(elem);
+      }
+    })
+    setQuestionAnswers(newAnswers);
+    setEditQuestion({ ...editQuestion, answers: newAnswers });
+  }
+
+  function handleChangeSecondPartText(text, id) {
+    let newAnswers = [];
+    questionAnswers.forEach((elem) => {
+      if (elem.id === id) {
+        newAnswers.push({ ...elem, secondPart: text });
+      } else {
+        newAnswers.push(elem);
+      }
+    })
+    setQuestionAnswers(newAnswers);
+    setEditQuestion({ ...editQuestion, answers: newAnswers });
+  }
+
   function handleAddAnswer() {
     const newAnswers = [...questionAnswers, {
       id: parseInt(new Date().getTime()),
@@ -37,9 +76,11 @@ function Question({ currentQuestion, editQuestion, setEditQuestion, }) {
         }
       })
     } else {
-      newAnswers.forEach((elem) => {
+      questionAnswers.forEach((elem) => {
         if (elem.id === id) {
-          elem.isCorrect = !elem.isCorrect;
+          newAnswers.push({ ...elem, isCorrect: !elem.isCorrect });
+        } else {
+          newAnswers.push(elem);
         }
       })
     }
@@ -69,13 +110,13 @@ function Question({ currentQuestion, editQuestion, setEditQuestion, }) {
           {
             questionAnswers.map((answer, i) => (
               <MultiAnswer
-                questionAnswers={questionAnswers}
                 onDelete={handleDeleteAnswer}
                 key={answer.id}
                 answerText={answer.answerText}
                 answerId={answer.id}
                 isCorrect={answer.isCorrect}
                 onChangeAnswer={handleChangeAnswer}
+                onChangeAnswerText={handleChangeAnswerText}
               /> 
             ))
           } 
@@ -92,12 +133,12 @@ function Question({ currentQuestion, editQuestion, setEditQuestion, }) {
           {
             questionAnswers.map((answer, i) => (
               <OpenAnswer 
-                questionAnswers={questionAnswers} 
                 onDelete={handleDeleteAnswer} 
                 key={answer.id} 
                 answerText={answer.answerText} 
                 answerId={answer.id} 
                 index={i}
+                onChangeAnswerText={handleChangeAnswerText}
               />
             ))
           }
@@ -114,12 +155,12 @@ function Question({ currentQuestion, editQuestion, setEditQuestion, }) {
           {
             questionAnswers.map((answer, i) => (
               <SequenceAnswer 
-                questionAnswers={questionAnswers} 
                 onDelete={handleDeleteAnswer} 
                 key={answer.id} 
                 answerText={answer.answerText} 
                 answerId={answer.id} 
                 index={i}
+                onChangeAnswerText={handleChangeAnswerText}
               />
             ))
           } 
@@ -136,13 +177,14 @@ function Question({ currentQuestion, editQuestion, setEditQuestion, }) {
           {
             questionAnswers.map((answer, i) => (
               <ConformityAnswer
-                questionAnswers={questionAnswers}
                 onDelete={handleDeleteAnswer}
                 key={answer.id}
                 firstPartText={answer.firstPart}
                 secondPartText={answer.secondPart}
                 answerId={answer.id}
                 index={i}
+                onChangeFirstPartText={handleChangeFirstPartText}
+                onChangeSecondPartText={handleChangeSecondPartText}
               />
             ))
           } 
@@ -158,13 +200,13 @@ function Question({ currentQuestion, editQuestion, setEditQuestion, }) {
         {
           questionAnswers.map((answer) => (
             <OneAnswer 
-              questionAnswers={questionAnswers}
               onDelete={handleDeleteAnswer}
               key={answer.id}
               answerText={answer.answerText}
               answerId={answer.id}
               isCorrect={answer.isCorrect}
               onChangeAnswer={handleChangeAnswer}
+              onChangeAnswerText={handleChangeAnswerText}
             />
           ))
         } 

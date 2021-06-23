@@ -1,6 +1,7 @@
 import React from 'react';
 import './KnowledgeMaterial.css';
 import Question from './Question/Question.js';
+import AccordionChooseQuestionType from '../../../Accordion/AccordionChooseQuestionType/AccordionChooseQuestionType.js';
 import oneAnswerIcon from '../../../../images/quiz/one-answer-icon.png';
 import multiAnswerIcon from '../../../../images/quiz/multi-answer-icon.png';
 import openAnswerIcon from '../../../../images/quiz/open-answer-icon.png';
@@ -14,6 +15,7 @@ function KnowledgeMaterial({ currentKnowledge, currentKnowledgeQuestions, setCur
   const [editQuestion, setEditQuestion] = React.useState({});
   const [isRenderQuestion, setIsRenderQuestion] = React.useState(false);
   const [textQuestion, setTextQuestion] = React.useState('');
+  const [isDefineTypeOfQuestion, setIsDefineTypeOfQuestion] = React.useState(false);
 
   const defineQuestionType = (type) => {
     if (type === 'multi-answer') {
@@ -38,10 +40,17 @@ function KnowledgeMaterial({ currentKnowledge, currentKnowledgeQuestions, setCur
     setIsRenderQuestion(true);
   }
 
-  function addNewQuestion() {
+  function chooseNewQuestionType() {
+    setIsDefineTypeOfQuestion(true);
+    setIsRenderQuestion(false);
+  }
+
+  function addNewQuestion(type) {
+    setIsDefineTypeOfQuestion(false);
+    setIsRenderQuestion(true);
     const newQuestion = {
       text: '',
-      type: 'one-answer',
+      type: type,
       answers: [
         {
           id: parseInt(new Date().getTime()) + 1,
@@ -115,7 +124,7 @@ function KnowledgeMaterial({ currentKnowledge, currentKnowledgeQuestions, setCur
       <div className="questions__container">
         <div className="questions__main">
           <div className="questions__control"> 
-            <button className="btn btn_type_add" onClick={addNewQuestion} type="button">Новый вопрос</button>
+            <button className="btn btn_type_add" onClick={chooseNewQuestionType} type="button">Новый вопрос</button>
             {
               isRenderQuestion &&
               <div className="questions__control-edit">
@@ -131,6 +140,15 @@ function KnowledgeMaterial({ currentKnowledge, currentKnowledgeQuestions, setCur
               editQuestion={editQuestion}
               setEditQuestion={setEditQuestion}
             />
+          }
+          {
+            isDefineTypeOfQuestion 
+          ?
+            <AccordionChooseQuestionType
+              addNewQuestion={addNewQuestion}
+            />
+          :
+            ""
           }
         </div>
         <nav className="questions__nav-menu">

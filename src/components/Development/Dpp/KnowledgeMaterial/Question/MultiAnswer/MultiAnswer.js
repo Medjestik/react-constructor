@@ -1,22 +1,15 @@
 import React from 'react';
 import './MultiAnswer.css';
 
-function MultiAnswer({ questionAnswers, onDelete, answerText, answerId, isCorrect, onChangeAnswer }) {
-
-  const [isAnswerText, setIsAnswerText] = React.useState(answerText);
+function MultiAnswer({ onDelete, answerText, answerId, isCorrect, onChangeAnswer, onChangeAnswerText }) {
 
   function handleChangeAnswerText(e) {
-    setIsAnswerText(e.target.value);
+    onChangeAnswerText(e.target.value, answerId);
   }
 
   function handleClickDelete() {
     onDelete(answerId);
   }
-
-  React.useEffect(() => {
-    setIsAnswerText(answerText);
-  }, [answerText, questionAnswers]);
-
 
   return (
     <li className="multi-answer" id={answerId}>
@@ -27,10 +20,10 @@ function MultiAnswer({ questionAnswers, onDelete, answerText, answerId, isCorrec
       <input
         className="multi-answer__input"
         placeholder="Введите ответ"
-        value={isAnswerText || ''}
+        value={answerText || ''}
         onChange={handleChangeAnswerText}
         type="text"
-        id={`multi-answer ${answerId}`}
+        id={answerId}
         name={`multi-answer ${answerId}`}
       >
       </input>

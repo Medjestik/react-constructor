@@ -1,5 +1,6 @@
 import React from 'react';
 import './Dpp.css';
+import * as api from '../../../utils/api.js';
 import { Route, Switch } from 'react-router-dom';
 import Steps from './Steps/Steps.js';
 import InitialData from './InitialData/InitialData.js';
@@ -8,54 +9,95 @@ import EvaluationMaterial from './EvaluationMaterial/EvaluationMaterial.js';
 import ProgramStructure from './ProgramStructure/ProgramStructure.js';
 import EducationalMaterial from './EducationalMaterial/EducationalMaterial.js';
 import Approval from './Approval/Approval.js';
+import Preloader from '../../Preloader/Preloader.js';
 
-function Dpp({ history, pathname }) {
+function Dpp({ loggedIn, history, pathname, }) {
+
+  const [dppDescription, setDppDescription] = React.useState({});
+  const [isLoadingProgram, setIsLoadingProgram] = React.useState({});
+
+  function getDppDescription() {
+    const token = localStorage.getItem("token");
+    const currentProgramId = localStorage.getItem("currentProgramId");
+    if (token || currentProgramId) {
+      setIsLoadingProgram(true);
+      api.getProgramDescription({ token: token, id: currentProgramId })
+        .then((res) => {
+          setDppDescription(res);
+          console.log(res);
+        })
+        .catch((err) => {
+            console.error(err);
+            history.push('/main/development');
+        })
+        .finally(() => {
+          setIsLoadingProgram(false);
+        });
+    }
+  }
+
+  React.useEffect(() => {
+    getDppDescription();
+    return () => {
+      setDppDescription([]);
+    };
+    // eslint-disable-next-line
+  },[])
 
   return (
-    <div className="dpp">
+
+      isLoadingProgram 
+      ?
+      <Preloader />
+      :
+      <div className="dpp">
       
-      <h2 className="main__title dpp__title">Информационное сопровождение проектов</h2>
-      <Steps
-        pathname={pathname} 
-      />
+        <h2 className="main__title dpp__title">{dppDescription.name}</h2>
+        <Steps
+          pathname={pathname} 
+        />
 
-      <Switch>    
-        <Route path="/main/development/dpp/initial-data" exact>
-          <InitialData />
-        </Route>
-      </Switch>
+        <Switch>    
+          <Route path="/main/development/dpp/initial-data" exact>
+            <InitialData
+              loggedIn={loggedIn}
+              history={history}
+              dppDescription={dppDescription}
+            />
+          </Route>
+        </Switch>
 
-      <Switch>    
-        <Route path="/main/development/dpp/zoon" exact>
-          <Zoon />
-        </Route>
-      </Switch>
+        <Switch>    
+          <Route path="/main/development/dpp/zoon" exact>
+            <Zoon />
+          </Route>
+        </Switch>
 
-      <Switch>    
-        <Route path="/main/development/dpp/evaluation-material" exact>
-          <EvaluationMaterial />
-        </Route>
-      </Switch>
+        <Switch>    
+          <Route path="/main/development/dpp/evaluation-material" exact>
+            <EvaluationMaterial />
+          </Route>
+        </Switch>
 
-      <Switch>    
-        <Route path="/main/development/dpp/program-structure" exact>
-          <ProgramStructure />
-        </Route>
-      </Switch>
+        <Switch>    
+          <Route path="/main/development/dpp/program-structure" exact>
+            <ProgramStructure />
+          </Route>
+        </Switch>
 
-      <Switch>    
-        <Route path="/main/development/dpp/educational-material" exact>
-          <EducationalMaterial />
-        </Route>
-      </Switch>
+        <Switch>    
+          <Route path="/main/development/dpp/educational-material" exact>
+            <EducationalMaterial />
+          </Route>
+        </Switch>
 
-      <Switch>    
-        <Route path="/main/development/dpp/approval" exact>
-          <Approval />
-        </Route>
-      </Switch>
+        <Switch>    
+          <Route path="/main/development/dpp/approval" exact>
+            <Approval />
+          </Route>
+        </Switch>
 
-    </div>
+      </div>
   );
 }
 

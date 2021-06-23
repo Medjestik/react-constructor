@@ -87,8 +87,8 @@ function App() {
       .catch((err) => {
         console.log(err);
       })
+    }
   }
-}
 
   React.useEffect(() => {
     tokenCheck();

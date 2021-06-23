@@ -1,18 +1,75 @@
 import React from 'react';
 import './Program.css';
+import * as api from '../../../../utils/api.js';
 import { Collapse } from 'react-collapse';
 import avatar from '../../../../images/avatar-default.png';
 import status from '../../../../images/status.png';
 import stage from '../../../../images/stage.png';
 import role from '../../../../images/role.png';
 
-
-function Program({ program, history }) {
+function Program({ program, history, }) {
 
   const [isShowPerformers, setIsShowPerformers] = React.useState(false);
 
+  function getDppDescription (id) {
+    const token = localStorage.getItem("token");
+    if (token) {
+      //setIsLoadingProgram(true);
+      api.getProgramDescription({ token: token, id: id })
+        .then((res) => {
+          handleDefineStage(res);
+        })
+        .catch((err) => {
+            console.error(err);
+        })
+        .finally(() => {
+          //setIsLoadingProgram(false);
+        });
+    }
+  }
+
+  function transitionToProgram (id) {
+    switch(id) {
+      case 1:
+        history.push("/main/development/dpp/zoon");
+        break;
+    
+      case 2:
+        history.push("/main/development/dpp/evaluation-material");
+        break;
+
+      case 3:
+        history.push("/main/development/dpp/program-structure");
+        break;
+
+      case 4:
+        history.push("/main/development/dpp/educational-material");
+        break;
+
+      case 5:
+        history.push("/main/development/dpp/approval");
+        break;
+    
+      default:
+        history.push("/main/development/dpp/initial-data");
+    }
+  }
+
   function toggleProgramPerformers () {
     setIsShowPerformers(!isShowPerformers);
+  }
+
+  function handleDefineStage (program) {
+    program.stages.forEach((stages) => {
+      if (stages.id === program.current_stage_id) {
+        transitionToProgram(stages.stage_type_id);
+      }
+    })
+  }
+
+  function handleClickProgram () {
+    getDppDescription(program.dpp_id);
+    localStorage.setItem("currentProgramId", program.dpp_id);
   }
 
   const definePerformerRole = (role) => {
@@ -61,7 +118,7 @@ function Program({ program, history }) {
       </div>
       <div className="development__item-control">
         <button className={`development__item-button-performer ${isShowPerformers ? "button-performer_type_show" : "button-performer_type_hide"}`} type="button" onClick={toggleProgramPerformers}>Показать список всех исполнителей</button>
-        <button className="btn btn_type_next" type="button" onClick={() => history.push("/main/development/dpp/initial-data")}>Продолжить работу</button>
+        <button className="btn btn_type_next" type="button" onClick={handleClickProgram}>Продолжить работу</button>
       </div>
 
 

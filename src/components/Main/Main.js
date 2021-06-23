@@ -17,7 +17,7 @@ function Main({ loggedIn, pathname, onLogout, history, onUpdateUser }) {
 
   const [showHeaderMenu, setShowHeaderMenu] = React.useState(true);
   const [isAvatarPopupOpen, setIsAvatarPopupOpen] = React.useState(false);
-
+  
   function closeMainPopups() {
     setIsAvatarPopupOpen(false);
   }
@@ -60,14 +60,15 @@ function Main({ loggedIn, pathname, onLogout, history, onUpdateUser }) {
           <Switch>    
             <Route path="/main/development" exact>
               <Development
-                history={history} 
+                history={history}
               />
             </Route>
           </Switch>
 
           <Switch>    
             <Route path="/main/development/dpp">
-              <Dpp 
+              <Dpp
+                loggedIn={loggedIn}
                 history={history}
                 pathname={pathname}
               />

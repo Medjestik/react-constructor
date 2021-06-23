@@ -1,23 +1,15 @@
 import React from 'react';
 import './SequenceAnswer.css';
 
-function SequenceAnswer({ questionAnswers, onDelete, answerText, answerId, index, }) {
-
-  const [isAnswerText, setIsAnswerText] = React.useState(answerText);
+function SequenceAnswer({ onDelete, answerText, answerId, index, onChangeAnswerText }) {
 
   function handleChangeAnswerText(e) {
-    setIsAnswerText(e.target.value);
+    onChangeAnswerText(e.target.value, answerId);
   }
 
   function handleClickDelete() {
     onDelete(answerId);
   }
-
-  React.useEffect(() => {
-    setIsAnswerText(answerText);
-  }, [answerText, questionAnswers]);
-
-
 
   return (
     <li className="sequence-answer" id={answerId}>
@@ -25,7 +17,7 @@ function SequenceAnswer({ questionAnswers, onDelete, answerText, answerId, index
       <input
         className="sequence-answer__input"
         placeholder="Введите ответ"
-        value={isAnswerText || ''}
+        value={answerText || ''}
         onChange={handleChangeAnswerText}
         type="text"
         id={`sequence-answer ${answerId}`}

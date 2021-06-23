@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
-import Chevron from "../Accordion/Chevron.js";
-import "./AccordionChoose.css";
-import useOnClickOutside from "../../hooks/useOnClickOutside.js";
+import Chevron from "../Chevron.js";
+import "./AccordionChooseKnowledge.css";
+import useOnClickOutside from "../../../hooks/useOnClickOutside.js";
 
-const AccordionChoose = ({ children, renderKnowledge }) => {
+const AccordionChooseKnowledge = ({ children, renderKnowledge }) => {
   const [active, setActive] = useState("");
   const [height, setHeight] = useState("0px");
   const [fill, setFill] = useState("#404040");
@@ -67,4 +67,4 @@ const AccordionChoose = ({ children, renderKnowledge }) => {
   );
 };
 
-export default AccordionChoose;
+export default AccordionChooseKnowledge;

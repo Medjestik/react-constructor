@@ -1,11 +1,9 @@
 import React from 'react';
 import './Method.css';
-
 import structure from '../../images/structure.png';
 import profession from '../../images/profession.png';
 import qualification from '../../images/qualification.png';
 import fgos from '../../images/fgos.png';
-
 
 function Method() {
 

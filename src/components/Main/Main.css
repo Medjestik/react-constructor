@@ -9,7 +9,7 @@
 }
 .main__show-menu {
   margin-left: 350px;
-  margin-right: 80px;
+  margin-right: 0px;
   transition-delay: .55s;
 }
 .main__hide-menu {

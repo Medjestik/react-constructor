@@ -1,22 +1,15 @@
 import React from 'react';
 import './OpenAnswer.css';
 
-function OpenAnswer({ questionAnswers, onDelete, answerText, answerId, index, }) {
-
-  const [isAnswerText, setIsAnswerText] = React.useState(answerText);
+function OpenAnswer({ onDelete, answerText, answerId, index, onChangeAnswerText }) {
 
   function handleChangeAnswerText(e) {
-    setIsAnswerText(e.target.value);
+    onChangeAnswerText(e.target.value, answerId);
   }
 
   function handleClickDelete() {
     onDelete(answerId);
   }
-
-  React.useEffect(() => {
-    setIsAnswerText(answerText);
-  }, [answerText, questionAnswers]);
-
 
   return (
     <li className="open-answer" id={answerId}>
@@ -24,10 +17,10 @@ function OpenAnswer({ questionAnswers, onDelete, answerText, answerId, index, })
       <input
         className="open-answer__input"
         placeholder="Введите ответ"
-        value={isAnswerText || ''}
+        value={answerText || ''}
         onChange={handleChangeAnswerText}
         type="text"
-        id={`open-answer ${answerId}`}
+        id={answerId}
         name={`open-answer ${answerId}`}
       >
       </input>

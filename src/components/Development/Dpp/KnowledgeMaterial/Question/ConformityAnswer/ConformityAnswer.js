@@ -1,28 +1,19 @@
 import React from 'react';
 import './ConformityAnswer.css';
 
-function ConformityAnswer({ questionAnswers, onDelete, firstPartText, secondPartText, answerId, index, }) {
-
-  const [isFirstPartText, setIsFirstPartText] = React.useState(firstPartText);
-  const [isSecondPartText, setIsSecondPartText] = React.useState(secondPartText);
+function ConformityAnswer({ onDelete, firstPartText, secondPartText, answerId, index, onChangeFirstPartText, onChangeSecondPartText }) {
 
   function handleChangeFirstPartText(e) {
-    setIsFirstPartText(e.target.value);
+    onChangeFirstPartText(e.target.value, answerId);
   }
 
   function handleChangeSecondPartText(e) {
-    setIsSecondPartText(e.target.value);
+    onChangeSecondPartText(e.target.value, answerId);
   }
 
   function handleClickDelete() {
     onDelete(answerId);
   }
-
-  React.useEffect(() => {
-    setIsFirstPartText(firstPartText);
-    setIsSecondPartText(secondPartText);
-  }, [firstPartText, secondPartText, questionAnswers]);
-
 
   return (
     <li className="conformity-answer" id={answerId}>
@@ -30,20 +21,20 @@ function ConformityAnswer({ questionAnswers, onDelete, firstPartText, secondPart
       <input
         className="conformity-answer__input"
         placeholder="Введите ответ"
-        value={isFirstPartText || ''}
+        value={firstPartText || ''}
         onChange={handleChangeFirstPartText}
         type="text"
-        id={`firstPartText ${answerId}`}
+        id={answerId}
         name={`firstPartText ${answerId}`}
       >
       </input>
       <input
         className="conformity-answer__input"
         placeholder="Введите ответ"
-        value={isSecondPartText || ''}
+        value={secondPartText || ''}
         onChange={handleChangeSecondPartText}
         type="text"
-        id={`secondPartText ${answerId}`}
+        id={answerId}
         name={`secondPartText ${answerId}`}
       >
       </input>

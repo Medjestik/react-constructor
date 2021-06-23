@@ -1,23 +1,16 @@
 import React from 'react';
 import './OneAnswer.css';
 
-function OneAnswer({ questionAnswers, onDelete, answerText, answerId, isCorrect, onChangeAnswer }) {
-
-  const [isAnswerText, setIsAnswerText] = React.useState(answerText);
+function OneAnswer({ onDelete, answerText, answerId, isCorrect, onChangeAnswer, onChangeAnswerText }) {
 
   function handleChangeAnswerText(e) {
-    setIsAnswerText(e.target.value);
+    onChangeAnswerText(e.target.value, answerId);
   }
 
   function handleClickDelete() {
     onDelete(answerId);
   }
-
-  React.useEffect(() => {
-    setIsAnswerText(answerText);
-  }, [answerText, questionAnswers]);
-
-
+  
   return (
     <li className="one-answer" id={answerId}>
       <label className="radio one-answer__radio">
@@ -34,10 +27,10 @@ function OneAnswer({ questionAnswers, onDelete, answerText, answerId, isCorrect,
       <input
         className="one-answer__input"
         placeholder="Введите ответ"
-        value={isAnswerText || ''}
+        value={answerText || ''}
         onChange={handleChangeAnswerText}
         type="text"
-        id={`one-answer ${answerId}`}
+        id={answerId}
         name={`one-answer ${answerId}`}
       >
       </input>

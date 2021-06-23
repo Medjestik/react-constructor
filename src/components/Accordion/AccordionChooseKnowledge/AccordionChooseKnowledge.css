@@ -93,7 +93,7 @@
 }
 .accordion__button:hover {
   cursor: pointer;
-  background-color: var(--border-card-color);
+  background-color: var(--white-color);
 }
 .accordion__count {
   margin: 0px 0px 0px auto;
@@ -108,6 +108,13 @@
   align-items: center;
   background-color: var(--main-color);
   color: var(--white-color);
+}
+.accordion__img_type_choose {
+  width: 25px;
+  height: 25px;
+  object-fit: contain;
+  object-position: center;
+  margin-right: 15px;
 }
 
 @media all and (max-width: 1000px) {

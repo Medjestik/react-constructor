@@ -5,13 +5,13 @@ import * as api from '../../utils/api.js';
 import Program from './Dpp/Program/Program.js';
 import Preloader from '../Preloader/Preloader.js';
 
-function Development({ history }) {
+function Development({ history, setDppDescription }) {
 
   const user = React.useContext(CurrentUserContext);
 
   const [isLoadingProgram, setIsLoadingProgram] = React.useState(false);
   const [assignedPrograms, setAssignedPrograms] = React.useState([]);
-
+  
   function getDpps () {
     const token = localStorage.getItem("token");
     if (token) {
