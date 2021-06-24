@@ -4,7 +4,7 @@ import AccordionChooseKnowledge from '../../../Accordion/AccordionChooseKnowledg
 import KnowledgeMaterial from '../KnowledgeMaterial/KnowledgeMaterial.js';
 
 const data = [
-  { id: 1, value: 'Duis ullamcorper purus sagittis elementum vestibulum.', questions: [
+  { id: 1, value: 'Знать корректные сочетания слов (глаголов и существительных), описывающих дорожную деятельность и реализацию отдельных мероприятий НП БКАД.', questions: [
     {
       text: 'Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет?',
       type: 'one-answer',
@@ -35,7 +35,7 @@ const data = [
       id: 8,
     }
   ] },
-  { id: 2, value: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu sagittis quam. Proin risus purus, malesuada ac ipsum id, euismod dapibus sem.', questions: [
+  { id: 2, value: 'Знать требования к оформлению информационных сообщений на официальном фирменном бланке.', questions: [
     {
       text: 'Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет?',
       type: 'one-answer',

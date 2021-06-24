@@ -94,7 +94,6 @@ export const updateInitialData = ({ token, dppId, initialDataVersion, ish_data }
   .then(res => handleResponse(res))
 };
 
-
 export const getProfLevels = ({ token }) => {
   return fetch(`${API_URL}/dpps/get_prof_levels`, {
     method: 'GET',
@@ -103,6 +102,31 @@ export const getProfLevels = ({ token }) => {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     }
+  })
+  .then(res => handleResponse(res))
+};
+
+export const getProfStandarts = ({ token }) => {
+  return fetch(`${API_URL}/profstandarts/get_profstandarts`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};
+
+export const selectProfStandarts = ({ token, dppId, initialDataVersion, data }) => {
+  return fetch(`${API_URL}/dpps/${dppId}/update_ish_version_data/${initialDataVersion}/select_profstandarts`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ data })
   })
   .then(res => handleResponse(res))
 };

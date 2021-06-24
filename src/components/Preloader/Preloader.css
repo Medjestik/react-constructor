@@ -25,6 +25,9 @@
   justify-content: center;
   align-items: center;
 }
+.preloader_type_popup {
+  min-height: 0px;
+}
 
 .preloader__circle {
 	width:  74px;

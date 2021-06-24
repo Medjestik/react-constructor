@@ -6,13 +6,16 @@ import ReferenceInformation from './ReferenceInformation/ReferenceInformation.js
 import prof from '../../../../images/profession.png';
 import qual from '../../../../images/qualification.png';
 import fgos from '../../../../images/fgos.png';
+import useOnPushEsc from '../../../../hooks/useOnPushEsc';
+import useOnClickOverlay from '../../../../hooks/useOnClickOverlay.js';
+import ProfStandartPopup from '../../../Popup/ProfStandartPopup/ProfStandartPopup.js';
 
 function InitialData({ loggedIn, history, dppDescription }) {
 
   const [isRendering, setIsRendering] = React.useState(true);
   const [profLevels, setProfLevels] = React.useState([]);
   const [initialData, setInitialData] = React.useState({});
-  const [profStandarts, setProfStandarts] = React.useState([]);
+  const [profStandartsProgram, setProfStandartsProgram] = React.useState([]);
   const [requirementQualifications, setRequirementQualifications] = React.useState([]);
   const [requirementFgos, setRequirementFgos] = React.useState([]);
   const [selectedProfLevels, setSelectedProfLevels] = React.useState([]);
@@ -21,8 +24,9 @@ function InitialData({ loggedIn, history, dppDescription }) {
   const [typologies, setTypologies] = React.useState([]);
   const [currentTypologiesId, setCurrentTypologiesId] = React.useState();
   const [requestMessage, setRequestMessage] = React.useState({ text: '', isShow: false, type: '' });
-
-  console.log(initialData);
+  const [isProfStandartPopupOpen, setIsProfStandartPopupOpen] = React.useState(false);
+  const [profStandarts, setProfStandarts] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   function handleChangeProfLevels(id) {
     const newLevels = selectedProfLevels;
@@ -55,6 +59,26 @@ function InitialData({ loggedIn, history, dppDescription }) {
     setRequestMessage({ text: '', isShow: false, type: '',});
   }
 
+  function handleSelectProfStandart(profStandart) {
+    const profStandartId = profStandart.map(elem => elem.id);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.updateInitialData({ 
+        token: token, 
+        dppId: dppDescription.id, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        data: profStandartId 
+      })
+      .then((res) => {
+        setProfStandartsProgram(res);
+        closeInitialDataPopups();
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+    }
+  }
+
   function handleSubmitForm(e) {
     e.preventDefault();
     const token = localStorage.getItem("token");
@@ -67,7 +91,6 @@ function InitialData({ loggedIn, history, dppDescription }) {
       typology: currentTypologiesId,
     }
     if (loggedIn) {
-      console.log(selectedProfLevels);
       api.updateInitialData({ 
         token: token, 
         dppId: dppDescription.id, 
@@ -93,6 +116,29 @@ function InitialData({ loggedIn, history, dppDescription }) {
     }
   }
 
+  function closeInitialDataPopups() {
+    setIsProfStandartPopupOpen(false);
+  }
+
+  function profStandartPopupOpen() {
+    setIsLoading(true);
+    closeInitialDataPopups();
+    setIsProfStandartPopupOpen(true);
+    const token = localStorage.getItem("token");
+    api.getProfStandarts({ token: token })
+    .then((res) => {
+      setProfStandarts(res);
+      console.log(res)
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => setIsLoading(false));
+  }
+
+  useOnClickOverlay(closeInitialDataPopups);
+  useOnPushEsc(closeInitialDataPopups);
+
   React.useEffect(() => {
     if (loggedIn) {
         const token = localStorage.getItem("token");
@@ -103,7 +149,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
         .then(([ profLevels, initialData ]) => {
           setProfLevels(profLevels);
           setInitialData(initialData);
-          setProfStandarts(initialData.prof_standarts);
+          setProfStandartsProgram(initialData.prof_standarts);
           setRequirementQualifications(initialData.dolg_kvals);
           setRequirementFgos(initialData.fgoses);
           setUserQualification(initialData.req_user_kval);
@@ -138,11 +184,11 @@ function InitialData({ loggedIn, history, dppDescription }) {
             <ul className="initial-data__basis-list">
               <li className="initial-data__basis-item">
                 <img className="initial-data__basis-img" src={prof} alt="prof"></img>
-                <h4 className="initial-data__basis-name">{`Профессиональные стандарты (${profStandarts.length})`}</h4>
-                <button className="btn_type_basis" type="button">Выбрать</button>
+                <h4 className="initial-data__basis-name">{`Профессиональные стандарты (${profStandartsProgram.length})`}</h4>
+                <button className="btn_type_basis" type="button" onClick={profStandartPopupOpen}>Выбрать</button>
                 <ul className="initial-data__basis-el-list">
                   {
-                    profStandarts.map((elem, i) => (
+                    profStandartsProgram.map((elem, i) => (
                       <li className="initial-data__basis-el" key={i}>
                         <span className="initial-data__basis-el-code">{elem.code}</span>
                         <p className="initial-data__basis-el-name">{elem.name}</p>
@@ -201,7 +247,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
                     onChange={() => handleChangeProfLevels(level.id)}
                     >
                   </input>
-                    <span className="test">{level.text}</span>
+                    <span>{level.text}</span>
                   </label>
                 </li>
                 ))
@@ -303,6 +349,17 @@ function InitialData({ loggedIn, history, dppDescription }) {
         </div>
 
       </form>
+
+      <ProfStandartPopup
+        isOpen={isProfStandartPopupOpen}
+        onClose={closeInitialDataPopups}
+        isLoading={isLoading}
+        initialData={initialData}
+        profStandarts={profStandarts}
+        profStandartsProgram={profStandartsProgram} 
+        onSave={handleSelectProfStandart}
+      />
+
     </section>
   );
 }
