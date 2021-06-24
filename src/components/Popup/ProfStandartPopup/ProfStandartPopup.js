@@ -58,7 +58,7 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, initialData, profStanda
           <div className="profstandart__control">
             <button className="btn btn_type_add profstandart__btn-add" type="button">Добавить профстандарт</button>
             <div className="profstandart__search">
-              <div className="profstandart__search-input">
+              <div className="search profstandart__search-input">
                 <input 
                 className="input-search" 
                 placeholder="поиск по названию"
@@ -68,7 +68,7 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, initialData, profStanda
                 >
                 </input>
               </div>
-              <div className="profstandart__search-input">
+              <div className="search profstandart__search-input">
                 <input 
                 className="input-search" 
                 placeholder="поиск по коду"

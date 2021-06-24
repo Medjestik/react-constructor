@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "./static/css/main.2df572a7.chunk.css",
-    "main.js": "./static/js/main.f6dab9b5.chunk.js",
-    "main.js.map": "./static/js/main.f6dab9b5.chunk.js.map",
+    "main.css": "./static/css/main.e996cc5f.chunk.css",
+    "main.js": "./static/js/main.7f217c1a.chunk.js",
+    "main.js.map": "./static/js/main.7f217c1a.chunk.js.map",
     "runtime-main.js": "./static/js/runtime-main.61a1037d.js",
     "runtime-main.js.map": "./static/js/runtime-main.61a1037d.js.map",
     "static/js/2.c650c699.chunk.js": "./static/js/2.c650c699.chunk.js",
@@ -10,14 +10,14 @@
     "static/js/3.7560d338.chunk.js": "./static/js/3.7560d338.chunk.js",
     "static/js/3.7560d338.chunk.js.map": "./static/js/3.7560d338.chunk.js.map",
     "index.html": "./index.html",
-    "static/css/main.2df572a7.chunk.css.map": "./static/css/main.2df572a7.chunk.css.map",
+    "static/css/main.e996cc5f.chunk.css.map": "./static/css/main.e996cc5f.chunk.css.map",
     "static/js/2.c650c699.chunk.js.LICENSE.txt": "./static/js/2.c650c699.chunk.js.LICENSE.txt",
     "static/media/index.css": "./static/media/Raleway-Thin.48c8c234.eot",
     "static/media/act.6897593f.png": "./static/media/act.6897593f.png",
     "static/media/avatar-default.249de024.png": "./static/media/avatar-default.249de024.png",
     "static/media/book.1163651f.png": "./static/media/book.1163651f.png",
     "static/media/document.96ae20ee.png": "./static/media/document.96ae20ee.png",
-    "static/media/KnowledgeMaterial.css": "./static/media/input-search-icon.5375dba4.png",
+    "static/media/App.css": "./static/media/input-search-icon.5375dba4.png",
     "static/media/library.aa65111d.png": "./static/media/library.aa65111d.png",
     "static/media/logo-rut-white.e60879f8.png": "./static/media/logo-rut-white.e60879f8.png",
     "static/media/logo.8cb69506.png": "./static/media/logo.8cb69506.png",
@@ -32,7 +32,7 @@
   "entrypoints": [
     "static/js/runtime-main.61a1037d.js",
     "static/js/2.c650c699.chunk.js",
-    "static/css/main.2df572a7.chunk.css",
-    "static/js/main.f6dab9b5.chunk.js"
+    "static/css/main.e996cc5f.chunk.css",
+    "static/js/main.7f217c1a.chunk.js"
   ]
 }
