@@ -330,13 +330,35 @@
 .form__input-error_active {
   opacity: 1;
 }
-.seacrh {
+.search {
   margin: 10px 0px;
   width: 100%;
   position: relative;
 }
 .input-search {
-
+  background-color: #fff;
+  border-radius: 100px;
+  padding: 10px 50px 10px 20px;
+  width: calc(100% - 70px);
+  outline: none;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.15px;
+  color: var(--title-color);
+  border: 2px solid var(--border-card-color);
+}
+.search::after {
+  content: '';
+  background-size: 20px;
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  z-index: 5;
+  background-image: url('../../images/input-search-icon.png');
 }
 
 @media all and (max-width: 1400px) {

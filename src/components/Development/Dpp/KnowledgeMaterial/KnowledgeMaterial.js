@@ -156,9 +156,9 @@ function KnowledgeMaterial({ currentKnowledge, currentKnowledgeQuestions, setCur
             <p className="questions__title">Вопросы</p>
             <span className="questions__count">{currentQuestions.length}</span>
           </div>
-          <div className="questions__nav-search">
+          <div className="search">
             <input 
-            className="questions__nav-input" 
+            className="input-search" 
             placeholder="поиск по вопросу"
             type="email" 
             id="searchQuestion"

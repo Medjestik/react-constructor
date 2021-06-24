@@ -63,23 +63,6 @@
   text-align: left;
   color: var(--white-color);
 }
-.questions__nav-search {
-  margin: 10px 0px;
-  width: 100%;
-  position: relative;
-}
-.questions__nav-search::after {
-  content: '';
-  background-size: 20px;
-  background-repeat: no-repeat;
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  right: 15px;
-  top: 10px;
-  z-index: 5;
-  background-image: url('../../../../images/quiz/input-search-icon.png');
-}
 .questions__nav-input {
   background-color: #fff;
   border-radius: 100px;
