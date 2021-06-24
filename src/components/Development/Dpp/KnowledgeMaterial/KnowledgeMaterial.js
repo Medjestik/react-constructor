@@ -33,7 +33,6 @@ function KnowledgeMaterial({ currentKnowledge, currentKnowledgeQuestions, setCur
     return (<img className="questions__nav-item-img" src={oneAnswerIcon} alt="иконка"></img>);
   }
 
-  
   function chooseQuestion(question) {
     setCurrentQuestion(question);
     setEditQuestion(question);
