@@ -330,6 +330,14 @@
 .form__input-error_active {
   opacity: 1;
 }
+.seacrh {
+  margin: 10px 0px;
+  width: 100%;
+  position: relative;
+}
+.input-search {
+
+}
 
 @media all and (max-width: 1400px) {
   .container {
