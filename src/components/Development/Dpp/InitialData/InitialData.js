@@ -337,6 +337,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
 
           <li className="initial-data__item initial-data__item_type_info">
             <h3 className="initial-data__item-name">Нормативно-справочная информация</h3>
+            <p className="initial-data__item-subtitle initial-data__item-subtitle_type_info">Добавьте названия источников НСИ, которые будут использованы в ДПП. Вы также сможете дополнить данный список на последующих этапах разработки ДПП.</p>
             <ReferenceInformation />
           </li>
 
