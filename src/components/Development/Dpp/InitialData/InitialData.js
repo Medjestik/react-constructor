@@ -357,7 +357,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
         isLoading={isLoading}
         initialData={initialData}
         profStandarts={profStandarts}
-        profStandartsProgram={profStandartsProgram} 
+        profStandartsProgram={profStandartsProgram}
         onSave={handleSelectProfStandart}
       />
 
