@@ -13,7 +13,7 @@ import ChangeAvatarPopup  from '../Popup/ChangeAvatarPopup/ChangeAvatarPopup.js'
 import useOnClickOverlay from "../../hooks/useOnClickOverlay.js";
 import useOnPushEsc from '../../hooks/useOnPushEsc.js';
 
-function Main({ loggedIn, pathname, onLogout, history, onUpdateUser }) {
+function Main({ loggedIn, pathname, onLogout, history, onUpdateUser, isLoadingRequest, requestMessage, setRequestMessage }) {
 
   const [showHeaderMenu, setShowHeaderMenu] = React.useState(true);
   const [isAvatarPopupOpen, setIsAvatarPopupOpen] = React.useState(false);
@@ -48,7 +48,12 @@ function Main({ loggedIn, pathname, onLogout, history, onUpdateUser }) {
             <MainPage />
           </Route>
           <Route path="/main/person">
-            <Person onUpdateUser={onUpdateUser} />
+            <Person 
+            onUpdateUser={onUpdateUser} 
+            isLoadingRequest={isLoadingRequest} 
+            requestMessage={requestMessage} 
+            setRequestMessage={setRequestMessage} 
+            />
           </Route>
           <Route path="/main/development" exact >
             <Development history={history} />

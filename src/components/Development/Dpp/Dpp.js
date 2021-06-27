@@ -24,7 +24,6 @@ function Dpp({ loggedIn, history, pathname, }) {
       api.getProgramDescription({ token: token, id: currentProgramId })
         .then((res) => {
           setDppDescription(res);
-          console.log(res);
         })
         .catch((err) => {
             console.error(err);

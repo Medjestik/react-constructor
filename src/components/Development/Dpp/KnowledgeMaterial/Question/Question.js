@@ -65,6 +65,8 @@ function Question({ currentQuestion, editQuestion, setEditQuestion, }) {
     setEditQuestion({ ...editQuestion, answers: newAnswers });
   }
 
+  console.log(currentQuestion)
+
   function handleChangeAnswer(id) {
     let newAnswers = [];
     if (editQuestion.type === "one-answer") {

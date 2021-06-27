@@ -124,6 +124,7 @@
   right: 12px;
   top: 13px;
   z-index: 5;
+  transition: .3s ease-in-out;
 }
 .btn_type_delete {
   background-color: var(--third-light-color);
@@ -359,6 +360,21 @@
   top: 10px;
   z-index: 5;
   background-image: url('../../images/input-search-icon.png');
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+  border-radius: 10px;
+  background-color: rgba(94, 185, 175, .3);
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+  background-color: rgba(94, 185, 175, 1);
 }
 
 @media all and (max-width: 1400px) {

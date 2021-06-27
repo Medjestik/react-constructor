@@ -14,6 +14,8 @@ function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [loginError, setLoginError] = React.useState(false);
   const [isLoadingPage, setIsLoadingPage] = React.useState(false);
+  const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
+  const [requestMessage, setRequestMessage] = React.useState({ text: '', isShow: false, type: '' });
 
   const { pathname } = useLocation();
   const history = useHistory();
@@ -79,14 +81,28 @@ function App() {
       id: currentUser.id,
     }
     if (loggedIn) {
+      setIsLoadingRequest(true);
       api.updateUserInfo(userInfoUpdate, localStorage.token)
       .then((res) => {
-        setCurrentUser({ ...currentUser, firstname, lastname, middlename, phone, email })
-        console.log(currentUser)
+        setCurrentUser({ ...currentUser, firstname, lastname, middlename, phone, email });
+        console.log(res);
+        setRequestMessage({ 
+          text: 'Данные успешно сохранены!',
+          isShow: true,
+          type: 'success',
+        })
       })
       .catch((err) => {
+        setRequestMessage({ 
+          text: 'К сожалению произошла ошибка, ваши данные не сохранены!',
+          isShow: true,
+          type: 'error',
+        })
         console.log(err);
       })
+      .finally(() => {
+        setIsLoadingRequest(false);
+      });
     }
   }
 
@@ -118,6 +134,9 @@ function App() {
               onLogout={handleLogout}
               onUpdateUser={handleUpdateUser}
               history={history}
+              isLoadingRequest={isLoadingRequest}
+              requestMessage={requestMessage}
+              setRequestMessage={setRequestMessage}
             />
           </Switch> 
         }
