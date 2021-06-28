@@ -9,11 +9,11 @@ import Dpp from '../Development/Dpp/Dpp.js';
 import Control from '../Control/Control.js';
 import Method from '../Method/Method.js';
 import Discussion from '../Discussion/Discussion.js';
-import ChangeAvatarPopup  from '../Popup/ChangeAvatarPopup/ChangeAvatarPopup';
+import ChangeAvatarPopup  from '../Popup/ChangeAvatarPopup/ChangeAvatarPopup.js';
 import useOnClickOverlay from "../../hooks/useOnClickOverlay.js";
 import useOnPushEsc from '../../hooks/useOnPushEsc.js';
 
-function Main({ loggedIn, pathname, onLogout, history, onUpdateUser }) {
+function Main({ loggedIn, pathname, onLogout, history, onUpdateUser, isLoadingRequest, requestMessage, setRequestMessage }) {
 
   const [showHeaderMenu, setShowHeaderMenu] = React.useState(true);
   const [isAvatarPopupOpen, setIsAvatarPopupOpen] = React.useState(false);
@@ -44,59 +44,38 @@ function Main({ loggedIn, pathname, onLogout, history, onUpdateUser }) {
         <div className={`main__container ${showHeaderMenu ? "main__container_direction_left" : "main__container_direction_center"}`}>
 
         <Switch>    
-            <Route path="/main" exact>
-              <MainPage />
-            </Route>
-          </Switch>
+          <Route path="/main" exact>
+            <MainPage />
+          </Route>
+          <Route path="/main/person">
+            <Person 
+            onUpdateUser={onUpdateUser} 
+            isLoadingRequest={isLoadingRequest} 
+            requestMessage={requestMessage} 
+            setRequestMessage={setRequestMessage} 
+            />
+          </Route>
+          <Route path="/main/development" exact >
+            <Development history={history} />
+          </Route>
+          <Route path="/main/development/dpp" >
+            <Dpp loggedIn={loggedIn} history={history} pathname={pathname} />
+          </Route>
+          <Route path="/main/method" exact>
+            <Method />
+          </Route>
+          <Route path="/main/discussion" exact>
+            <Discussion />
+          </Route>
+          <Route path="/main/control" exact>
+            <Control />
+          </Route>
+        </Switch>
 
-          <Switch>    
-            <Route path="/main/person" exact>
-              <Person
-                onUpdateUser={onUpdateUser} 
-              />
-            </Route>
-          </Switch>
-
-          <Switch>    
-            <Route path="/main/development" exact>
-              <Development
-                history={history}
-              />
-            </Route>
-          </Switch>
-
-          <Switch>    
-            <Route path="/main/development/dpp">
-              <Dpp
-                loggedIn={loggedIn}
-                history={history}
-                pathname={pathname}
-              />
-            </Route>
-          </Switch>
-
-          <Switch>    
-            <Route path="/main/method" exact>
-              <Method />
-            </Route>
-          </Switch>
-
-          <Switch>    
-            <Route path="/main/discussion" exact>
-              <Discussion />
-            </Route>
-          </Switch>
-
-          <Switch>    
-            <Route path="/main/control" exact>
-              <Control />
-            </Route>
-          </Switch>
-
-          <ChangeAvatarPopup
-            isOpen={isAvatarPopupOpen}
-            onClose={closeMainPopups}
-          />
+        <ChangeAvatarPopup
+          isOpen={isAvatarPopupOpen}
+          onClose={closeMainPopups}
+        />
 
         </div>
       </div>

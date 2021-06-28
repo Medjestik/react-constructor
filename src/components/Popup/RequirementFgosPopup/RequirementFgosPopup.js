@@ -1,11 +1,11 @@
 import React from 'react';
-import './ProfStandartPopup.css';
+import './RequirementFgosPopup.css';
 import Popup from '../../Popup/Popup.js';
 
-function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStandartsProgram, onSave }) {
+function RequirementFgosPopup({ isOpen, onClose, isLoading, requirementFgos, requirementFgosProgram, onSave }) {
 
-  const [selectedProfStandart, setSelectedProfStandart] = React.useState([ ...profStandartsProgram]);
-  const [currentProfStandart, setCurrentProfStandart] = React.useState([...profStandarts]);
+  const [selectedFgos, setSelectedFgos] = React.useState([ ...requirementFgosProgram]);
+  const [currentFgos, setCurrentFgos] = React.useState([...requirementFgos]);
   const [searchName, setSearchName] = React.useState('');
   const [searchCode, setSearchCode] = React.useState('');
   const [showAddForm, setShowAddForm] = React.useState(false);
@@ -14,7 +14,7 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
 
   function handleSubmit(e) {
     e.preventDefault();
-    onSave(selectedProfStandart);
+    onSave(selectedFgos);
   }
   
   function handleShowAddForm() {
@@ -23,16 +23,16 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
     setSearchCode('');
   }
 
-  function handleAddProfStandart() {
+  function handleAddFgos() {
     setShowAddForm(false);
     setAddNameText('');
     setAddNameCode('');
-    const newProfStandart = {
+    const newFgos = {
       name: addNameText,
       code: addNameCode,
       id: parseInt(new Date().getTime()),
     }
-    setCurrentProfStandart([...currentProfStandart, newProfStandart]);
+    setCurrentFgos([...currentFgos, newFgos]);
   }
 
   function handleAddName(e) {
@@ -51,41 +51,41 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
     setSearchCode(e.target.value);
   }
 
-  function handleChangeProfStandart(id) {
-    const newProfStandart = selectedProfStandart;
-    if (newProfStandart.some(elem => elem.id === id)) {
-      const index = newProfStandart.findIndex(elem => elem.id === id);
-      newProfStandart.splice(index, 1);
+  function handleChangeFgos(id) {
+    const newFgos = selectedFgos;
+    if (newFgos.some(elem => elem.id === id)) {
+      const index = newFgos.findIndex(elem => elem.id === id);
+      newFgos.splice(index, 1);
     } else {
-      currentProfStandart.find((elem) => {
+      currentFgos.find((elem) => {
         if (elem.id === id) {
-          return newProfStandart.push(elem);
+          return newFgos.push(elem);
         } else {
           return false;
         }
       })
     }
-    setSelectedProfStandart(newProfStandart);
+    setSelectedFgos(newFgos);
   }
 
   React.useEffect(() => {
-    const filteredProfStandart = profStandarts.filter((item) => {
+    const filteredFgos = requirementFgos.filter((item) => {
       return item.name.toLowerCase().includes(searchName.toLowerCase()) && item.code.toLowerCase().includes(searchCode.toLowerCase());
     })
-    setCurrentProfStandart(filteredProfStandart)
-  }, [profStandarts, searchName, searchCode]);
+    setCurrentFgos(filteredFgos)
+  }, [requirementFgos, searchName, searchCode]);
 
   React.useEffect(() => {
-    setSelectedProfStandart([ ...profStandartsProgram]);
-    setCurrentProfStandart([...profStandarts]);
+    setSelectedFgos([ ...requirementFgosProgram]);
+    setCurrentFgos([...requirementFgos]);
     setSearchName('');
     setSearchCode('');
     setAddNameText('');
     setAddNameCode('');
     setShowAddForm(false);
     return () => {
-      setSelectedProfStandart([]);
-      setCurrentProfStandart([]);
+      setSelectedFgos([]);
+      setCurrentFgos([]);
     };
     // eslint-disable-next-line
   }, [isOpen]);
@@ -97,7 +97,7 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
       onClose={onClose}
     >
       <form className="popup__form popup__form_type_large" name="avatar-form" action="#" noValidate onSubmit={handleSubmit}>
-        <h3 className="initial-popup__title">Выбор профессиональных стандартов</h3>
+        <h3 className="initial-popup__title">Выбор федеральных государственных образовательных стандартов</h3>
 
         {
           isLoading ?
@@ -113,13 +113,13 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
             type="button" 
             onClick={handleShowAddForm}
             >
-              Добавить профстандарт
+              Добавить ФГОС
             </button>
             <div className="initial-popup__search">
               <div className="search initial-popup__search-input">
                 <input
                 className="input-search"
-                placeholder="поиск по названию"
+                placeholder="поиск по направлению"
                 type="text"
                 id="search-input-name"
                 name="search-input-name"
@@ -149,41 +149,41 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
             <div className="initial-popup__add-container">
               <input 
               className="initial-popup__add-input"
-              placeholder="введите название профстандарта"
+              placeholder="введите название направления"
               type="text"
               id="add-input-name"
               name="add-input-name"
-              autoComplete="off"
               value={addNameText}
               onChange={handleAddName}
+              autoComplete="off"
               >
               </input>
               <input 
               className="initial-popup__add-input"
-              placeholder="введите код профстандарта"
+              placeholder="введите код направления"
               type="text"
               id="add-input-code"
               name="add-input-code"
-              autoComplete="off"
               value={addNameCode}
               onChange={handleAddCode}
+              autoComplete="off"
               >
               </input>
-              <button className="btn btn_type_save initial-popup__btn-save" type="button" onClick={handleAddProfStandart}>Добавить</button>
+              <button className="btn btn_type_save initial-popup__btn-save" type="button" onClick={handleAddFgos}>Добавить</button>
             </div>
           </div>
           
           <ul className="initial-popup__list">
             {
-              currentProfStandart.map((item, i) => (
+              currentFgos.map((item, i) => (
                 <li className="initial-popup__item" key={i}>
                   <label className="checkbox initial-popup__checkbox">
                     <input 
                       name="prof-standard"
                       type="checkbox"
                       id={i}
-                      defaultChecked={selectedProfStandart.some(elem => elem.id === item.id)}
-                      onChange={() => handleChangeProfStandart(item.id)}
+                      defaultChecked={selectedFgos.some(elem => elem.id === item.id)}
+                      onChange={() => handleChangeFgos(item.id)}
                       >
                     </input>
                     <span></span>
@@ -207,4 +207,4 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
   )
 }
 
-export default ProfStandartPopup;
+export default RequirementFgosPopup;

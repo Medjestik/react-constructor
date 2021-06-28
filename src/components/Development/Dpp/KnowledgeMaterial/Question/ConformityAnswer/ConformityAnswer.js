@@ -24,7 +24,7 @@ function ConformityAnswer({ onDelete, firstPartText, secondPartText, answerId, i
         value={firstPartText || ''}
         onChange={handleChangeFirstPartText}
         type="text"
-        id={answerId}
+        id={`firstPart ${answerId}`}
         name={`firstPartText ${answerId}`}
       >
       </input>
@@ -34,7 +34,7 @@ function ConformityAnswer({ onDelete, firstPartText, secondPartText, answerId, i
         value={secondPartText || ''}
         onChange={handleChangeSecondPartText}
         type="text"
-        id={answerId}
+        id={`secondPart ${answerId}`}
         name={`secondPartText ${answerId}`}
       >
       </input>

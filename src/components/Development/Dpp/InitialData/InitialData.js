@@ -9,25 +9,38 @@ import fgos from '../../../../images/fgos.png';
 import useOnPushEsc from '../../../../hooks/useOnPushEsc';
 import useOnClickOverlay from '../../../../hooks/useOnClickOverlay.js';
 import ProfStandartPopup from '../../../Popup/ProfStandartPopup/ProfStandartPopup.js';
+import RequirementQualificationsPopup from '../../../Popup/RequirementQualificationsPopup/RequirementQualificationsPopup.js';
+import RequirementFgosPopup from '../../../Popup/RequirementFgosPopup/RequirementFgosPopup.js';
 
 function InitialData({ loggedIn, history, dppDescription }) {
 
   const [isRendering, setIsRendering] = React.useState(true);
-  const [profLevels, setProfLevels] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+
   const [initialData, setInitialData] = React.useState({});
-  const [profStandartsProgram, setProfStandartsProgram] = React.useState([]);
-  const [requirementQualifications, setRequirementQualifications] = React.useState([]);
-  const [requirementFgos, setRequirementFgos] = React.useState([]);
+  const [profLevels, setProfLevels] = React.useState([]);
   const [selectedProfLevels, setSelectedProfLevels] = React.useState([]);
+  
+  const [profStandarts, setProfStandarts] = React.useState([]);
+  const [profStandartsProgram, setProfStandartsProgram] = React.useState([]);
+  const [isProfStandartPopupOpen, setIsProfStandartPopupOpen] = React.useState(false);
+
+  const [requirementQualifications, setRequirementQualifications] = React.useState([]);
+  const [requirementQualificationProgram, setRequirementQualificationProgram] = React.useState([]);
+  const [isRequirementQualificationsPopupOpen, setIsRequirementQualificationsPopupOpen] = React.useState(false);
+
+
+  const [requirementFgos, setRequirementFgos] = React.useState([]);
+  const [requirementFgosProgram, setRequirementFgosProgram] = React.useState([]);
+  const [isRequirementFgosPopupOpen, setIsRequirementFgosPopupOpen] = React.useState(false);
+  
   const [newCompetence, setNewCompetence] = React.useState();
   const [userQualification, setUserQualification] = React.useState('');
   const [typologies, setTypologies] = React.useState([]);
   const [currentTypologiesId, setCurrentTypologiesId] = React.useState();
-  const [requestMessage, setRequestMessage] = React.useState({ text: '', isShow: false, type: '' });
-  const [isProfStandartPopupOpen, setIsProfStandartPopupOpen] = React.useState(false);
-  const [profStandarts, setProfStandarts] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
 
+  const [requestMessage, setRequestMessage] = React.useState({ text: '', isShow: false, type: '' });
+  
   function handleChangeProfLevels(id) {
     const newLevels = selectedProfLevels;
     if (newLevels.some(elem => elem.id === id)) {
@@ -67,7 +80,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
         token: token, 
         dppId: dppDescription.id, 
         initialDataVersion: dppDescription.ish_version_id, 
-        data: profStandartId 
+        data: profStandartId
       })
       .then((res) => {
         setProfStandartsProgram(res);
@@ -77,6 +90,14 @@ function InitialData({ loggedIn, history, dppDescription }) {
         console.log(err);
       })
     }
+  }
+
+  function handleSelectRequirementQualification(requirementQualification) {
+    console.log(requirementQualification);
+  }
+
+  function handleSelectRequirementFgos(requirementFgos) {
+    console.log(requirementFgos);
   }
 
   function handleSubmitForm(e) {
@@ -118,6 +139,8 @@ function InitialData({ loggedIn, history, dppDescription }) {
 
   function closeInitialDataPopups() {
     setIsProfStandartPopupOpen(false);
+    setIsRequirementQualificationsPopupOpen(false);
+    setIsRequirementFgosPopupOpen(false);
   }
 
   function profStandartPopupOpen() {
@@ -128,12 +151,21 @@ function InitialData({ loggedIn, history, dppDescription }) {
     api.getProfStandarts({ token: token })
     .then((res) => {
       setProfStandarts(res);
-      console.log(res)
     })
     .catch((err) => {
       console.error(err);
     })
     .finally(() => setIsLoading(false));
+  }
+
+  function requirementQualificationsPopupOpen() {
+    closeInitialDataPopups();
+    setIsRequirementQualificationsPopupOpen(true);
+  }
+
+  function requirementFgosPopupOpen() {
+    closeInitialDataPopups();
+    setIsRequirementFgosPopupOpen(true);
   }
 
   useOnClickOverlay(closeInitialDataPopups);
@@ -147,11 +179,14 @@ function InitialData({ loggedIn, history, dppDescription }) {
           api.getInitialData({ token: token, dppId: dppDescription.id, initialDataVersion: dppDescription.ish_version_id, })
         ])
         .then(([ profLevels, initialData ]) => {
+          console.log(initialData);
           setProfLevels(profLevels);
           setInitialData(initialData);
           setProfStandartsProgram(initialData.prof_standarts);
           setRequirementQualifications(initialData.dolg_kvals);
+          setRequirementQualificationProgram(initialData.dolg_kvals);
           setRequirementFgos(initialData.fgoses);
+          setRequirementFgosProgram(initialData.fgoses);
           setUserQualification(initialData.req_user_kval);
           setNewCompetence(initialData.make_new_competence);
           setSelectedProfLevels(initialData.prof_levels);
@@ -200,7 +235,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
               <li className="initial-data__basis-item">
                 <img className="initial-data__basis-img" src={qual} alt="qual"></img>
                 <h4 className="initial-data__basis-name">{`Квалификационные требования (${requirementQualifications.length})`}</h4>
-                <button className="btn_type_basis" type="button">Выбрать</button>
+                <button className="btn_type_basis" type="button" onClick={requirementQualificationsPopupOpen}>Выбрать</button>
                 <ul className="initial-data__basis-el-list">
                   {
                     requirementQualifications.map((elem, i) => (
@@ -215,7 +250,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
               <li className="initial-data__basis-item">
                 <img className="initial-data__basis-img" src={fgos} alt="fgos"></img>
                 <h4 className="initial-data__basis-name">{`Требования ФГОС (${requirementFgos.length})`}</h4>
-                <button className="btn_type_basis" type="button">Выбрать</button>
+                <button className="btn_type_basis" type="button" onClick={requirementFgosPopupOpen}>Выбрать</button>
                 <ul className="initial-data__basis-el-list">
                   {
                     requirementFgos.map((elem, i) => (
@@ -337,6 +372,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
 
           <li className="initial-data__item initial-data__item_type_info">
             <h3 className="initial-data__item-name">Нормативно-справочная информация</h3>
+            <p className="initial-data__item-subtitle initial-data__item-subtitle_type_info">Добавьте названия источников НСИ, которые будут использованы в ДПП. Вы также сможете дополнить данный список на последующих этапах разработки ДПП.</p>
             <ReferenceInformation />
           </li>
 
@@ -354,10 +390,27 @@ function InitialData({ loggedIn, history, dppDescription }) {
         isOpen={isProfStandartPopupOpen}
         onClose={closeInitialDataPopups}
         isLoading={isLoading}
-        initialData={initialData}
         profStandarts={profStandarts}
-        profStandartsProgram={profStandartsProgram} 
+        profStandartsProgram={profStandartsProgram}
         onSave={handleSelectProfStandart}
+      />
+
+      <RequirementQualificationsPopup
+        isOpen={isRequirementQualificationsPopupOpen}
+        onClose={closeInitialDataPopups}
+        isLoading={isLoading}
+        requirementQualifications={requirementQualifications}
+        requirementQualificationProgram={requirementQualificationProgram}
+        onSave={handleSelectRequirementQualification}
+      />
+
+      <RequirementFgosPopup
+        isOpen={isRequirementFgosPopupOpen}
+        onClose={closeInitialDataPopups}
+        isLoading={isLoading}
+        requirementFgos={requirementFgos}
+        requirementFgosProgram={requirementFgosProgram}
+        onSave={handleSelectRequirementFgos}
       />
 
     </section>

@@ -76,6 +76,7 @@ function KnowledgeMaterial({ currentKnowledge, currentKnowledgeQuestions, setCur
     }
     
     const newQuestions = [newQuestion, ...currentQuestions];
+    console.log(newQuestions);
     setEditQuestion(newQuestions[0]);
     setIsRenderQuestion(true);
   }
@@ -159,7 +160,7 @@ function KnowledgeMaterial({ currentKnowledge, currentKnowledgeQuestions, setCur
             <input 
             className="input-search" 
             placeholder="поиск по вопросу"
-            type="email" 
+            type="text" 
             id="searchQuestion"
             name="searchQuestion" 
             value={textQuestion}

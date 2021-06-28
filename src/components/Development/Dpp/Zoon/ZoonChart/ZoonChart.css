@@ -1,0 +1,36 @@
+#tree {
+  margin-top: 30px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  border: 2px solid var(--border-card-color);
+  border-radius: 10px;
+}
+#tree>svg {
+  background-color: var(--background-third-color);
+  width: 100%;
+  height: 100%;
+}
+.field__name {
+  margin: 0px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 1.3;
+  text-align: left;
+  color: var(--white-color);
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.field__title {
+  margin: 0px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.3;
+  text-align: left;
+  color: var(--white-color);
+}

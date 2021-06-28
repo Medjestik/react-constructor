@@ -14,7 +14,7 @@ function ReferenceInformation() {
       <li className="initial-data__info-item">
         <div className="initial-data__info-top">
           <img className="initial-data__info-img" src={tehn} alt="иконка"></img>
-          <h5 className="initial-data__info-name">Нормативно-техническая документация и ГОСТы</h5>
+          <h5 className="initial-data__info-name">Нормативно-техническая документация и ГОСТ</h5>
         </div>
         <div className="initial-data__info-bottom">
           <span className="initial-data__info-count">Добавлено источников: 5</span>

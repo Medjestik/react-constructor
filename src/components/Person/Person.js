@@ -2,7 +2,7 @@ import React from 'react';
 import './Person.css';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
 
-function Person({ onUpdateUser }) {
+function Person({ onUpdateUser, isLoadingRequest, requestMessage, setRequestMessage }) {
 
   const user = React.useContext(CurrentUserContext);
 
@@ -28,6 +28,7 @@ function Person({ onUpdateUser }) {
   function handleChangeFirstname(e) {
     setFirstname(e.target.value);
     setErrorFirstname(false);
+    setRequestMessage({ text: '', isShow: false, type: '',});
     if (e.target.checkValidity()) {
       setErrorFirstname({
           errorText: '',
@@ -45,6 +46,7 @@ function Person({ onUpdateUser }) {
   function handleChangeLastname(e) {
     setLastname(e.target.value);
     setErrorLastname(false);
+    setRequestMessage({ text: '', isShow: false, type: '',});
     if (e.target.checkValidity()) {
       setErrorLastname({
           errorText: '',
@@ -62,6 +64,7 @@ function Person({ onUpdateUser }) {
   function handleChangeMiddlename(e) {
     setMiddlename(e.target.value);
     setErrorMiddlename(false);
+    setRequestMessage({ text: '', isShow: false, type: '',});
     if (e.target.checkValidity()) {
       setErrorMiddlename({
           errorText: '',
@@ -79,6 +82,7 @@ function Person({ onUpdateUser }) {
   function handleChangePhone(e) {
     setPhone(e.target.value);
     setErrorPhone(false);
+    setRequestMessage({ text: '', isShow: false, type: '',});
     if (e.target.checkValidity()) {
       setErrorPhone({
           errorText: '',
@@ -96,6 +100,7 @@ function Person({ onUpdateUser }) {
   function handleChangeEmail(e) {
     setEmail(e.target.value);
     setErrorEmail(false);
+    setRequestMessage({ text: '', isShow: false, type: '',});
     if (e.target.checkValidity()) {
       setErrorEmail({
           errorText: '',
@@ -216,9 +221,12 @@ function Person({ onUpdateUser }) {
             </span>
           </div>
         </label>
-        
-        
-        <button className={`btn btn_type_save ${errorForm ? "btn_type_block" : ""}`} type="submit">Сохранить данные</button>
+
+        <div className="person__button">
+          <button className={`btn btn_type_save ${errorForm ? "btn_type_block" : ""}`} type="submit">{isLoadingRequest ? "Сохранение.." : "Сохранить данные"}</button>
+          <span className={`request-message ${requestMessage.isShow ? "request-message_type_show" : "request-message_type_hide"} ${requestMessage.type === 'error' ? "request-message_type_error" : "request-message_type_success"}`}>{requestMessage.text}</span>
+        </div>
+
       </form>
       
     </div>
