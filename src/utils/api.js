@@ -130,3 +130,15 @@ export const selectProfStandarts = ({ token, dppId, initialDataVersion, data }) 
   })
   .then(res => handleResponse(res))
 };
+
+export const getZoonVersion = ({ token, dppId, zoonVersion }) => {
+  return fetch(`${API_URL}/dpps/${dppId}/get_stage_data/${zoonVersion}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};

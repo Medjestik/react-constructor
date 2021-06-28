@@ -1,5 +1,6 @@
 import React from 'react';
 import './Zoon.css';
+import * as api from '../../../../utils/api.js';
 import ZoonChart from './ZoonChart/ZoonChart.js';
 
 const nodes = [
@@ -10,7 +11,20 @@ const nodes = [
   { id: "7", pid: "4", tags: ["knowledge"], name: "Avery Hughes", title: "Знание"},
 ]
 
-function Zoon() {
+function Zoon({ dppDescription }) {
+
+  React.useEffect(() => {
+    const token = localStorage.getItem("token");
+    api.getZoonVersion({ token: token, dppId: dppDescription.id, zoonVersion: dppDescription.zun_version_id, })
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.err(err);
+    })
+  }, [dppDescription]);
+
+  console.log(dppDescription);
 
   return (
     <div className="zoon">

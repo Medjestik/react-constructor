@@ -106,7 +106,26 @@ function ZoonChart({ nodes }) {
       mouseScrool: OrgChart.action.zoom,
     });
 
-    console.log(nodes)
+    zoon.on('drop', function (sender, draggedNodeId, droppedNodeId) {
+      const draggedNode = sender.getNode(draggedNodeId);
+      const droppedNode = sender.getNode(droppedNodeId);
+
+      console.log(draggedNode);
+      //console.log(droppedNode.tags.indexOf("knowledge"));
+      if (droppedNode.tags.indexOf("knowledge") !== -1) {
+        return false;
+      }
+
+      /*if (droppedNode.tags.indexOf("department") !== -1 && draggedNode.tags.indexOf("department") === -1) {
+          var draggedNodeData = sender.get(draggedNode.id);
+          draggedNodeData.pid = null;
+          draggedNodeData.stpid = droppedNode.id;
+          sender.updateNode(draggedNodeData);
+          return false;
+      }*/
+  });
+
+    console.log(nodes);
     // eslint-disable-next-line
   }, [nodes]);
 
@@ -146,7 +165,7 @@ function ZoonChart({ nodes }) {
     setIsEditNodePopupOpen(true);
   }
 
-  console.log(currentNode);
+  //console.log(currentNode);
   
   return (
     <>
