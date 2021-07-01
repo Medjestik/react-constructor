@@ -178,10 +178,10 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
           required
           ></input>
           <span className="popup__subtitle add-node__caption">{`Итоговое название: Знать ${knowledgeWhat || ""}`}</span>
+          <JustificationPopup />
           <div className="add-zoon__error">
           <span className={`add-zoon__error-message ${isErrorRequest ? "add-zoon__error-message_type_show" : "add-zoon__error-message_type_hide"}`}>К сожалению, произошла ошибка, попробуйте обновить страницу.</span>
           </div>
-          
           <button className={`
           btn btn_type_save initial-popup__btn-save 
           ${isLoadingRequest || formErrorKnowledge ? "btn_type_loading" : ""}
@@ -235,10 +235,10 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
           required
           ></input>
           <span className="popup__subtitle add-node__caption">{`Итоговое название: Уметь ${abilityWhat || ""} ${abilityWith || ""} ${abilityWhere || ""}`}</span>
+          <JustificationPopup />
           <div className="add-zoon__error">
           <span className={`add-zoon__error-message ${isErrorRequest ? "add-zoon__error-message_type_show" : "add-zoon__error-message_type_hide"}`}>К сожалению, произошла ошибка, попробуйте обновить страницу.</span>
           </div>
-          
           <button className={`
           btn btn_type_save initial-popup__btn-save 
           ${isLoadingRequest || formErrorAbility ? "btn_type_loading" : ""}
@@ -292,14 +292,13 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
             required
             ></input>
             <span className="popup__subtitle add-node__caption">{`Итоговое название: Владеть навыком ${skillWhat || ""} ${skillWith || ""} ${skillWhere || ""}`}</span>
+            <JustificationPopup />
             <div className="add-zoon__error">
             <span className={`add-zoon__error-message ${isErrorRequest ? "add-zoon__error-message_type_show" : "add-zoon__error-message_type_hide"}`}>К сожалению, произошла ошибка, попробуйте обновить страницу.</span>
             </div>
-            
             <button className={`
             btn btn_type_save initial-popup__btn-save 
             ${isLoadingRequest || formErrorSkill ? "btn_type_loading" : ""}
-            
             `} 
             type="submit"
             >

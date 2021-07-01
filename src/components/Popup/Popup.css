@@ -22,10 +22,12 @@
   transition-delay: 0s;
 }
 .popup__container {
-  margin: 20vh auto 0px;
+  margin: 15vh auto 0px;
   padding: 34px 36px 28px;
   width: max-content;
   min-height: 114px;
+  overflow-y: auto;
+  max-height: 70vh;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -36,10 +38,10 @@
 .popup__close-button {
   position: absolute;
   padding: 0;
-  right: -45px;
-  top: -45px;
-  width: 40px;
-  height: 40px;
+  right: 15px;
+  top: 15px;
+  width: 30px;
+  height: 30px;
   border: none;
   box-sizing: border-box;
   background-color: transparent;
@@ -53,7 +55,6 @@
   cursor: pointer;
   transition: opacity .3s ease-in-out;
   outline: none;
-  z-index: -1;
 }
 .popup__close-button:hover {
   opacity: .7;
