@@ -1,6 +1,7 @@
 import React from 'react';
 import './AddNodePopup.css';
 import Popup from '../../../../Popup/Popup.js';
+import JustificationPopup from '../JustificationPopup/JustificationPopup.js';
 
 function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadingRequest, isErrorRequest }) {
 
@@ -180,6 +181,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
           <div className="add-zoon__error">
           <span className={`add-zoon__error-message ${isErrorRequest ? "add-zoon__error-message_type_show" : "add-zoon__error-message_type_hide"}`}>К сожалению, произошла ошибка, попробуйте обновить страницу.</span>
           </div>
+          
           <button className={`
           btn btn_type_save initial-popup__btn-save 
           ${isLoadingRequest || formErrorKnowledge ? "btn_type_loading" : ""}
@@ -236,6 +238,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
           <div className="add-zoon__error">
           <span className={`add-zoon__error-message ${isErrorRequest ? "add-zoon__error-message_type_show" : "add-zoon__error-message_type_hide"}`}>К сожалению, произошла ошибка, попробуйте обновить страницу.</span>
           </div>
+          
           <button className={`
           btn btn_type_save initial-popup__btn-save 
           ${isLoadingRequest || formErrorAbility ? "btn_type_loading" : ""}
@@ -292,6 +295,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
             <div className="add-zoon__error">
             <span className={`add-zoon__error-message ${isErrorRequest ? "add-zoon__error-message_type_show" : "add-zoon__error-message_type_hide"}`}>К сожалению, произошла ошибка, попробуйте обновить страницу.</span>
             </div>
+            
             <button className={`
             btn btn_type_save initial-popup__btn-save 
             ${isLoadingRequest || formErrorSkill ? "btn_type_loading" : ""}
