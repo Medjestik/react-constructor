@@ -131,14 +131,105 @@ export const selectProfStandarts = ({ token, dppId, initialDataVersion, data }) 
   .then(res => handleResponse(res))
 };
 
-export const getZoonVersion = ({ token, dppId, zoonVersion }) => {
-  return fetch(`${API_URL}/dpps/${dppId}/get_stage_data/${zoonVersion}`, {
+export const getZoon = ({ token, dppId, zoonVersion }) => {
+  return fetch(`${API_URL}/dpps/${dppId}/get_zun_version_data2/${zoonVersion}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     }
+  })
+  .then(res => handleResponse(res))
+};
+
+export const addKnowledge = ({ token, dppId, zoonVersion, node }) => {
+  return fetch(`${API_URL}/dpps/${dppId}/add_knowledge_new/${zoonVersion}`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ node })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const removeKnowledge = ({ token, dppId, zoonVersion, nodeId }) => {
+  return fetch(`${API_URL}/dpps/${dppId}/remove_knowledge_new/${zoonVersion}`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ nodeId })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const addAbility = ({ token, dppId, zoonVersion, node }) => {
+  return fetch(`${API_URL}/dpps/${dppId}/add_ability_new/${zoonVersion}`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ node })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const removeAbility = ({ token, dppId, zoonVersion, nodeId }) => {
+  return fetch(`${API_URL}/dpps/${dppId}/remove_ability_new/${zoonVersion}`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ nodeId })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const addSkill = ({ token, dppId, zoonVersion, node }) => {
+  return fetch(`${API_URL}/dpps/${dppId}/add_skill_new/${zoonVersion}`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ node })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const removeSkill = ({ token, dppId, zoonVersion, nodeId }) => {
+  return fetch(`${API_URL}/dpps/${dppId}/remove_skill_new/${zoonVersion}`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ nodeId })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const moveNode = ({ token, dppId, elem_type, elem_id, to_type, to_id }) => {
+  return fetch(`${API_URL}/dpps/${dppId}/move_elem`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ elem_type, elem_id, to_type, to_id })
   })
   .then(res => handleResponse(res))
 };

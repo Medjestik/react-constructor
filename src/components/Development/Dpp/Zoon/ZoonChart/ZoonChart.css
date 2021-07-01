@@ -1,5 +1,5 @@
 #tree {
-  margin-top: 30px;
+  margin-top: 10px;
   width: 100%;
   height: 100%;
   position: relative;
@@ -25,6 +25,17 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.field__menu {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  object-position: center;
+  object-fit: cover;
+  transition: .3s ease-in-out;
+}
+.field__menu:hover {
+  opacity: .7;
+}
 .field__title {
   margin: 0px;
   font-style: normal;
@@ -33,4 +44,95 @@
   line-height: 1.3;
   text-align: left;
   color: var(--white-color);
+}
+.chart-menu div span {
+  margin: 0px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--subtitle-color);
+  padding-left: 30px;
+  position: relative;
+}
+.chart-menu div {
+  padding: 15px 15px !important;
+  cursor: pointer;
+}
+.chart-menu div span::before {
+  content: '';
+  background-size: 25px;
+  background-repeat: no-repeat;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  left: 0px;
+  top: -2px;
+  z-index: 10000;
+}
+.chart-menu div[data-item ="addAbility"] span::before {
+  content: '';
+  background-image: url('../../../../../images/add-color.png');
+  position: absolute;
+  left: 0px;
+  top: -2px;
+  z-index: 10000;
+}
+.chart-menu div[data-item ="addSkill"] span::before {
+  content: '';
+  background-image: url('../../../../../images/add-color.png');
+  position: absolute;
+  left: 0px;
+  top: -2px;
+  z-index: 10000;
+}
+.chart-menu div[data-item ="addKnowledge"] span::before {
+  content: '';
+  background-image: url('../../../../../images/add-color.png');
+  position: absolute;
+  left: 0px;
+  top: -2px;
+  z-index: 10000;
+}
+.chart-menu div[data-item ="remove"] span::before {
+  content: '';
+  background-image: url('../../../../../images/delete-color.png');
+  position: absolute;
+  left: 0px;
+  top: -2px;
+  z-index: 10000;
+}
+.chart-menu div[data-item ="edit"] span::before {
+  content: '';
+  background-image: url('../../../../../images/edit-color.png');
+  position: absolute;
+  left: 0px;
+  top: -2px;
+  z-index: 10000;
+}
+.zoon-chart_btn-control {
+  margin: 30px 0px 0px 0px;
+  display: flex;
+}
+.zoon-chart__btn_type_add-skill {
+  margin-right: 20px;
+  background-color: var(--secondary-color);
+}
+.zoon-chart__btn_type_add-ability {
+  background-color: var(--main-color);
+}
+.zoon-chart__btn_type_build-competence {
+  margin: 0px 0px 0px auto;
+  background-color: #8B00FF;
+}
+.zoon-chart__btn_type_build-competence::after {
+  content: '';
+  background-image: url('../../../../../images/build-competence.png');
+  background-size: 28px;
+  width: 28px;
+  height: 28px;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  z-index: 5;
+  transition: .3s ease-in-out;
 }

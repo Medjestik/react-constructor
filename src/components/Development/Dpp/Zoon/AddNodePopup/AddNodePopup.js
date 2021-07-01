@@ -1,27 +1,30 @@
 import React from 'react';
-import './EditNodePopup.css';
+import './AddNodePopup.css';
 import Popup from '../../../../Popup/Popup.js';
 
-function EditNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadingRequest, isErrorRequest }) {
+function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadingRequest, isErrorRequest }) {
 
   const [knowledgeWhat, setKnowledgeWhat] = React.useState('');
   const [errorKnowledgeWhat, setErrorKnowledgeWhat] = React.useState(true);
   const [formErrorKnowledge, setFormErrorKnowledge] = React.useState(true);
   const [abilityWhat, setAbilityWhat] = React.useState('');
+  const [errorAbilityWhat, setErrorAbilityWhat] = React.useState(true);
   const [abilityWith, setAbilityWith] = React.useState('');
+  const [errorAbilityWith, setErrorAbilityWith] = React.useState(true);
   const [abilityWhere, setAbilityWhere] = React.useState('');
+  const [errorAbilityWhere, setErrorAbilityWhere] = React.useState(true);
   const [formErrorAbility, setFormErrorAbility] = React.useState(true);
   const [skillWhat, setSkillWhat] = React.useState('');
+  const [errorSkillWhat, setErrorSkillWhat] = React.useState(true);
   const [skillWith, setSkillWith] = React.useState('');
+  const [errorSkillWith, setErrorSkillWith] = React.useState(true);
   const [skillWhere, setSkillWhere] = React.useState('');
+  const [errorSkillWhere, setErrorSkillWhere] = React.useState(true);
   const [formErrorSkill, setFormErrorSkill] = React.useState(true);
-
-  console.log(currentNode);
-  console.log(isOpen);
   
   function handleSubmit(e) {
     e.preventDefault();
-    /*switch(currentNode.tags[0]) {
+    switch(currentNode.tags[0]) {
       case 'knowledge':
         const newKnowledge = "Знать " + knowledgeWhat;
         const newKnowledgeNode = { ...currentNode, name: newKnowledge, what: knowledgeWhat };
@@ -42,7 +45,7 @@ function EditNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoad
 
       default: 
         return false;
-    }*/
+    }
   }
   
   function handleChangeKnowledgeWhat(e) {
@@ -56,39 +59,75 @@ function EditNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoad
 
   function handleChangeAbilityWhat(e) {
     setAbilityWhat(e.target.value);
+    if (e.target.checkValidity()) {
+      setErrorAbilityWhat(false);
+    } else {
+      setErrorAbilityWhat(true);
+    }
   }
 
   function handleChangeAbilityWith(e) {
     setAbilityWith(e.target.value);
+    if (e.target.checkValidity()) {
+      setErrorAbilityWith(false);
+    } else {
+      setErrorAbilityWith(true);
+    }
   }
 
   function handleChangeAbilityWhere(e) {
     setAbilityWhere(e.target.value);
+    if (e.target.checkValidity()) {
+      setErrorAbilityWhere(false);
+    } else {
+      setErrorAbilityWhere(true);
+    }
   }
 
   function handleChangeSkillWhat(e) {
     setSkillWhat(e.target.value);
+    if (e.target.checkValidity()) {
+      setErrorSkillWhat(false);
+    } else {
+      setErrorSkillWhat(true);
+    }
   }
 
   function handleChangeSkillWith(e) {
     setSkillWith(e.target.value);
+    if (e.target.checkValidity()) {
+      setErrorSkillWith(false);
+    } else {
+      setErrorSkillWith(true);
+    }
   }
 
   function handleChangeSkillWhere(e) {
     setSkillWhere(e.target.value);
+    if (e.target.checkValidity()) {
+      setErrorSkillWhere(false);
+    } else {
+      setErrorSkillWhere(true);
+    }
   }
 
   React.useEffect(() => {
-    setKnowledgeWhat(currentNode.what || "");
+    setKnowledgeWhat('');
     setErrorKnowledgeWhat(true);
     setFormErrorKnowledge(true);
-    setAbilityWhat(currentNode.what || "");
-    setAbilityWith(currentNode.with || "");
-    setAbilityWhere(currentNode.where || "");
+    setAbilityWhat('');
+    setAbilityWith('');
+    setAbilityWhere('');
+    setErrorAbilityWhat(true);
+    setErrorAbilityWith(true);
+    setErrorAbilityWhere(true);
     setFormErrorAbility(true);
-    setSkillWhat(currentNode.what || "");
-    setSkillWith(currentNode.with || "");
-    setSkillWhere(currentNode.where || "");
+    setSkillWhat('');
+    setSkillWith('');
+    setSkillWhere('');
+    setErrorSkillWhat(true);
+    setErrorSkillWith(true);
+    setErrorSkillWhere(true);
     setFormErrorSkill(true);
     // eslint-disable-next-line
   }, [isOpen]);
@@ -102,27 +141,27 @@ function EditNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoad
   }, [errorKnowledgeWhat]);
 
   React.useEffect(() => {
-    if (abilityWhat.length > 0 & abilityWith.length > 0 & abilityWhere.length > 0) {
-      setFormErrorAbility(false);
-    } else {
+    if (errorAbilityWhat || errorAbilityWith || errorAbilityWhere) {
       setFormErrorAbility(true);
+    } else {
+      setFormErrorAbility(false);
     }
-  }, [abilityWhat, abilityWith, abilityWhere]);
+  }, [errorAbilityWhat, errorAbilityWith, errorAbilityWhere]);
 
   React.useEffect(() => {
-    if (skillWhat.length > 0 & skillWith.length > 0 & skillWhere.length > 0) {
-      setFormErrorSkill(false);
-    } else {
+    if (errorSkillWhat || errorSkillWith || errorSkillWhere) {
       setFormErrorSkill(true);
+    } else {
+      setFormErrorSkill(false);
     }
-  }, [skillWhat, skillWith, skillWhere]);
+  }, [errorSkillWhat, errorSkillWith, errorSkillWhere]);
 
   function handleDefineType(type) {
     switch(type) {
       case 'knowledge':
         return (
           <>
-          <h3 className="popup__title add-node__main-title">Редактирование знания</h3>
+          <h3 className="popup__title add-node__main-title">Создание нового знания</h3>
           <h5 className="popup__title add-node__title">Название знания</h5>
           <p className="popup__subtitle add-node__subtitle">Заполните параметры названия компонента</p>
           <input 
@@ -154,7 +193,7 @@ function EditNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoad
       case 'ability':
         return(
           <>
-          <h3 className="popup__title add-node__main-title">Редактирование умения</h3>
+          <h3 className="popup__title add-node__main-title">Создание нового умения</h3>
           <h5 className="popup__title add-node__title">Название умения</h5>
           <p className="popup__subtitle add-node__subtitle">Заполните параметры названия компонента</p>
           <input 
@@ -210,7 +249,7 @@ function EditNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoad
         case "skill":
           return(
             <>
-            <h3 className="popup__title add-node__main-title">Редактирование навыка</h3>
+            <h3 className="popup__title add-node__main-title">Создание нового навыка</h3>
             <h5 className="popup__title add-node__title">Название навыка</h5>
             <p className="popup__subtitle add-node__subtitle">Заполните параметры названия компонента</p>
             <input 
@@ -283,4 +322,4 @@ function EditNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoad
   )
 }
 
-export default EditNodePopup;
+export default AddNodePopup;
