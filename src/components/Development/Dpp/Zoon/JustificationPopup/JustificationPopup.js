@@ -1,6 +1,11 @@
 import React from 'react';
 import './JustificationPopup.css';
 import tehn from '../../../../../images/nsi/tehn.png';
+import book from '../../../../../images/nsi/book.png';
+import website from '../../../../../images/nsi/website.png';
+import library from '../../../../../images/nsi/library.png';
+import act from '../../../../../images/nsi/act.png';
+import document from '../../../../../images/nsi/document.png';
 
 const source = [
   {
@@ -30,10 +35,11 @@ const source = [
 ]
 
 
-function JustificationPopup() {
+function JustificationPopup({ openAddJustificationPopup }) {
 
   const [isJustificationType, setIsJustificationType] = React.useState("");
   const [isExpertOpinion, setIsExpertOpinion] = React.useState("")
+  
 
   function handleJustificationType(e) {
     setIsJustificationType(e.target.id);
@@ -43,7 +49,30 @@ function JustificationPopup() {
     setIsExpertOpinion(e.target.value);
   }
 
-
+  function defineIcon(type) {
+    switch(type) {
+      case 'textbook':
+        return (<img className="justification__source-icon" src={book} alt="source-icon"></img>);
+  
+      case 'technical':
+        return (<img className="justification__source-icon" src={tehn} alt="source-icon"></img>);
+  
+      case 'internet':
+        return (<img className="justification__source-icon" src={website} alt="source-icon"></img>);
+  
+      case 'library':
+        return (<img className="justification__source-icon" src={library} alt="source-icon"></img>);
+  
+      case 'act':
+        return (<img className="justification__source-icon" src={act} alt="source-icon"></img>);
+          
+        case 'document':
+          return (<img className="justification__source-icon" src={document} alt="source-icon"></img>);
+  
+      default: 
+        return false;
+    }
+  }
 
 
   function defineJustification(type) {
@@ -53,7 +82,7 @@ function JustificationPopup() {
           <>
           <h5 className="popup__title add-node__title">Источники НСИ</h5>
           <p className="popup__subtitle add-node__subtitle">Соотнесите элемент с источниками НСИ</p>
-          <button className="btn btn_type_add justification__btn_type_add" type="button">Добавить новый источник</button>
+          <button className="btn btn_type_add justification__btn_type_add" type="button" onClick={openAddJustificationPopup}>Добавить новый источник</button>
           <ul className="justification__source-list">
             {
               source.map((item, i) => (
@@ -69,7 +98,7 @@ function JustificationPopup() {
                     <span></span>
                   </label>
                   <p className="justification__source-name">{item.name}</p>
-                  <img className="justification__source-icon" src={tehn} alt="source-icon"></img>
+                  {defineIcon(item.type)}
                 </li>
               ))
             }
@@ -133,6 +162,7 @@ function JustificationPopup() {
         </li>
       </ul>
       {defineJustification(isJustificationType)}
+
     </div>
   )
 }

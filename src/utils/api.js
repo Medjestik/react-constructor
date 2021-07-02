@@ -233,3 +233,15 @@ export const moveNode = ({ token, dppId, elem_type, elem_id, to_type, to_id }) =
   })
   .then(res => handleResponse(res))
 };
+
+export const getNsi = ({ token, initialVersionId }) => {
+  return fetch(`${API_URL}/nsis/${initialVersionId}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};

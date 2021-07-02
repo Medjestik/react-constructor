@@ -68,7 +68,10 @@ function Dpp({ loggedIn, history, pathname, }) {
 
         <Switch>    
           <Route path="/main/development/dpp/zoon" exact>
-            <Zoon dppDescription={dppDescription} />
+            <Zoon 
+            dppDescription={dppDescription}
+            loggedIn={loggedIn}
+            />
           </Route>
         </Switch>
 

@@ -3,7 +3,7 @@ import './AddNodePopup.css';
 import Popup from '../../../../Popup/Popup.js';
 import JustificationPopup from '../JustificationPopup/JustificationPopup.js';
 
-function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadingRequest, isErrorRequest }) {
+function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadingRequest, isErrorRequest, openAddJustificationPopup }) {
 
   const [knowledgeWhat, setKnowledgeWhat] = React.useState('');
   const [errorKnowledgeWhat, setErrorKnowledgeWhat] = React.useState(true);
@@ -178,7 +178,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
           required
           ></input>
           <span className="popup__subtitle add-node__caption">{`Итоговое название: Знать ${knowledgeWhat || ""}`}</span>
-          <JustificationPopup />
+          <JustificationPopup openAddJustificationPopup={openAddJustificationPopup} />
           <div className="add-zoon__error">
           <span className={`add-zoon__error-message ${isErrorRequest ? "add-zoon__error-message_type_show" : "add-zoon__error-message_type_hide"}`}>К сожалению, произошла ошибка, попробуйте обновить страницу.</span>
           </div>
@@ -235,7 +235,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
           required
           ></input>
           <span className="popup__subtitle add-node__caption">{`Итоговое название: Уметь ${abilityWhat || ""} ${abilityWith || ""} ${abilityWhere || ""}`}</span>
-          <JustificationPopup />
+          <JustificationPopup openAddJustificationPopup={openAddJustificationPopup} />
           <div className="add-zoon__error">
           <span className={`add-zoon__error-message ${isErrorRequest ? "add-zoon__error-message_type_show" : "add-zoon__error-message_type_hide"}`}>К сожалению, произошла ошибка, попробуйте обновить страницу.</span>
           </div>
@@ -292,7 +292,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
             required
             ></input>
             <span className="popup__subtitle add-node__caption">{`Итоговое название: Владеть навыком ${skillWhat || ""} ${skillWith || ""} ${skillWhere || ""}`}</span>
-            <JustificationPopup />
+            <JustificationPopup openAddJustificationPopup={openAddJustificationPopup} />
             <div className="add-zoon__error">
             <span className={`add-zoon__error-message ${isErrorRequest ? "add-zoon__error-message_type_show" : "add-zoon__error-message_type_hide"}`}>К сожалению, произошла ошибка, попробуйте обновить страницу.</span>
             </div>

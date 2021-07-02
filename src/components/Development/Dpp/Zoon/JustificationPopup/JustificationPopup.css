@@ -72,3 +72,6 @@
   line-height: 1.3;
   color: var(--title-color);
 }
+.btn_type_nsi {
+  margin: 20px auto 0px 0px;
+}

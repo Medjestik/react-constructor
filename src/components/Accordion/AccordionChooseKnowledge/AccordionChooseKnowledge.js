@@ -45,7 +45,7 @@ const AccordionChooseKnowledge = ({ children, renderKnowledge }) => {
 
   return (
     <div className="accordion__section accordion__section_type_choose" ref={sensitive}>
-      <button className={`accordion ${active}`} onClick={toggleAccordion}>
+      <button className={`accordion ${active}`} onClick={toggleAccordion} type="button">
         <p className="accordion__title accordion__title_type_choose">{title}</p>
         <Chevron width={10} fill={fill} className={`${rotation}`} />
       </button>

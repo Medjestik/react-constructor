@@ -5,17 +5,16 @@ import AddNodePopup from '../AddNodePopup/AddNodePopup.js';
 import EditNodePopup from '../EditNodePopup/EditNodePopup.js';
 import ConfirmRemovePopup from '../ConfirmRemovePopup/ConfirmRemovePopup.js';
 import ErrorRemovePopup from '../ErrorRemovePopup/ErrorRemovePopup.js';
-import useOnPushEsc from '../../../../../hooks/useOnPushEsc.js';
-import useOnClickOverlay from '../../../../../hooks/useOnClickOverlay.js';
+import AddNsiPopup from '../../../../Popup/AddNsiPopup/AddNsiPopup.js';
 import * as api from '../../../../../utils/api.js';
 import ErrorDragAndDropPopup from '../ErrorDragAndDropPopup/ErrorDragAndDropPopup.js';
 
 function ZoonChart({ nodes, dppDescription }) {
 
-  const [zoonChart, setZoonChart] = React.useState({})
-  const [currentNode, setCurrentNode] = React.useState({})
-  const [currentNodeId, setCurrentNodeId] = React.useState('')
-  const [currentNodeType, setCurrentNodeType] = React.useState('')
+  const [zoonChart, setZoonChart] = React.useState({});
+  const [currentNode, setCurrentNode] = React.useState({});
+  const [currentNodeId, setCurrentNodeId] = React.useState('');
+  const [currentNodeType, setCurrentNodeType] = React.useState('');
   const [isAddNodePopupOpen, setIsAddNodePopupOpen] = React.useState(false);
   const [isEditNodePopupOpen, setIsEditNodePopupOpen] = React.useState(false);
   const [isConfirmRemovePopupOpen, setIsConfirmRemovePopupOpen] = React.useState(false);
@@ -24,6 +23,7 @@ function ZoonChart({ nodes, dppDescription }) {
   const [isErrorRequest, setIsErrorRequest] = React.useState(false);
   const [errorDragAndDrop, setErrorDragAndDrop] = React.useState('');
   const [isErrorDragAndDropPopupOpen, setIsErrorDragAndDropPopupOpen] = React.useState(false);
+  const [isAddJustificationPopupOpen , setIsAddJustificationPopupOpen] = React.useState(false);
 
   const divRef = React.createRef();
   OrgChart.templates.myTemplate = Object.assign({}, OrgChart.templates.ana);
@@ -236,6 +236,14 @@ function ZoonChart({ nodes, dppDescription }) {
     // eslint-disable-next-line
   }, [nodes]);
 
+  
+  function openAddJustificationPopup() {
+    setIsAddJustificationPopupOpen(true);
+  }
+  
+  function closeAddJustificationPopup() {
+    setIsAddJustificationPopupOpen(false);
+  }
 
   function handleCreateNewSkill() {
     const data = { id: OrgChart.randomId(), pid: "", tags: ["skill"], };
@@ -386,9 +394,6 @@ function ZoonChart({ nodes, dppDescription }) {
     setIsEditNodePopupOpen(false);
   }
 
-  useOnClickOverlay(closeZoonPopups);
-  useOnPushEsc(closeZoonPopups);
-
   return (
     <>
     <div className="zoon-chart_btn-control">
@@ -409,6 +414,7 @@ function ZoonChart({ nodes, dppDescription }) {
       onSave={handleAddNode}
       isLoadingRequest={isLoadingRequest}
       isErrorRequest={isErrorRequest}
+      openAddJustificationPopup={openAddJustificationPopup}
       />
     }
     {
@@ -458,6 +464,14 @@ function ZoonChart({ nodes, dppDescription }) {
       errorDragAndDrop={errorDragAndDrop}
       />
     }
+
+    {
+      <AddNsiPopup
+      isOpen={isAddJustificationPopupOpen}
+      onClose={closeAddJustificationPopup}
+      />
+    }
+
 
     </>
   );

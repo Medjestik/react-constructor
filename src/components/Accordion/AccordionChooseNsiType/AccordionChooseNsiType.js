@@ -1,14 +1,16 @@
 import React, { useState, useRef } from "react";
 import Chevron from "../Chevron.js";
-import "./AccordionChooseQuestionType.css";
+import "./AccordionChooseNsiType.css";
 import useOnClickOutside from "../../../hooks/useOnClickOutside.js";
-import oneAnswerIcon from '../../../images/quiz/one-answer-color.png';
-import multiAnswerIcon from '../../../images/quiz/multi-answer-color.png';
-import openAnswerIcon from '../../../images/quiz/open-answer-color.png';
-import sequenceAnswerIcon from '../../../images/quiz/sequence-answer-color.png';
-import conformityAnswerIcon from '../../../images/quiz/conformity-answer-color.png';
+import tehn from '../../../images/nsi/tehn.png';
+import book from '../../../images/nsi/book.png';
+import website from '../../../images/nsi/website.png';
+import library from '../../../images/nsi/library.png';
+import act from '../../../images/nsi/act.png';
+import document from '../../../images/nsi/document.png';
 
-const AccordionChooseQuestionType = ({ addNewQuestion }) => {
+
+const AccordionChooseNsiType = ({ chooseNsiType, isOpen }) => {
   const [active, setActive] = useState("");
   const [height, setHeight] = useState("0px");
   const [fill, setFill] = useState("#404040");
@@ -19,36 +21,42 @@ const AccordionChooseQuestionType = ({ addNewQuestion }) => {
   const content = useRef();
   const sensitive = useRef();
 
-  const questions = [
+  const nsi = [
     {
-      text: 'Вопрос с одним правильным вариантом ответа',
-      type: 'one-answer',
+      text: 'Нормативно-техническая документация и ГОСТ',
+      type: 'technical',
       id: 1,
-      img: oneAnswerIcon,
+      img: tehn,
     },
     {
-      text: 'Вопрос с несколькими правильными вариантами ответа',
-      type: 'multi-answer',
+      text: 'Учебники и монографии',
+      type: 'textbook',
       id: 2,
-      img: multiAnswerIcon,
+      img: book,
     },
     {
-      text: 'Вопрос с открытым ответом',
-      type: 'open-answer',
+      text: 'Интернет ресурсы',
+      type: 'internet',
       id: 3,
-      img: openAnswerIcon,
+      img: website,
     },
     {
-      text: 'Вопрос с установлением последовательности',
-      type: 'sequence-answer',
+      text: 'Электронно-библиотечная система',
+      type: 'library',
       id: 4,
-      img: sequenceAnswerIcon,
+      img: library,
     },
     {
-      text: 'Вопрос с установлением соответсвия',
-      type: 'conformity-answer',
+      text: 'Нормативно-правовые акты',
+      type: 'act',
       id: 5,
-      img: conformityAnswerIcon,
+      img: act,
+    },
+    {
+      text: 'Отраслевые дорожные методические документы',
+      type: 'document',
+      id: 6,
+      img: document,
     },
 
   ]
@@ -72,7 +80,7 @@ const AccordionChooseQuestionType = ({ addNewQuestion }) => {
     setHeight("0px");
     setRotation("accordion__icon");
     setFill("#404040");
-    addNewQuestion(elem.type);
+    chooseNsiType(elem.type);
   }
 
   useOnClickOutside(sensitive, () => {
@@ -82,10 +90,14 @@ const AccordionChooseQuestionType = ({ addNewQuestion }) => {
     setFill("#404040");
   });
 
+  React.useEffect(() => {
+    setTitle('Выберите тип вопроса');
+  }, [isOpen]);
+
   return (
-    <div className="accordion__section accordion__section_type_choose" ref={sensitive}>
+    <div className="accordion__section accordion__section_type_choose accordion__section_type_nsi" ref={sensitive}>
       <button className={`accordion ${active}`} onClick={toggleAccordion} type="button">
-        <p className="accordion__title accordion__title_type_choose">{title}</p>
+        <p className="accordion__title accordion__title_type_choose accordion__section_type_nsi">{title}</p>
         <Chevron width={10} fill={fill} className={`${rotation}`} />
       </button>
       <div
@@ -94,10 +106,10 @@ const AccordionChooseQuestionType = ({ addNewQuestion }) => {
         className="accordion__content accordion__content_type_choose"
       >
         {
-          questions.map((elem, i) => (
+          nsi.map((elem, i) => (
             <button key={i} type="button" onClick={() => handleClick(elem)} className="accordion__button">
-              <img className="accordion__img_type_choose" src={elem.img} alt="иконка"></img>
-              <p className="accordion__text_type_choose">{elem.text}</p>
+              <img className="accordion__img_type_nsi" src={elem.img} alt="иконка"></img>
+              <p className="accordion__text_type_choose accordion__section_type_nsi">{elem.text}</p>
             </button>
           ))
         }
@@ -106,4 +118,4 @@ const AccordionChooseQuestionType = ({ addNewQuestion }) => {
   );
 };
 
-export default AccordionChooseQuestionType;
+export default AccordionChooseNsiType;
