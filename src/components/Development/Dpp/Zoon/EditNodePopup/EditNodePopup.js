@@ -16,9 +16,6 @@ function EditNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoad
   const [skillWhere, setSkillWhere] = React.useState('');
   const [formErrorSkill, setFormErrorSkill] = React.useState(true);
 
-  console.log(currentNode);
-  console.log(isOpen);
-  
   function handleSubmit(e) {
     e.preventDefault();
     /*switch(currentNode.tags[0]) {

@@ -11,6 +11,10 @@ import useOnClickOverlay from '../../../../hooks/useOnClickOverlay.js';
 import ProfStandartPopup from '../../../Popup/ProfStandartPopup/ProfStandartPopup.js';
 import RequirementQualificationsPopup from '../../../Popup/RequirementQualificationsPopup/RequirementQualificationsPopup.js';
 import RequirementFgosPopup from '../../../Popup/RequirementFgosPopup/RequirementFgosPopup.js';
+import TypicalStructure from './TypicalStructure/TypicalStructure.js';
+import EditPartPopup from '../../../Popup/EditPartPopup/EditPartPopup.js';
+import RemovePartPopup from '../../../Popup/RemovePartPopup/RemovePartPopup.js';
+import ChoosePartsPopup from '../../../Popup/ChoosePartsPopup/ChoosePartsPopup.js';
 
 function InitialData({ loggedIn, history, dppDescription }) {
 
@@ -29,7 +33,6 @@ function InitialData({ loggedIn, history, dppDescription }) {
   const [requirementQualificationProgram, setRequirementQualificationProgram] = React.useState([]);
   const [isRequirementQualificationsPopupOpen, setIsRequirementQualificationsPopupOpen] = React.useState(false);
 
-
   const [requirementFgos, setRequirementFgos] = React.useState([]);
   const [requirementFgosProgram, setRequirementFgosProgram] = React.useState([]);
   const [isRequirementFgosPopupOpen, setIsRequirementFgosPopupOpen] = React.useState(false);
@@ -37,10 +40,15 @@ function InitialData({ loggedIn, history, dppDescription }) {
   const [newCompetence, setNewCompetence] = React.useState();
   const [userQualification, setUserQualification] = React.useState('');
   const [typologies, setTypologies] = React.useState([]);
-  const [currentTypologiesId, setCurrentTypologiesId] = React.useState();
-
+  const [typologiesParts, setTypologiesParts] = React.useState([]);
   const [requestMessage, setRequestMessage] = React.useState({ text: '', isShow: false, type: '' });
-  
+
+  const [isOpenEditPartPopup, setIsOpenEditPartPopup] = React.useState(false);
+  const [isOpenRemovePartPopup, setIsOpenRemovePartPopup] = React.useState(false);
+  const [isOpenChoosePartsPopup, setIsOpenChoosePartsPopup] = React.useState(false);
+  const [currentPart, setCurrentPart] = React.useState({ name: "", })
+  const [currentPartIndex, setCurrentPartIndex] = React.useState(0);
+
   function handleChangeProfLevels(id) {
     const newLevels = selectedProfLevels;
     if (newLevels.some(elem => elem.id === id)) {
@@ -55,11 +63,6 @@ function InitialData({ loggedIn, history, dppDescription }) {
 
   function handleChangeUserQualification(e) {
     setUserQualification(e.target.value);
-    setRequestMessage({ text: '', isShow: false, type: '',});
-  }
-
-  function handleChangeTypology(id) {
-    setCurrentTypologiesId(id);
     setRequestMessage({ text: '', isShow: false, type: '',});
   }
 
@@ -107,9 +110,9 @@ function InitialData({ loggedIn, history, dppDescription }) {
       ...initialData, 
       req_user_kval: userQualification, 
       prof_levels: selectedProfLevels,
-      pl: Array.from(selectedProfLevels, x => x.id),
+      pl: Array.from(selectedProfLevels, level => level.id),
       make_new_competence: newCompetence,
-      typology: currentTypologiesId,
+      //typology: currentTypologiesId,
     }
     if (loggedIn) {
       api.updateInitialData({ 
@@ -141,6 +144,9 @@ function InitialData({ loggedIn, history, dppDescription }) {
     setIsProfStandartPopupOpen(false);
     setIsRequirementQualificationsPopupOpen(false);
     setIsRequirementFgosPopupOpen(false);
+    setIsOpenEditPartPopup(false);
+    setIsOpenRemovePartPopup(false);
+    setIsOpenChoosePartsPopup(false);
   }
 
   function profStandartPopupOpen() {
@@ -168,6 +174,40 @@ function InitialData({ loggedIn, history, dppDescription }) {
     setIsRequirementFgosPopupOpen(true);
   }
 
+  function openEditPartPopup(part, index) {
+    closeInitialDataPopups();
+    setIsOpenEditPartPopup(true);
+    setCurrentPart(part);
+    setCurrentPartIndex(index);
+  }
+
+  function openRemovePartPopup(part) {
+    closeInitialDataPopups();
+    setIsOpenRemovePartPopup(true);
+    setCurrentPart(part);
+  }
+
+  function openChoosePartsPopup() {
+    closeInitialDataPopups();
+    setIsOpenChoosePartsPopup(true);
+  }
+
+  function changeTypologyParts(newTypology) {
+    closeInitialDataPopups();
+    setTypologiesParts(newTypology.typology_parts);
+  }
+  
+  function removeTypologyParts(id) {
+    const newParts = typologiesParts.filter(part => part.id !== id);
+    setTypologiesParts(newParts);
+    closeInitialDataPopups();
+  }
+
+  function editTypologyParts(newPart, partIndex) {
+    setTypologiesParts([...typologiesParts.slice(0, partIndex), newPart, ...typologiesParts.slice(partIndex + 1)]);
+    closeInitialDataPopups();
+  }
+
   useOnClickOverlay(closeInitialDataPopups);
   useOnPushEsc(closeInitialDataPopups);
 
@@ -191,7 +231,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
           setNewCompetence(initialData.make_new_competence);
           setSelectedProfLevels(initialData.prof_levels);
           setTypologies(initialData.typologies);
-          setCurrentTypologiesId(initialData.typology)
+          setTypologiesParts(initialData.typology_parts);
         })
         .catch((err) => {
           console.error(err);
@@ -345,29 +385,13 @@ function InitialData({ loggedIn, history, dppDescription }) {
 
           <li className="initial-data__item initial-data__item_type_structure">
             <h3 className="initial-data__item-name">Типовая структура ДПП</h3>
-            <p className="initial-data__item-subtitle">Выберите наиболее подходящую типовую структуру ДПП. Типовая структура состоит из разделов, которых следует придерживаться во время разработки ДПП.</p>
-            <h5 className="initial-data__item-title">Виды типовых структур</h5>
-            <ul className="initial-data__item-target-list">
-            {
-              typologies.map((elem) => (
-                <li className="initial-data__item-target-item" key={elem.id}>
-                  <label className="radio">
-                    <input 
-                    className="radio" 
-                    id={`typologies ${elem.id}`} 
-                    name="typologies" 
-                    type="radio" 
-                    value={elem.name} 
-                    defaultChecked={elem.id === currentTypologiesId ? true : false}
-                    onChange={() => handleChangeTypology(elem.id)}
-                    >
-                    </input>
-                    <span>{elem.name}</span>
-                  </label>
-                </li>
-              ))
-            }
-            </ul>
+            <p className="initial-data__item-subtitle initial-data__item-subtitle_type_structure">Выберите наиболее подходящую типовую структуру ДПП или создайте свою. Типовая структура состоит из разделов, которых следует придерживаться во время разработки ДПП.</p>
+            <TypicalStructure 
+              typologyParts={typologiesParts}
+              onEdit={openEditPartPopup}
+              onRemove={openRemovePartPopup}
+              onChoose={openChoosePartsPopup}
+            />
           </li>
 
           <li className="initial-data__item initial-data__item_type_info">
@@ -412,6 +436,29 @@ function InitialData({ loggedIn, history, dppDescription }) {
         requirementFgosProgram={requirementFgosProgram}
         onSave={handleSelectRequirementFgos}
       />
+
+      <EditPartPopup 
+        isOpen={isOpenEditPartPopup}
+        onClose={closeInitialDataPopups}
+        part={currentPart}
+        partIndex={currentPartIndex}
+        onEdit={editTypologyParts}
+      />
+
+      <RemovePartPopup
+        isOpen={isOpenRemovePartPopup}
+        onClose={closeInitialDataPopups}  
+        part={currentPart}
+        onRemove={removeTypologyParts}
+      />
+
+      <ChoosePartsPopup
+        isOpen={isOpenChoosePartsPopup}
+        onClose={closeInitialDataPopups}  
+        typologies={typologies}
+        onChangeTypologyParts={changeTypologyParts}
+      />
+
 
     </section>
   );

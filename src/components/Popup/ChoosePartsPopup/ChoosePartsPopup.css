@@ -1,0 +1,15 @@
+.popup-choose-parts__title {
+  margin: 0px 0px 10px 0px;
+}
+.popup-choose-parts__list {
+  padding: 0px;
+  list-style-type: none;
+  margin: 0px;
+  width: 100%;
+}
+.popup-choose-parts__item_type_typologies {
+  margin: 0px;
+}
+.popup-choose-parts__item {
+  margin: 0px 0px 10px 0px;
+}
