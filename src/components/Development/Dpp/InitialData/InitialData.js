@@ -15,6 +15,7 @@ import TypicalStructure from './TypicalStructure/TypicalStructure.js';
 import EditPartPopup from '../../../Popup/EditPartPopup/EditPartPopup.js';
 import RemovePartPopup from '../../../Popup/RemovePartPopup/RemovePartPopup.js';
 import ChoosePartsPopup from '../../../Popup/ChoosePartsPopup/ChoosePartsPopup.js';
+import AccordionChooseNewDocumentType from '../../../Accordion/AccordionChooseNewDocumentType/AccordionChooseNewDocumentType.js';
 
 function InitialData({ loggedIn, history, dppDescription }) {
 
@@ -149,6 +150,12 @@ function InitialData({ loggedIn, history, dppDescription }) {
     setIsOpenChoosePartsPopup(false);
   }
 
+  function closeOverlayPopups() {
+    setIsOpenEditPartPopup(false);
+    setIsOpenRemovePartPopup(false);
+    setIsOpenChoosePartsPopup(false);
+  }
+
   function profStandartPopupOpen() {
     setIsLoading(true);
     closeInitialDataPopups();
@@ -208,8 +215,30 @@ function InitialData({ loggedIn, history, dppDescription }) {
     closeInitialDataPopups();
   }
 
-  useOnClickOverlay(closeInitialDataPopups);
-  useOnPushEsc(closeInitialDataPopups);
+  function handleAddNewDocument(type) {
+    switch (type) {
+      case "fgos":
+        requirementFgosPopupOpen();
+        break;
+      case "profstandart":
+        profStandartPopupOpen();
+        break;
+      case "etkc":
+        
+        break;
+        case "ekc":
+        
+          break;
+        case "worldskills":
+        
+          break;
+      default:
+        alert( "Нет таких значений" );
+    }
+  }
+
+  useOnClickOverlay(closeOverlayPopups);
+  useOnPushEsc(closeOverlayPopups);
 
   React.useEffect(() => {
     if (loggedIn) {
@@ -238,6 +267,20 @@ function InitialData({ loggedIn, history, dppDescription }) {
         })
         .finally(() => setIsRendering(false));
     }
+    return () => {
+      setProfLevels([]);
+      setInitialData({});
+      setProfStandartsProgram([]);
+      setRequirementQualifications([]);
+      setRequirementQualificationProgram([]);
+      setRequirementFgos([]);
+      setRequirementFgosProgram([]);
+      setUserQualification("");
+      setNewCompetence(0);
+      setSelectedProfLevels([]);
+      setTypologies([]);
+      setTypologiesParts([]);
+  }
   }, [loggedIn, dppDescription]);
   
   return (
@@ -256,11 +299,16 @@ function InitialData({ loggedIn, history, dppDescription }) {
           <li className="initial-data__item initial-data__item_type_basis">
             <h3 className="initial-data__item-name">Нормативные правовые основания разработки</h3>
             <p className="initial-data__item-subtitle initial-data__item-subtitle_type_basis">Выберите нормативные документы, на основе которых разрабатывается ДПП.</p>
-            <ul className="initial-data__basis-list">
+            <AccordionChooseNewDocumentType 
+            onChoose={handleAddNewDocument}
+            />
+            <h5 className="initial-data__item-title">Требования к квалификации установлены на основе:</h5>
+
+            {/*<ul className="initial-data__basis-list">
               <li className="initial-data__basis-item">
                 <img className="initial-data__basis-img" src={prof} alt="prof"></img>
                 <h4 className="initial-data__basis-name">{`Профессиональные стандарты (${profStandartsProgram.length})`}</h4>
-                <button className="btn_type_basis" type="button" onClick={profStandartPopupOpen}>Выбрать</button>
+                <button className="btn_type_basis" type="button">Выбрать</button>
                 <ul className="initial-data__basis-el-list">
                   {
                     profStandartsProgram.map((elem, i) => (
@@ -275,7 +323,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
               <li className="initial-data__basis-item">
                 <img className="initial-data__basis-img" src={qual} alt="qual"></img>
                 <h4 className="initial-data__basis-name">{`Квалификационные требования (${requirementQualifications.length})`}</h4>
-                <button className="btn_type_basis" type="button" onClick={requirementQualificationsPopupOpen}>Выбрать</button>
+                <button className="btn_type_basis" type="button">Выбрать</button>
                 <ul className="initial-data__basis-el-list">
                   {
                     requirementQualifications.map((elem, i) => (
@@ -290,7 +338,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
               <li className="initial-data__basis-item">
                 <img className="initial-data__basis-img" src={fgos} alt="fgos"></img>
                 <h4 className="initial-data__basis-name">{`Требования ФГОС (${requirementFgos.length})`}</h4>
-                <button className="btn_type_basis" type="button" onClick={requirementFgosPopupOpen}>Выбрать</button>
+                <button className="btn_type_basis" type="button">Выбрать</button>
                 <ul className="initial-data__basis-el-list">
                   {
                     requirementFgos.map((elem, i) => (
@@ -302,7 +350,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
                   }
                 </ul>
               </li>
-            </ul>
+            </ul>*/}
           </li>
 
           <li className="initial-data__item initial-data__item_type_requirements">

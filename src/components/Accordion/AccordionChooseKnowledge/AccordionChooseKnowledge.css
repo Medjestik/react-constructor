@@ -4,6 +4,7 @@
 }
 .accordion__section_type_choose {
   margin: 20px 0px 0px 0px;
+  width: 100%;
 }
 
 /* Style the buttons that are used to open and close the accordion panel */
@@ -59,9 +60,6 @@
   transition: max-height 0.6s ease;
   border-radius: 10px;
   z-index: 1;
-}
-.accordion__content_type_choose {
-
 }
 
 /* Style the accordion content text */

@@ -1,6 +1,8 @@
 import React from 'react';
 import './ProfStandartPopup.css';
 import Popup from '../../Popup/Popup.js';
+import ProfStandartPopupItem from './ProfStandartPopupItem/ProfStandartPopupItem.js';
+import AddProfStandartPopup from './AddProfStandartPopup/AddProfStandartPopup.js';
 
 function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStandartsProgram, onSave }) {
 
@@ -8,39 +10,24 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
   const [currentProfStandart, setCurrentProfStandart] = React.useState([...profStandarts]);
   const [searchName, setSearchName] = React.useState('');
   const [searchCode, setSearchCode] = React.useState('');
-  const [showAddForm, setShowAddForm] = React.useState(false);
-  const [addNameText, setAddNameText] = React.useState('');
-  const [addNameCode, setAddNameCode] = React.useState('');
+  const [isShowAddPopup, setIsShowAddPopup] = React.useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
     onSave(selectedProfStandart);
   }
+
+  function showAddPopup() {
+    setIsShowAddPopup(true);
+  }
+
+  function closeAllPopups() {
+    setIsShowAddPopup(false);
+  }
   
-  function handleShowAddForm() {
-    setShowAddForm(!showAddForm);
-    setSearchName('');
-    setSearchCode('');
-  }
-
-  function handleAddProfStandart() {
-    setShowAddForm(false);
-    setAddNameText('');
-    setAddNameCode('');
-    const newProfStandart = {
-      name: addNameText,
-      code: addNameCode,
-      id: parseInt(new Date().getTime()),
-    }
+  function handleAddProfStandart(newProfStandart) {
+    closeAllPopups();
     setCurrentProfStandart([...currentProfStandart, newProfStandart]);
-  }
-
-  function handleAddName(e) {
-    setAddNameText(e.target.value);
-  }
-
-  function handleAddCode(e) {
-    setAddNameCode(e.target.value);
   }
 
   function handleSearchByName(e) {
@@ -80,9 +67,6 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
     setCurrentProfStandart([...profStandarts]);
     setSearchName('');
     setSearchCode('');
-    setAddNameText('');
-    setAddNameCode('');
-    setShowAddForm(false);
     return () => {
       setSelectedProfStandart([]);
       setCurrentProfStandart([]);
@@ -92,6 +76,7 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
 
 
   return (
+    <>
     <Popup 
       isOpen={isOpen}
       onClose={onClose}
@@ -109,9 +94,9 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
           <>
           <div className="initial-popup__control">
             <button 
-            className={`btn btn_type_add initial-popup__btn-add ${showAddForm ? "initial-popup__btn-add_type_show" : "initial-popup__btn-add_type_hide"}`}
+            className="btn btn_type_add initial-popup__btn-add"
             type="button" 
-            onClick={handleShowAddForm}
+            onClick={showAddPopup}
             >
               Добавить профстандарт
             </button>
@@ -145,55 +130,16 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
             </div>
           </div>
 
-          <div className={`initial-popup__add ${showAddForm ? "prof-standard__add_type_show" : "prof-standard__add_type_hide"}`}>
-            <div className="initial-popup__add-container">
-              <input 
-              className="initial-popup__add-input"
-              placeholder="введите название профстандарта"
-              type="text"
-              id="add-input-name"
-              name="add-input-name"
-              autoComplete="off"
-              value={addNameText}
-              onChange={handleAddName}
-              >
-              </input>
-              <input 
-              className="initial-popup__add-input"
-              placeholder="введите код профстандарта"
-              type="text"
-              id="add-input-code"
-              name="add-input-code"
-              autoComplete="off"
-              value={addNameCode}
-              onChange={handleAddCode}
-              >
-              </input>
-              <button className="btn btn_type_save initial-popup__btn-save" type="button" onClick={handleAddProfStandart}>Добавить</button>
-            </div>
-          </div>
-          
           <ul className="initial-popup__list">
             {
               currentProfStandart.map((item, i) => (
-                <li className="initial-popup__item" key={i}>
-                  <label className="checkbox initial-popup__checkbox">
-                    <input 
-                      name="prof-standard"
-                      type="checkbox"
-                      id={i}
-                      defaultChecked={selectedProfStandart.some(elem => elem.id === item.id)}
-                      onChange={() => handleChangeProfStandart(item.id)}
-                      >
-                    </input>
-                    <span></span>
-                  </label>
-                  <div className="initial-popup__info">
-                    <h4 className="initial-popup__name">{item.name}</h4>
-                    <span className="initial-popup__code">{item.code}</span>
-                  </div>
-                  <button className="initial-popup__button-edit" type="button"></button>
-                </li>
+                <ProfStandartPopupItem
+                item={item}
+                i={i}
+                key={i}
+                selectedProfStandart={selectedProfStandart}
+                onChange={handleChangeProfStandart}
+                />
               ))
             }
           </ul>
@@ -204,6 +150,9 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
 
       </form>
     </Popup>
+
+    <AddProfStandartPopup isOpen={isShowAddPopup} onClose={closeAllPopups} onAdd={handleAddProfStandart} />
+    </>
   )
 }
 
