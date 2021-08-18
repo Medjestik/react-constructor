@@ -9,8 +9,6 @@ function RequirementFgosPopup({ isOpen, onClose, isLoading, requirementFgos, req
   const [searchName, setSearchName] = React.useState('');
   const [searchCode, setSearchCode] = React.useState('');
   const [showAddForm, setShowAddForm] = React.useState(false);
-  const [addNameText, setAddNameText] = React.useState('');
-  const [addNameCode, setAddNameCode] = React.useState('');
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -21,26 +19,6 @@ function RequirementFgosPopup({ isOpen, onClose, isLoading, requirementFgos, req
     setShowAddForm(!showAddForm);
     setSearchName('');
     setSearchCode('');
-  }
-
-  function handleAddFgos() {
-    setShowAddForm(false);
-    setAddNameText('');
-    setAddNameCode('');
-    const newFgos = {
-      name: addNameText,
-      code: addNameCode,
-      id: parseInt(new Date().getTime()),
-    }
-    setCurrentFgos([...currentFgos, newFgos]);
-  }
-
-  function handleAddName(e) {
-    setAddNameText(e.target.value);
-  }
-
-  function handleAddCode(e) {
-    setAddNameCode(e.target.value);
   }
 
   function handleSearchByName(e) {
@@ -80,8 +58,6 @@ function RequirementFgosPopup({ isOpen, onClose, isLoading, requirementFgos, req
     setCurrentFgos([...requirementFgos]);
     setSearchName('');
     setSearchCode('');
-    setAddNameText('');
-    setAddNameCode('');
     setShowAddForm(false);
     return () => {
       setSelectedFgos([]);
@@ -113,7 +89,7 @@ function RequirementFgosPopup({ isOpen, onClose, isLoading, requirementFgos, req
             type="button" 
             onClick={handleShowAddForm}
             >
-              Добавить ФГОС
+              Выбрать тип
             </button>
             <div className="initial-popup__search">
               <div className="search initial-popup__search-input">
@@ -145,35 +121,12 @@ function RequirementFgosPopup({ isOpen, onClose, isLoading, requirementFgos, req
             </div>
           </div>
 
-          <div className={`initial-popup__add ${showAddForm ? "prof-standard__add_type_show" : "prof-standard__add_type_hide"}`}>
-            <div className="initial-popup__add-container">
-              <input 
-              className="initial-popup__add-input"
-              placeholder="введите название направления"
-              type="text"
-              id="add-input-name"
-              name="add-input-name"
-              value={addNameText}
-              onChange={handleAddName}
-              autoComplete="off"
-              >
-              </input>
-              <input 
-              className="initial-popup__add-input"
-              placeholder="введите код направления"
-              type="text"
-              id="add-input-code"
-              name="add-input-code"
-              value={addNameCode}
-              onChange={handleAddCode}
-              autoComplete="off"
-              >
-              </input>
-              <button className="btn btn_type_save initial-popup__btn-save" type="button" onClick={handleAddFgos}>Добавить</button>
+          <div className={`initial-popup__show ${showAddForm ? "initial-popup__show_type_show" : "initial-popup__show_type_hide"}`}>
+            <div className="initial-popup__show-container">
             </div>
           </div>
           
-          <ul className="initial-popup__list">
+          <ul className="initial-popup__list initial-popup__list_type_fgoses">
             {
               currentFgos.map((item, i) => (
                 <li className="initial-popup__item" key={i}>
@@ -189,10 +142,9 @@ function RequirementFgosPopup({ isOpen, onClose, isLoading, requirementFgos, req
                     <span></span>
                   </label>
                   <div className="initial-popup__info">
-                    <h4 className="initial-popup__name">{item.name}</h4>
-                    <span className="initial-popup__code">{item.code}</span>
+                    <span className="initial-popup__code">{item.code || "xx.xx.xx"}</span>
+                    <h4 className="initial-popup__name">{item.name || "название"}</h4>
                   </div>
-                  <button className="initial-popup__button-edit" type="button"></button>
                 </li>
               ))
             }

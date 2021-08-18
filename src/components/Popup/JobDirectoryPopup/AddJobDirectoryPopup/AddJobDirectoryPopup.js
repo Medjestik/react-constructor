@@ -1,0 +1,153 @@
+import React from 'react';
+import './AddJobDirectoryPopup.css';
+import Popup from '../../Popup.js';
+
+function AddJobDirectoryPopup({ isOpen, onClose, onAdd }) {
+
+  const [addNameChapter, setAddNameChapter] = React.useState('');
+  const [addNameChapterError, setAddNameChapterError] = React.useState(false);
+  const [addNameJob, setAddNameJob] = React.useState('');
+  const [addNameJobError, setAddNameJobError] = React.useState(false);
+  const [addEditionDate, setAddEditionDate] = React.useState('');
+  const [addEditionDateError, setAddEditionDateError] = React.useState(false);
+  const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    const newJobСlassification = {
+      chapterName: addNameChapter,
+      nameProfession: addNameJob,
+      editionDate: addEditionDate,
+    }
+
+    onAdd(newJobСlassification);
+  }
+
+  function handleAddNameChapter(e) {
+    setAddNameChapter(e.target.value);
+    if (e.target.checkValidity()) {
+      setAddNameChapterError(false);
+    } else {
+      setAddNameChapterError(true);
+    }
+  }
+
+  function handleAddNameProfession(e) {
+    setAddNameJob(e.target.value);
+    if (e.target.checkValidity()) {
+      setAddNameJobError(false);
+    } else {
+      setAddNameJobError(true);
+    }
+  }
+
+  function handleAddEditionDate(e) {
+    setAddEditionDate(e.target.value);
+    if (e.target.value.length !== 10) {
+      setAddEditionDateError(true);
+    } else {
+      setAddEditionDateError(false);
+    }
+  }
+
+  React.useEffect(() => {
+    setAddNameChapter('');
+    setAddNameJob('');
+    setAddEditionDate('');
+    setAddNameChapterError(false);
+    setAddNameJobError(false);
+    setAddEditionDateError(false);
+    setIsBlockSubmitButton(true);
+  }, [isOpen]);
+
+  React.useEffect(() => {
+    if (
+      addNameChapterError || 
+      addNameJobError || 
+      addEditionDateError ||
+      addNameChapter.length < 1 ||
+      addNameJob.length < 1 ||
+      addEditionDate.length < 10
+      ) {
+      setIsBlockSubmitButton(true);
+    } else {
+      setIsBlockSubmitButton(false);
+    }
+    // eslint-disable-next-line
+  }, [addNameChapter, addNameJob, addEditionDate])
+
+  return(
+    <Popup isOpen={isOpen} onClose={onClose} >
+      <form className="popup__form popup__form_type_large" name="avatar-form" action="#" noValidate onSubmit={handleSubmit}>
+        <h3 className="initial-popup__title">Добавление нового документа ЕКС</h3>
+        <ul className="initial-popup__list-input">
+          <li className="initial-popup__item-input">
+            <h5 className="initial-popup__input-name">Название раздела</h5>
+            <input 
+            className="initial-popup__input"
+            placeholder="введите название раздела"
+            type="text"
+            id="add-input-name"
+            name="add-input-name"
+            autoComplete="off"
+            value={addNameChapter}
+            onChange={handleAddNameChapter}
+            required
+            >
+            </input>
+            <span className={`initial-popup__input-error ${addNameChapterError ? "initial-popup__input-error_type_show" : ""}`}>Заполните название раздела</span>
+          </li>
+          <li className="initial-popup__item-input">
+            <h5 className="initial-popup__input-name">Наименование должности</h5>
+            <input 
+            className="initial-popup__input"
+            placeholder="введите наименование должности"
+            type="text"
+            id="add-input-job"
+            name="add-input-job"
+            autoComplete="off"
+            value={addNameJob}
+            onChange={handleAddNameProfession}
+            required
+            >
+            </input>
+            <span className={`initial-popup__input-error ${addNameJobError ? "initial-popup__input-error_type_show" : ""}`}>Заполните наименование должности</span>
+          </li>
+        
+          <li className="initial-popup__item-input">
+            <h5 className="initial-popup__input-name">Дата редакции</h5>
+            <input 
+            className="initial-popup__input"
+            placeholder="введите дату редакции"
+            type="date"
+            id="add-input-edition-date"
+            name="add-input-edition-date"
+            autoComplete="off"
+            value={addEditionDate}
+            onChange={handleAddEditionDate}
+            required
+            >
+            </input>
+            <span className={`initial-popup__input-error ${addEditionDateError ? "initial-popup__input-error_type_show" : ""}`}>Заполните дату редакции</span>
+          </li>
+        </ul>
+
+              
+        <p className="initial-popup__result-name">
+          <span className="initial-popup__result-name_weight_bold">Итоговое название: </span>
+          {`
+            ${addNameChapter} 
+            ${addNameJob}
+            ${addEditionDate}
+          `}
+        </p>
+       
+        <button className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""}`} type="submit">Добавить</button>
+
+      </form>
+    </Popup>
+  )
+}
+
+export default AddJobDirectoryPopup;

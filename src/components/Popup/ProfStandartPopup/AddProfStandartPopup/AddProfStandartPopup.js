@@ -3,7 +3,6 @@ import './AddProfStandartPopup.css';
 import Popup from '../../Popup.js';
 import InputMask from "react-input-mask";
 
-
 function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
 
   const [addNameText, setAddNameText] = React.useState('');
@@ -18,18 +17,21 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
   const [addRegistrationDateError, setAddRegistrationDateError] = React.useState(false);
   const [addRegistrationNumber, setAddRegistrationNumber] = React.useState('');
   const [addRegistrationNumberError, setAddRegistrationNumberError] = React.useState('');
+  const [addNameQual, setAddNameQual] = React.useState('');
+  const [addLinkQual, setAddLinkQual] = React.useState('');
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    const order = "приказ от " + addOrderDate + " г. № " + addOrderNumber + "н (зарегистрирован Министерством юстиции Российской Федерации " + addRegistrationDate + " г., регистрационный № " + addRegistrationNumber;
-
     const newProfStandart = {
-     name: addNameText,
-     code: addNameCode,
-     order: order,
-     id: parseInt(new Date().getTime()),
+     nameText: addNameText,
+     nameCode: addNameCode,
+     orderDate: addOrderDate,
+     orderNumber: addOrderNumber,
+     registrationDate: addRegistrationDate,
+     registrationNumber: addRegistrationNumber,
+     nameQual: addNameQual,
+     linkQual: addLinkQual,
     }
 
     onAdd(newProfStandart);
@@ -59,14 +61,10 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
 
   function handleAddOrderDate(e) {
     setAddOrderDate(e.target.value);
-    if (e.target.value.indexOf("x") === -1) {
-      if (e.target.value.length === 0) {
-        setAddOrderDateError(true);
-      } else {
-        setAddOrderDateError(false);
-      }
-    } else {
+    if (e.target.value.length !== 10) {
       setAddOrderDateError(true);
+    } else {
+      setAddOrderDateError(false);
     }
   }
 
@@ -81,14 +79,10 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
 
   function handleAddRegistrationDate(e) {
     setAddRegistrationDate(e.target.value);
-    if (e.target.value.indexOf("x") === -1) {
-      if (e.target.value.length === 0) {
-        setAddRegistrationDateError(true);
-      } else {
-        setAddRegistrationDateError(false);
-      }
-    } else {
+    if (e.target.value.length !== 10) {
       setAddRegistrationDateError(true);
+    } else {
+      setAddRegistrationDateError(false);
     }
   }
 
@@ -101,6 +95,14 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
     }
   }
 
+  function handleAddQual(e) {
+    setAddNameQual(e.target.value);
+  }
+
+  function handleLinkQual(e) {
+    setAddLinkQual(e.target.value);
+  }
+
   React.useEffect(() => {
     setAddNameText('');
     setAddNameCode('');
@@ -108,6 +110,8 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
     setAddOrderDate('');
     setAddRegistrationDate('');
     setAddRegistrationNumber('');
+    setAddNameQual('');
+    setAddLinkQual('');
     setAddNameTextError(false);
     setAddNameCodeError(false);
     setAddOrderDateError(false);
@@ -127,9 +131,9 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
       addRegistrationNumberError ||
       addNameText.length < 1 ||
       addNameCode.length < 5 ||
-      addOrderDate.length < 8 ||
+      addOrderDate.length < 10 ||
       addOrderNumber.length < 1 ||
-      addRegistrationDate.length < 8 ||
+      addRegistrationDate.length < 10 ||
       addRegistrationNumber.length < 1
       ) {
       setIsBlockSubmitButton(true);
@@ -178,24 +182,22 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
             </InputMask>
             <span className={`initial-popup__input-error ${addNameCodeError ? "initial-popup__input-error_type_show" : ""}`}>Заполните код профстандарта</span>
           </li>
-          <li className="initial-popup__item-input">
+          <li className="initial-popup__item-input initial-popup__item-input_margin_bottom">
             <h5 className="initial-popup__input-name">Реквизиты приказа Минтруда</h5>
             <ul className="initial-popup__list-input">
               <li className="initial-popup__item-input">
-                <InputMask  
+                <input 
                 className="initial-popup__input"
                 placeholder="введите дату приказа Минтруда России"
-                type="text"
+                type="date"
                 id="add-input-order-date"
                 name="add-input-order-date"
                 autoComplete="off"
                 value={addOrderDate}
                 onChange={handleAddOrderDate}
-                mask="99.99.2099"
-                maskPlaceholder="xx.xx.xxxx"
                 required
                 >
-                </InputMask>
+                </input>
                 <span className={`initial-popup__input-error ${addOrderDateError ? "initial-popup__input-error_type_show" : ""}`}>Заполните дату приказа Минтруда России</span>
               </li>
               <li className="initial-popup__item-input">
@@ -215,20 +217,18 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
                 <span className={`initial-popup__input-error ${addOrderNumberError ? "initial-popup__input-error_type_show" : ""}`}>Заполните номер приказа Минтруда России</span>
               </li>
               <li className="initial-popup__item-input">
-                <InputMask  
+                <input  
                 className="initial-popup__input"
                 placeholder="введите дату приказа Минюста России"
-                type="text"
+                type="date"
                 id="add-input-registration-date"
                 name="add-input-registration-date"
                 autoComplete="off"
                 value={addRegistrationDate}
                 onChange={handleAddRegistrationDate}
-                mask="99.99.2099"
-                maskPlaceholder="xx.xx.xxxx"
                 required
                 >
-                </InputMask>
+                </input>
                 <span className={`initial-popup__input-error ${addRegistrationDateError ? "initial-popup__input-error_type_show" : ""}`}>Заполните дату приказа Минюста России</span>
               </li>
               <li className="initial-popup__item-input">
@@ -250,6 +250,34 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
               </li>
             </ul>
           </li>
+          <li className="initial-popup__item-input">
+            <h5 className="initial-popup__input-name">Наименование квалификации</h5>
+            <input 
+            className="initial-popup__input"
+            placeholder="введите название квалификации"
+            type="text"
+            id="add-input-qual"
+            name="add-input-qual"
+            autoComplete="off"
+            value={addNameQual}
+            onChange={handleAddQual}
+            >
+            </input>
+          </li>
+          <li className="initial-popup__item-input">
+            <h5 className="initial-popup__input-name">Ссылка на описание квалификации</h5>
+            <input 
+            className="initial-popup__input"
+            placeholder="введите url ссылки"
+            type="url"
+            id="add-input-qual"
+            name="add-input-qual"
+            autoComplete="off"
+            value={addLinkQual}
+            onChange={handleLinkQual}
+            >
+            </input>
+          </li>  
         </ul>
         <p className="initial-popup__result-name">
           <span className="initial-popup__result-name_weight_bold">Итоговое название: </span>

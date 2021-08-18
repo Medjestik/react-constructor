@@ -22,9 +22,9 @@ function ProfStandartPopupItem({ item, i, selectedProfStandart, onChange }) {
         <span></span>
       </label>
       <div className="initial-popup__info">
-        <span className="initial-popup__code">{item.code}</span>
-        <h4 className="initial-popup__name">{item.name}</h4>
-        <p className="initial-popup__order">{item.order || ""}</p>
+        <span className="initial-popup__code">{item.nameCode || "xx.xxx"}</span>
+        <h4 className="initial-popup__name">{item.nameText || "название"}</h4>
+        <p className="initial-popup__order">{`приказ Минтруда России от ${item.orderDate || "xx.xx.20xx"} г. № ${item.orderNumber || "xxxx"}н (зарегистрирован Министерством юстиции Российской Федерации ${item.registrationDate || "xx.xx.20xx"} г., регистрационный № ${item.registrationNumber || "xxxxx"}`}</p>
       </div>
       <div className={`initial-popup___buttons ${isShowMenu ? "initial-popup___buttons_type_show" : ""}`}>
         <button className={`initial-popup___btn-menu ${isShowMenu ? "initial-popup___btn-menu_type_show" : ""}`} type="button" onClick={toggleMenu}></button>

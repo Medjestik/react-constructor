@@ -1,8 +1,9 @@
 import React from 'react';
 import './TypicalStructure.css';
 import DragAndDrop from '../../../../DragAndDrop/DragAndDrop.js';
+import * as api from '../../../../../utils/api.js';
 
-function TypicalStructure({ typologyParts, onEdit, onRemove, onChoose, }) {
+function TypicalStructure({ typologyParts, initialDataVersion, loggedIn, onEdit, onRemove, onChoose, onChangeOrder }) {
 
   const [currentTypologiesParts, setCurrentTypologiesParts] = React.useState(typologyParts);
   const [addStructurePartName, setAddStructurePartName] = React.useState('');
@@ -18,13 +19,23 @@ function TypicalStructure({ typologyParts, onEdit, onRemove, onChoose, }) {
   }
 
   function handleAddStructurePart() {
-    setAddStructurePartName('');
-    const newStructurePart = {
-      name: addStructurePartName,
-      id: parseInt(new Date().getTime()),
+    
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.createStructurePart({ 
+        token: token, 
+        initialDataVersion: initialDataVersion, 
+        name: addStructurePartName
+      })
+      .then((res) => {
+        setAddStructurePartName('');
+        handleShowAddFormStructurePart();
+        setCurrentTypologiesParts([...currentTypologiesParts, res]);
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
     }
-    setCurrentTypologiesParts([...currentTypologiesParts, newStructurePart]);
-    handleShowAddFormStructurePart();
   }
 
   React.useEffect(() => {
@@ -70,6 +81,7 @@ function TypicalStructure({ typologyParts, onEdit, onRemove, onChoose, }) {
                 data={currentTypologiesParts}
                 onEdit={onEdit}
                 onRemove={onRemove}
+                onChangeOrder={onChangeOrder}
               />
           </div>
       }

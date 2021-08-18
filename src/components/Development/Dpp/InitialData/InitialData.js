@@ -3,52 +3,70 @@ import './InitialData.css';
 import * as api from '../../../../utils/api.js';
 import Preloader from '../../../Preloader/Preloader.js';
 import ReferenceInformation from './ReferenceInformation/ReferenceInformation.js';
-import prof from '../../../../images/profession.png';
-import qual from '../../../../images/qualification.png';
-import fgos from '../../../../images/fgos.png';
 import useOnPushEsc from '../../../../hooks/useOnPushEsc';
 import useOnClickOverlay from '../../../../hooks/useOnClickOverlay.js';
-import ProfStandartPopup from '../../../Popup/ProfStandartPopup/ProfStandartPopup.js';
-import RequirementQualificationsPopup from '../../../Popup/RequirementQualificationsPopup/RequirementQualificationsPopup.js';
 import RequirementFgosPopup from '../../../Popup/RequirementFgosPopup/RequirementFgosPopup.js';
+import ProfStandartPopup from '../../../Popup/ProfStandartPopup/ProfStandartPopup.js';
+import JobСlassificationPopup from '../../../Popup/JobСlassificationPopup/JobСlassificationPopup.js';
+import JobDirectoryPopup from '../../../Popup/JobDirectoryPopup/JobDirectoryPopup.js';
+import WorldSkillsPopup from '../../../Popup/WorldSkillsPopup/WorldSkillsPopup.js';
 import TypicalStructure from './TypicalStructure/TypicalStructure.js';
 import EditPartPopup from '../../../Popup/EditPartPopup/EditPartPopup.js';
 import RemovePartPopup from '../../../Popup/RemovePartPopup/RemovePartPopup.js';
 import ChoosePartsPopup from '../../../Popup/ChoosePartsPopup/ChoosePartsPopup.js';
 import AccordionChooseNewDocumentType from '../../../Accordion/AccordionChooseNewDocumentType/AccordionChooseNewDocumentType.js';
+import NsiPopup from '../../../Popup/NsiPopup/NsiPopup.js';
+
+import fgosIcon from '../../../../images/documents/fgos.png';
+import profstandartIcon from '../../../../images/documents/profstandart.png';
+import etkcIcon from '../../../../images/documents/etkc.png';
+import ekcIcon from '../../../../images/documents/ekc.png';
+import worldskillsIcon from '../../../../images/documents/worldskills.png';
 
 function InitialData({ loggedIn, history, dppDescription }) {
 
   const [isRendering, setIsRendering] = React.useState(true);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const [initialData, setInitialData] = React.useState({});
   const [profLevels, setProfLevels] = React.useState([]);
   const [selectedProfLevels, setSelectedProfLevels] = React.useState([]);
-  
-  const [profStandarts, setProfStandarts] = React.useState([]);
-  const [profStandartsProgram, setProfStandartsProgram] = React.useState([]);
-  const [isProfStandartPopupOpen, setIsProfStandartPopupOpen] = React.useState(false);
-
-  const [requirementQualifications, setRequirementQualifications] = React.useState([]);
-  const [requirementQualificationProgram, setRequirementQualificationProgram] = React.useState([]);
-  const [isRequirementQualificationsPopupOpen, setIsRequirementQualificationsPopupOpen] = React.useState(false);
 
   const [requirementFgos, setRequirementFgos] = React.useState([]);
   const [requirementFgosProgram, setRequirementFgosProgram] = React.useState([]);
   const [isRequirementFgosPopupOpen, setIsRequirementFgosPopupOpen] = React.useState(false);
   
+  const [profStandarts, setProfStandarts] = React.useState([]);
+  const [profStandartsProgram, setProfStandartsProgram] = React.useState([]);
+  const [isProfStandartPopupOpen, setIsProfStandartPopupOpen] = React.useState(false);
+
+  const [jobСlassification, setJobСlassification] = React.useState([]);
+  const [jobСlassificationProgram, setJobСlassificationProgram] = React.useState([]);
+  const [isJobСlassificationPopupOpen, setIsJobСlassificationPopupOpen] = React.useState(false);
+
+  const [jobDirectory, setJobDirectory] = React.useState([]);
+  const [jobDirectoryProgram, setJobDirectoryProgram] = React.useState([]);
+  const [isJobDirectoryPopupOpen, setIsJobDirectoryPopupOpen] = React.useState(false);
+
+  const [worldSkills, setWorldSkills] = React.useState([]);
+  const [worldSkillsProgram, setWorldSkillsProgram] = React.useState([]);
+  const [isWorldSkillsPopupOpen, setIsWorldSkillsPopupOpen] = React.useState(false);
+
   const [newCompetence, setNewCompetence] = React.useState();
   const [userQualification, setUserQualification] = React.useState('');
   const [typologies, setTypologies] = React.useState([]);
   const [typologiesParts, setTypologiesParts] = React.useState([]);
-  const [requestMessage, setRequestMessage] = React.useState({ text: '', isShow: false, type: '' });
+  const [requestMessageRequirements, setRequestMessageRequirements] = React.useState({ text: '', isShow: false, type: '' });
+  const [requestMessageCompetence, setRequestMessageCompetence] = React.useState({ text: '', isShow: false, type: '' });
 
   const [isOpenEditPartPopup, setIsOpenEditPartPopup] = React.useState(false);
   const [isOpenRemovePartPopup, setIsOpenRemovePartPopup] = React.useState(false);
   const [isOpenChoosePartsPopup, setIsOpenChoosePartsPopup] = React.useState(false);
   const [currentPart, setCurrentPart] = React.useState({ name: "", })
   const [currentPartIndex, setCurrentPartIndex] = React.useState(0);
+
+  const [isNsiPopupOpen, setIsNsiPopupOpen] = React.useState(false);
+  const [nsiTypes, setNsiTypes] = React.useState([]);
+  const [nsiProgram, setNsiProgram] = React.useState([]);
 
   function handleChangeProfLevels(id) {
     const newLevels = selectedProfLevels;
@@ -59,12 +77,39 @@ function InitialData({ loggedIn, history, dppDescription }) {
       newLevels.push(profLevels[id - 1])
     }
     setSelectedProfLevels(newLevels);
-    setRequestMessage({ text: '', isShow: false, type: '',});
+    setRequestMessageRequirements({ text: '', isShow: false, type: '',});
   }
 
   function handleChangeUserQualification(e) {
     setUserQualification(e.target.value);
-    setRequestMessage({ text: '', isShow: false, type: '',});
+    setRequestMessageRequirements({ text: '', isShow: false, type: '',});
+  }
+
+  function handleSaveRequirements() {
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.saveRequirements({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        profLevels: selectedProfLevels,
+        userQualification: userQualification
+      })
+      .then(() => {
+        setRequestMessageRequirements({ 
+          text: 'Данные успешно сохранены!',
+          isShow: true,
+          type: 'success',
+        })
+      })
+      .catch((err) =>{
+        setRequestMessageRequirements({ 
+          text: 'К сожалению произошла ошибка, ваши данные не сохранены!',
+          isShow: true,
+          type: 'error',
+        })
+        console.log(err);
+      })
+    }
   }
 
   function handleChangeNewCompetence(e) {
@@ -73,16 +118,60 @@ function InitialData({ loggedIn, history, dppDescription }) {
     } else {
       setNewCompetence(0);
     }
-    setRequestMessage({ text: '', isShow: false, type: '',});
+    setRequestMessageCompetence({ text: '', isShow: false, type: '',});
+  }
+
+  function handleSaveNewCompetence() {
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.saveCompetence({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        newCompetence: newCompetence,
+      })
+      .then(() => {
+        setRequestMessageCompetence({ 
+          text: 'Данные успешно сохранены!',
+          isShow: true,
+          type: 'success',
+        })
+      })
+      .catch((err) =>{
+        setRequestMessageCompetence({ 
+          text: 'К сожалению произошла ошибка, ваши данные не сохранены!',
+          isShow: true,
+          type: 'error',
+        })
+        console.log(err);
+      })
+    }
+  }
+
+  function handleSelectFgoses(fgoses) {
+    const fgosesId = fgoses.map(elem => elem.id);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.selectFgoses({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        data: fgosesId
+      })
+      .then((res) => {
+        setRequirementFgosProgram(res);
+        closeInitialDataPopups();
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+    }
   }
 
   function handleSelectProfStandart(profStandart) {
     const profStandartId = profStandart.map(elem => elem.id);
     const token = localStorage.getItem("token");
     if (loggedIn) {
-      api.updateInitialData({ 
+      api.selectProfStandarts({ 
         token: token, 
-        dppId: dppDescription.id, 
         initialDataVersion: dppDescription.ish_version_id, 
         data: profStandartId
       })
@@ -96,46 +185,95 @@ function InitialData({ loggedIn, history, dppDescription }) {
     }
   }
 
-  function handleSelectRequirementQualification(requirementQualification) {
-    console.log(requirementQualification);
-  }
-
-  function handleSelectRequirementFgos(requirementFgos) {
-    console.log(requirementFgos);
-  }
-
-  function handleSubmitForm(e) {
-    e.preventDefault();
+  function handleSelectJobСlassification(jobСlassification) {
+    const jobСlassificationId = jobСlassification.map(elem => elem.id);
     const token = localStorage.getItem("token");
-    const updateInitialData = {
-      ...initialData, 
-      req_user_kval: userQualification, 
-      prof_levels: selectedProfLevels,
-      pl: Array.from(selectedProfLevels, level => level.id),
-      make_new_competence: newCompetence,
-      //typology: currentTypologiesId,
-    }
     if (loggedIn) {
-      api.updateInitialData({ 
+      api.selectJobClassification({ 
         token: token, 
-        dppId: dppDescription.id, 
         initialDataVersion: dppDescription.ish_version_id, 
-        ish_data: updateInitialData 
+        data: jobСlassificationId
       })
       .then((res) => {
-        setRequestMessage({ 
-          text: 'Данные успешно сохранены!',
-          isShow: true,
-          type: 'success',
-        })
-        setInitialData(res);
+        setJobСlassificationProgram(res);
+        closeInitialDataPopups();
       })
-      .catch((err) => {
-        setRequestMessage({ 
-          text: 'К сожалению произошла ошибка, ваши данные не сохранены!',
-          isShow: true,
-          type: 'error',
-        })
+      .catch((err) =>{
+        console.log(err);
+      })
+    }
+  }
+
+  function handleSelectJobDirectory(jobDirectory) {
+    const jobDirectoryId = jobDirectory.map(elem => elem.id);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.selectDirectoryJob({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        data: jobDirectoryId
+      })
+      .then((res) => {
+        setJobDirectoryProgram(res);
+        closeInitialDataPopups();
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+    }
+  }
+
+  function handleSelectWorldSkills(worldSkills) {
+    const worldSkillsId = worldSkills.map(elem => elem.id);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.selectWorldSkills({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        data: worldSkillsId
+      })
+      .then((res) => {
+        setWorldSkillsProgram(res);
+        closeInitialDataPopups();
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+    }
+  }
+
+  function handleRemoveProgramDocument(id, type) {
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.removeProgramDocument({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        id: id,
+        type: type,
+      })
+      .then((res) => {
+        switch (type) {
+          case "fgos":
+            setRequirementFgosProgram(res);
+            break;
+          case "prof":
+            setProfStandartsProgram(res);
+            break;
+          case "etkc":
+            setJobСlassificationProgram(res);
+            break;
+          case "ekc":
+            setJobDirectoryProgram(res);
+            break;
+          case "ws":
+            setWorldSkillsProgram(res);
+            break;
+          default:
+            alert( "Нет таких значений" );
+        }
+        closeInitialDataPopups();
+      })
+      .catch((err) =>{
         console.log(err);
       })
     }
@@ -143,17 +281,35 @@ function InitialData({ loggedIn, history, dppDescription }) {
 
   function closeInitialDataPopups() {
     setIsProfStandartPopupOpen(false);
-    setIsRequirementQualificationsPopupOpen(false);
+    setIsJobСlassificationPopupOpen(false);
+    setIsJobDirectoryPopupOpen(false);
+    setIsWorldSkillsPopupOpen(false);
     setIsRequirementFgosPopupOpen(false);
     setIsOpenEditPartPopup(false);
     setIsOpenRemovePartPopup(false);
     setIsOpenChoosePartsPopup(false);
+    setIsNsiPopupOpen(false);
   }
 
   function closeOverlayPopups() {
     setIsOpenEditPartPopup(false);
     setIsOpenRemovePartPopup(false);
     setIsOpenChoosePartsPopup(false);
+  }
+
+  function requirementFgosPopupOpen() {
+    setIsLoading(true);
+    closeInitialDataPopups();
+    setIsRequirementFgosPopupOpen(true);
+    const token = localStorage.getItem("token");
+    api.getFgoses({ token: token })
+    .then((res) => {
+      setRequirementFgos(res);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => setIsLoading(false));
   }
 
   function profStandartPopupOpen() {
@@ -171,14 +327,49 @@ function InitialData({ loggedIn, history, dppDescription }) {
     .finally(() => setIsLoading(false));
   }
 
-  function requirementQualificationsPopupOpen() {
+  function jobСlassificationPopupOpen() {
+    setIsLoading(true);
     closeInitialDataPopups();
-    setIsRequirementQualificationsPopupOpen(true);
+    setIsJobСlassificationPopupOpen(true);
+    const token = localStorage.getItem("token");
+    api.getJobClassification({ token: token })
+    .then((res) => {
+      setJobСlassification(res);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => setIsLoading(false));
   }
 
-  function requirementFgosPopupOpen() {
+  function jobDirectoryPopupOpen() {
+    setIsLoading(true);
     closeInitialDataPopups();
-    setIsRequirementFgosPopupOpen(true);
+    setIsJobDirectoryPopupOpen(true);
+    const token = localStorage.getItem("token");
+    api.getDirectoryJob({ token: token })
+    .then((res) => {
+      setJobDirectory(res);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => setIsLoading(false));
+  }
+
+  function worldSkillsPopupOpen() {
+    setIsLoading(true);
+    closeInitialDataPopups();
+    setIsWorldSkillsPopupOpen(true);
+    const token = localStorage.getItem("token");
+    api.getWorldSkills({ token: token })
+    .then((res) => {
+      setWorldSkills(res);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => setIsLoading(false));
   }
 
   function openEditPartPopup(part, index) {
@@ -199,20 +390,129 @@ function InitialData({ loggedIn, history, dppDescription }) {
     setIsOpenChoosePartsPopup(true);
   }
 
+  function openNsiPopup() {
+    const token = localStorage.getItem("token");
+    api.getNsiType({ token: token })
+    .then((res) => {
+      setNsiTypes(res);
+      closeInitialDataPopups();
+      setIsNsiPopupOpen(true);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => setIsLoading(false));
+  }
+
+  function handleAddNsi(elem, closeAllNsiPopup) {
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.createNsiElem({ 
+        token: token, 
+        initialDataVersion:dppDescription.ish_version_id, 
+        elem: elem
+      })
+      .then((res) => {
+        setNsiProgram([res, ...nsiProgram]);
+        closeAllNsiPopup();
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+  }
+}
+
+  function removeNsi(id) {
+    const token = localStorage.getItem("token");
+    api.removeNsiElem({ 
+      token: token, 
+      initialDataVersion: dppDescription.ish_version_id, 
+      id: id
+    })
+    .then((res) => {
+      const newNsi = nsiProgram.filter(part => part.id !== res);
+      setNsiProgram(newNsi);
+      closeInitialDataPopups();
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => setIsLoading(false));
+  }
+
   function changeTypologyParts(newTypology) {
-    closeInitialDataPopups();
-    setTypologiesParts(newTypology.typology_parts);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.chooseStructureParts({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        id: newTypology.id
+      })
+      .then((res) => {
+        setTypologiesParts(res);
+        closeInitialDataPopups();
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+    }
+  }
+
+  function changeTypologyPartsOrder(newOrder) {
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.changeStructurePartsOrder({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        order: newOrder
+      })
+      .then(() => {
+
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+    }
   }
   
   function removeTypologyParts(id) {
-    const newParts = typologiesParts.filter(part => part.id !== id);
-    setTypologiesParts(newParts);
-    closeInitialDataPopups();
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.removeStructurePart({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        id: id
+      })
+      .then((res) => {
+        const newParts = typologiesParts.filter(part => part.id !== res);
+        setTypologiesParts(newParts);
+        closeInitialDataPopups();
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+    }
   }
 
   function editTypologyParts(newPart, partIndex) {
-    setTypologiesParts([...typologiesParts.slice(0, partIndex), newPart, ...typologiesParts.slice(partIndex + 1)]);
-    closeInitialDataPopups();
+    
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.editStructurePart({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        id: newPart.id,
+        name: newPart.name
+      })
+      .then((res) => {
+        console.log(res);
+        setTypologiesParts([...typologiesParts.slice(0, partIndex), res, ...typologiesParts.slice(partIndex + 1)]);
+        closeInitialDataPopups();
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+    }
   }
 
   function handleAddNewDocument(type) {
@@ -224,14 +524,14 @@ function InitialData({ loggedIn, history, dppDescription }) {
         profStandartPopupOpen();
         break;
       case "etkc":
-        
+        jobСlassificationPopupOpen();
         break;
-        case "ekc":
-        
-          break;
-        case "worldskills":
-        
-          break;
+      case "ekc":
+        jobDirectoryPopupOpen();
+        break;
+      case "worldskills":
+        worldSkillsPopupOpen();
+        break;
       default:
         alert( "Нет таких значений" );
     }
@@ -250,10 +550,10 @@ function InitialData({ loggedIn, history, dppDescription }) {
         .then(([ profLevels, initialData ]) => {
           console.log(initialData);
           setProfLevels(profLevels);
-          setInitialData(initialData);
           setProfStandartsProgram(initialData.prof_standarts);
-          setRequirementQualifications(initialData.dolg_kvals);
-          setRequirementQualificationProgram(initialData.dolg_kvals);
+          setJobСlassificationProgram(initialData.ektses);
+          setJobDirectoryProgram(initialData.ekses);
+          setWorldSkillsProgram(initialData.world_skills);
           setRequirementFgos(initialData.fgoses);
           setRequirementFgosProgram(initialData.fgoses);
           setUserQualification(initialData.req_user_kval);
@@ -261,6 +561,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
           setSelectedProfLevels(initialData.prof_levels);
           setTypologies(initialData.typologies);
           setTypologiesParts(initialData.typology_parts);
+          setNsiProgram(initialData.nsis);
         })
         .catch((err) => {
           console.error(err);
@@ -269,10 +570,10 @@ function InitialData({ loggedIn, history, dppDescription }) {
     }
     return () => {
       setProfLevels([]);
-      setInitialData({});
       setProfStandartsProgram([]);
-      setRequirementQualifications([]);
-      setRequirementQualificationProgram([]);
+      setJobСlassificationProgram([]);
+      setJobDirectoryProgram([]);
+      setWorldSkillsProgram([]);
       setRequirementFgos([]);
       setRequirementFgosProgram([]);
       setUserQualification("");
@@ -280,6 +581,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
       setSelectedProfLevels([]);
       setTypologies([]);
       setTypologiesParts([]);
+      setNsiProgram([]);
   }
   }, [loggedIn, dppDescription]);
   
@@ -289,7 +591,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
     <Preloader />
     :
     <section className="initial-data">
-      <form onSubmit={handleSubmitForm} name="initial-data" action="#" noValidate>
+      <div>
 
         <h1 className="main__title">Ввод исходных данных</h1>
         <p className="main__subtitle">Заполните предолженные поля форм. Для сохранения данных, нажмите кнопку "Сохранить данные". Для перехода к следующему этапу нажмите кнопку "Перейти к следующему этапу".</p>
@@ -302,55 +604,98 @@ function InitialData({ loggedIn, history, dppDescription }) {
             <AccordionChooseNewDocumentType 
             onChoose={handleAddNewDocument}
             />
-            <h5 className="initial-data__item-title">Требования к квалификации установлены на основе:</h5>
 
-            {/*<ul className="initial-data__basis-list">
-              <li className="initial-data__basis-item">
-                <img className="initial-data__basis-img" src={prof} alt="prof"></img>
-                <h4 className="initial-data__basis-name">{`Профессиональные стандарты (${profStandartsProgram.length})`}</h4>
-                <button className="btn_type_basis" type="button">Выбрать</button>
-                <ul className="initial-data__basis-el-list">
-                  {
-                    profStandartsProgram.map((elem, i) => (
-                      <li className="initial-data__basis-el" key={i}>
-                        <span className="initial-data__basis-el-code">{elem.code}</span>
-                        <p className="initial-data__basis-el-name">{elem.name}</p>
-                      </li>
-                    ))
-                  }
-                </ul>
-              </li>
-              <li className="initial-data__basis-item">
-                <img className="initial-data__basis-img" src={qual} alt="qual"></img>
-                <h4 className="initial-data__basis-name">{`Квалификационные требования (${requirementQualifications.length})`}</h4>
-                <button className="btn_type_basis" type="button">Выбрать</button>
-                <ul className="initial-data__basis-el-list">
-                  {
-                    requirementQualifications.map((elem, i) => (
-                      <li className="initial-data__basis-el" key={i}>
-                        <span className="initial-data__basis-el-code">{`№ ${i + 1}`}</span>
-                        <p className="initial-data__basis-el-name">{elem.name}</p>
-                      </li>
-                    ))
-                  }
-                </ul>
-              </li>
-              <li className="initial-data__basis-item">
-                <img className="initial-data__basis-img" src={fgos} alt="fgos"></img>
-                <h4 className="initial-data__basis-name">{`Требования ФГОС (${requirementFgos.length})`}</h4>
-                <button className="btn_type_basis" type="button">Выбрать</button>
-                <ul className="initial-data__basis-el-list">
-                  {
-                    requirementFgos.map((elem, i) => (
-                      <li className="initial-data__basis-el" key={i}>
-                        <span className="initial-data__basis-el-code">{elem.code}</span>
-                        <p className="initial-data__basis-el-name">{elem.name}</p>
-                      </li>
-                    ))
-                  }
-                </ul>
-              </li>
-            </ul>*/}
+            {
+              requirementFgosProgram.length > 0 || 
+              profStandartsProgram.length > 0 ||
+              jobСlassificationProgram.length > 0 ||
+              jobDirectoryProgram.length > 0 ||
+              worldSkillsProgram.length > 0 ?
+              <h5 className="initial-data__item-title">Требования к квалификации установлены на основе:</h5>
+              :
+              <div></div>
+            }
+            
+            <ul className="initial-data__documents-list">
+              {
+                requirementFgosProgram.map((elem, i) => (
+                  <li className="initial-data__documents-item" key={`prof-${i}`}>
+                    <img className="initial-data__documents-img" src={fgosIcon} alt="иконка фгос"></img>
+                    <div className="initial-data__documents-info">
+                      <div className="initial-data__documents-tags">
+                        <span className="initial-data__documents-type">ФГОС</span>
+                        <span className="initial-data__documents-code">{elem.code || "xx.xxx"}</span>
+                        <button className="initial-data__documents-delete-btn" type="button" onClick={() => handleRemoveProgramDocument(elem.id, "fgos")}></button>
+                      </div>
+                      <h4 className="initial-data__documents-name">{elem.name || "название"}</h4>
+                    </div>
+                  </li>
+                ))
+              }
+              {
+                profStandartsProgram.map((elem, i) => (
+                  <li className="initial-data__documents-item" key={`prof-${i}`}>
+                    <img className="initial-data__documents-img" src={profstandartIcon} alt="иконка профстандарта"></img>
+                    <div className="initial-data__documents-info">
+                      <div className="initial-data__documents-tags">
+                        <span className="initial-data__documents-type">Профстандарт</span>
+                        <span className="initial-data__documents-code">{elem.nameCode || "xx.xxx"}</span>
+                        <button className="initial-data__documents-delete-btn" type="button" onClick={() => handleRemoveProgramDocument(elem.id, "prof")}></button>
+                      </div>
+                      <h4 className="initial-data__documents-name">{elem.nameText || "название"}</h4>
+                      <p className="initial-data__documents-order">{`приказ Минтруда России от ${elem.orderDate || "xx.xx.20xx"} г. № ${elem.orderNumber || "xxxx"}н (зарегистрирован Министерством юстиции Российской Федерации ${elem.registrationDate || "xx.xx.20xx"} г., регистрационный № ${elem.registrationNumber || "xxxxx"}`}</p>
+                    </div>
+                  </li>
+                ))
+              }
+              {
+                jobСlassificationProgram.map((elem, i) => (
+                  <li className="initial-data__documents-item" key={`class-${i}`}>
+                    <img className="initial-data__documents-img" src={etkcIcon} alt="иконка еткс"></img>
+                    <div className="initial-data__documents-info">
+                      <div className="initial-data__documents-tags">
+                        <span className="initial-data__documents-type">ЕТКС</span>
+                        <span className="initial-data__documents-code">{elem.nameProfession || "xx.xxx"}</span>
+                        <button className="initial-data__documents-delete-btn" type="button" onClick={() => handleRemoveProgramDocument(elem.id, "etkc")}></button>
+                      </div>
+                      <h4 className="initial-data__documents-name">{elem.chapterName || "название"}</h4>
+                      <p className="initial-data__documents-order">{`Выпуск № ${elem.issueNumber || "xx"}. Дата редакции ${elem.editionDate || "xx.xx.20xx"} г.`}</p>
+                    </div>
+                  </li>
+                ))
+              }
+              {
+                jobDirectoryProgram.map((elem, i) => (
+                  <li className="initial-data__documents-item" key={`direct-${i}`}>
+                    <img className="initial-data__documents-img" src={ekcIcon} alt="иконка екс"></img>
+                    <div className="initial-data__documents-info">
+                      <div className="initial-data__documents-tags">
+                        <span className="initial-data__documents-type">ЕКС</span>
+                        <span className="initial-data__documents-code">{elem.nameProfession || "xx.xxx"}</span>
+                        <button className="initial-data__documents-delete-btn" type="button"onClick={() => handleRemoveProgramDocument(elem.id, "ekc")}></button>
+                      </div>
+                      <h4 className="initial-data__documents-name">{elem.chapterName || "название"}</h4>
+                      <p className="initial-data__documents-order">{`Дата редакции ${elem.editionDate || "xx.xx.20xx"} г.`}</p>
+                    </div>
+                  </li>
+                ))
+              }
+              {
+                worldSkillsProgram.map((elem, i) => (
+                  <li className="initial-data__documents-item" key={`world-${i}`}>
+                    <img className="initial-data__documents-img" src={worldskillsIcon} alt="иконка worldskills"></img>
+                    <div className="initial-data__documents-info">
+                      <div className="initial-data__documents-tags">
+                        <span className="initial-data__documents-type">WorldSkills</span>
+                        <span className="initial-data__documents-code">{elem.code || "xxx"}</span>
+                        <button className="initial-data__documents-delete-btn" type="button" onClick={() => handleRemoveProgramDocument(elem.id, "ws")}></button>
+                      </div>
+                      <h4 className="initial-data__documents-name">{elem.name || "название"}</h4>
+                    </div>
+                  </li>
+                ))
+              }
+            </ul>
           </li>
 
           <li className="initial-data__item initial-data__item_type_requirements">
@@ -385,6 +730,11 @@ function InitialData({ loggedIn, history, dppDescription }) {
               onChange={handleChangeUserQualification}
             >
             </textarea>
+            <div className="initial-data__buttons initial-data__buttons_type_requirements">
+              <button className="btn btn_type_save" type="button" onClick={handleSaveRequirements}>Сохранить данные</button>
+              <span className={`initial-data__buttons-message ${requestMessageRequirements.isShow ? "initial-data__buttons-message_type_show" : "initial-data__buttons-message_type_hide"} ${requestMessageRequirements.type === 'error' ? "initial-data__buttons-message_type_error" : "initial-data__buttons-message_type_success"}`}>{requestMessageRequirements.text}</span>
+            </div>
+            
           </li>
 
           <li className="initial-data__item initial-data__item_type_target">
@@ -429,6 +779,10 @@ function InitialData({ loggedIn, history, dppDescription }) {
                 </label>
               </li>
             </ul>
+            <div className="initial-data__buttons initial-data__buttons_type_requirements">
+              <button className="btn btn_type_save" type="button" onClick={handleSaveNewCompetence}>Сохранить данные</button>
+              <span className={`initial-data__buttons-message ${requestMessageCompetence.isShow ? "initial-data__buttons-message_type_show" : "initial-data__buttons-message_type_hide"} ${requestMessageCompetence.type === 'error' ? "initial-data__buttons-message_type_error" : "initial-data__buttons-message_type_success"}`}>{requestMessageCompetence.text}</span>
+            </div>
           </li>
 
           <li className="initial-data__item initial-data__item_type_structure">
@@ -436,27 +790,39 @@ function InitialData({ loggedIn, history, dppDescription }) {
             <p className="initial-data__item-subtitle initial-data__item-subtitle_type_structure">Выберите наиболее подходящую типовую структуру ДПП или создайте свою. Типовая структура состоит из разделов, которых следует придерживаться во время разработки ДПП.</p>
             <TypicalStructure 
               typologyParts={typologiesParts}
+              initialDataVersion={dppDescription.ish_version_id}
+              loggedIn={loggedIn}
               onEdit={openEditPartPopup}
               onRemove={openRemovePartPopup}
               onChoose={openChoosePartsPopup}
+              onChangeOrder={changeTypologyPartsOrder}
             />
           </li>
 
           <li className="initial-data__item initial-data__item_type_info">
             <h3 className="initial-data__item-name">Нормативно-справочная информация</h3>
             <p className="initial-data__item-subtitle initial-data__item-subtitle_type_info">Добавьте названия источников НСИ, которые будут использованы в ДПП. Вы также сможете дополнить данный список на последующих этапах разработки ДПП.</p>
-            <ReferenceInformation />
+            <button className="btn btn_type_add initial-data__btn_type_add-nsi" onClick={openNsiPopup}>Добавить новый источник</button>
+            <ReferenceInformation 
+              nsi={nsiProgram}
+              onRemove={removeNsi}
+            />
           </li>
 
         </ul>
 
-        <div className="initial-data__buttons">
-          <button className="btn btn_type_save" type="submit">Сохранить данные</button>
-          <button className="btn btn_type_next" type="button" onClick={() => history.push("/main/development/dpp/zoon")}>Перейти к следующему этапу</button>
-          <span className={`request-message ${requestMessage.isShow ? "request-message_type_show" : "request-message_type_hide"} ${requestMessage.type === 'error' ? "request-message_type_error" : "request-message_type_success"}`}>{requestMessage.text}</span>
-        </div>
+        <button className="btn btn_type_next" type="button" onClick={() => history.push("/main/development/dpp/zoon")}>Перейти к следующему этапу</button>
 
-      </form>
+      </div>
+
+      <RequirementFgosPopup
+        isOpen={isRequirementFgosPopupOpen}
+        onClose={closeInitialDataPopups}
+        isLoading={isLoading}
+        requirementFgos={requirementFgos}
+        requirementFgosProgram={requirementFgosProgram}
+        onSave={handleSelectFgoses}
+      />
 
       <ProfStandartPopup
         isOpen={isProfStandartPopupOpen}
@@ -467,22 +833,31 @@ function InitialData({ loggedIn, history, dppDescription }) {
         onSave={handleSelectProfStandart}
       />
 
-      <RequirementQualificationsPopup
-        isOpen={isRequirementQualificationsPopupOpen}
+      <JobСlassificationPopup
+        isOpen={isJobСlassificationPopupOpen}
         onClose={closeInitialDataPopups}
         isLoading={isLoading}
-        requirementQualifications={requirementQualifications}
-        requirementQualificationProgram={requirementQualificationProgram}
-        onSave={handleSelectRequirementQualification}
+        jobСlassification={jobСlassification}
+        jobСlassificationProgram={jobСlassificationProgram}
+        onSave={handleSelectJobСlassification}
       />
 
-      <RequirementFgosPopup
-        isOpen={isRequirementFgosPopupOpen}
+      <JobDirectoryPopup
+        isOpen={isJobDirectoryPopupOpen}
         onClose={closeInitialDataPopups}
         isLoading={isLoading}
-        requirementFgos={requirementFgos}
-        requirementFgosProgram={requirementFgosProgram}
-        onSave={handleSelectRequirementFgos}
+        jobDirectory={jobDirectory}
+        jobDirectoryProgram={jobDirectoryProgram}
+        onSave={handleSelectJobDirectory}
+      />
+
+      <WorldSkillsPopup
+        isOpen={isWorldSkillsPopupOpen}
+        onClose={closeInitialDataPopups}
+        isLoading={isLoading}
+        worldSkills={worldSkills}
+        worldSkillsProgram={worldSkillsProgram}
+        onSave={handleSelectWorldSkills}
       />
 
       <EditPartPopup 
@@ -507,6 +882,12 @@ function InitialData({ loggedIn, history, dppDescription }) {
         onChangeTypologyParts={changeTypologyParts}
       />
 
+      <NsiPopup 
+        isOpen={isNsiPopupOpen}
+        onClose={closeInitialDataPopups}
+        nsiTypes={nsiTypes}
+        onAdd={handleAddNsi}
+      />
 
     </section>
   );

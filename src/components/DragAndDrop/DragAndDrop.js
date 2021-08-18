@@ -4,7 +4,7 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import DroppableColumn from './DroppableColumn/DroppableColumn.js';
 
 
-function DragAndDrop({ data, onEdit, onRemove }) {
+function DragAndDrop({ data, onEdit, onRemove, onChangeOrder }) {
 
   const [dataQuestion, setDataQuestion] = React.useState([]);
 
@@ -57,6 +57,7 @@ function DragAndDrop({ data, onEdit, onRemove }) {
     };
 
     setDataQuestion(newState);
+    onChangeOrder(newState.column.partIds);
   }
  
   

@@ -15,7 +15,7 @@ import useOnPushEsc from '../../hooks/useOnPushEsc.js';
 
 function Main({ loggedIn, pathname, onLogout, history, onUpdateUser, isLoadingRequest, requestMessage, setRequestMessage }) {
 
-  const [showHeaderMenu, setShowHeaderMenu] = React.useState(true);
+  const [showHeaderMenu, setShowHeaderMenu] = React.useState(false);
   const [isAvatarPopupOpen, setIsAvatarPopupOpen] = React.useState(false);
   
   function closeMainPopups() {

@@ -3,6 +3,7 @@ import './ProfStandartPopup.css';
 import Popup from '../../Popup/Popup.js';
 import ProfStandartPopupItem from './ProfStandartPopupItem/ProfStandartPopupItem.js';
 import AddProfStandartPopup from './AddProfStandartPopup/AddProfStandartPopup.js';
+import * as api from '../../../utils/api.js';
 
 function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStandartsProgram, onSave }) {
 
@@ -25,9 +26,17 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
     setIsShowAddPopup(false);
   }
   
-  function handleAddProfStandart(newProfStandart) {
-    closeAllPopups();
-    setCurrentProfStandart([...currentProfStandart, newProfStandart]);
+  function handleAddDocument(newDocument) {
+    const token = localStorage.getItem("token");
+    api.createProfStandarts({ token: token, document: newDocument })
+    .then((res) => {
+      closeAllPopups();
+      setCurrentProfStandart([...currentProfStandart, res]);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    //.finally(() => setIsLoading(false));
   }
 
   function handleSearchByName(e) {
@@ -57,7 +66,7 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
 
   React.useEffect(() => {
     const filteredProfStandart = profStandarts.filter((item) => {
-      return item.name.toLowerCase().includes(searchName.toLowerCase()) && item.code.toLowerCase().includes(searchCode.toLowerCase());
+      return item.nameText.toLowerCase().includes(searchName.toLowerCase()) && item.nameCode.toLowerCase().includes(searchCode.toLowerCase());
     })
     setCurrentProfStandart(filteredProfStandart)
   }, [profStandarts, searchName, searchCode]);
@@ -151,7 +160,7 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
       </form>
     </Popup>
 
-    <AddProfStandartPopup isOpen={isShowAddPopup} onClose={closeAllPopups} onAdd={handleAddProfStandart} />
+    <AddProfStandartPopup isOpen={isShowAddPopup} onClose={closeAllPopups} onAdd={handleAddDocument} />
     </>
   )
 }

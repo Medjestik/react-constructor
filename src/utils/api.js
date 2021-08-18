@@ -106,8 +106,8 @@ export const getProfLevels = ({ token }) => {
   .then(res => handleResponse(res))
 };
 
-export const getProfStandarts = ({ token }) => {
-  return fetch(`${API_URL}/profstandarts/get_profstandarts`, {
+export const getFgoses = ({ token }) => {
+  return fetch(`${API_URL}/fgoses`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -118,8 +118,8 @@ export const getProfStandarts = ({ token }) => {
   .then(res => handleResponse(res))
 };
 
-export const selectProfStandarts = ({ token, dppId, initialDataVersion, data }) => {
-  return fetch(`${API_URL}/dpps/${dppId}/update_ish_version_data/${initialDataVersion}/select_profstandarts`, {
+export const selectFgoses = ({ token, initialDataVersion, data }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/select_fgoses`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -130,6 +130,300 @@ export const selectProfStandarts = ({ token, dppId, initialDataVersion, data }) 
   })
   .then(res => handleResponse(res))
 };
+
+export const getProfStandarts = ({ token }) => {
+  return fetch(`${API_URL}/profstandarts`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};
+
+export const createProfStandarts = ({ token, document }) => {
+  return fetch(`${API_URL}/profstandarts`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ document })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const selectProfStandarts = ({ token, initialDataVersion, data }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/select_profstandarts`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ data })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const getJobClassification = ({ token }) => {
+  return fetch(`${API_URL}/ekts`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};
+
+export const createJobClassification = ({ token, document }) => {
+  return fetch(`${API_URL}/ekts`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ document })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const selectJobClassification = ({ token, initialDataVersion, data }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/select_ektses`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ data })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const getDirectoryJob = ({ token }) => {
+  return fetch(`${API_URL}/eks`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};
+
+export const createDirectoryJob = ({ token, document }) => {
+  return fetch(`${API_URL}/eks`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ document })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const selectDirectoryJob = ({ token, initialDataVersion, data }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/select_ekses`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ data })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const getWorldSkills = ({ token }) => {
+  return fetch(`${API_URL}/ws`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};
+
+export const createWorldSkills = ({ token, document }) => {
+  return fetch(`${API_URL}/ws`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ document })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const selectWorldSkills = ({ token, initialDataVersion, data }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/select_world_skills`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ data })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const removeProgramDocument = ({ token, initialDataVersion, id, type }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/unselect_qual_based`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ id, type })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const saveRequirements = ({ token, initialDataVersion, profLevels, userQualification }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/requirements`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ profLevels, userQualification })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const saveCompetence = ({ token, initialDataVersion, newCompetence }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/results`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ newCompetence })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const createStructurePart = ({ token, initialDataVersion, name }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/dpp_typology_parts`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ name })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const chooseStructureParts = ({ token, initialDataVersion, id }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/dpp_typology_parts/choose`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ id })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const changeStructurePartsOrder = ({ token, initialDataVersion, order }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/dpp_typology_parts/reorder`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ order })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const editStructurePart = ({ token, initialDataVersion, id, name }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/dpp_typology_parts/${id}/update`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ name })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const removeStructurePart = ({ token, initialDataVersion, id }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/dpp_typology_parts/${id}/destroy`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ id })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const getNsiType = ({ token }) => {
+  return fetch(`${API_URL}/nsi_types`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};
+
+export const createNsiElem = ({ token, initialDataVersion, elem }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/nsis`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ elem })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const removeNsiElem = ({ token, initialDataVersion, id }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/nsis/${id}/destroy`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+  .then(res => handleResponse(res))
+};
+
 
 export const getZoon = ({ token, dppId, zoonVersion }) => {
   return fetch(`${API_URL}/dpps/${dppId}/get_zun_version_data2/${zoonVersion}`, {
