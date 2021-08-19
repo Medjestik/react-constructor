@@ -105,7 +105,9 @@ function ZoonChart({ dppDescription, nodes, nsi, zoonLinks, typologyParts }) {
             addSkill: { text: "Добавить навык", icon: "", onClick: function (nodeId) {
               addNode(nodeId, zoon, "skill");
             } },
-            remove: { text: "Удалить", icon: "" }
+            remove: { text: "Удалить", icon: "", onClick: function (nodeId) {
+              removeNode(nodeId, zoon, "competence");
+            } },
           },
         },
         "skill": {
@@ -461,6 +463,19 @@ function ZoonChart({ dppDescription, nodes, nsi, zoonLinks, typologyParts }) {
           setIsLoadingRequest(false);
         });
         break;
+        case 'competence':
+          api.removeCompetence(({ token: token, zoonVersion: dppDescription.zun_version_id, nodeId: nodeId }))
+          .then((res) => {
+            zoon.removeNode(res);
+            closeZoonPopups();
+          })
+          .catch((err) => {
+            console.error(err);
+          })
+          .finally(() => {
+            setIsLoadingRequest(false);
+          });
+          break;
       default: 
         return false;
       }
@@ -490,6 +505,7 @@ function ZoonChart({ dppDescription, nodes, nsi, zoonLinks, typologyParts }) {
       setIsLoadingRequest(false);
     });
   }
+
 
   function buildCompetencePopupOpen() {
     setIsBuildCompetencePopupOpen(true);
