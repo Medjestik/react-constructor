@@ -1,9 +1,10 @@
 import React from 'react';
 import './AddNodePopup.css';
 import Popup from '../../../../Popup/Popup.js';
-import JustificationPopup from '../JustificationPopup/JustificationPopup.js';
+import Justification from './Justification/Justification.js';
+import KnowledgeTypology from './KnowledgeTypology/KnowledgeTypology.js';
 
-function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadingRequest, isErrorRequest, openAddJustificationPopup }) {
+function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadingRequest, isErrorRequest, openAddJustificationPopup, nsi, typologyParts }) {
 
   const [knowledgeWhat, setKnowledgeWhat] = React.useState('');
   const [errorKnowledgeWhat, setErrorKnowledgeWhat] = React.useState(true);
@@ -22,25 +23,55 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
   const [skillWhere, setSkillWhere] = React.useState('');
   const [errorSkillWhere, setErrorSkillWhere] = React.useState(true);
   const [formErrorSkill, setFormErrorSkill] = React.useState(true);
-  
+
+  const [newNode, setNewNode] = React.useState({})
+  const [nsiArray, setNsiArray] = React.useState([])
+
+  function handleChooseJustificationType(number) {
+    setNewNode({ ...newNode, justificationType: number });
+  }
+
+  function handleChangeExpertOpinion(text) {
+    setNewNode({ ...newNode, expertOpinion: text });
+  }
+
+  function handleChooseNsi(id) {
+    let index = nsiArray.indexOf(id);
+    let newArray = nsiArray;
+    if (index === -1) {
+      newArray.push(id);
+    } else {
+      newArray.splice(index, 1);
+    }
+    setNsiArray(newArray);
+  }
+
+  function handleChooseTypologyPart(id) {
+    setNewNode({ ...newNode, typologyPartId: id });
+  }
+
+  function handleSwapType() {
+    setNsiArray([]);
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     switch(currentNode.tags[0]) {
       case 'knowledge':
         const newKnowledge = "Знать " + knowledgeWhat;
-        const newKnowledgeNode = { ...currentNode, name: newKnowledge, what: knowledgeWhat };
+        const newKnowledgeNode = { ...newNode, name: newKnowledge, what: knowledgeWhat, nsis: nsiArray };
         onSave(zoonChart, newKnowledgeNode);
         break;
       
       case 'ability': 
         const newAbility = "Уметь " + abilityWhat + " " + abilityWith + " " + abilityWhere;
-        const newAbilityNode = { ...currentNode, name: newAbility, what: abilityWhat, with: abilityWith, where: abilityWhere };
+        const newAbilityNode = { ...newNode, name: newAbility, what: abilityWhat, with: abilityWith, where: abilityWhere, nsis: nsiArray };
         onSave(zoonChart, newAbilityNode);
         break;
 
         case 'skill': 
         const newSkill = "Владеть навыком " + skillWhat + " " + skillWith + " " + skillWhere;
-        const newSkillNode = { ...currentNode, name: newSkill, what: skillWhat, with: skillWith, where: skillWhere };
+        const newSkillNode = { ...newNode, name: newSkill, what: skillWhat, with: skillWith, where: skillWhere, nsis: nsiArray };
         onSave(zoonChart, newSkillNode);
         break;
 
@@ -130,6 +161,11 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
     setErrorSkillWith(true);
     setErrorSkillWhere(true);
     setFormErrorSkill(true);
+    setNewNode({ ...currentNode, justificationType: "", expertOpinion: "", nsis: [], typologyPartId: "" });
+
+    return () => {
+      setNewNode({})
+    }
     // eslint-disable-next-line
   }, [isOpen]);
 
@@ -178,7 +214,21 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
           required
           ></input>
           <span className="popup__subtitle add-node__caption">{`Итоговое название: Знать ${knowledgeWhat || ""}`}</span>
-          <JustificationPopup openAddJustificationPopup={openAddJustificationPopup} />
+
+          <KnowledgeTypology
+            typologyParts={typologyParts}
+            onChoose={handleChooseTypologyPart}
+          />
+          
+          <Justification 
+          openAddJustificationPopup={openAddJustificationPopup} 
+          nsi={nsi} 
+          onChooseJustificationType={handleChooseJustificationType}
+          onChangeExpertOpinion={handleChangeExpertOpinion}
+          onChooseNsi={handleChooseNsi}
+          onSwapType={handleSwapType}
+          />
+
           <div className="add-zoon__error">
           <span className={`add-zoon__error-message ${isErrorRequest ? "add-zoon__error-message_type_show" : "add-zoon__error-message_type_hide"}`}>К сожалению, произошла ошибка, попробуйте обновить страницу.</span>
           </div>
@@ -235,7 +285,16 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
           required
           ></input>
           <span className="popup__subtitle add-node__caption">{`Итоговое название: Уметь ${abilityWhat || ""} ${abilityWith || ""} ${abilityWhere || ""}`}</span>
-          <JustificationPopup openAddJustificationPopup={openAddJustificationPopup} />
+
+          <Justification 
+          openAddJustificationPopup={openAddJustificationPopup} 
+          nsi={nsi} 
+          onChooseJustificationType={handleChooseJustificationType}
+          onChangeExpertOpinion={handleChangeExpertOpinion}
+          onChooseNsi={handleChooseNsi}
+          onSwapType={handleSwapType}
+          />
+
           <div className="add-zoon__error">
           <span className={`add-zoon__error-message ${isErrorRequest ? "add-zoon__error-message_type_show" : "add-zoon__error-message_type_hide"}`}>К сожалению, произошла ошибка, попробуйте обновить страницу.</span>
           </div>
@@ -292,7 +351,16 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
             required
             ></input>
             <span className="popup__subtitle add-node__caption">{`Итоговое название: Владеть навыком ${skillWhat || ""} ${skillWith || ""} ${skillWhere || ""}`}</span>
-            <JustificationPopup openAddJustificationPopup={openAddJustificationPopup} />
+
+            <Justification 
+            openAddJustificationPopup={openAddJustificationPopup} 
+            nsi={nsi} 
+            onChooseJustificationType={handleChooseJustificationType}
+            onChangeExpertOpinion={handleChangeExpertOpinion}
+            onChooseNsi={handleChooseNsi}
+            onSwapType={handleSwapType}
+            />
+
             <div className="add-zoon__error">
             <span className={`add-zoon__error-message ${isErrorRequest ? "add-zoon__error-message_type_show" : "add-zoon__error-message_type_hide"}`}>К сожалению, произошла ошибка, попробуйте обновить страницу.</span>
             </div>

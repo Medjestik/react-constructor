@@ -109,6 +109,30 @@
   top: -2px;
   z-index: 10000;
 }
+.chart-menu div[data-item ="disconnect"] span::before {
+  content: '';
+  background-image: url('../../../../../images/disconnect-color.png');
+  position: absolute;
+  left: 0px;
+  top: -2px;
+  z-index: 10000;
+}
+.chart-menu div[data-item ="addLink"] span::before {
+  content: '';
+  background-image: url('../../../../../images/add-connection-color.png');
+  position: absolute;
+  left: 0px;
+  top: -2px;
+  z-index: 10000;
+}
+.chart-menu div[data-item ="removeLink"] span::before {
+  content: '';
+  background-image: url('../../../../../images/remove-connection-color.png');
+  position: absolute;
+  left: 0px;
+  top: -2px;
+  z-index: 10000;
+}
 .zoon-chart_btn-control {
   margin: 30px 0px 0px 0px;
   display: flex;

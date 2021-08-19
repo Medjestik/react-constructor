@@ -425,8 +425,12 @@ export const removeNsiElem = ({ token, initialDataVersion, id }) => {
 };
 
 
+
+
+
+
 export const getZoon = ({ token, dppId, zoonVersion }) => {
-  return fetch(`${API_URL}/dpps/${dppId}/get_zun_version_data2/${zoonVersion}`, {
+  return fetch(`${API_URL}/dpps/${dppId}/get_zun_version_data/${zoonVersion}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -437,8 +441,20 @@ export const getZoon = ({ token, dppId, zoonVersion }) => {
   .then(res => handleResponse(res))
 };
 
-export const addKnowledge = ({ token, dppId, zoonVersion, node }) => {
-  return fetch(`${API_URL}/dpps/${dppId}/add_knowledge_new/${zoonVersion}`, {
+export const getNsi = ({ token, initialVersionId }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialVersionId}/nsis`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};
+
+export const addKnowledge = ({ token, zoonVersion, node }) => {
+  return fetch(`${API_URL}/zuns/${zoonVersion}/knowledges`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -450,8 +466,8 @@ export const addKnowledge = ({ token, dppId, zoonVersion, node }) => {
   .then(res => handleResponse(res))
 };
 
-export const removeKnowledge = ({ token, dppId, zoonVersion, nodeId }) => {
-  return fetch(`${API_URL}/dpps/${dppId}/remove_knowledge_new/${zoonVersion}`, {
+export const removeKnowledge = ({ token, zoonVersion, nodeId }) => {
+  return fetch(`${API_URL}/zuns/${zoonVersion}/knowledges/destroy`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -463,8 +479,8 @@ export const removeKnowledge = ({ token, dppId, zoonVersion, nodeId }) => {
   .then(res => handleResponse(res))
 };
 
-export const addAbility = ({ token, dppId, zoonVersion, node }) => {
-  return fetch(`${API_URL}/dpps/${dppId}/add_ability_new/${zoonVersion}`, {
+export const addAbility = ({ token, zoonVersion, node }) => {
+  return fetch(`${API_URL}/zuns/${zoonVersion}/abilities`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -476,8 +492,8 @@ export const addAbility = ({ token, dppId, zoonVersion, node }) => {
   .then(res => handleResponse(res))
 };
 
-export const removeAbility = ({ token, dppId, zoonVersion, nodeId }) => {
-  return fetch(`${API_URL}/dpps/${dppId}/remove_ability_new/${zoonVersion}`, {
+export const removeAbility = ({ token, zoonVersion, nodeId }) => {
+  return fetch(`${API_URL}/zuns/${zoonVersion}/abilities/destroy`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -489,8 +505,8 @@ export const removeAbility = ({ token, dppId, zoonVersion, nodeId }) => {
   .then(res => handleResponse(res))
 };
 
-export const addSkill = ({ token, dppId, zoonVersion, node }) => {
-  return fetch(`${API_URL}/dpps/${dppId}/add_skill_new/${zoonVersion}`, {
+export const addSkill = ({ token, zoonVersion, node }) => {
+  return fetch(`${API_URL}/zuns/${zoonVersion}/skills`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -502,8 +518,8 @@ export const addSkill = ({ token, dppId, zoonVersion, node }) => {
   .then(res => handleResponse(res))
 };
 
-export const removeSkill = ({ token, dppId, zoonVersion, nodeId }) => {
-  return fetch(`${API_URL}/dpps/${dppId}/remove_skill_new/${zoonVersion}`, {
+export const removeSkill = ({ token, zoonVersion, nodeId }) => {
+  return fetch(`${API_URL}/zuns/${zoonVersion}/skills/destroy`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -528,14 +544,44 @@ export const moveNode = ({ token, dppId, elem_type, elem_id, to_type, to_id }) =
   .then(res => handleResponse(res))
 };
 
-export const getNsi = ({ token, initialVersionId }) => {
-  return fetch(`${API_URL}/nsis/${initialVersionId}`, {
-    method: 'GET',
+export const disconnectNode = ({ token, zoonVersion, node }) => {
+  return fetch(`${API_URL}/zuns/${zoonVersion}/disconnect`, {
+    method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
-    }
+    },
+    body: JSON.stringify({ node })
   })
   .then(res => handleResponse(res))
 };
+
+export const addLink = ({ token, zoonVersion, nodeId, abilityId }) => {
+  return fetch(`${API_URL}/zuns/${zoonVersion}/knowledges/add_new_link`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ nodeId, abilityId })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const removeLink = ({ token, zoonVersion, nodeId, abilityId }) => {
+  return fetch(`${API_URL}/zuns/${zoonVersion}/knowledges/remove_new_link`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ nodeId, abilityId })
+  })
+  .then(res => handleResponse(res))
+};
+
+
+

@@ -5,11 +5,13 @@ import AddNodePopup from '../AddNodePopup/AddNodePopup.js';
 import EditNodePopup from '../EditNodePopup/EditNodePopup.js';
 import ConfirmRemovePopup from '../ConfirmRemovePopup/ConfirmRemovePopup.js';
 import ErrorRemovePopup from '../ErrorRemovePopup/ErrorRemovePopup.js';
-import AddNsiPopup from '../../../../Popup/AddNsiPopup/AddNsiPopup.js';
+import AddNewLinkPopup from '../AddNewLinkPopup/AddNewLinkPopup.js';
+import RemoveLinkPopup from '../RemoveLinkPopup/RemoveLinkPopup.js';
+import NsiPopup from '../../../../Popup/NsiPopup/NsiPopup.js';
 import * as api from '../../../../../utils/api.js';
 import ErrorDragAndDropPopup from '../ErrorDragAndDropPopup/ErrorDragAndDropPopup.js';
 
-function ZoonChart({ nodes, dppDescription }) {
+function ZoonChart({ dppDescription, nodes, nsi, zoonLinks, typologyParts }) {
 
   const [zoonChart, setZoonChart] = React.useState({});
   const [currentNode, setCurrentNode] = React.useState({});
@@ -17,8 +19,10 @@ function ZoonChart({ nodes, dppDescription }) {
   const [currentNodeType, setCurrentNodeType] = React.useState('');
   const [isAddNodePopupOpen, setIsAddNodePopupOpen] = React.useState(false);
   const [isEditNodePopupOpen, setIsEditNodePopupOpen] = React.useState(false);
-  const [isConfirmRemovePopupOpen, setIsConfirmRemovePopupOpen] = React.useState(false);
+  const [isConfirmRemovePopupOpen, setIsConfirmRemovePopupOpen] = React.useState(false); 
   const [isErrorRemovePopupOpen, setIsErrorRemovePopupOpen] = React.useState(false);
+  const [isAddNewLinkPopupOpen, setIsAddNewLinkPopupOpen] = React.useState(false);
+  const [isRemoveLinkPopupOpen, setIsRemoveLinkPopupOpen] = React.useState(false);
   const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
   const [isErrorRequest, setIsErrorRequest] = React.useState(false);
   const [errorDragAndDrop, setErrorDragAndDrop] = React.useState('');
@@ -60,6 +64,7 @@ function ZoonChart({ nodes, dppDescription }) {
   React.useEffect (() => {
     const zoon = new OrgChart(divRef.current , {
       nodes: nodes,
+      slinks: zoonLinks,
       layout: OrgChart.treeRightOffset,
       nodeMouseClick: OrgChart.action.none,
       enableSearch: false,
@@ -98,7 +103,7 @@ function ZoonChart({ nodes, dppDescription }) {
             addSkill: { text: "Добавить навык", icon: "", onClick: function (nodeId) {
               addNode(nodeId, zoon, "skill");
             } },
-            remove: { text: "Удалить" }
+            remove: { text: "Удалить", icon: "" }
           },
         },
         "skill": {
@@ -112,6 +117,9 @@ function ZoonChart({ nodes, dppDescription }) {
             } },
             remove: { text: "Удалить", icon: "", onClick: function (nodeId) {
               removeNode(nodeId, zoon, "skill");
+            } },
+            disconnect: { text: "Отсоединить", icon: "", onClick: function (nodeId) {
+              disconnectNode(nodeId, zoon);
             } },
           },
         },
@@ -127,6 +135,9 @@ function ZoonChart({ nodes, dppDescription }) {
             remove: { text: "Удалить", icon: "", onClick: function (nodeId) {
               removeNode(nodeId, zoon, "ability");
             } },
+            disconnect: { text: "Отсоединить", icon: "", onClick: function (nodeId) {
+              disconnectNode(nodeId, zoon);
+            } },
           }
         },
         "knowledge": {
@@ -137,6 +148,15 @@ function ZoonChart({ nodes, dppDescription }) {
             } },
             remove: { text: "Удалить", icon: "", onClick: function (nodeId) {
               removeNode(nodeId, zoon, "knowledge");
+            } },
+            disconnect: { text: "Отсоединить", icon: "", onClick: function (nodeId) {
+              disconnectNode(nodeId, zoon);
+            } },
+            addLink: { text: "Добавить связь", icon: "", onClick: function (nodeId) {
+              addLinkPopupOpen(nodeId, zoon);
+            } },
+            removeLink: { text: "Удалить связь", icon: "", onClick: function (nodeId) {
+              removeLinkPopupOpen(nodeId, zoon);
             } },
           },
         },
@@ -233,7 +253,10 @@ function ZoonChart({ nodes, dppDescription }) {
     }
   })
   setZoonChart(zoon);
-    // eslint-disable-next-line
+  return () => {
+    setZoonChart({});
+  };
+  // eslint-disable-next-line
   }, [nodes]);
 
   
@@ -269,9 +292,10 @@ function ZoonChart({ nodes, dppDescription }) {
     setIsLoadingRequest(true);
     switch(node.tags[0]) {
       case 'knowledge':
-        api.addKnowledge(({ token: token, dppId: dppDescription.id, zoonVersion: dppDescription.zun_version_id, node: node }))
+        api.addKnowledge(({ token: token, zoonVersion: dppDescription.zun_version_id, node: node }))
         .then((res) => {
           zoon.addNode(res);
+          zoon.center(res.id);
           setIsErrorRequest(false);
           closeZoonPopups();
         })
@@ -284,9 +308,10 @@ function ZoonChart({ nodes, dppDescription }) {
         });
         break;
       case 'ability':
-        api.addAbility(({ token: token, dppId: dppDescription.id, zoonVersion: dppDescription.zun_version_id, node: node }))
+        api.addAbility(({ token: token, zoonVersion: dppDescription.zun_version_id, node: node }))
         .then((res) => {
           zoon.addNode(res);
+          zoon.center(res.id);
           setIsErrorRequest(false);
           closeZoonPopups();
         })
@@ -299,9 +324,10 @@ function ZoonChart({ nodes, dppDescription }) {
         });
         break;
       case 'skill':
-        api.addSkill(({ token: token, dppId: dppDescription.id, zoonVersion: dppDescription.zun_version_id, node: node }))
+        api.addSkill(({ token: token, zoonVersion: dppDescription.zun_version_id, node: node }))
         .then((res) => {
           zoon.addNode(res);
+          zoon.center(res.id);
           setIsErrorRequest(false);
           closeZoonPopups();
         })
@@ -338,12 +364,64 @@ function ZoonChart({ nodes, dppDescription }) {
     }
   }
 
+  function disconnectNode(nodeId, zoon) {
+    const node = nodes.find(el=> el.id === nodeId);
+    const token = localStorage.getItem("token");
+    api.disconnectNode({ token: token, zoonVersion: dppDescription.zun_version_id, node: node })
+    .then(() => {
+      node.pid = null;
+      zoon.draw(OrgChart.action.init);
+      
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+  }
+
+  function addLinkPopupOpen(nodeId, zoon) {
+    const node = nodes.find(el=> el.id === nodeId); 
+    setCurrentNode(node);
+    setIsAddNewLinkPopupOpen(true);
+  }
+
+  function removeLinkPopupOpen(nodeId, zoon) {
+    const node = nodes.find(el=> el.id === nodeId);
+    setCurrentNode(node);
+    setIsRemoveLinkPopupOpen(true);
+  }
+
+  function handleAddLink(nodeId, abilityId) {
+    const token = localStorage.getItem("token");
+    api.addLink({ token: token, zoonVersion: dppDescription.zun_version_id, nodeId: nodeId, abilityId: abilityId })
+    .then(() => {
+      zoonChart.addSlink(nodeId, abilityId, "", "blue");
+      zoonChart.draw(OrgChart.action.init);
+      closeZoonPopups();
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+  }
+
+  function handleRemoveLink(nodeId, abilityId) {
+    const token = localStorage.getItem("token");
+    api.removeLink({ token: token, zoonVersion: dppDescription.zun_version_id, nodeId: nodeId, abilityId: abilityId })
+    .then(() => {
+      zoonChart.removeSlink(nodeId, abilityId);
+      zoonChart.draw(OrgChart.action.init);
+      closeZoonPopups();
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+  }
+
   function handleRemoveNode(zoon, nodeId, type) {
     setIsLoadingRequest(true);
     const token = localStorage.getItem("token");
     switch(type) {
       case 'knowledge':
-        api.removeKnowledge(({ token: token, dppId: dppDescription.id, zoonVersion: dppDescription.zun_version_id, nodeId: nodeId }))
+        api.removeKnowledge(({ token: token, zoonVersion: dppDescription.zun_version_id, nodeId: nodeId }))
         .then((res) => {
           zoon.removeNode(res);
           closeZoonPopups();
@@ -356,7 +434,7 @@ function ZoonChart({ nodes, dppDescription }) {
         });
         break;
       case 'ability':
-        api.removeAbility(({ token: token, dppId: dppDescription.id, zoonVersion: dppDescription.zun_version_id, nodeId: nodeId }))
+        api.removeAbility(({ token: token, zoonVersion: dppDescription.zun_version_id, nodeId: nodeId }))
         .then((res) => {
           zoon.removeNode(res);
           closeZoonPopups();
@@ -369,7 +447,7 @@ function ZoonChart({ nodes, dppDescription }) {
         });
         break;
       case 'skill':
-        api.removeSkill(({ token: token, dppId: dppDescription.id, zoonVersion: dppDescription.zun_version_id, nodeId: nodeId }))
+        api.removeSkill(({ token: token, zoonVersion: dppDescription.zun_version_id, nodeId: nodeId }))
         .then((res) => {
           zoon.removeNode(res);
           closeZoonPopups();
@@ -392,6 +470,8 @@ function ZoonChart({ nodes, dppDescription }) {
     setIsErrorRemovePopupOpen(false);
     setIsErrorDragAndDropPopupOpen(false);
     setIsEditNodePopupOpen(false);
+    setIsAddNewLinkPopupOpen(false);
+    setIsRemoveLinkPopupOpen(false);
   }
 
   return (
@@ -415,6 +495,8 @@ function ZoonChart({ nodes, dppDescription }) {
       isLoadingRequest={isLoadingRequest}
       isErrorRequest={isErrorRequest}
       openAddJustificationPopup={openAddJustificationPopup}
+      nsi={nsi}
+      typologyParts={typologyParts}
       />
     }
     {
@@ -466,10 +548,37 @@ function ZoonChart({ nodes, dppDescription }) {
     }
 
     {
-      <AddNsiPopup
+      isAddNewLinkPopupOpen
+      &&
+      <AddNewLinkPopup
+      isOpen={isAddNewLinkPopupOpen}
+      onClose={closeZoonPopups}
+      currentNode={currentNode}
+      nodes={nodes}
+      onConfirm={handleAddLink}
+      zoonLinks={zoonLinks}
+      />
+    }
+
+    {
+      isRemoveLinkPopupOpen
+      &&
+      <RemoveLinkPopup
+      isOpen={isRemoveLinkPopupOpen}
+      onClose={closeZoonPopups}
+      currentNode={currentNode}
+      nodes={nodes}
+      onConfirm={handleRemoveLink}
+      zoonLinks={zoonLinks}
+      />
+    }
+
+    { /*
+      <NsiPopup
       isOpen={isAddJustificationPopupOpen}
       onClose={closeAddJustificationPopup}
       />
+      */
     }
 
 
