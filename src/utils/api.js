@@ -583,5 +583,18 @@ export const removeLink = ({ token, zoonVersion, nodeId, abilityId }) => {
   .then(res => handleResponse(res))
 };
 
+export const buildCompetence = ({ token, zoonVersion, node, nodesId }) => {
+  return fetch(`${API_URL}/zuns/${zoonVersion}/competences`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ node, nodesId })
+  })
+  .then(res => handleResponse(res))
+};
+
 
 

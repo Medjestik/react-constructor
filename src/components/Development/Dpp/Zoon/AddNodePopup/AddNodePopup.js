@@ -22,7 +22,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
   const [errorSkillWith, setErrorSkillWith] = React.useState(true);
   const [skillWhere, setSkillWhere] = React.useState('');
   const [errorSkillWhere, setErrorSkillWhere] = React.useState(true);
-  const [formErrorSkill, setFormErrorSkill] = React.useState(true);
+  const [formErrorSkill, setFormErrorSkill] = React.useState(true); 
 
   const [newNode, setNewNode] = React.useState({})
   const [nsiArray, setNsiArray] = React.useState([])

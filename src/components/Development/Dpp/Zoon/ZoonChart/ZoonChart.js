@@ -7,6 +7,7 @@ import ConfirmRemovePopup from '../ConfirmRemovePopup/ConfirmRemovePopup.js';
 import ErrorRemovePopup from '../ErrorRemovePopup/ErrorRemovePopup.js';
 import AddNewLinkPopup from '../AddNewLinkPopup/AddNewLinkPopup.js';
 import RemoveLinkPopup from '../RemoveLinkPopup/RemoveLinkPopup.js';
+import BuildCompetence from '../BuildCompetence/BuildCompetence.js';
 import NsiPopup from '../../../../Popup/NsiPopup/NsiPopup.js';
 import * as api from '../../../../../utils/api.js';
 import ErrorDragAndDropPopup from '../ErrorDragAndDropPopup/ErrorDragAndDropPopup.js';
@@ -23,6 +24,7 @@ function ZoonChart({ dppDescription, nodes, nsi, zoonLinks, typologyParts }) {
   const [isErrorRemovePopupOpen, setIsErrorRemovePopupOpen] = React.useState(false);
   const [isAddNewLinkPopupOpen, setIsAddNewLinkPopupOpen] = React.useState(false);
   const [isRemoveLinkPopupOpen, setIsRemoveLinkPopupOpen] = React.useState(false);
+  const [isBuildCompetencePopupOpen, setIsBuildCompetencePopupOpen] = React.useState(false);
   const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
   const [isErrorRequest, setIsErrorRequest] = React.useState(false);
   const [errorDragAndDrop, setErrorDragAndDrop] = React.useState('');
@@ -464,6 +466,36 @@ function ZoonChart({ dppDescription, nodes, nsi, zoonLinks, typologyParts }) {
       }
   }
 
+  function handleBuildCompetence(zoon, competence, nodesId) {
+    const token = localStorage.getItem("token");
+    console.log(competence)
+    console.log(nodesId)
+    setIsLoadingRequest(true);
+    api.buildCompetence(({ token: token, zoonVersion: dppDescription.zun_version_id, node: competence, nodesId: nodesId }))
+    .then((res) => {
+      zoon.addNode(res);
+      zoon.center(res.id);
+      nodesId.forEach((id) => {
+        let old_el = nodes.find(elem => elem.id === id)
+        zoon.updateNode({ id: id, type: old_el.type, tags: old_el.tags, name: old_el.name, pid: res.id })
+      })
+      setIsErrorRequest(false);
+      closeZoonPopups();
+    })
+    .catch((err) => {
+      setIsErrorRequest(true);
+      console.error(err);
+    })
+    .finally(() => {
+      setIsLoadingRequest(false);
+    });
+  }
+
+  function buildCompetencePopupOpen() {
+    setIsBuildCompetencePopupOpen(true);
+  }
+
+
   function closeZoonPopups() {
     setIsAddNodePopupOpen(false);
     setIsConfirmRemovePopupOpen(false);
@@ -472,6 +504,7 @@ function ZoonChart({ dppDescription, nodes, nsi, zoonLinks, typologyParts }) {
     setIsEditNodePopupOpen(false);
     setIsAddNewLinkPopupOpen(false);
     setIsRemoveLinkPopupOpen(false);
+    setIsBuildCompetencePopupOpen(false);
   }
 
   return (
@@ -479,7 +512,7 @@ function ZoonChart({ dppDescription, nodes, nsi, zoonLinks, typologyParts }) {
     <div className="zoon-chart_btn-control">
       <button className="btn btn_type_add zoon-chart__btn_type_add-skill" onClick={handleCreateNewSkill}>Создать новый навык</button>
       <button className="btn btn_type_add zoon-chart__btn_type_add-ability" onClick={handleCreateNewAbility}>Создать новое умение</button>
-      <button className="btn btn_type_add zoon-chart__btn_type_build-competence">Сформировать компетенцию</button>
+      <button className="btn btn_type_add zoon-chart__btn_type_build-competence" onClick={buildCompetencePopupOpen}>Сформировать компетенцию</button>
     </div>
     <div id="tree" className="zoon-chart" ref={divRef}></div>
 
@@ -570,6 +603,19 @@ function ZoonChart({ dppDescription, nodes, nsi, zoonLinks, typologyParts }) {
       nodes={nodes}
       onConfirm={handleRemoveLink}
       zoonLinks={zoonLinks}
+      />
+    }
+    {
+      isBuildCompetencePopupOpen
+      &&
+      <BuildCompetence
+      isOpen={isBuildCompetencePopupOpen}
+      onClose={closeZoonPopups}
+      onSave={handleBuildCompetence}
+      nodes={nodes}
+      zoonChart={zoonChart}
+      isLoadingRequest={isLoadingRequest}
+      isErrorRequest={isErrorRequest}
       />
     }
 
