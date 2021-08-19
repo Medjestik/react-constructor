@@ -1,167 +1,49 @@
 import React from 'react';
 import './EvaluationMaterial.css';
+import * as evaluationMaterialApi from '../../../../utils/evaluationMaterialApi/evaluationMaterialApi.js';
 import AccordionChooseKnowledge from '../../../Accordion/AccordionChooseKnowledge/AccordionChooseKnowledge.js';
 import KnowledgeMaterial from '../KnowledgeMaterial/KnowledgeMaterial.js';
 
-const data = [
-  { id: 1, value: 'Знать корректные сочетания слов (глаголов и существительных), описывающих дорожную деятельность и реализацию отдельных мероприятий НП БКАД.', questions: [
-    {
-      text: 'Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет?',
-      type: 'one-answer',
-      answers: [
-        {
-          id: 1,
-          answerText: 'зеленый',
-        },
-        {
-          id: 2,
-          answerText: 'красный',
-        },
-        {
-          id: 3,
-          answerText: 'синий',
-        },
-        {
-          id: 4,
-          answerText: 'белый',
-        },
-      ],
-      id: 7,
-    },
-    {
-      text: 'Какая это буква?',
-      type: 'one-answer',
-      answers: ['a', 's', 'd', 'h'],
-      id: 8,
-    }
-  ] },
-  { id: 2, value: 'Знать требования к оформлению информационных сообщений на официальном фирменном бланке.', questions: [
-    {
-      text: 'Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет? Какой это цвет?',
-      type: 'one-answer',
-      answers: [
-        {
-          id: 1,
-          answerText: 'зеленый',
-          isCorrect: false,
-        },
-        {
-          id: 2,
-          answerText: 'красный',
-          isCorrect: false,
-        },
-        {
-          id: 3,
-          answerText: 'синий',
-          isCorrect: true,
-        },
-        {
-          id: 4,
-          answerText: 'белый',
-          isCorrect: false,
-        },
-      ],
-      id: 15,
-    },
-    {
-      text: 'Какая это буква?',
-      type: 'multi-answer',
-      answers: [
-        {
-          id: 30,
-          answerText: 'A',
-          isCorrect: true,
-        },
-        {
-          id: 31,
-          answerText: 'B',
-          isCorrect: false,
-        },
-        {
-          id: 32,
-          answerText: 'C',
-          isCorrect: true,
-        },
-        {
-          id: 33,
-          answerText: 'D',
-          isCorrect: false,
-        },
-      ],
-      id: 11,
-    }, 
-    {
-      text: 'Расставьте цифры в порядке убивания?',
-      type: 'sequence-answer',
-      answers: [
-        {
-          id: 20,
-          answerText: '7',
-        },
-        {
-          id: 21,
-          answerText: '6',
-        },
-        {
-          id: 22,
-          answerText: '4',
-        },
-        {
-          id: 23,
-          answerText: '2',
-        },
-      ],
-      id: 12,
-    },
-    {
-      text: 'Вопрос вопрос вопрос?',
-      type: 'open-answer',
-      answers: [
-        {
-          id: 12,
-          answerText: '16:00',
-        },
-      ],
-      id: 13,
-    },
-    {
-      text: 'Соответсвие?',
-      type: 'conformity-answer',
-      answers: [
-        {
-          id: 40,
-          firstPart: '1',
-          secondPart: '1',
-        },
-        {
-          id: 41,
-          firstPart: '2',
-          secondPart: '2',
-        },
-        {
-          id: 42,
-          firstPart: '3',
-          secondPart: '3',
-        },
-        {
-          id: 43,
-          firstPart: '4',
-          secondPart: '4',
-        },
-      ],
-      id: 14,
-    }
-  ] },
-];
+function EvaluationMaterial({ dppDescription, loggedIn }) {
 
-function EvaluationMaterial() {
-
-  const [knowledge, setKnowledge] = React.useState(data);
+  const [knowledges, setKnowledges] = React.useState([]);
+  const [questionTypes, setQuestionTypes] = React.useState([]);
   const [currentKnowledge, setCurrentKnowledge] = React.useState({});
   const [isRenderKnowledge, setIsRenderKnowledge] = React.useState(false);
 
+  const [isLoadingKnowledges, setIsLoadingKnowledges] = React.useState(false);
+
+  function getKnowledges() {
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      setIsLoadingKnowledges(true);
+      evaluationMaterialApi.getKnowledges({ token: token, dppId: dppDescription.id, omId: dppDescription.om_version_id })
+        .then((res) => {
+          console.log(res);
+          setKnowledges(res.knowledges);
+          setQuestionTypes(res.questionTypes);
+        })
+        .catch((err) => {
+            console.error(err);
+        })
+        .finally(() => {
+          setIsLoadingKnowledges(false);
+        });
+    }
+  }
+
+  React.useEffect(() => {
+    getKnowledges();
+    return () => {
+      setKnowledges([]);
+      setQuestionTypes([]);
+    };
+    // eslint-disable-next-line
+  },[loggedIn, dppDescription])
+
+  
   const findKnowledge = (knowledgeId) => {
-    knowledge.forEach((elem) => {
+    knowledges.forEach((elem) => {
       if (knowledgeId === elem.id) {
         setIsRenderKnowledge(true);
         setCurrentKnowledge(elem);
@@ -171,13 +53,13 @@ function EvaluationMaterial() {
 
   React.useEffect(() => {
     const newKnowledge = [];
-    knowledge.forEach((elem) => {
+    knowledges.forEach((elem) => {
       if (elem.id === currentKnowledge.id) {
         elem = currentKnowledge;
       }
       newKnowledge.push(elem);
     })
-    setKnowledge(newKnowledge);
+    setKnowledges(newKnowledge);
     // eslint-disable-next-line
   }, [currentKnowledge]);
 
@@ -185,18 +67,23 @@ function EvaluationMaterial() {
     <div className="evaluation-material">
       <h1 className="main__title">Проектирование оценочных материалов</h1>
       <p className="main__subtitle">Для работы с оценочными материалами выберите знание</p>
-      
-      <AccordionChooseKnowledge 
-        children={knowledge} 
-        renderKnowledge={findKnowledge}
-      />
 
       {
+        !isLoadingKnowledges &&
+        <AccordionChooseKnowledge 
+          children={knowledges} 
+          renderKnowledge={findKnowledge}
+        />
+      }
+      
+      {
         isRenderKnowledge &&
+
         <KnowledgeMaterial
+          dppDescription={dppDescription}
           currentKnowledge={currentKnowledge}
-          currentKnowledgeQuestions={currentKnowledge.questions}
-          setCurrentKnowledge={setCurrentKnowledge}
+          questionTypes={questionTypes}
+          loggedIn={loggedIn}
         />
       }
 

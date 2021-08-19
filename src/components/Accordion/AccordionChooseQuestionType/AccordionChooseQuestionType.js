@@ -8,7 +8,7 @@ import openAnswerIcon from '../../../images/quiz/open-answer-color.png';
 import sequenceAnswerIcon from '../../../images/quiz/sequence-answer-color.png';
 import conformityAnswerIcon from '../../../images/quiz/conformity-answer-color.png';
 
-const AccordionChooseQuestionType = ({ addNewQuestion }) => {
+const AccordionChooseQuestionType = ({ addNewQuestion, questionTypes }) => {
   const [active, setActive] = useState("");
   const [height, setHeight] = useState("0px");
   const [fill, setFill] = useState("#404040");
@@ -19,39 +19,23 @@ const AccordionChooseQuestionType = ({ addNewQuestion }) => {
   const content = useRef();
   const sensitive = useRef();
 
-  const questions = [
-    {
-      text: 'Вопрос с одним правильным вариантом ответа',
-      type: 'one-answer',
-      id: 1,
-      img: oneAnswerIcon,
-    },
-    {
-      text: 'Вопрос с несколькими правильными вариантами ответа',
-      type: 'multi-answer',
-      id: 2,
-      img: multiAnswerIcon,
-    },
-    {
-      text: 'Вопрос с открытым ответом',
-      type: 'open-answer',
-      id: 3,
-      img: openAnswerIcon,
-    },
-    {
-      text: 'Вопрос с установлением последовательности',
-      type: 'sequence-answer',
-      id: 4,
-      img: sequenceAnswerIcon,
-    },
-    {
-      text: 'Вопрос с установлением соответсвия',
-      type: 'conformity-answer',
-      id: 5,
-      img: conformityAnswerIcon,
-    },
+  function defineQuestionImg(type) {
+    switch (type) {
+      case "one-answer":
+        return(<img className="accordion__img_type_choose" src={oneAnswerIcon} alt="иконка"></img>)
+      case "multi-answer":
+        return(<img className="accordion__img_type_choose" src={multiAnswerIcon} alt="иконка"></img>)
+      case "open-answer":
+        return(<img className="accordion__img_type_choose" src={openAnswerIcon} alt="иконка"></img>)
+      case "sequence-answer":
+        return(<img className="accordion__img_type_choose" src={sequenceAnswerIcon} alt="иконка"></img>)
+      case "conformity-answer":
+        return(<img className="accordion__img_type_choose" src={conformityAnswerIcon} alt="иконка"></img>)
 
-  ]
+      default:
+        return(<div></div>)
+    }
+  }
 
   const toggleAccordion = () => {
     setActive(active === "" ? "active" : "");
@@ -82,6 +66,8 @@ const AccordionChooseQuestionType = ({ addNewQuestion }) => {
     setFill("#404040");
   });
 
+  console.log(questionTypes)
+
   return (
     <div className="accordion__section accordion__section_type_choose" ref={sensitive}>
       <button className={`accordion ${active}`} onClick={toggleAccordion} type="button">
@@ -94,10 +80,10 @@ const AccordionChooseQuestionType = ({ addNewQuestion }) => {
         className="accordion__content accordion__content_type_choose"
       >
         {
-          questions.map((elem, i) => (
+          questionTypes.map((elem, i) => (
             <button key={i} type="button" onClick={() => handleClick(elem)} className="accordion__button">
-              <img className="accordion__img_type_choose" src={elem.img} alt="иконка"></img>
-              <p className="accordion__text_type_choose">{elem.text}</p>
+              {defineQuestionImg(elem.type)}
+              <p className="accordion__text_type_choose">{elem.name}</p>
             </button>
           ))
         }

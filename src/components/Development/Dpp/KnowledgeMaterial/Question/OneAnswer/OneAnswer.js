@@ -10,6 +10,9 @@ function OneAnswer({ onDelete, answerText, answerId, isCorrect, onChangeAnswer, 
   function handleClickDelete() {
     onDelete(answerId);
   }
+
+  console.log(isCorrect);
+
   
   return (
     <li className="one-answer" id={answerId}>
@@ -18,6 +21,7 @@ function OneAnswer({ onDelete, answerText, answerId, isCorrect, onChangeAnswer, 
           className="radio"
           name="radio"
           type="radio"
+          value=""
           defaultChecked={isCorrect ? true : false}
           onChange={() => {onChangeAnswer(answerId)}}
         >

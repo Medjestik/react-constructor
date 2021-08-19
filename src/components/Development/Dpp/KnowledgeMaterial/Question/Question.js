@@ -7,7 +7,7 @@ import SequenceAnswer from './SequenceAnswer/SequenceAnswer.js';
 import ConformityAnswer from './ConformityAnswer/ConformityAnswer.js';
 
 
-function Question({ currentQuestion, editQuestion, setEditQuestion, }) {
+function Question({ currentQuestion, editQuestion, setEditQuestion }) {
 
   const [questionText, setQuestionText] = React.useState(editQuestion.text);
   const [questionAnswers, setQuestionAnswers] = React.useState(editQuestion.answers);
@@ -21,7 +21,7 @@ function Question({ currentQuestion, editQuestion, setEditQuestion, }) {
     let newAnswers = [];
     questionAnswers.forEach((elem) => {
       if (elem.id === id) {
-        newAnswers.push({ ...elem, answerText: text });
+        newAnswers.push({ ...elem, text: text });
       } else {
         newAnswers.push(elem);
       }
@@ -59,13 +59,12 @@ function Question({ currentQuestion, editQuestion, setEditQuestion, }) {
   function handleAddAnswer() {
     const newAnswers = [...questionAnswers, {
       id: parseInt(new Date().getTime()),
-      answerText: '',
+      text: '',
+      isCorrect: false
     }];
     setQuestionAnswers(newAnswers);
     setEditQuestion({ ...editQuestion, answers: newAnswers });
   }
-
-  console.log(currentQuestion)
 
   function handleChangeAnswer(id) {
     let newAnswers = [];
@@ -99,6 +98,10 @@ function Question({ currentQuestion, editQuestion, setEditQuestion, }) {
   React.useEffect(() => {
     setQuestionText(editQuestion.text);
     setQuestionAnswers(editQuestion.answers);
+    return () => {
+      setQuestionText('');
+      setQuestionAnswers([]);
+    }
     // eslint-disable-next-line
   }, [editQuestion.text, editQuestion.answers]);
 
@@ -114,7 +117,7 @@ function Question({ currentQuestion, editQuestion, setEditQuestion, }) {
               <MultiAnswer
                 onDelete={handleDeleteAnswer}
                 key={answer.id}
-                answerText={answer.answerText}
+                answerText={answer.text}
                 answerId={answer.id}
                 isCorrect={answer.isCorrect}
                 onChangeAnswer={handleChangeAnswer}
@@ -137,7 +140,7 @@ function Question({ currentQuestion, editQuestion, setEditQuestion, }) {
               <OpenAnswer 
                 onDelete={handleDeleteAnswer} 
                 key={answer.id} 
-                answerText={answer.answerText} 
+                answerText={answer.text} 
                 answerId={answer.id} 
                 index={i}
                 onChangeAnswerText={handleChangeAnswerText}
@@ -159,7 +162,7 @@ function Question({ currentQuestion, editQuestion, setEditQuestion, }) {
               <SequenceAnswer 
                 onDelete={handleDeleteAnswer} 
                 key={answer.id} 
-                answerText={answer.answerText} 
+                answerText={answer.text} 
                 answerId={answer.id} 
                 index={i}
                 onChangeAnswerText={handleChangeAnswerText}
@@ -200,11 +203,11 @@ function Question({ currentQuestion, editQuestion, setEditQuestion, }) {
       <textarea value={questionText || ""} onChange={handleChangeQuestionText} className="question__text" name="question__text" placeholder="Введите текст вопроса"></textarea>
       <ul className="questions__answers">
         {
-          questionAnswers.map((answer) => (
+          questionAnswers.map((answer, i) => (
             <OneAnswer 
               onDelete={handleDeleteAnswer}
-              key={answer.id}
-              answerText={answer.answerText}
+              key={i}
+              answerText={answer.text}
               answerId={answer.id}
               isCorrect={answer.isCorrect}
               onChangeAnswer={handleChangeAnswer}
@@ -219,7 +222,7 @@ function Question({ currentQuestion, editQuestion, setEditQuestion, }) {
 
   return (
     <div className="questions">
-      {defineQuestionType(editQuestion.type)}
+      {defineQuestionType(editQuestion.questionType)}
       <button className="questions__btn_type_add" type="button" onClick={handleAddAnswer}></button>
     </div>
   );

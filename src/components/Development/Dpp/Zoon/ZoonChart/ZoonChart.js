@@ -105,6 +105,9 @@ function ZoonChart({ dppDescription, nodes, nsi, zoonLinks, typologyParts }) {
             addSkill: { text: "Добавить навык", icon: "", onClick: function (nodeId) {
               addNode(nodeId, zoon, "skill");
             } },
+            addAbility: { text: "Добавить умение", icon: "", onClick: function (nodeId) {
+              addNode(nodeId, zoon, "ability");
+            } },
             remove: { text: "Удалить", icon: "", onClick: function (nodeId) {
               removeNode(nodeId, zoon, "competence");
             } },
@@ -531,6 +534,7 @@ function ZoonChart({ dppDescription, nodes, nsi, zoonLinks, typologyParts }) {
       <button className="btn btn_type_add zoon-chart__btn_type_build-competence" onClick={buildCompetencePopupOpen}>Сформировать компетенцию</button>
     </div>
     <div id="tree" className="zoon-chart" ref={divRef}></div>
+    <a href={`https://constructor.emiit.ru/dpps/${dppDescription.id}/export_zun/${dppDescription.zun_version_id}`} target="_blank" rel="noreferrer">Экспорт в Word</a>
 
     {
       isAddNodePopupOpen

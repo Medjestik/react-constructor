@@ -1,5 +1,6 @@
 import React from 'react';
 import './KnowledgeMaterial.css';
+import * as evaluationMaterialApi from '../../../../utils/evaluationMaterialApi/evaluationMaterialApi.js';
 import Question from './Question/Question.js';
 import AccordionChooseQuestionType from '../../../Accordion/AccordionChooseQuestionType/AccordionChooseQuestionType.js';
 import oneAnswerIcon from '../../../../images/quiz/one-answer-icon.png';
@@ -8,10 +9,10 @@ import openAnswerIcon from '../../../../images/quiz/open-answer-icon.png';
 import sequenceAnswerIcon from '../../../../images/quiz/sequence-answer-icon.png';
 import conformityAnswerIcon from '../../../../images/quiz/conformity-answer-icon.png';
 
-function KnowledgeMaterial({ currentKnowledge, currentKnowledgeQuestions, setCurrentKnowledge }) {
+function KnowledgeMaterial({ dppDescription, currentKnowledge, questionTypes, loggedIn }) {
 
   const [currentQuestion, setCurrentQuestion] = React.useState({});
-  const [currentQuestions, setCurrentQuestions] = React.useState(currentKnowledgeQuestions);
+  const [currentQuestions, setCurrentQuestions] = React.useState(currentKnowledge.questions);
   const [editQuestion, setEditQuestion] = React.useState({});
   const [isRenderQuestion, setIsRenderQuestion] = React.useState(false);
   const [textQuestion, setTextQuestion] = React.useState('');
@@ -48,37 +49,36 @@ function KnowledgeMaterial({ currentKnowledge, currentKnowledgeQuestions, setCur
     setIsDefineTypeOfQuestion(false);
     setIsRenderQuestion(true);
     const newQuestion = {
+      knowledgeId: currentKnowledge.id,
+      questionType: type,
+      id: 'new',
       text: '',
-      type: type,
       answers: [
         {
+          text: '',
+          isCorrect: false,
           id: parseInt(new Date().getTime()) + 1,
-          answerText: '',
-          isCorrect: false,
         },
         {
-          id: parseInt(new Date().getTime()) + 2,
-          answerText: '',
+          text: '',
           isCorrect: false,
-        },
-        {
           id: parseInt(new Date().getTime()) + 3,
-          answerText: '',
-          isCorrect: false,
         },
         {
-          id: parseInt(new Date().getTime()) + 4,
-          answerText: '',
+          text: '',
           isCorrect: false,
+          id: parseInt(new Date().getTime()) + 5,
+        },
+        {
+          text: '',
+          isCorrect: false,
+          id: parseInt(new Date().getTime()) + 7,
         },
       ],
-      id: parseInt(new Date().getTime()),
     }
     
     const newQuestions = [newQuestion, ...currentQuestions];
-    console.log(newQuestions);
     setEditQuestion(newQuestions[0]);
-    setIsRenderQuestion(true);
   }
 
   function handleChangeTextQuestion(e) {
@@ -86,13 +86,31 @@ function KnowledgeMaterial({ currentKnowledge, currentKnowledgeQuestions, setCur
   }
 
   function handleDeleteQuestion() {
-    const newQuestions = currentQuestions.filter((item) => item.id !== currentQuestion.id);
+    /*const newQuestions = currentQuestions.filter((item) => item.id !== currentQuestion.id);
     setCurrentQuestions(newQuestions);
-    setIsRenderQuestion(false);
+    setIsRenderQuestion(false);*/
+    const token = localStorage.getItem("token");
+    console.log(editQuestion);
+    if (loggedIn) {
+      evaluationMaterialApi.deleteQuestion({ token: token, omId: dppDescription.om_version_id, questionId: currentQuestion.id })
+        .then(() => {
+          const newQuestions = currentQuestions.filter((item) => item.id !== currentQuestion.id);
+          setCurrentQuestions(newQuestions);
+          setIsRenderQuestion(false);
+        })
+        .catch((err) => {
+            console.error(err);
+        })
+        .finally(() => {
+
+        });
+      }
   }
 
   function handleSaveQuestion() {
-    const newQuestions = [];
+    const token = localStorage.getItem("token");
+    
+    /*const newQuestions = [];
     if (currentQuestions.find(elem => (elem.id === editQuestion.id)) === undefined) {
       newQuestions.unshift(editQuestion);
     }
@@ -102,7 +120,53 @@ function KnowledgeMaterial({ currentKnowledge, currentKnowledgeQuestions, setCur
       }
       newQuestions.push(elem);
     })
-    setCurrentQuestions(newQuestions);
+    setCurrentQuestions(newQuestions);*/
+
+    if (editQuestion.id === "new") {
+      if (loggedIn) {
+        evaluationMaterialApi.createQuestion({ token: token, omId: dppDescription.om_version_id, questionData: editQuestion })
+        .then((res) => {
+          setCurrentQuestions([res, ...currentQuestions]);
+          chooseQuestion(res);
+        })
+        .catch((err) => {
+            console.error(err);
+        })
+        .finally(() => {
+
+        });
+      }
+    } else  {
+        
+        if (loggedIn) {
+          evaluationMaterialApi.editQuestion({ token: token, omId: dppDescription.om_version_id, questionId: currentQuestion.id, questionData: editQuestion })
+          .then((res) => {
+            console.log(res);
+            const newQuestions = [];
+            if (currentQuestions.find(elem => (elem.id === res.id)) === undefined) {
+              newQuestions.unshift(editQuestion);
+            }
+            currentQuestions.forEach((elem) => {
+              if (elem.id === res.id) {
+                elem = res;
+              }
+              newQuestions.push(elem);
+            })
+            setCurrentQuestions(newQuestions);
+          })
+          .catch((err) => {
+              console.error(err);
+          })
+          .finally(() => {
+  
+          });
+        
+      }
+    }
+
+    
+
+
   }
 
   React.useEffect(() => {
@@ -113,6 +177,9 @@ function KnowledgeMaterial({ currentKnowledge, currentKnowledgeQuestions, setCur
 
   React.useEffect(() => {
     setEditQuestion(currentQuestion);
+    return () => {
+      setEditQuestion({});
+    }
   }, [currentQuestion]);
 
   React.useEffect(() => {
@@ -146,6 +213,7 @@ function KnowledgeMaterial({ currentKnowledge, currentKnowledgeQuestions, setCur
           ?
             <AccordionChooseQuestionType
               addNewQuestion={addNewQuestion}
+              questionTypes={questionTypes}
             />
           :
             ""
@@ -176,7 +244,7 @@ function KnowledgeMaterial({ currentKnowledge, currentKnowledgeQuestions, setCur
               className={`questions__nav-item ${editQuestion.id === elem.id ? "questions__nav-item_type_active" : ""}`}
               onClick={() => chooseQuestion(elem)}
               >
-                {defineQuestionType(elem.type)}
+                {defineQuestionType(elem.questionType)}
                 <h5 className="questions__nav-item-text">{elem.text}</h5>
               </li>
             ))

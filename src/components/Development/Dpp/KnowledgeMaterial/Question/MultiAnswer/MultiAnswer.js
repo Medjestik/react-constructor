@@ -14,7 +14,14 @@ function MultiAnswer({ onDelete, answerText, answerId, isCorrect, onChangeAnswer
   return (
     <li className="multi-answer" id={answerId}>
       <label className="checkbox multi-answer__checkbox">
-        <input name="checkbox" type="checkbox" value="" defaultChecked={isCorrect ? true : false} onChange={() => {onChangeAnswer(answerId)}}></input>
+        <input 
+        name="checkbox" 
+        type="checkbox" 
+        value="" 
+        defaultChecked={isCorrect ? true : false} 
+        onChange={() => {onChangeAnswer(answerId)}}
+        >
+        </input>
         <span className="test"></span>
       </label>
       <input

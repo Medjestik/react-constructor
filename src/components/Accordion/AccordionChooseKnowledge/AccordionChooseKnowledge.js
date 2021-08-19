@@ -57,7 +57,7 @@ const AccordionChooseKnowledge = ({ children, renderKnowledge }) => {
         {
           children.map((elem, i) => (
             <button key={i} type="button" onClick={() => handleClick(elem)} className="accordion__button">
-              <p className="accordion__text_type_choose">{elem.value}</p>
+              <p className="accordion__text_type_choose">{elem.name}</p>
               <span className="accordion__count">{elem.questions.length}</span>
             </button>
           ))
