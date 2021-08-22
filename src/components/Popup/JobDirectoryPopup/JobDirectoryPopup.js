@@ -2,10 +2,9 @@ import React from 'react';
 import './JobDirectoryPopup.css';
 import Popup from '../Popup.js';
 import AddJobDirectoryPopup from './AddJobDirectoryPopup/AddJobDirectoryPopup.js';
-import * as api from '../../../utils/api.js';
 import JobDirectoryPopupItem from './JobDirectoryPopupItem/JobDirectoryPopupItem.js';
 
-function JobDirectoryPopup({ isOpen, onClose, isLoading, jobDirectory, jobDirectoryProgram, onSave }) {
+function JobDirectoryPopup({ isOpen, onClose, isLoading, jobDirectory, jobDirectoryProgram, onSave, onAdd }) {
 
   const [selectedJobDirectory, setSelectedJobDirectory] = React.useState([ ...jobDirectoryProgram]);
   const [currentJobDirectory, setCurrentJobDirectory] = React.useState([...jobDirectory]);
@@ -26,19 +25,6 @@ function JobDirectoryPopup({ isOpen, onClose, isLoading, jobDirectory, jobDirect
     setIsShowAddPopup(false);
   }
   
-  function handleAddDocument(newDocument) {
-    const token = localStorage.getItem("token");
-    api.createDirectoryJob({ token: token, document: newDocument })
-    .then((res) => {
-      closeAllPopups();
-      setCurrentJobDirectory([...currentJobDirectory, res]);
-    })
-    .catch((err) => {
-      console.error(err);
-    })
-    
-  }
-
   function handleSearchByName(e) {
     setSearchName(e.target.value);
   }
@@ -62,6 +48,31 @@ function JobDirectoryPopup({ isOpen, onClose, isLoading, jobDirectory, jobDirect
       })
     }
     setSelectedJobDirectory(newJobDirectory);
+  }
+
+  function printDate(obj) {
+    let t=new Date(obj);
+    let y=t.getFullYear();
+    let d=t.getDate();
+    let mon=t.getMonth();
+    let s = "";
+    switch (mon)
+    {
+      case 0: s="января"; break;
+      case 1: s="февраля"; break;
+      case 2: s="марта"; break;
+      case 3: s="апреля"; break;
+      case 4: s="мая"; break;
+      case 5: s="июня"; break;
+      case 6: s="июля"; break;
+      case 7: s="августа"; break;
+      case 8: s="сентября"; break;
+      case 9: s="октября"; break;
+      case 10: s="ноября"; break;
+      case 11: s="декабря"; break;
+      default: s=""
+    }
+    return d+" "+s+" "+y;
   }
 
   React.useEffect(() => {
@@ -90,7 +101,7 @@ function JobDirectoryPopup({ isOpen, onClose, isLoading, jobDirectory, jobDirect
       isOpen={isOpen}
       onClose={onClose}
     >
-      <form className="popup__form popup__form_type_large" name="avatar-form" action="#" noValidate onSubmit={handleSubmit}>
+      <form className="popup__form popup__form_type_large" name="eks-popup-form" action="#" noValidate onSubmit={handleSubmit}>
         <h3 className="initial-popup__title">Выбор документов ЕКС</h3>
 
         {
@@ -115,8 +126,8 @@ function JobDirectoryPopup({ isOpen, onClose, isLoading, jobDirectory, jobDirect
                 className="input-search"
                 placeholder="поиск по разделу"
                 type="text"
-                id="search-input-name"
-                name="search-input-name"
+                id="search-eks-popup-input-name"
+                name="search-ekts-popup-input-name"
                 autoComplete="off"
                 value={searchName}
                 onChange={handleSearchByName}
@@ -128,8 +139,8 @@ function JobDirectoryPopup({ isOpen, onClose, isLoading, jobDirectory, jobDirect
                 className="input-search"
                 placeholder="поиск по должности"
                 type="text"
-                id="search-input-job"
-                name="search-input-job"
+                id="search-eks-popup-input-job"
+                name="search-ekts-popup-input-job"
                 autoComplete="off"
                 value={searchJob}
                 onChange={handleSearchByJob}
@@ -148,6 +159,7 @@ function JobDirectoryPopup({ isOpen, onClose, isLoading, jobDirectory, jobDirect
               key={i}
               selectedJobDirectory={selectedJobDirectory}
               onChange={handleChangeJobDirectory}
+              printDate={printDate}
               />
             ))
           }
@@ -160,7 +172,7 @@ function JobDirectoryPopup({ isOpen, onClose, isLoading, jobDirectory, jobDirect
       </form>
     </Popup>
 
-    <AddJobDirectoryPopup isOpen={isShowAddPopup} onClose={closeAllPopups} onAdd={handleAddDocument} />
+    <AddJobDirectoryPopup isOpen={isShowAddPopup} onClose={closeAllPopups} onAdd={onAdd} printDate={printDate} />
 
     </>
   )

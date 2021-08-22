@@ -3,12 +3,11 @@ import './ProfStandartPopup.css';
 import Popup from '../../Popup/Popup.js';
 import ProfStandartPopupItem from './ProfStandartPopupItem/ProfStandartPopupItem.js';
 import AddProfStandartPopup from './AddProfStandartPopup/AddProfStandartPopup.js';
-import * as api from '../../../utils/api.js';
 
-function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStandartsProgram, onSave }) {
+function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStandartsProgram, onSave, onAdd }) {
 
   const [selectedProfStandart, setSelectedProfStandart] = React.useState([ ...profStandartsProgram]);
-  const [currentProfStandart, setCurrentProfStandart] = React.useState([...profStandarts]);
+  const [filteredProfStandart, setFilteredProfStandart] = React.useState([...profStandarts]);
   const [searchName, setSearchName] = React.useState('');
   const [searchCode, setSearchCode] = React.useState('');
   const [isShowAddPopup, setIsShowAddPopup] = React.useState(false);
@@ -20,23 +19,12 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
 
   function showAddPopup() {
     setIsShowAddPopup(true);
+    setSearchName('');
+    setSearchCode('');
   }
 
   function closeAllPopups() {
     setIsShowAddPopup(false);
-  }
-  
-  function handleAddDocument(newDocument) {
-    const token = localStorage.getItem("token");
-    api.createProfStandarts({ token: token, document: newDocument })
-    .then((res) => {
-      closeAllPopups();
-      setCurrentProfStandart([...currentProfStandart, res]);
-    })
-    .catch((err) => {
-      console.error(err);
-    })
-    //.finally(() => setIsLoading(false));
   }
 
   function handleSearchByName(e) {
@@ -53,7 +41,7 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
       const index = newProfStandart.findIndex(elem => elem.id === id);
       newProfStandart.splice(index, 1);
     } else {
-      currentProfStandart.find((elem) => {
+      filteredProfStandart.find((elem) => {
         if (elem.id === id) {
           return newProfStandart.push(elem);
         } else {
@@ -64,21 +52,46 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
     setSelectedProfStandart(newProfStandart);
   }
 
+  function printDate(obj) {
+    let t=new Date(obj);
+    let y=t.getFullYear();
+    let d=t.getDate();
+    let mon=t.getMonth();
+    let s = "";
+    switch (mon)
+    {
+      case 0: s="января"; break;
+      case 1: s="февраля"; break;
+      case 2: s="марта"; break;
+      case 3: s="апреля"; break;
+      case 4: s="мая"; break;
+      case 5: s="июня"; break;
+      case 6: s="июля"; break;
+      case 7: s="августа"; break;
+      case 8: s="сентября"; break;
+      case 9: s="октября"; break;
+      case 10: s="ноября"; break;
+      case 11: s="декабря"; break;
+      default: s=""
+    }
+    return d+" "+s+" "+y;
+  }
+
   React.useEffect(() => {
-    const filteredProfStandart = profStandarts.filter((item) => {
+    const changeProfstandart = profStandarts.filter((item) => {
       return item.nameText.toLowerCase().includes(searchName.toLowerCase()) && item.nameCode.toLowerCase().includes(searchCode.toLowerCase());
     })
-    setCurrentProfStandart(filteredProfStandart)
+    setFilteredProfStandart(changeProfstandart);
   }, [profStandarts, searchName, searchCode]);
 
   React.useEffect(() => {
     setSelectedProfStandart([ ...profStandartsProgram]);
-    setCurrentProfStandart([...profStandarts]);
+    setFilteredProfStandart([...profStandarts]);
     setSearchName('');
     setSearchCode('');
     return () => {
       setSelectedProfStandart([]);
-      setCurrentProfStandart([]);
+      setFilteredProfStandart([]);
     };
     // eslint-disable-next-line
   }, [isOpen]);
@@ -90,7 +103,7 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
       isOpen={isOpen}
       onClose={onClose}
     >
-      <form className="popup__form popup__form_type_large" name="avatar-form" action="#" noValidate onSubmit={handleSubmit}>
+      <form className="popup__form popup__form_type_large" name="pf-popup-form" action="#" noValidate onSubmit={handleSubmit}>
         <h3 className="initial-popup__title">Выбор профессиональных стандартов</h3>
 
         {
@@ -115,8 +128,8 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
                 className="input-search"
                 placeholder="поиск по названию"
                 type="text"
-                id="search-input-name"
-                name="search-input-name"
+                id="search-pf-popup-input-name"
+                name="search-pf-popup-input-name"
                 autoComplete="off"
                 value={searchName}
                 onChange={handleSearchByName}
@@ -128,8 +141,8 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
                 className="input-search"
                 placeholder="поиск по коду"
                 type="text"
-                id="search-input-code"
-                name="search-input-code"
+                id="search-pf-popup-input-code"
+                name="search-pf-popup-input-code"
                 autoComplete="off"
                 value={searchCode}
                 onChange={handleSearchByCode}
@@ -141,13 +154,14 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
 
           <ul className="initial-popup__list">
             {
-              currentProfStandart.map((item, i) => (
+              filteredProfStandart.map((item, i) => (
                 <ProfStandartPopupItem
                 item={item}
                 i={i}
                 key={i}
                 selectedProfStandart={selectedProfStandart}
                 onChange={handleChangeProfStandart}
+                printDate={printDate}
                 />
               ))
             }
@@ -160,7 +174,7 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
       </form>
     </Popup>
 
-    <AddProfStandartPopup isOpen={isShowAddPopup} onClose={closeAllPopups} onAdd={handleAddDocument} />
+    <AddProfStandartPopup isOpen={isShowAddPopup} onClose={closeAllPopups} onAdd={onAdd} printDate={printDate} />
     </>
   )
 }

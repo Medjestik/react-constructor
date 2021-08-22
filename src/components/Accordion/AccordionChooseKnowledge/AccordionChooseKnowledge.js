@@ -28,7 +28,7 @@ const AccordionChooseKnowledge = ({ children, renderKnowledge }) => {
   };
   
   const handleClick = (elem) => {
-    setTitle(elem.value);
+    setTitle(elem.name);
     setActive("");
     setHeight("0px");
     setRotation("accordion__icon");

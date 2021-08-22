@@ -2,10 +2,9 @@ import React from 'react';
 import './JobСlassificationPopup.css';
 import Popup from '../Popup.js';
 import AddJobСlassificationPopup from './AddJobСlassificationPopup/AddJobСlassificationPopup.js';
-import * as api from '../../../utils/api.js';
 import JobСlassificationPopupItem from './JobСlassificationPopupItem/JobСlassificationPopupItem.js';
 
-function JobСlassificationPopup({ isOpen, onClose, isLoading, jobСlassification, jobСlassificationProgram, onSave }) {
+function JobСlassificationPopup({ isOpen, onClose, isLoading, jobСlassification, jobСlassificationProgram, onSave, onAdd }) {
 
   const [selectedJobСlassification, setSelectedJobСlassification] = React.useState([...jobСlassificationProgram]);
   const [currentJobСlassification, setCurrentJobСlassification] = React.useState([...jobСlassification]);
@@ -26,17 +25,7 @@ function JobСlassificationPopup({ isOpen, onClose, isLoading, jobСlassificatio
     setIsShowAddPopup(false);
   }
   
-  function handleAddDocument(newDocument) {
-    const token = localStorage.getItem("token");
-    api.createJobClassification({ token: token, document: newDocument })
-    .then((res) => {
-      closeAllPopups();
-      setCurrentJobСlassification([...currentJobСlassification, res]);
-    })
-    .catch((err) => {
-      console.error(err);
-    })
-  }
+
 
   function handleSearchByName(e) {
     setSearchName(e.target.value);
@@ -61,6 +50,31 @@ function JobСlassificationPopup({ isOpen, onClose, isLoading, jobСlassificatio
       })
     }
     setSelectedJobСlassification(newJobClassification);
+  }
+
+  function printDate(obj) {
+    let t=new Date(obj);
+    let y=t.getFullYear();
+    let d=t.getDate();
+    let mon=t.getMonth();
+    let s = "";
+    switch (mon)
+    {
+      case 0: s="января"; break;
+      case 1: s="февраля"; break;
+      case 2: s="марта"; break;
+      case 3: s="апреля"; break;
+      case 4: s="мая"; break;
+      case 5: s="июня"; break;
+      case 6: s="июля"; break;
+      case 7: s="августа"; break;
+      case 8: s="сентября"; break;
+      case 9: s="октября"; break;
+      case 10: s="ноября"; break;
+      case 11: s="декабря"; break;
+      default: s=""
+    }
+    return d+" "+s+" "+y;
   }
 
   React.useEffect(() => {
@@ -89,7 +103,7 @@ function JobСlassificationPopup({ isOpen, onClose, isLoading, jobСlassificatio
       isOpen={isOpen}
       onClose={onClose}
     >
-      <form className="popup__form popup__form_type_large" name="avatar-form" action="#" noValidate onSubmit={handleSubmit}>
+      <form className="popup__form popup__form_type_large" name="etks-popup-form" action="#" noValidate onSubmit={handleSubmit}>
         <h3 className="initial-popup__title">Выбор документов ЕТКС</h3>
 
         {
@@ -114,8 +128,8 @@ function JobСlassificationPopup({ isOpen, onClose, isLoading, jobСlassificatio
                 className="input-search"
                 placeholder="поиск по разделу"
                 type="text"
-                id="search-input-name"
-                name="search-input-name"
+                id="search-etks-popup-input-name"
+                name="search-etks-popup-input-name"
                 autoComplete="off"
                 value={searchName}
                 onChange={handleSearchByName}
@@ -127,8 +141,8 @@ function JobСlassificationPopup({ isOpen, onClose, isLoading, jobСlassificatio
                 className="input-search"
                 placeholder="поиск по профессии"
                 type="text"
-                id="search-input-profession"
-                name="search-input-profession"
+                id="search-etks-popup-input-profession"
+                name="search-etks-popup-input-profession"
                 autoComplete="off"
                 value={searchProfession}
                 onChange={handleSearchByProfession}
@@ -147,6 +161,7 @@ function JobСlassificationPopup({ isOpen, onClose, isLoading, jobСlassificatio
                 key={i}
                 selectedJobСlassification={selectedJobСlassification}
                 onChange={handleChangeJobClassification}
+                printDate={printDate}
                 />
               ))
             }
@@ -159,7 +174,7 @@ function JobСlassificationPopup({ isOpen, onClose, isLoading, jobСlassificatio
       </form>
     </Popup>
 
-    <AddJobСlassificationPopup isOpen={isShowAddPopup} onClose={closeAllPopups} onAdd={handleAddDocument} />
+    <AddJobСlassificationPopup isOpen={isShowAddPopup} onClose={closeAllPopups} onAdd={onAdd} printDate={printDate} />
 
     </>
   )

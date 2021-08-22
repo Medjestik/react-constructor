@@ -12,9 +12,9 @@ function WorldSkillsPopupItem({ item, i, selectedWorldSkills, onChange }) {
     <li className="initial-popup__item" key={i}>
       <label className="checkbox initial-popup__checkbox">
         <input 
-          name="prof-standard"
+          name={`ws-item-${item.id}`}
           type="checkbox"
-          id={i}
+          id={`ws-item-${item.id}`}
           defaultChecked={selectedWorldSkills.some(elem => elem.id === item.id)}
           onChange={() => onChange(item.id)}
           >

@@ -12,7 +12,7 @@ import NsiPopup from '../../../../Popup/NsiPopup/NsiPopup.js';
 import * as api from '../../../../../utils/api.js';
 import ErrorDragAndDropPopup from '../ErrorDragAndDropPopup/ErrorDragAndDropPopup.js';
 
-function ZoonChart({ dppDescription, nodes, nsi, zoonLinks, typologyParts }) {
+function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi, zoonLinks, typologyParts }) {
 
   const [zoonChart, setZoonChart] = React.useState({});
   const [currentNode, setCurrentNode] = React.useState({});
@@ -29,7 +29,7 @@ function ZoonChart({ dppDescription, nodes, nsi, zoonLinks, typologyParts }) {
   const [isErrorRequest, setIsErrorRequest] = React.useState(false);
   const [errorDragAndDrop, setErrorDragAndDrop] = React.useState('');
   const [isErrorDragAndDropPopupOpen, setIsErrorDragAndDropPopupOpen] = React.useState(false);
-  const [isAddJustificationPopupOpen , setIsAddJustificationPopupOpen] = React.useState(false);
+  const [isAddNsiPopupOpen , setIsAddNsiPopupOpen] = React.useState(false);
 
   const divRef = React.createRef();
   OrgChart.templates.myTemplate = Object.assign({}, OrgChart.templates.ana);
@@ -267,14 +267,6 @@ function ZoonChart({ dppDescription, nodes, nsi, zoonLinks, typologyParts }) {
   }, [nodes]);
 
   
-  function openAddJustificationPopup() {
-    setIsAddJustificationPopupOpen(true);
-  }
-  
-  function closeAddJustificationPopup() {
-    setIsAddJustificationPopupOpen(false);
-  }
-
   function handleCreateNewSkill() {
     const data = { id: OrgChart.randomId(), pid: "", tags: ["skill"], };
     setCurrentNode(data);
@@ -378,7 +370,6 @@ function ZoonChart({ dppDescription, nodes, nsi, zoonLinks, typologyParts }) {
     .then(() => {
       node.pid = null;
       zoon.draw(OrgChart.action.init);
-      
     })
     .catch((err) => {
       console.error(err);
@@ -390,6 +381,18 @@ function ZoonChart({ dppDescription, nodes, nsi, zoonLinks, typologyParts }) {
     setCurrentNode(node);
     setIsAddNewLinkPopupOpen(true);
   }
+
+  function addNsiPopupOpen() {
+    setIsAddNsiPopupOpen(true);
+    console.log(nsiTypes);
+  }
+  
+  function closeAddNsiPopup() {
+    setIsAddNsiPopupOpen(false);
+  }
+
+
+
 
   function removeLinkPopupOpen(nodeId, zoon) {
     const node = nodes.find(el=> el.id === nodeId);
@@ -528,13 +531,15 @@ function ZoonChart({ dppDescription, nodes, nsi, zoonLinks, typologyParts }) {
 
   return (
     <>
-    <div className="zoon-chart_btn-control">
-      <button className="btn btn_type_add zoon-chart__btn_type_add-skill" onClick={handleCreateNewSkill}>Создать новый навык</button>
-      <button className="btn btn_type_add zoon-chart__btn_type_add-ability" onClick={handleCreateNewAbility}>Создать новое умение</button>
-      <button className="btn btn_type_add zoon-chart__btn_type_build-competence" onClick={buildCompetencePopupOpen}>Сформировать компетенцию</button>
+
+    <div className="zoon__container">
+      <div className="zoon-chart__btn-control">
+        <button className="btn btn_type_add zoon-chart__btn_type_add-skill" onClick={handleCreateNewSkill}>Создать новый навык</button>
+        <button className="btn btn_type_add zoon-chart__btn_type_add-ability" onClick={handleCreateNewAbility}>Создать новое умение</button>
+        <button className="btn btn_type_add zoon-chart__btn_type_build-competence" onClick={buildCompetencePopupOpen}>Сформировать компетенцию</button>
+      </div>
+      <div id="tree" className="zoon-chart" ref={divRef}></div>
     </div>
-    <div id="tree" className="zoon-chart" ref={divRef}></div>
-    <a href={`https://constructor.emiit.ru/dpps/${dppDescription.id}/export_zun/${dppDescription.zun_version_id}`} target="_blank" rel="noreferrer">Экспорт в Word</a>
 
     {
       isAddNodePopupOpen
@@ -547,7 +552,8 @@ function ZoonChart({ dppDescription, nodes, nsi, zoonLinks, typologyParts }) {
       onSave={handleAddNode}
       isLoadingRequest={isLoadingRequest}
       isErrorRequest={isErrorRequest}
-      openAddJustificationPopup={openAddJustificationPopup}
+      addNsiPopupOpen={addNsiPopupOpen}
+      onRemoveNsi={onRemoveNsi}
       nsi={nsi}
       typologyParts={typologyParts}
       />
@@ -639,12 +645,16 @@ function ZoonChart({ dppDescription, nodes, nsi, zoonLinks, typologyParts }) {
       />
     }
 
-    { /*
+    { 
+      isAddNsiPopupOpen
+      &&
       <NsiPopup
-      isOpen={isAddJustificationPopupOpen}
-      onClose={closeAddJustificationPopup}
+      isOpen={isAddNsiPopupOpen}
+      onClose={closeAddNsiPopup}
+      nsiTypes={nsiTypes}
+      onAdd={onAddNsi}
       />
-      */
+      
     }
 
 

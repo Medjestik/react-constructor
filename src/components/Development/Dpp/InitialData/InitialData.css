@@ -515,6 +515,15 @@
   margin: 10px 0px 0px 0px;
   list-style-type: none;
   width: 100%;
+  transition: .3s ease-in-out;
+}
+.list-input_type_show {
+  margin: 0px;
+  display: block;
+}
+.list-input_type_hide {
+  margin: 0px;
+  display: none;
 }
 .initial-popup__item-input {
   margin: 0px 0px 15px 0px;
@@ -527,6 +536,23 @@
 .initial-popup__item-input_margin_bottom {
   margin: 0px;
   padding: 0px;
+}
+.initial-popup__item-select {
+  justify-content: space-between;
+  
+  border-radius: 100px;
+  border: none;
+  outline: none;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 1.15;
+  color: var(--title-color);
+  letter-spacing: 1.5px;
+  margin: 0px;
+  width: calc(100% - 20px);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 20%);
+  position: relative;
 }
 .initial-popup__input-name {
   margin: 0px 10px 3px 20px;

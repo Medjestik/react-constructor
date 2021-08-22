@@ -2,12 +2,11 @@ import React from 'react';
 import './ChoosePartsPopup.css';
 import Popup from '../Popup.js';
 
-function ChoosePartsPopup({ isOpen, onClose, typologies, onChangeTypologyParts }) {
+function ChoosePartsPopup({ isOpen, onClose, typologies, onChangeTypologyParts, isLoading }) {
 
   const [currentTypologies, setCurrentTypologies] = React.useState();
   const [isShowTypologiesParts, setIsShowTypologiesParts] = React.useState(false);
-
-  const isLoadingRequest = false;
+  const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
   
   function handleSubmit(e) {
     e.preventDefault();
@@ -17,10 +16,12 @@ function ChoosePartsPopup({ isOpen, onClose, typologies, onChangeTypologyParts }
   function handleChangeTypology(typology) {
     setCurrentTypologies(typology);
     setIsShowTypologiesParts(true);
+    setIsBlockSubmitButton(false);
   }
 
   React.useEffect(() => {
     setIsShowTypologiesParts(false);
+    setIsBlockSubmitButton(true);
   }, [isOpen]);
 
 
@@ -60,12 +61,16 @@ function ChoosePartsPopup({ isOpen, onClose, typologies, onChangeTypologyParts }
               currentTypologies.typology_parts.map((elem, i) => (
                 <li key={i} className="popup-choose-parts__item">{`${i + 1}. ${elem.name}`}</li>
               ))
-
             }
           </ul>
           </>
         }
-        <button className={`btn btn_type_save ${isLoadingRequest ? "btn_type_loading" : ""}`} type="submit">{isLoadingRequest ? "Сохранение.." : "Сохранить"}</button>
+        <button 
+        className={`btn btn_type_save popup-choose-parts__btn ${isLoading ? "btn_type_loading" : ""} ${isBlockSubmitButton ? "btn_type_block" : ""}`} 
+        type="submit"
+        >
+          {isLoading ? "Сохранение.." : "Сохранить"}
+        </button>
       </form>
     </Popup>
     )

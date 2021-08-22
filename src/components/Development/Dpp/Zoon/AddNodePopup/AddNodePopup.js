@@ -4,7 +4,7 @@ import Popup from '../../../../Popup/Popup.js';
 import Justification from './Justification/Justification.js';
 import KnowledgeTypology from './KnowledgeTypology/KnowledgeTypology.js';
 
-function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadingRequest, isErrorRequest, openAddJustificationPopup, nsi, typologyParts }) {
+function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadingRequest, isErrorRequest, openAddJustificationPopup, addNsiPopupOpen, onRemoveNsi, nsi, typologyParts }) {
 
   const [knowledgeWhat, setKnowledgeWhat] = React.useState('');
   const [errorKnowledgeWhat, setErrorKnowledgeWhat] = React.useState(true);
@@ -227,6 +227,8 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
           onChangeExpertOpinion={handleChangeExpertOpinion}
           onChooseNsi={handleChooseNsi}
           onSwapType={handleSwapType}
+          addNsiPopupOpen={addNsiPopupOpen}
+          onRemoveNsi={onRemoveNsi}
           />
 
           <div className="add-zoon__error">
@@ -293,6 +295,8 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
           onChangeExpertOpinion={handleChangeExpertOpinion}
           onChooseNsi={handleChooseNsi}
           onSwapType={handleSwapType}
+          addNsiPopupOpen={addNsiPopupOpen}
+          onRemoveNsi={onRemoveNsi}
           />
 
           <div className="add-zoon__error">
@@ -353,12 +357,13 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
             <span className="popup__subtitle add-node__caption">{`Итоговое название: Владеть навыком ${skillWhat || ""} ${skillWith || ""} ${skillWhere || ""}`}</span>
 
             <Justification 
-            openAddJustificationPopup={openAddJustificationPopup} 
             nsi={nsi} 
             onChooseJustificationType={handleChooseJustificationType}
             onChangeExpertOpinion={handleChangeExpertOpinion}
             onChooseNsi={handleChooseNsi}
             onSwapType={handleSwapType}
+            addNsiPopupOpen={addNsiPopupOpen}
+            onRemoveNsi={onRemoveNsi}
             />
 
             <div className="add-zoon__error">

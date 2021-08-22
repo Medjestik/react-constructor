@@ -283,6 +283,44 @@ export const selectWorldSkills = ({ token, initialDataVersion, data }) => {
   .then(res => handleResponse(res))
 };
 
+export const getOrganizationRules = ({ token }) => {
+  return fetch(`${API_URL}/crs`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};
+
+export const createOrganizationRules = ({ token, document }) => {
+  return fetch(`${API_URL}/crs`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ document })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const selectOrganizationRules = ({ token, initialDataVersion, data }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/select_crs`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ data })
+  })
+  .then(res => handleResponse(res))
+};
+
 export const removeProgramDocument = ({ token, initialDataVersion, id, type }) => {
   return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/unselect_qual_based`, {
     method: 'POST',

@@ -1,41 +1,41 @@
 import React from 'react';
 import './ConformityAnswer.css';
 
-function ConformityAnswer({ onDelete, firstPartText, secondPartText, answerId, index, onChangeFirstPartText, onChangeSecondPartText }) {
+function ConformityAnswer({ onDelete, answer, index, onChangeFirstPartText, onChangeSecondPartText }) {
 
   function handleChangeFirstPartText(e) {
-    onChangeFirstPartText(e.target.value, answerId);
+    onChangeFirstPartText(e.target.value, answer.id);
   }
 
   function handleChangeSecondPartText(e) {
-    onChangeSecondPartText(e.target.value, answerId);
+    onChangeSecondPartText(e.target.value, answer.id);
   }
 
   function handleClickDelete() {
-    onDelete(answerId);
+    onDelete(answer.id);
   }
 
   return (
-    <li className="conformity-answer" id={answerId}>
+    <li className="conformity-answer" id={answer.id}>
       <span className="conformity-answer__count">{`${index + 1}.`}</span>
       <input
         className="conformity-answer__input"
         placeholder="Введите ответ"
-        value={firstPartText || ''}
+        value={answer.firstPart || ''}
         onChange={handleChangeFirstPartText}
         type="text"
-        id={`firstPart ${answerId}`}
-        name={`firstPartText ${answerId}`}
+        id={`conformity-answer-first-part ${answer.id}`}
+        name={`conformity-answer-first-part ${answer.id}`}
       >
       </input>
       <input
         className="conformity-answer__input"
         placeholder="Введите ответ"
-        value={secondPartText || ''}
+        value={answer.secondPart || ''}
         onChange={handleChangeSecondPartText}
         type="text"
-        id={`secondPart ${answerId}`}
-        name={`secondPartText ${answerId}`}
+        id={`conformity-answer-second-part ${answer.id}`}
+        name={`conformity-answer-second-part ${answer.id}`}
       >
       </input>
       <button className="questions__btn_type_delete" type="button" onClick={handleClickDelete}></button>

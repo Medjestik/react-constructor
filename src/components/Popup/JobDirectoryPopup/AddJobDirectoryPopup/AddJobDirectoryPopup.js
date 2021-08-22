@@ -2,7 +2,7 @@ import React from 'react';
 import './AddJobDirectoryPopup.css';
 import Popup from '../../Popup.js';
 
-function AddJobDirectoryPopup({ isOpen, onClose, onAdd }) {
+function AddJobDirectoryPopup({ isOpen, onClose, onAdd, printDate }) {
 
   const [addNameChapter, setAddNameChapter] = React.useState('');
   const [addNameChapterError, setAddNameChapterError] = React.useState(false);
@@ -10,6 +10,7 @@ function AddJobDirectoryPopup({ isOpen, onClose, onAdd }) {
   const [addNameJobError, setAddNameJobError] = React.useState(false);
   const [addEditionDate, setAddEditionDate] = React.useState('');
   const [addEditionDateError, setAddEditionDateError] = React.useState(false);
+  const [addFullName, setAddFullName] = React.useState('');
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
 
   function handleSubmit(e) {
@@ -19,9 +20,10 @@ function AddJobDirectoryPopup({ isOpen, onClose, onAdd }) {
       chapterName: addNameChapter,
       nameProfession: addNameJob,
       editionDate: addEditionDate,
+      fullName: addFullName,
     }
 
-    onAdd(newJobСlassification);
+    onAdd(newJobСlassification, onClose);
   }
 
   function handleAddNameChapter(e) {
@@ -77,9 +79,20 @@ function AddJobDirectoryPopup({ isOpen, onClose, onAdd }) {
     // eslint-disable-next-line
   }, [addNameChapter, addNameJob, addEditionDate])
 
+  React.useEffect(() => { 
+    let chapter = addNameChapter.length > 0 ? addNameChapter : "<название раздела>";
+    let job = addNameJob.length > 0 ? addNameJob : "<наименование должности>";
+    let editionDate = addEditionDate.length > 0 ? printDate(addEditionDate) : "xx.xx.xxxx";
+     
+    setAddFullName(chapter + " " + job + ". Дата редакции " + editionDate + " г." );
+
+
+    // eslint-disable-next-line
+  }, [addNameChapter, addNameJob, addEditionDate])
+
   return(
     <Popup isOpen={isOpen} onClose={onClose} >
-      <form className="popup__form popup__form_type_large" name="avatar-form" action="#" noValidate onSubmit={handleSubmit}>
+      <form className="popup__form popup__form_type_large" name="add-eks-popup-form" action="#" noValidate onSubmit={handleSubmit}>
         <h3 className="initial-popup__title">Добавление нового документа ЕКС</h3>
         <ul className="initial-popup__list-input">
           <li className="initial-popup__item-input">
@@ -88,8 +101,8 @@ function AddJobDirectoryPopup({ isOpen, onClose, onAdd }) {
             className="initial-popup__input"
             placeholder="введите название раздела"
             type="text"
-            id="add-input-name"
-            name="add-input-name"
+            id="add-eks-input-name"
+            name="add-eks-input-name"
             autoComplete="off"
             value={addNameChapter}
             onChange={handleAddNameChapter}
@@ -104,8 +117,8 @@ function AddJobDirectoryPopup({ isOpen, onClose, onAdd }) {
             className="initial-popup__input"
             placeholder="введите наименование должности"
             type="text"
-            id="add-input-job"
-            name="add-input-job"
+            id="add-eks-input-job"
+            name="add-eks-input-job"
             autoComplete="off"
             value={addNameJob}
             onChange={handleAddNameProfession}
@@ -121,8 +134,8 @@ function AddJobDirectoryPopup({ isOpen, onClose, onAdd }) {
             className="initial-popup__input"
             placeholder="введите дату редакции"
             type="date"
-            id="add-input-edition-date"
-            name="add-input-edition-date"
+            id="add-eks-input-edition-date"
+            name="add-eks-input-edition-date"
             autoComplete="off"
             value={addEditionDate}
             onChange={handleAddEditionDate}
@@ -136,11 +149,7 @@ function AddJobDirectoryPopup({ isOpen, onClose, onAdd }) {
               
         <p className="initial-popup__result-name">
           <span className="initial-popup__result-name_weight_bold">Итоговое название: </span>
-          {`
-            ${addNameChapter} 
-            ${addNameJob}
-            ${addEditionDate}
-          `}
+          {addFullName}
         </p>
        
         <button className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""}`} type="submit">Добавить</button>

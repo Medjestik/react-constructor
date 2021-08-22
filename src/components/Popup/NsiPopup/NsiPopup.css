@@ -17,15 +17,6 @@
   transition: .3s;
   position: relative;
 }
-.nsi-popup__item-img {
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
-  object-position: center;
-  margin-right: 20px;
-  user-select: none;
-  pointer-events: none;
-}
 .nsi-popup__item-info {
   display: flex;
   flex-direction: column;
@@ -147,4 +138,8 @@
 }
 .nsi-popup__btn-save {
   margin: 20px auto 0px 0px;
+}
+.nsi__search {
+  margin: 30px 0px;
+  width: 100%;
 }

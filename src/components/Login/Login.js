@@ -10,8 +10,8 @@ function Login({ onLogin, loginError, setLoginError, isOpen, onClose }) {
   const [errorEmail, setErrorEmail] = React.useState({});
   const [errorPassword, setErrorPassword] = React.useState({});
 
-  const errorForm = errorEmail.error || errorPassword.error;
- 
+  const errorForm = errorEmail.error || errorPassword.error || email.length < 1 || password.length < 1
+
   function handleSubmit(e) {
     e.preventDefault();
     onLogin({ email, password });
@@ -55,6 +55,7 @@ function Login({ onLogin, loginError, setLoginError, isOpen, onClose }) {
     setEmail('');
     setPassword('');
     setBlockSubmitButton(true);
+    setLoginError(false);
     setErrorEmail({
       errorText: '',
       error: false
@@ -63,6 +64,7 @@ function Login({ onLogin, loginError, setLoginError, isOpen, onClose }) {
       errorText: '',
       error: false
     });
+    // eslint-disable-next-line
   }, [isOpen]);
 
   React.useEffect(() => {
@@ -126,7 +128,7 @@ function Login({ onLogin, loginError, setLoginError, isOpen, onClose }) {
             Войти
           </button>
         </div>
-        <p className="login__forgot-password">Забыли пароль?</p>
+        <p className="login__forgot-password"></p>
       </form>
     </Popup>
   )

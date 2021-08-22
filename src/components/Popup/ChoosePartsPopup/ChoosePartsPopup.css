@@ -13,3 +13,6 @@
 .popup-choose-parts__item {
   margin: 0px 0px 10px 0px;
 }
+.popup-choose-parts__btn {
+  margin: 20px auto 0px 0px;
+}

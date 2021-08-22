@@ -3,11 +3,7 @@ import './KnowledgeMaterial.css';
 import * as evaluationMaterialApi from '../../../../utils/evaluationMaterialApi/evaluationMaterialApi.js';
 import Question from './Question/Question.js';
 import AccordionChooseQuestionType from '../../../Accordion/AccordionChooseQuestionType/AccordionChooseQuestionType.js';
-import oneAnswerIcon from '../../../../images/quiz/one-answer-icon.png';
-import multiAnswerIcon from '../../../../images/quiz/multi-answer-icon.png';
-import openAnswerIcon from '../../../../images/quiz/open-answer-icon.png';
-import sequenceAnswerIcon from '../../../../images/quiz/sequence-answer-icon.png';
-import conformityAnswerIcon from '../../../../images/quiz/conformity-answer-icon.png';
+import DefineQuestionType from '../../../Define/DefineQuestionType/DefineQuestionType.js';
 
 function KnowledgeMaterial({ dppDescription, currentKnowledge, questionTypes, loggedIn }) {
 
@@ -17,22 +13,7 @@ function KnowledgeMaterial({ dppDescription, currentKnowledge, questionTypes, lo
   const [isRenderQuestion, setIsRenderQuestion] = React.useState(false);
   const [textQuestion, setTextQuestion] = React.useState('');
   const [isDefineTypeOfQuestion, setIsDefineTypeOfQuestion] = React.useState(false);
-
-  const defineQuestionType = (type) => {
-    if (type === 'multi-answer') {
-      return (<img className="questions__nav-item-img" src={multiAnswerIcon} alt="иконка"></img>)
-    }
-    if (type === 'open-answer') {
-      return (<img className="questions__nav-item-img" src={openAnswerIcon} alt="иконка"></img>)
-    }
-    if (type === 'sequence-answer') {
-      return (<img className="questions__nav-item-img" src={sequenceAnswerIcon} alt="иконка"></img>)
-    }
-    if (type === 'conformity-answer') {
-      return (<img className="questions__nav-item-img" src={conformityAnswerIcon} alt="иконка"></img>)
-    }
-    return (<img className="questions__nav-item-img" src={oneAnswerIcon} alt="иконка"></img>);
-  }
+  const [isBlockSaveButton, setIsBlockSaveButton] = React.useState(false);
 
   function chooseQuestion(question) {
     setCurrentQuestion(question);
@@ -86,9 +67,6 @@ function KnowledgeMaterial({ dppDescription, currentKnowledge, questionTypes, lo
   }
 
   function handleDeleteQuestion() {
-    /*const newQuestions = currentQuestions.filter((item) => item.id !== currentQuestion.id);
-    setCurrentQuestions(newQuestions);
-    setIsRenderQuestion(false);*/
     const token = localStorage.getItem("token");
     console.log(editQuestion);
     if (loggedIn) {
@@ -109,18 +87,6 @@ function KnowledgeMaterial({ dppDescription, currentKnowledge, questionTypes, lo
 
   function handleSaveQuestion() {
     const token = localStorage.getItem("token");
-    
-    /*const newQuestions = [];
-    if (currentQuestions.find(elem => (elem.id === editQuestion.id)) === undefined) {
-      newQuestions.unshift(editQuestion);
-    }
-    currentQuestions.forEach((elem) => {
-      if (elem.id === editQuestion.id) {
-        elem = editQuestion;
-      }
-      newQuestions.push(elem);
-    })
-    setCurrentQuestions(newQuestions);*/
 
     if (editQuestion.id === "new") {
       if (loggedIn) {
@@ -137,7 +103,6 @@ function KnowledgeMaterial({ dppDescription, currentKnowledge, questionTypes, lo
         });
       }
     } else  {
-        
         if (loggedIn) {
           evaluationMaterialApi.editQuestion({ token: token, omId: dppDescription.om_version_id, questionId: currentQuestion.id, questionData: editQuestion })
           .then((res) => {
@@ -160,13 +125,8 @@ function KnowledgeMaterial({ dppDescription, currentKnowledge, questionTypes, lo
           .finally(() => {
   
           });
-        
       }
     }
-
-    
-
-
   }
 
   React.useEffect(() => {
@@ -195,7 +155,13 @@ function KnowledgeMaterial({ dppDescription, currentKnowledge, questionTypes, lo
             {
               isRenderQuestion &&
               <div className="questions__control-edit">
-                <button className="btn btn_type_save questions__btn_type_save" onClick={handleSaveQuestion} type="button">Сохранить вопрос</button>
+                <button 
+                className={`btn btn_type_save questions__btn_type_save ${isBlockSaveButton ? "questions__btn_type_block" : ""}`}
+                onClick={handleSaveQuestion} 
+                type="button"
+                >
+                  Сохранить вопрос
+                </button>
                 <button className="btn btn_type_delete" onClick={handleDeleteQuestion} type="button">Удалить вопрос</button>
               </div>
             }
@@ -203,7 +169,6 @@ function KnowledgeMaterial({ dppDescription, currentKnowledge, questionTypes, lo
           {
             isRenderQuestion &&
             <Question 
-              currentQuestion={currentQuestion}
               editQuestion={editQuestion}
               setEditQuestion={setEditQuestion}
             />
@@ -244,7 +209,7 @@ function KnowledgeMaterial({ dppDescription, currentKnowledge, questionTypes, lo
               className={`questions__nav-item ${editQuestion.id === elem.id ? "questions__nav-item_type_active" : ""}`}
               onClick={() => chooseQuestion(elem)}
               >
-                {defineQuestionType(elem.questionType)}
+                <DefineQuestionType type={elem.questionType} />
                 <h5 className="questions__nav-item-text">{elem.text}</h5>
               </li>
             ))

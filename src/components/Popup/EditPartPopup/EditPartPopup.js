@@ -2,7 +2,7 @@ import React from 'react';
 import './EditPartPopup.css';
 import Popup from '../Popup.js';
 
-function EditPartPopup({ isOpen, onClose, part, partIndex, onEdit }) {
+function EditPartPopup({ isOpen, onClose, part, partIndex, onEdit, isLoading }) {
 
   const [partName, setPartName] = React.useState('');
   const [isChangeName, setIsChangeName] = React.useState(false);
@@ -41,7 +41,12 @@ function EditPartPopup({ isOpen, onClose, part, partIndex, onEdit }) {
         required
       >
       </textarea>
-      <button className={`btn btn_type_save initial-popup__btn-save ${partName.length < 1 || !isChangeName ? "btn_type_block" : ""}`} type="submit">Сохранение</button>
+      <button 
+      className={`btn btn_type_save initial-popup__btn-save ${isLoading ? "btn_type_loading" : ""} ${partName.length < 1 || !isChangeName ? "btn_type_block" : ""}`} 
+      type="submit"
+      >
+        {isLoading ? "Сохранение.." : "Сохранить"}
+      </button>
       </form>
     </Popup>
   )

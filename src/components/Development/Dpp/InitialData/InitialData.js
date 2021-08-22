@@ -10,12 +10,14 @@ import ProfStandartPopup from '../../../Popup/ProfStandartPopup/ProfStandartPopu
 import JobСlassificationPopup from '../../../Popup/JobСlassificationPopup/JobСlassificationPopup.js';
 import JobDirectoryPopup from '../../../Popup/JobDirectoryPopup/JobDirectoryPopup.js';
 import WorldSkillsPopup from '../../../Popup/WorldSkillsPopup/WorldSkillsPopup.js';
+import OrganizationRulesPopup from '../../../Popup/OrganizationRulesPopup/OrganizationRulesPopup.js';
 import TypicalStructure from './TypicalStructure/TypicalStructure.js';
 import EditPartPopup from '../../../Popup/EditPartPopup/EditPartPopup.js';
 import RemovePartPopup from '../../../Popup/RemovePartPopup/RemovePartPopup.js';
 import ChoosePartsPopup from '../../../Popup/ChoosePartsPopup/ChoosePartsPopup.js';
 import AccordionChooseNewDocumentType from '../../../Accordion/AccordionChooseNewDocumentType/AccordionChooseNewDocumentType.js';
 import NsiPopup from '../../../Popup/NsiPopup/NsiPopup.js';
+import RemoveNsiPopup from '../../../Popup/RemoveNsiPopup/RemoveNsiPopup.js'
 
 import fgosIcon from '../../../../images/documents/fgos.png';
 import profstandartIcon from '../../../../images/documents/profstandart.png';
@@ -51,6 +53,10 @@ function InitialData({ loggedIn, history, dppDescription }) {
   const [worldSkillsProgram, setWorldSkillsProgram] = React.useState([]);
   const [isWorldSkillsPopupOpen, setIsWorldSkillsPopupOpen] = React.useState(false);
 
+  const [organizationRules, setOrganizationRules] = React.useState([]);
+  const [organizationRulesProgram, setOrganizationRulesProgram] = React.useState([]);
+  const [isOrganizationRulesPopupOpen, setIsOrganizationRulesPopupOpen] = React.useState(false);
+
   const [newCompetence, setNewCompetence] = React.useState();
   const [userQualification, setUserQualification] = React.useState('');
   const [typologies, setTypologies] = React.useState([]);
@@ -67,6 +73,8 @@ function InitialData({ loggedIn, history, dppDescription }) {
   const [isNsiPopupOpen, setIsNsiPopupOpen] = React.useState(false);
   const [nsiTypes, setNsiTypes] = React.useState([]);
   const [nsiProgram, setNsiProgram] = React.useState([]);
+  const [isRemoveNsiPopupOpen, setIsRemoveNsiPopupOpen] = React.useState(false);
+  const [currentNsiItem, setCurrentNsiItem] = React.useState({});
 
   function handleChangeProfLevels(id) {
     const newLevels = selectedProfLevels;
@@ -147,98 +155,28 @@ function InitialData({ loggedIn, history, dppDescription }) {
     }
   }
 
-  function handleSelectFgoses(fgoses) {
-    const fgosesId = fgoses.map(elem => elem.id);
-    const token = localStorage.getItem("token");
-    if (loggedIn) {
-      api.selectFgoses({ 
-        token: token, 
-        initialDataVersion: dppDescription.ish_version_id, 
-        data: fgosesId
-      })
-      .then((res) => {
-        setRequirementFgosProgram(res);
-        closeInitialDataPopups();
-      })
-      .catch((err) =>{
-        console.log(err);
-      })
-    }
-  }
-
-  function handleSelectProfStandart(profStandart) {
-    const profStandartId = profStandart.map(elem => elem.id);
-    const token = localStorage.getItem("token");
-    if (loggedIn) {
-      api.selectProfStandarts({ 
-        token: token, 
-        initialDataVersion: dppDescription.ish_version_id, 
-        data: profStandartId
-      })
-      .then((res) => {
-        setProfStandartsProgram(res);
-        closeInitialDataPopups();
-      })
-      .catch((err) =>{
-        console.log(err);
-      })
-    }
-  }
-
-  function handleSelectJobСlassification(jobСlassification) {
-    const jobСlassificationId = jobСlassification.map(elem => elem.id);
-    const token = localStorage.getItem("token");
-    if (loggedIn) {
-      api.selectJobClassification({ 
-        token: token, 
-        initialDataVersion: dppDescription.ish_version_id, 
-        data: jobСlassificationId
-      })
-      .then((res) => {
-        setJobСlassificationProgram(res);
-        closeInitialDataPopups();
-      })
-      .catch((err) =>{
-        console.log(err);
-      })
-    }
-  }
-
-  function handleSelectJobDirectory(jobDirectory) {
-    const jobDirectoryId = jobDirectory.map(elem => elem.id);
-    const token = localStorage.getItem("token");
-    if (loggedIn) {
-      api.selectDirectoryJob({ 
-        token: token, 
-        initialDataVersion: dppDescription.ish_version_id, 
-        data: jobDirectoryId
-      })
-      .then((res) => {
-        setJobDirectoryProgram(res);
-        closeInitialDataPopups();
-      })
-      .catch((err) =>{
-        console.log(err);
-      })
-    }
-  }
-
-  function handleSelectWorldSkills(worldSkills) {
-    const worldSkillsId = worldSkills.map(elem => elem.id);
-    const token = localStorage.getItem("token");
-    if (loggedIn) {
-      api.selectWorldSkills({ 
-        token: token, 
-        initialDataVersion: dppDescription.ish_version_id, 
-        data: worldSkillsId
-      })
-      .then((res) => {
-        setWorldSkillsProgram(res);
-        closeInitialDataPopups();
-      })
-      .catch((err) =>{
-        console.log(err);
-      })
+  function handleAddNewDocument(type) {
+    switch (type) {
+      case "fgos":
+        requirementFgosPopupOpen();
+        break;
+      case "profstandart":
+        profStandartPopupOpen();
+        break;
+      case "etkc":
+        jobСlassificationPopupOpen();
+        break;
+      case "ekc":
+        jobDirectoryPopupOpen();
+        break;
+      case "worldskills":
+        worldSkillsPopupOpen();
+        break;
+      case "organization":
+        organizationRulesPopupOpen();
+        break;
+      default:
+        alert( "Нет таких значений" );
     }
   }
 
@@ -279,23 +217,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
     }
   }
 
-  function closeInitialDataPopups() {
-    setIsProfStandartPopupOpen(false);
-    setIsJobСlassificationPopupOpen(false);
-    setIsJobDirectoryPopupOpen(false);
-    setIsWorldSkillsPopupOpen(false);
-    setIsRequirementFgosPopupOpen(false);
-    setIsOpenEditPartPopup(false);
-    setIsOpenRemovePartPopup(false);
-    setIsOpenChoosePartsPopup(false);
-    setIsNsiPopupOpen(false);
-  }
-
-  function closeOverlayPopups() {
-    setIsOpenEditPartPopup(false);
-    setIsOpenRemovePartPopup(false);
-    setIsOpenChoosePartsPopup(false);
-  }
+  /* ФГОСы */
 
   function requirementFgosPopupOpen() {
     setIsLoading(true);
@@ -312,6 +234,27 @@ function InitialData({ loggedIn, history, dppDescription }) {
     .finally(() => setIsLoading(false));
   }
 
+  function handleSelectFgoses(fgoses) {
+    const fgosesId = fgoses.map(elem => elem.id);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.selectFgoses({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        data: fgosesId
+      })
+      .then((res) => {
+        setRequirementFgosProgram(res);
+        closeInitialDataPopups();
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+    }
+  }
+
+  /* Профстандарты */
+
   function profStandartPopupOpen() {
     setIsLoading(true);
     closeInitialDataPopups();
@@ -326,6 +269,40 @@ function InitialData({ loggedIn, history, dppDescription }) {
     })
     .finally(() => setIsLoading(false));
   }
+
+  function handleAddProfStandart(newDocument, closeAddPopup) {
+    const token = localStorage.getItem("token");
+    api.createProfStandarts({ token: token, document: newDocument })
+    .then((res) => {
+      closeAddPopup();
+      setProfStandarts([...profStandarts, res]);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    //.finally(() => setIsLoading(false));
+  }
+
+  function handleSelectProfStandart(profStandart) {
+    const profStandartId = profStandart.map(elem => elem.id);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.selectProfStandarts({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        data: profStandartId
+      })
+      .then((res) => {
+        setProfStandartsProgram(res);
+        closeInitialDataPopups();
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+    }
+  }
+
+  /* ЕТКС */
 
   function jobСlassificationPopupOpen() {
     setIsLoading(true);
@@ -342,6 +319,39 @@ function InitialData({ loggedIn, history, dppDescription }) {
     .finally(() => setIsLoading(false));
   }
 
+  function handleAddJobСlassification(newDocument, closeAddPopup) {
+    const token = localStorage.getItem("token");
+    api.createJobClassification({ token: token, document: newDocument })
+    .then((res) => {
+      closeAddPopup();
+      setJobСlassification([...jobСlassification, res]);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+  }
+
+  function handleSelectJobСlassification(jobСlassification) {
+    const jobСlassificationId = jobСlassification.map(elem => elem.id);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.selectJobClassification({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        data: jobСlassificationId
+      })
+      .then((res) => {
+        setJobСlassificationProgram(res);
+        closeInitialDataPopups();
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+    }
+  }
+
+  /* ЕКС */
+
   function jobDirectoryPopupOpen() {
     setIsLoading(true);
     closeInitialDataPopups();
@@ -355,6 +365,52 @@ function InitialData({ loggedIn, history, dppDescription }) {
       console.error(err);
     })
     .finally(() => setIsLoading(false));
+  }
+
+  function handleAddJobDirectory(newDocument, closeAddPopup) {
+    const token = localStorage.getItem("token");
+    api.createDirectoryJob({ token: token, document: newDocument })
+    .then((res) => {
+      closeAddPopup();
+      setJobDirectory([...jobDirectory, res]);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    //.finally(() => setIsLoading(false));
+  }
+
+  function handleSelectJobDirectory(jobDirectory) {
+    const jobDirectoryId = jobDirectory.map(elem => elem.id);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.selectDirectoryJob({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        data: jobDirectoryId
+      })
+      .then((res) => {
+        setJobDirectoryProgram(res);
+        closeInitialDataPopups();
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+    }
+  }
+
+  /* WorldSkills */
+
+  function handleAddWorldSkills(newDocument, closeAddPopup) { 
+    const token = localStorage.getItem("token");
+    api.createWorldSkills({ token: token, document: newDocument })
+    .then((res) => {
+      closeAddPopup();
+      setWorldSkills([...worldSkills, res]);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
   }
 
   function worldSkillsPopupOpen() {
@@ -371,6 +427,77 @@ function InitialData({ loggedIn, history, dppDescription }) {
     })
     .finally(() => setIsLoading(false));
   }
+
+  function handleSelectWorldSkills(worldSkills) {
+    const worldSkillsId = worldSkills.map(elem => elem.id);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.selectWorldSkills({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        data: worldSkillsId
+      })
+      .then((res) => {
+        setWorldSkillsProgram(res);
+        closeInitialDataPopups();
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+    }
+  }
+
+  /* Корпоративные требования */
+
+  function organizationRulesPopupOpen() {
+    setIsLoading(true);
+    closeInitialDataPopups();
+    setIsOrganizationRulesPopupOpen(true);
+    const token = localStorage.getItem("token");
+    api.getOrganizationRules({ token: token })
+    .then((res) => {
+      setOrganizationRules(res);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => setIsLoading(false));
+  }
+
+  function handleAddOrganizationRules(newDocument, closeAddPopup) { 
+
+    const token = localStorage.getItem("token");
+    api.createOrganizationRules({ token: token, document: newDocument })
+    .then((res) => {
+      closeAddPopup();
+      setOrganizationRules([...organizationRules, res]);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+  }
+
+  function handleSelectOrganizationRules(organizationRules) {
+    const organizationRulesId = organizationRules.map(elem => elem.id);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.selectOrganizationRules({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        data: organizationRulesId
+      })
+      .then((res) => {
+        setOrganizationRulesProgram(res);
+        closeInitialDataPopups();
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+    }
+  }
+
+
+  /* Typology */
 
   function openEditPartPopup(part, index) {
     closeInitialDataPopups();
@@ -389,6 +516,94 @@ function InitialData({ loggedIn, history, dppDescription }) {
     closeInitialDataPopups();
     setIsOpenChoosePartsPopup(true);
   }
+
+  function changeTypologyParts(newTypology) {
+    const token = localStorage.getItem("token");
+    setIsLoading(true);
+    if (loggedIn) {
+      api.chooseStructureParts({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        id: newTypology.id
+      })
+      .then((res) => {
+        setTypologiesParts(res);
+        closeInitialDataPopups();
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+    }
+  }
+
+  function changeTypologyPartsOrder(newOrder) {
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.changeStructurePartsOrder({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        order: newOrder
+      })
+      .then(() => {
+
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+    }
+  }
+  
+  function removeTypologyParts(id) {
+    const token = localStorage.getItem("token");
+    setIsLoading(true);
+    if (loggedIn) {
+      api.removeStructurePart({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        id: id
+      })
+      .then((res) => {
+        const newParts = typologiesParts.filter(part => part.id !== res);
+        setTypologiesParts(newParts);
+        closeInitialDataPopups();
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
+    }
+  }
+
+  function editTypologyParts(newPart, partIndex) {
+    setIsLoading(true);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.editStructurePart({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        id: newPart.id,
+        name: newPart.name
+      })
+      .then((res) => {
+        console.log(res);
+        setTypologiesParts([...typologiesParts.slice(0, partIndex), res, ...typologiesParts.slice(partIndex + 1)]);
+        closeInitialDataPopups();
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
+    }
+  }
+
+  /* NSI */
 
   function openNsiPopup() {
     const token = localStorage.getItem("token");
@@ -422,7 +637,12 @@ function InitialData({ loggedIn, history, dppDescription }) {
   }
 }
 
-  function removeNsi(id) {
+  function openRemoveNsiPopup(nsi) {
+    setCurrentNsiItem(nsi);
+    setIsRemoveNsiPopupOpen(true);
+  }
+
+  function handleRemoveNsi(id) {
     const token = localStorage.getItem("token");
     api.removeNsiElem({ 
       token: token, 
@@ -440,101 +660,25 @@ function InitialData({ loggedIn, history, dppDescription }) {
     .finally(() => setIsLoading(false));
   }
 
-  function changeTypologyParts(newTypology) {
-    const token = localStorage.getItem("token");
-    if (loggedIn) {
-      api.chooseStructureParts({ 
-        token: token, 
-        initialDataVersion: dppDescription.ish_version_id, 
-        id: newTypology.id
-      })
-      .then((res) => {
-        setTypologiesParts(res);
-        closeInitialDataPopups();
-      })
-      .catch((err) =>{
-        console.log(err);
-      })
-    }
+  function closeInitialDataPopups() {
+    setIsProfStandartPopupOpen(false);
+    setIsJobСlassificationPopupOpen(false);
+    setIsJobDirectoryPopupOpen(false);
+    setIsWorldSkillsPopupOpen(false);
+    setIsOrganizationRulesPopupOpen(false);
+    setIsRequirementFgosPopupOpen(false);
+    setIsOpenEditPartPopup(false);
+    setIsOpenRemovePartPopup(false);
+    setIsOpenChoosePartsPopup(false);
+    setIsNsiPopupOpen(false);
+    setIsRemoveNsiPopupOpen(false);
   }
 
-  function changeTypologyPartsOrder(newOrder) {
-    const token = localStorage.getItem("token");
-    if (loggedIn) {
-      api.changeStructurePartsOrder({ 
-        token: token, 
-        initialDataVersion: dppDescription.ish_version_id, 
-        order: newOrder
-      })
-      .then(() => {
-
-      })
-      .catch((err) =>{
-        console.log(err);
-      })
-    }
-  }
-  
-  function removeTypologyParts(id) {
-    const token = localStorage.getItem("token");
-    if (loggedIn) {
-      api.removeStructurePart({ 
-        token: token, 
-        initialDataVersion: dppDescription.ish_version_id, 
-        id: id
-      })
-      .then((res) => {
-        const newParts = typologiesParts.filter(part => part.id !== res);
-        setTypologiesParts(newParts);
-        closeInitialDataPopups();
-      })
-      .catch((err) =>{
-        console.log(err);
-      })
-    }
-  }
-
-  function editTypologyParts(newPart, partIndex) {
-    
-    const token = localStorage.getItem("token");
-    if (loggedIn) {
-      api.editStructurePart({ 
-        token: token, 
-        initialDataVersion: dppDescription.ish_version_id, 
-        id: newPart.id,
-        name: newPart.name
-      })
-      .then((res) => {
-        console.log(res);
-        setTypologiesParts([...typologiesParts.slice(0, partIndex), res, ...typologiesParts.slice(partIndex + 1)]);
-        closeInitialDataPopups();
-      })
-      .catch((err) =>{
-        console.log(err);
-      })
-    }
-  }
-
-  function handleAddNewDocument(type) {
-    switch (type) {
-      case "fgos":
-        requirementFgosPopupOpen();
-        break;
-      case "profstandart":
-        profStandartPopupOpen();
-        break;
-      case "etkc":
-        jobСlassificationPopupOpen();
-        break;
-      case "ekc":
-        jobDirectoryPopupOpen();
-        break;
-      case "worldskills":
-        worldSkillsPopupOpen();
-        break;
-      default:
-        alert( "Нет таких значений" );
-    }
+  function closeOverlayPopups() {
+    setIsOpenEditPartPopup(false);
+    setIsOpenRemovePartPopup(false);
+    setIsOpenChoosePartsPopup(false);
+    setIsRemoveNsiPopupOpen(false);
   }
 
   useOnClickOverlay(closeOverlayPopups);
@@ -805,7 +949,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
             <button className="btn btn_type_add initial-data__btn_type_add-nsi" onClick={openNsiPopup}>Добавить новый источник</button>
             <ReferenceInformation 
               nsi={nsiProgram}
-              onRemove={removeNsi}
+              onRemove={openRemoveNsiPopup}
             />
           </li>
 
@@ -815,79 +959,140 @@ function InitialData({ loggedIn, history, dppDescription }) {
 
       </div>
 
-      <RequirementFgosPopup
-        isOpen={isRequirementFgosPopupOpen}
-        onClose={closeInitialDataPopups}
-        isLoading={isLoading}
-        requirementFgos={requirementFgos}
-        requirementFgosProgram={requirementFgosProgram}
-        onSave={handleSelectFgoses}
-      />
+      {
+        isRequirementFgosPopupOpen &&
+        <RequirementFgosPopup
+          isOpen={isRequirementFgosPopupOpen}
+          onClose={closeInitialDataPopups}
+          isLoading={isLoading}
+          requirementFgos={requirementFgos}
+          requirementFgosProgram={requirementFgosProgram}
+          onSave={handleSelectFgoses}
+        />
+      }
 
-      <ProfStandartPopup
-        isOpen={isProfStandartPopupOpen}
-        onClose={closeInitialDataPopups}
-        isLoading={isLoading}
-        profStandarts={profStandarts}
-        profStandartsProgram={profStandartsProgram}
-        onSave={handleSelectProfStandart}
-      />
+      {
+        isProfStandartPopupOpen &&
+        <ProfStandartPopup
+          isOpen={isProfStandartPopupOpen}
+          onClose={closeInitialDataPopups}
+          isLoading={isLoading}
+          profStandarts={profStandarts}
+          profStandartsProgram={profStandartsProgram}
+          onSave={handleSelectProfStandart}
+          onAdd={handleAddProfStandart}
+        />
+      }
 
-      <JobСlassificationPopup
-        isOpen={isJobСlassificationPopupOpen}
-        onClose={closeInitialDataPopups}
-        isLoading={isLoading}
-        jobСlassification={jobСlassification}
-        jobСlassificationProgram={jobСlassificationProgram}
-        onSave={handleSelectJobСlassification}
-      />
+      {
+        isJobСlassificationPopupOpen &&
+        <JobСlassificationPopup
+          isOpen={isJobСlassificationPopupOpen}
+          onClose={closeInitialDataPopups}
+          isLoading={isLoading}
+          jobСlassification={jobСlassification}
+          jobСlassificationProgram={jobСlassificationProgram}
+          onSave={handleSelectJobСlassification}
+          onAdd={handleAddJobСlassification}
+        />
+      }
 
-      <JobDirectoryPopup
-        isOpen={isJobDirectoryPopupOpen}
-        onClose={closeInitialDataPopups}
-        isLoading={isLoading}
-        jobDirectory={jobDirectory}
-        jobDirectoryProgram={jobDirectoryProgram}
-        onSave={handleSelectJobDirectory}
-      />
+      {
+        isJobDirectoryPopupOpen &&
+        <JobDirectoryPopup
+          isOpen={isJobDirectoryPopupOpen}
+          onClose={closeInitialDataPopups}
+          isLoading={isLoading}
+          jobDirectory={jobDirectory}
+          jobDirectoryProgram={jobDirectoryProgram}
+          onSave={handleSelectJobDirectory}
+          onAdd={handleAddJobDirectory}
+        />
+      }
 
-      <WorldSkillsPopup
-        isOpen={isWorldSkillsPopupOpen}
-        onClose={closeInitialDataPopups}
-        isLoading={isLoading}
-        worldSkills={worldSkills}
-        worldSkillsProgram={worldSkillsProgram}
-        onSave={handleSelectWorldSkills}
-      />
+      {
+        isWorldSkillsPopupOpen &&
+        <WorldSkillsPopup
+          isOpen={isWorldSkillsPopupOpen}
+          onClose={closeInitialDataPopups}
+          isLoading={isLoading}
+          worldSkills={worldSkills}
+          worldSkillsProgram={worldSkillsProgram}
+          onSave={handleSelectWorldSkills}
+          onAdd={handleAddWorldSkills}
+        />
+      }
 
-      <EditPartPopup 
-        isOpen={isOpenEditPartPopup}
-        onClose={closeInitialDataPopups}
-        part={currentPart}
-        partIndex={currentPartIndex}
-        onEdit={editTypologyParts}
-      />
+      {
+        isOrganizationRulesPopupOpen &&
+        
+        <OrganizationRulesPopup
+          isOpen={isOrganizationRulesPopupOpen}
+          onClose={closeInitialDataPopups}
+          isLoading={isLoading}
+          organizationRules={organizationRules}
+          organizationRulesProgram={organizationRulesProgram}
+          onSave={handleSelectOrganizationRules}
+          onAdd={handleAddOrganizationRules}
+        />
+      }
 
-      <RemovePartPopup
-        isOpen={isOpenRemovePartPopup}
-        onClose={closeInitialDataPopups}  
-        part={currentPart}
-        onRemove={removeTypologyParts}
-      />
+      {
+        isOpenEditPartPopup &&
+        <EditPartPopup 
+          isOpen={isOpenEditPartPopup}
+          onClose={closeInitialDataPopups}
+          part={currentPart}
+          partIndex={currentPartIndex}
+          onEdit={editTypologyParts}
+          isLoading={isLoading}
+        />
+      }
 
-      <ChoosePartsPopup
-        isOpen={isOpenChoosePartsPopup}
-        onClose={closeInitialDataPopups}  
-        typologies={typologies}
-        onChangeTypologyParts={changeTypologyParts}
-      />
+      {
+        isOpenRemovePartPopup &&
+        <RemovePartPopup
+          isOpen={isOpenRemovePartPopup}
+          onClose={closeInitialDataPopups}  
+          part={currentPart}
+          onRemove={removeTypologyParts}
+          isLoading={isLoading}
+        />
+      }
 
-      <NsiPopup 
-        isOpen={isNsiPopupOpen}
-        onClose={closeInitialDataPopups}
-        nsiTypes={nsiTypes}
-        onAdd={handleAddNsi}
-      />
+      {
+        isOpenChoosePartsPopup &&
+        <ChoosePartsPopup
+          isOpen={isOpenChoosePartsPopup}
+          onClose={closeInitialDataPopups}  
+          typologies={typologies}
+          onChangeTypologyParts={changeTypologyParts}
+          isLoading={isLoading}
+        />
+      }
+
+      {
+        isNsiPopupOpen &&
+        <NsiPopup 
+          isOpen={isNsiPopupOpen}
+          onClose={closeInitialDataPopups} 
+          nsiTypes={nsiTypes}
+          onAdd={handleAddNsi} 
+        />
+
+      }
+      
+      {
+        isRemoveNsiPopupOpen &&
+        <RemoveNsiPopup
+          isOpen={isRemoveNsiPopupOpen}
+          onClose={closeInitialDataPopups}  
+          nsi={currentNsiItem}
+          onRemove={handleRemoveNsi}
+          isLoading={isLoading}
+        />
+      }
+
 
     </section>
   );

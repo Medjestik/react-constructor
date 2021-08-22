@@ -16,9 +16,10 @@ function AddWorldSkillsPopup({ isOpen, onClose, onAdd }) {
     const newDocument = {
      name: addName,
      code: addCode,
+     fullName: addCode + " " + addName,
     }
 
-    onAdd(newDocument);
+    onAdd(newDocument, onClose);
   }
 
   function handleAddName(e) {
@@ -63,7 +64,7 @@ function AddWorldSkillsPopup({ isOpen, onClose, onAdd }) {
 
   return(
     <Popup isOpen={isOpen} onClose={onClose} >
-      <form className="popup__form popup__form_type_large" name="avatar-form" action="#" noValidate onSubmit={handleSubmit}>
+      <form className="popup__form popup__form_type_large" name="add-ws-form" action="#" noValidate onSubmit={handleSubmit}>
         <h3 className="initial-popup__title">Добавление новой компетенции WorldSkills</h3>
         <ul className="initial-popup__list-input">
           <li className="initial-popup__item-input">
@@ -72,8 +73,8 @@ function AddWorldSkillsPopup({ isOpen, onClose, onAdd }) {
             className="initial-popup__input"
             placeholder="введите название компетенции"
             type="text"
-            id="add-input-name"
-            name="add-input-name"
+            id="add-ws-input-name"
+            name="add-ws-input-name"
             autoComplete="off"
             value={addName}
             onChange={handleAddName}
@@ -88,8 +89,8 @@ function AddWorldSkillsPopup({ isOpen, onClose, onAdd }) {
             className="initial-popup__input"
             placeholder="введите наименование должности"
             type="text"
-            id="add-input-code"
-            name="add-input-code"
+            id="add-ws-input-code"
+            name="add-ws-input-code"
             autoComplete="off"
             value={addCode}
             onChange={handleAddCode}

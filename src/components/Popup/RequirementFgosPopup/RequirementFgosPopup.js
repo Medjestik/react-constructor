@@ -72,7 +72,7 @@ function RequirementFgosPopup({ isOpen, onClose, isLoading, requirementFgos, req
       isOpen={isOpen}
       onClose={onClose}
     >
-      <form className="popup__form popup__form_type_large" name="avatar-form" action="#" noValidate onSubmit={handleSubmit}>
+      <form className="popup__form popup__form_type_large" name="fgos-popup-form" action="#" noValidate onSubmit={handleSubmit}>
         <h3 className="initial-popup__title">Выбор федеральных государственных образовательных стандартов</h3>
 
         {
@@ -97,8 +97,8 @@ function RequirementFgosPopup({ isOpen, onClose, isLoading, requirementFgos, req
                 className="input-search"
                 placeholder="поиск по направлению"
                 type="text"
-                id="search-input-name"
-                name="search-input-name"
+                id="search-fgos-popup-input-name"
+                name="search-fgos-popup-input-name"
                 autoComplete="off"
                 value={searchName}
                 onChange={handleSearchByName}
@@ -110,8 +110,8 @@ function RequirementFgosPopup({ isOpen, onClose, isLoading, requirementFgos, req
                 className="input-search"
                 placeholder="поиск по коду"
                 type="text"
-                id="search-input-code"
-                name="search-input-code"
+                id="search-fgos-popup-input-code"
+                name="search-fgos-popup-input-code"
                 autoComplete="off"
                 value={searchCode}
                 onChange={handleSearchByCode}
@@ -132,9 +132,9 @@ function RequirementFgosPopup({ isOpen, onClose, isLoading, requirementFgos, req
                 <li className="initial-popup__item" key={i}>
                   <label className="checkbox initial-popup__checkbox">
                     <input 
-                      name="prof-standard"
+                      name={`fgos-item-${item.id}`}
                       type="checkbox"
-                      id={i}
+                      id={`fgos-item-${item.id}`}
                       defaultChecked={selectedFgos.some(elem => elem.id === item.id)}
                       onChange={() => handleChangeFgos(item.id)}
                       >

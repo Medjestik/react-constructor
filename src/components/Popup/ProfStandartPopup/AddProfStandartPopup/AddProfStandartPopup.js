@@ -3,7 +3,7 @@ import './AddProfStandartPopup.css';
 import Popup from '../../Popup.js';
 import InputMask from "react-input-mask";
 
-function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
+function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate }) {
 
   const [addNameText, setAddNameText] = React.useState('');
   const [addNameTextError, setAddNameTextError] = React.useState(false);
@@ -19,6 +19,7 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
   const [addRegistrationNumberError, setAddRegistrationNumberError] = React.useState('');
   const [addNameQual, setAddNameQual] = React.useState('');
   const [addLinkQual, setAddLinkQual] = React.useState('');
+  const [addFullName, setAddFullName] = React.useState('');
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
 
   function handleSubmit(e) {
@@ -32,9 +33,10 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
      registrationNumber: addRegistrationNumber,
      nameQual: addNameQual,
      linkQual: addLinkQual,
+     fullName: addFullName,
     }
 
-    onAdd(newProfStandart);
+    onAdd(newProfStandart, onClose);
   }
 
   function handleAddName(e) {
@@ -141,11 +143,26 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
       setIsBlockSubmitButton(false);
     }
     // eslint-disable-next-line
-  }, [addNameText, addNameCode, addOrderDate, addOrderNumber, addRegistrationDate, addRegistrationNumber])
+  }, [addNameText, addNameCode, addOrderDate, addOrderNumber, addRegistrationDate, addRegistrationNumber]);
+
+  React.useEffect(() => { 
+    let code = addNameCode.length > 0 ? addNameCode : "xx.xxx";
+    let name = addNameText.length > 0 ? addNameText : "<наименование профстандарта>";
+    let orderDate = addOrderDate.length > 0 ? printDate(addOrderDate) : "xx.xx.xxxx";
+    let orderNumber = addOrderNumber.length > 0 ? addOrderNumber : "xxxx";
+    let registrationDate = addRegistrationDate.length > 0 ? printDate(addRegistrationDate) : "xx.xx.xxxx";
+    let registrationNumber = addRegistrationNumber.length > 0 ? addRegistrationNumber : "xxx";
+     
+    setAddFullName(code + " " + name + ", приказ от " + orderDate + " г. № " + orderNumber + "н (зарегистрирован Министерством юстиции Российской Федерации " + registrationDate + " г., регистрационный № " + registrationNumber + ")" );
+
+
+    // eslint-disable-next-line
+  }, [addNameCode, addNameText, addOrderDate, addOrderNumber, addRegistrationDate, addRegistrationNumber])
+  
 
   return(
     <Popup isOpen={isOpen} onClose={onClose} >
-      <form className="popup__form popup__form_type_large" name="avatar-form" action="#" noValidate onSubmit={handleSubmit}>
+      <form className="popup__form popup__form_type_large" name="add-pf-form" action="#" noValidate onSubmit={handleSubmit}>
         <h3 className="initial-popup__title">Добавление нового профессионального стандарта</h3>
         <ul className="initial-popup__list-input">
           <li className="initial-popup__item-input">
@@ -154,8 +171,8 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
             className="initial-popup__input"
             placeholder="введите название профстандарта"
             type="text"
-            id="add-input-name"
-            name="add-input-name"
+            id="add-pf-input-name"
+            name="add-pf-input-name"
             autoComplete="off"
             value={addNameText}
             onChange={handleAddName}
@@ -170,8 +187,8 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
             className="initial-popup__input"
             placeholder="введите код профстандарта"
             type="text"
-            id="add-input-code"
-            name="add-input-code"
+            id="add-pf-input-code"
+            name="add-pf-input-code"
             autoComplete="off"
             value={addNameCode}
             onChange={handleAddCode}
@@ -190,8 +207,8 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
                 className="initial-popup__input"
                 placeholder="введите дату приказа Минтруда России"
                 type="date"
-                id="add-input-order-date"
-                name="add-input-order-date"
+                id="add-pf-input-order-date"
+                name="add-pf-input-order-date"
                 autoComplete="off"
                 value={addOrderDate}
                 onChange={handleAddOrderDate}
@@ -205,8 +222,8 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
                 className="initial-popup__input"
                 placeholder="введите номер приказа Минтруда России"
                 type="number"
-                id="add-input-order-number"
-                name="add-input-order-number"
+                id="add-pf-input-order-number"
+                name="add-pf-input-order-number"
                 autoComplete="off"
                 value={addOrderNumber}
                 onChange={handleAddOrderNumber}
@@ -221,8 +238,8 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
                 className="initial-popup__input"
                 placeholder="введите дату приказа Минюста России"
                 type="date"
-                id="add-input-registration-date"
-                name="add-input-registration-date"
+                id="add-pf-input-registration-date"
+                name="add-pf-input-registration-date"
                 autoComplete="off"
                 value={addRegistrationDate}
                 onChange={handleAddRegistrationDate}
@@ -236,8 +253,8 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
                 className="initial-popup__input"
                 placeholder="введите регистрационный номер"
                 type="number"
-                id="add-input-registration-number"
-                name="add-input-registration-number"
+                id="add-pf-input-registration-number"
+                name="add-pf-input-registration-number"
                 autoComplete="off"
                 pattern="[0-9]*"
                 value={addRegistrationNumber}
@@ -251,13 +268,13 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
             </ul>
           </li>
           <li className="initial-popup__item-input">
-            <h5 className="initial-popup__input-name">Наименование квалификации</h5>
+            <h5 className="initial-popup__input-name">Наименование квалификации (если есть)</h5>
             <input 
             className="initial-popup__input"
             placeholder="введите название квалификации"
             type="text"
-            id="add-input-qual"
-            name="add-input-qual"
+            id="add-pf-input-qual"
+            name="add-pf-input-qual"
             autoComplete="off"
             value={addNameQual}
             onChange={handleAddQual}
@@ -265,13 +282,13 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
             </input>
           </li>
           <li className="initial-popup__item-input">
-            <h5 className="initial-popup__input-name">Ссылка на описание квалификации</h5>
+            <h5 className="initial-popup__input-name">Ссылка на описание квалификации (если есть)</h5>
             <input 
             className="initial-popup__input"
             placeholder="введите url ссылки"
             type="url"
-            id="add-input-qual"
-            name="add-input-qual"
+            id="add-pf-input-link"
+            name="add-pf-input-link"
             autoComplete="off"
             value={addLinkQual}
             onChange={handleLinkQual}
@@ -281,14 +298,7 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd }) {
         </ul>
         <p className="initial-popup__result-name">
           <span className="initial-popup__result-name_weight_bold">Итоговое название: </span>
-          {`
-            ${addNameCode || "xx.xxx"} 
-            ${addNameText || "название"}, приказ от 
-            ${addOrderDate || "xx.xx.20xx"} г. № 
-            ${addOrderNumber || "xxxx"}н (зарегистрирован Министерством юстиции Российской Федерации 
-            ${addRegistrationDate || "xx.xx.20xx"} г., регистрационный № 
-            ${addRegistrationNumber || "xxxxx"})
-          `}
+          {addFullName}
         </p>
        
         <button className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""}`} type="submit">Добавить</button>

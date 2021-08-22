@@ -2,10 +2,9 @@ import React from 'react';
 import './WorldSkillsPopup.css';
 import Popup from '../Popup.js';
 import AddWorldSkillsPopup from './AddWorldSkillsPopup/AddWorldSkillsPopup.js';
-import * as api from '../../../utils/api.js';
 import WorldSkillsPopupItem from './WorldSkillsPopupItem/WorldSkillsPopupItem.js';
 
-function WorldSkillsPopup({ isOpen, onClose, isLoading, worldSkills, worldSkillsProgram, onSave }) {
+function WorldSkillsPopup({ isOpen, onClose, isLoading, worldSkills, worldSkillsProgram, onSave, onAdd }) {
 
   const [selectedWorldSkills, setSelectedWorldSkills] = React.useState([...worldSkillsProgram]);
   const [currentWorldSkills, setCurrentWorldSkills] = React.useState([...worldSkills]);
@@ -26,19 +25,6 @@ function WorldSkillsPopup({ isOpen, onClose, isLoading, worldSkills, worldSkills
     setIsShowAddPopup(false);
   }
   
-  function handleAddDocument(newDocument) { 
-    
-    const token = localStorage.getItem("token");
-    api.createWorldSkills({ token: token, document: newDocument })
-    .then((res) => {
-      closeAllPopups();
-      setCurrentWorldSkills([...currentWorldSkills, res]);
-    })
-    .catch((err) => {
-      console.error(err);
-    })
-  }
-
   function handleSearchByName(e) {
     setSearchName(e.target.value);
   }
@@ -90,7 +76,7 @@ function WorldSkillsPopup({ isOpen, onClose, isLoading, worldSkills, worldSkills
       isOpen={isOpen}
       onClose={onClose}
     >
-      <form className="popup__form popup__form_type_large" name="worldskills-form" action="#" noValidate onSubmit={handleSubmit}>
+      <form className="popup__form popup__form_type_large" name="ws-popup-form" action="#" noValidate onSubmit={handleSubmit}>
         <h3 className="initial-popup__title">Выбор компетенций WorldSkills</h3>
 
         {
@@ -115,8 +101,8 @@ function WorldSkillsPopup({ isOpen, onClose, isLoading, worldSkills, worldSkills
                 className="input-search"
                 placeholder="поиск по названию"
                 type="text"
-                id="search-input-name"
-                name="search-input-name"
+                id="search-ws-popup-input-name"
+                name="search-ws-popup-input-name"
                 autoComplete="off"
                 value={searchName}
                 onChange={handleSearchByName}
@@ -128,8 +114,8 @@ function WorldSkillsPopup({ isOpen, onClose, isLoading, worldSkills, worldSkills
                 className="input-search"
                 placeholder="поиск по коду"
                 type="text"
-                id="search-input-code"
-                name="search-input-code"
+                id="search-ws-popup-input-code"
+                name="search-ws-popup-input-code"
                 autoComplete="off"
                 value={searchCode}
                 onChange={handleSearchByCode}
@@ -159,7 +145,7 @@ function WorldSkillsPopup({ isOpen, onClose, isLoading, worldSkills, worldSkills
       </form>
     </Popup>
 
-    <AddWorldSkillsPopup isOpen={isShowAddPopup} onClose={closeAllPopups} onAdd={handleAddDocument} />
+    <AddWorldSkillsPopup isOpen={isShowAddPopup} onClose={closeAllPopups} onAdd={onAdd} />
 
     </>
   )

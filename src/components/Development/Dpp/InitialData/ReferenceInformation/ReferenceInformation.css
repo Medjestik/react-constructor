@@ -18,13 +18,6 @@
   transition: .3s;
   position: relative;
 }
-.reference-information__item-img {
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
-  object-position: center;
-  margin-right: 20px;
-}
 .reference-information__item-info {
   display: flex;
   flex-direction: column;

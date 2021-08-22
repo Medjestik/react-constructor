@@ -29,6 +29,17 @@
   background-color: var(--secondary-color);
   margin: 0px 10px 0px 0px;
 }
+.questions__btn_type_block {
+  pointer-events: none;
+  user-select: none;
+  background-color: var(--background-main-color);
+  color: var(--background-third-color);
+}
+.questions__btn_type_block::after {
+  content: '';
+  background-image: url('../../../../images/save-block.png');
+  background-repeat: no-repeat;
+}
 .questions__nav-menu {
   display: -webkit-flex;
   display: flex;

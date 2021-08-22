@@ -42,7 +42,7 @@ import ISOPopup from './ISOPopup/ISOPopup.js';
 import PNSTPopup from './PNSTPopup/PNSTPopup.js';
 import OfficialSitePopup from './OfficialSitePopup/OfficialSitePopup.js';
 import TextbookPopup from './TextbookPopup/TextbookPopup.js';
-import tehn from '../../../images/nsi/tehn.png';
+import DefineNsiImg from '../../Define/DefineNsiImg/DefineNsiImg.js';
 
 function NsiPopup({ isOpen, onClose, nsiTypes, onAdd }) {       
   const [isFederalLawPopupOpen, setIsFederalLawPopupOpen] = React.useState(false);  
@@ -86,7 +86,9 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd }) {
   const [isPNSTPopupOpen, setIsPNSTPopupOpen] = React.useState(false);
   const [isOfficialSitePopupOpen, setIsOfficialSitePopupOpen] = React.useState(false);
   const [isTextbookPopupPopupOpen, setIsTextbookPopupPopupOpen] = React.useState(false);
-  const [currentElemId, setCurrentElemId] = React.useState(0); 
+  const [currentElemId, setCurrentElemId] = React.useState(0);
+  const [searchText, setSearchText] = React.useState('');
+  const [filteredNsiTypes, setFilteredNsiTypes] = React.useState([]);
 
   const emptyNsi = {
     nsiDate: "",
@@ -132,6 +134,28 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd }) {
     }
     return d+" "+s+" "+y;
   }
+  
+
+  function searchByType(e) {
+    setSearchText(e.target.value);
+  }
+
+  React.useEffect(() => {
+    const currentNsi = nsiTypes.filter((item) => {
+      return item.name.toLowerCase().includes(searchText.toLocaleLowerCase());
+    })
+    console.log(currentNsi);
+    setFilteredNsiTypes(currentNsi);
+  }, [nsiTypes, searchText]);
+
+  React.useEffect(() => {
+    setFilteredNsiTypes(nsiTypes);
+    setSearchText('');
+    return () => {
+      setFilteredNsiTypes([]);
+    };
+    // eslint-disable-next-line
+  }, [isOpen]);
 
   function federalLawPopupOpen(id) {
     setIsFederalLawPopupOpen(true);
@@ -382,470 +406,181 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd }) {
     setIsTextbookPopupPopupOpen(false);
   }
 
-  function defineNsiType(type) { 
+  function defineNsiPopup(type) {  
     switch (type.id) {
       case 9: /* Федеральный закон */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => federalLawPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 10: /* Закон РФ */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => russiaLawPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 11: /* Кодекс РФ */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => russiaCodexPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 12: /* Указ Президента РФ */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => presidentEdictPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 13: /* Постановление Правительства РФ */ 
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => governmentDecreePopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 14: /* Распоряжение Правительства РФ */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => governmentOrderPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 15: /* Паспорт национального проекта */ 
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => passportNationalProjectPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 16: /* Поручение Президента РФ */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => presidentAssignmentPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 17: /* Паспорт федерального проекта */ 
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => passportFederalProjectPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 18: /* Паспорт проекта */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => passportProjectPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 19: /* Порядок */ 
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => orderPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 20: /* Регламент */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => regulationPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 21: /* Технический регламент таможенного союза */ 
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => technicalRegulationPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 22: /* Постановление Госстроя России */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => russiaConstructionResolutionPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 23: /* Приказ Минобрнауки России */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => orderRussiaSciencePopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 24: /* Приказ Минтранса России */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => orderRussiaTransportPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 25: /* Приказ Госстроя России */ 
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => orderRussiaGosConstructionPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 26: /* Приказ Минстроя России */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => orderRussiaMinConstructionPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 27: /* Приказ Федеральной службы */ 
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => orderFederalServicePopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 28: /* Распоряжение Минобрнауки России */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => dispositionRussiaSciencePopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 29: /* Распоряжение Минтранса России */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => dispositionRussiaTransportPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 30: /* Распоряжение Минстроя России */ 
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p> 
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => dispositionRussiaMinConstructionPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 31: /* Распоряжение Федеральной службы */ 
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => dispositionFederalServicePopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 32: /* Методические рекомендации */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => guidelinesPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 33: /* Примерная программа */ 
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => sampleProgramPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 35: /* Требования */ 
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => requirementsPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 36: /* Каталог */ 
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => catalogPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 37: /* ГОСТ Р */ 
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => standardRPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 38: /* ГОСТ */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => standardPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 39: /* ОДМ */ 
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => odmPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 40: /* СТО */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => stoPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 41: /* СПО */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => spoPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 42: /* ГСН (Сборник) */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => gsnPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 43: /* СНиПы */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => snipPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 44: /* СП */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => spPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 45: /* ЕНИР */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => enirPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 46: /* ТУ */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => tyPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 47: /* ISO */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => isoPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 48: /* Учебники, монографии */ 
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => textbookPopupOpen(type.id)}>Выбрать</button>
-          </>
         )
       case 49: /* ПНСТ */
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => pnstPopupOpen(type.id)}>Выбрать</button>
-          </>
         )      
       case 50: /* Официальный сайт */ 
         return (
-          <>
-          <img className="nsi-popup__item-img" src={tehn} alt="иконка"></img>
-          <div className="nsi-popup__item-info">
-            <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
-            <p className="nsi-popup__item-description">{type.description || ""}</p>
-          </div>
           <button className="nsi-popup__item-btn" type="button" onClick={() => officialSitePopupOpen(type.id)}>Выбрать</button>
-          </>
         )    
       default:
         return (<div>Тип не загрузился</div>)
     }
   }
 
-
   React.useEffect(() => {
     setCurrentElemId(0);
     // eslint-disable-next-line
   }, [isOpen]);
-
 
   return (
     <>
@@ -855,11 +590,29 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd }) {
     >
       <div className="popup__form popup__form_type_large">
         <h3 className="initial-popup__title">Выберите тип источника</h3>
+          <div className="search nsi-seacrh">
+            <input
+            className="input-search"
+            placeholder="поиск по названию типа"
+            type="text"
+            id="search-input-nsi-type"
+            name="search-input-nsi-name"
+            autoComplete="off"
+            value={searchText}
+            onChange={searchByType}
+            >
+            </input>
+          </div>
         <ul className="nsi-popup__list">
           {
-            nsiTypes.map((type, i) => (
+            filteredNsiTypes.map((type, i) => (
               <li className="nsi-popup__item" key={i}>
-                {defineNsiType(type)}
+                <DefineNsiImg nsiId={type.id} />
+                <div className="nsi-popup__item-info">
+                  <h4 className="nsi-popup__item-name">{type.name || "Название"}</h4>
+                  <p className="nsi-popup__item-description">{type.description || ""}</p>
+                </div>
+                {defineNsiPopup(type)}
               </li>
             ))
           }

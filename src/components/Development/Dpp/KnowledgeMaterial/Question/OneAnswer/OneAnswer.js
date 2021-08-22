@@ -1,29 +1,26 @@
 import React from 'react';
 import './OneAnswer.css';
 
-function OneAnswer({ onDelete, answerText, answerId, isCorrect, onChangeAnswer, onChangeAnswerText }) {
+function OneAnswer({ onDelete, answer, onChangeAnswer, onChangeAnswerText }) {
 
   function handleChangeAnswerText(e) {
-    onChangeAnswerText(e.target.value, answerId);
+    onChangeAnswerText(e.target.value, answer.id);
   }
 
   function handleClickDelete() {
-    onDelete(answerId);
+    onDelete(answer.id);
   }
 
-  console.log(isCorrect);
-
-  
   return (
-    <li className="one-answer" id={answerId}>
+    <li className="one-answer" id={answer.id}>
       <label className="radio one-answer__radio">
         <input
           className="radio"
-          name="radio"
+          id={`one-answer-radio ${answer.id}`}
+          name="one-answer-radio"
           type="radio"
-          value=""
-          defaultChecked={isCorrect ? true : false}
-          onChange={() => {onChangeAnswer(answerId)}}
+          checked={answer.isCorrect ? true : false}
+          onChange={() => {onChangeAnswer(answer.id)}}
         >
         </input>
         <span></span>
@@ -31,11 +28,12 @@ function OneAnswer({ onDelete, answerText, answerId, isCorrect, onChangeAnswer, 
       <input
         className="one-answer__input"
         placeholder="Введите ответ"
-        value={answerText || ''}
+        value={answer.text || ''}
         onChange={handleChangeAnswerText}
         type="text"
-        id={answerId}
-        name={`one-answer ${answerId}`}
+        id={`one-answer-text ${answer.id}`}
+        name={`one-answer-text ${answer.id}`}
+        required
       >
       </input>
       <button className="questions__btn_type_delete" type="button" onClick={handleClickDelete}></button>

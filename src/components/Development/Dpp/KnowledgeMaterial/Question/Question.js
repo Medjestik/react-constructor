@@ -7,7 +7,7 @@ import SequenceAnswer from './SequenceAnswer/SequenceAnswer.js';
 import ConformityAnswer from './ConformityAnswer/ConformityAnswer.js';
 
 
-function Question({ currentQuestion, editQuestion, setEditQuestion }) {
+function Question({ editQuestion, setEditQuestion }) {
 
   const [questionText, setQuestionText] = React.useState(editQuestion.text);
   const [questionAnswers, setQuestionAnswers] = React.useState(editQuestion.answers);
@@ -68,12 +68,12 @@ function Question({ currentQuestion, editQuestion, setEditQuestion }) {
 
   function handleChangeAnswer(id) {
     let newAnswers = [];
-    if (editQuestion.type === "one-answer") {
+    if (editQuestion.questionType === "one-answer") {
       questionAnswers.forEach((elem) => {
         if (elem.id === id) {
-          newAnswers.push({ ...elem, isCorrect: true });
+          newAnswers.push({ ...elem, isCorrect: 1 });
         } else {
-          newAnswers.push({ ...elem, isCorrect: false });
+          newAnswers.push({ ...elem, isCorrect: 0 });
         }
       })
     } else {
@@ -103,7 +103,7 @@ function Question({ currentQuestion, editQuestion, setEditQuestion }) {
       setQuestionAnswers([]);
     }
     // eslint-disable-next-line
-  }, [editQuestion.text, editQuestion.answers]);
+  }, [editQuestion.answers, editQuestion.text]);
 
   const defineQuestionType = (type) => {
     if (type === 'multi-answer') {
@@ -113,13 +113,11 @@ function Question({ currentQuestion, editQuestion, setEditQuestion }) {
         <textarea value={questionText || ""} onChange={handleChangeQuestionText} className="question__text" name="question__text" placeholder="Введите текст вопроса"></textarea>
         <ul className="questions__answers">
           {
-            questionAnswers.map((answer, i) => (
+            questionAnswers.map((answer) => (
               <MultiAnswer
                 onDelete={handleDeleteAnswer}
                 key={answer.id}
-                answerText={answer.text}
-                answerId={answer.id}
-                isCorrect={answer.isCorrect}
+                answer={answer}
                 onChangeAnswer={handleChangeAnswer}
                 onChangeAnswerText={handleChangeAnswerText}
               /> 
@@ -139,9 +137,8 @@ function Question({ currentQuestion, editQuestion, setEditQuestion }) {
             questionAnswers.map((answer, i) => (
               <OpenAnswer 
                 onDelete={handleDeleteAnswer} 
-                key={answer.id} 
-                answerText={answer.text} 
-                answerId={answer.id} 
+                key={answer.id}
+                answer={answer}
                 index={i}
                 onChangeAnswerText={handleChangeAnswerText}
               />
@@ -161,9 +158,8 @@ function Question({ currentQuestion, editQuestion, setEditQuestion }) {
             questionAnswers.map((answer, i) => (
               <SequenceAnswer 
                 onDelete={handleDeleteAnswer} 
-                key={answer.id} 
-                answerText={answer.text} 
-                answerId={answer.id} 
+                key={answer.id}
+                answer={answer}
                 index={i}
                 onChangeAnswerText={handleChangeAnswerText}
               />
@@ -184,9 +180,7 @@ function Question({ currentQuestion, editQuestion, setEditQuestion }) {
               <ConformityAnswer
                 onDelete={handleDeleteAnswer}
                 key={answer.id}
-                firstPartText={answer.firstPart}
-                secondPartText={answer.secondPart}
-                answerId={answer.id}
+                answer={answer}
                 index={i}
                 onChangeFirstPartText={handleChangeFirstPartText}
                 onChangeSecondPartText={handleChangeSecondPartText}
@@ -203,13 +197,11 @@ function Question({ currentQuestion, editQuestion, setEditQuestion }) {
       <textarea value={questionText || ""} onChange={handleChangeQuestionText} className="question__text" name="question__text" placeholder="Введите текст вопроса"></textarea>
       <ul className="questions__answers">
         {
-          questionAnswers.map((answer, i) => (
+          questionAnswers.map((answer) => (
             <OneAnswer 
               onDelete={handleDeleteAnswer}
-              key={i}
-              answerText={answer.text}
-              answerId={answer.id}
-              isCorrect={answer.isCorrect}
+              key={answer.id}
+              answer={answer}
               onChangeAnswer={handleChangeAnswer}
               onChangeAnswerText={handleChangeAnswerText}
             />

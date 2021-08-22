@@ -7,7 +7,7 @@ import profstandartIcon from '../../../images/documents/profstandart.png';
 import etkcIcon from '../../../images/documents/etkc.png';
 import ekcIcon from '../../../images/documents/ekc.png';
 import worldskillsIcon from '../../../images/documents/worldskills.png';
-
+import organizationIcon from '../../../images/documents/organization.png';
 
 const AccordionChooseNewDocumentType = ({ onChoose }) => {
   const [active, setActive] = useState("");
@@ -18,7 +18,7 @@ const AccordionChooseNewDocumentType = ({ onChoose }) => {
   const content = useRef();
   const sensitive = useRef();
 
-  const questions = [
+  const documents = [
     {
       text: 'Федеральный государственный образовательный стандарт (ФГОС)',
       type: 'fgos',
@@ -49,7 +49,12 @@ const AccordionChooseNewDocumentType = ({ onChoose }) => {
       id: 5,
       img: worldskillsIcon,
     },
-
+    {
+      text: 'Корпоративные требования',
+      type: 'organization',
+      id: 6,
+      img: organizationIcon,
+    },
   ]
 
   const toggleAccordion = () => {
@@ -92,7 +97,7 @@ const AccordionChooseNewDocumentType = ({ onChoose }) => {
         className="accordion__content accordion__content_type_choose"
       >
         {
-          questions.map((elem, i) => (
+          documents.map((elem, i) => (
             <button key={i} type="button" onClick={() => handleClick(elem)} className="accordion__button">
               <img className="accordion__img_type_choose" src={elem.img} alt="иконка"></img>
               <p className="accordion__text_type_choose">{elem.text}</p>
