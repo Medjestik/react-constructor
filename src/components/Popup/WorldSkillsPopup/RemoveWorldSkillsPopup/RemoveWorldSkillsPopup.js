@@ -2,13 +2,13 @@ import React from 'react';
 import Popup from '../../Popup.js';
 import confirmIcon from '../../../../images/confirm.png';
 
-function RemoveProfStandartPopup({ isOpen, onClose, currentProfstandart, onRemove, isLoading, isErrorRequest }) {
+function RemoveWorldSkillsPopup({ isOpen, onClose, currentWorldSkills, onRemove, isLoading, isErrorRequest }) {
 
   const [error, setError] = React.useState({})
 
   function handleSubmit(e) {
     e.preventDefault();
-    onRemove(currentProfstandart.id, onClose);
+    onRemove(currentWorldSkills.id, onClose);
   }
 
   React.useEffect(() => {
@@ -26,9 +26,9 @@ function RemoveProfStandartPopup({ isOpen, onClose, currentProfstandart, onRemov
       isOpen={isOpen}
       onClose={onClose}
     >
-      <form className="popup__form popup__form_type_small" name="remove-pf-form" action="#" noValidate onSubmit={handleSubmit}>
+      <form className="popup__form popup__form_type_small" name="remove-ws-form" action="#" noValidate onSubmit={handleSubmit}>
         <img className="popup__icon" src={confirmIcon} alt="Иконка подтверждения"></img>
-        <h3 className="popup__title">Вы действительно хотите удалить профстандарт?</h3>
+        <h3 className="popup__title">Вы действительно хотите удалить компетенцию WorldSkills?</h3>
         <button className={`btn btn_type_delete ${isLoading ? "btn_type_loading" : ""}`} type="submit">{isLoading ? "Удаление.." : "Удалить"}</button>
         <span className={`popup__error-request ${error.isShow ? "popup__error-request_visible_show" : "popup__error-request_visible_hide"}`}>{error.text}</span>
       </form>
@@ -36,4 +36,4 @@ function RemoveProfStandartPopup({ isOpen, onClose, currentProfstandart, onRemov
     )
 }
 
-export default RemoveProfStandartPopup;
+export default RemoveWorldSkillsPopup;

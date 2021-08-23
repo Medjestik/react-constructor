@@ -2,6 +2,7 @@ import React from 'react';
 import './Tasks.css';
 import * as evaluationMaterialApi from '../../../../utils/evaluationMaterialApi/evaluationMaterialApi.js';
 import AddPracticalTask from './AddPracticalTask/AddPracticalTask.js';
+import TaskItem from './TaskItem/TaskItem.js';
 
 function Tasks({ loggedIn, dppDescription, tasks }) {
 
@@ -52,11 +53,8 @@ function Tasks({ loggedIn, dppDescription, tasks }) {
           <h5 className="practical-task__item-name">Добавленные задания</h5>
           <ul className="task__list">
             {
-              currentTasks.map((elem) => (
-                <li className="task__item" key={elem.id}>
-                  <span></span>
-                  {elem.name}
-                </li>
+              currentTasks.map((elem, i) => (
+                <TaskItem key={elem.id} task={elem} index={i} />
               ))
             }
           </ul>

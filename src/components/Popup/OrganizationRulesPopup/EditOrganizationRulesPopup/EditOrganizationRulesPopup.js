@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from '../../Popup.js';
 
-function AddOrganizationRulesPopup({ isOpen, onClose, onAdd, isLoading }) {
+function EditOrganizationRulesPopup({ isOpen, currentOrganizationRules, onClose, onEdit, isLoading }) {
 
   const [addName, setAddName] = React.useState('');
   const [addNameError, setAddNameError] = React.useState(false);
@@ -18,7 +18,7 @@ function AddOrganizationRulesPopup({ isOpen, onClose, onAdd, isLoading }) {
      fullName: addName + ". " + addText,
     }
 
-    onAdd(newDocument, onClose);
+    onEdit(newDocument, currentOrganizationRules.id, onClose);
   }
 
   function handleAddName(e) {
@@ -40,12 +40,12 @@ function AddOrganizationRulesPopup({ isOpen, onClose, onAdd, isLoading }) {
   }
 
   React.useEffect(() => {
-    setAddName('');
-    setAddText('');
+    setAddName(currentOrganizationRules.name);
+    setAddText(currentOrganizationRules.text);
     setAddNameError(false);
     setAddTextError(false);
     setIsBlockSubmitButton(true);
-  }, [isOpen]);
+  }, [currentOrganizationRules, isOpen]);
 
   React.useEffect(() => {
     if (
@@ -63,7 +63,7 @@ function AddOrganizationRulesPopup({ isOpen, onClose, onAdd, isLoading }) {
 
   return(
     <Popup isOpen={isOpen} onClose={onClose} >
-      <form className="popup__form popup__form_type_large" name="add-or-form" action="#" noValidate onSubmit={handleSubmit}>
+      <form className="popup__form popup__form_type_large" name="edit-or-form" action="#" noValidate onSubmit={handleSubmit}>
         <h3 className="initial-popup__title">Добавление нового корпоративного требования</h3>
         <ul className="initial-popup__list-input">
           <li className="initial-popup__item-input">
@@ -103,11 +103,11 @@ function AddOrganizationRulesPopup({ isOpen, onClose, onAdd, isLoading }) {
           {`${addName || "<Наименование документа>"}. ${addText || "<Описание документа>"}`}
         </p>
        
-        <button className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} type="submit">{isLoading ? "Добавление.." : "Добавить"}</button>
+        <button className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} type="submit">{isLoading ? "Сохранение.." : "Сохранить"}</button>
 
       </form>
     </Popup>
   )
 }
 
-export default AddOrganizationRulesPopup;
+export default EditOrganizationRulesPopup;

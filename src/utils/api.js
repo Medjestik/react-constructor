@@ -296,6 +296,19 @@ export const createWorldSkills = ({ token, document }) => {
   .then(res => handleResponse(res))
 };
 
+export const editWorldSkills = ({ token, id, document }) => {
+  return fetch(`${API_URL}/ws/${id}/update`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ document })
+  })
+  .then(res => handleResponse(res))
+};
+
 export const selectWorldSkills = ({ token, initialDataVersion, data }) => {
   return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/select_world_skills`, {
     method: 'POST',
@@ -305,6 +318,19 @@ export const selectWorldSkills = ({ token, initialDataVersion, data }) => {
       'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify({ data })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const removeWorldSkills = ({ token, id }) => {
+  return fetch(`${API_URL}/ws/${id}/destroy`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify()
   })
   .then(res => handleResponse(res))
 };
@@ -334,6 +360,19 @@ export const createOrganizationRules = ({ token, document }) => {
   .then(res => handleResponse(res))
 };
 
+export const editOrganizationRules = ({ token, id, document }) => {
+  return fetch(`${API_URL}/crs/${id}/update`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ document })
+  })
+  .then(res => handleResponse(res))
+};
+
 export const selectOrganizationRules = ({ token, initialDataVersion, data }) => {
   return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/select_corporate_requirements`, {
     method: 'POST',
@@ -343,6 +382,19 @@ export const selectOrganizationRules = ({ token, initialDataVersion, data }) => 
       'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify({ data })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const removeOrganizationRules = ({ token, id }) => {
+  return fetch(`${API_URL}/crs/${id}/destroy`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify()
   })
   .then(res => handleResponse(res))
 };

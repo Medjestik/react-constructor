@@ -3,18 +3,23 @@ import './WorldSkillsPopup.css';
 import Popup from '../Popup.js';
 import AddWorldSkillsPopup from './AddWorldSkillsPopup/AddWorldSkillsPopup.js';
 import WorldSkillsPopupItem from './WorldSkillsPopupItem/WorldSkillsPopupItem.js';
+import RemoveWorldSkillsPopup from './RemoveWorldSkillsPopup/RemoveWorldSkillsPopup.js';
+import EditWorldSkillsPopup from './EditWorldSkillsPopup/EditWorldSkillsPopup.js';
 
-function WorldSkillsPopup({ isOpen, onClose, isLoading, worldSkills, worldSkillsProgram, onSave, onAdd }) {
+function WorldSkillsPopup({ isOpen, onClose, isLoading, isLoadingPopup, worldSkills, worldSkillsProgram, onSave, onAdd, onEdit, onRemove, isErrorRequest }) {
 
   const [selectedWorldSkills, setSelectedWorldSkills] = React.useState([...worldSkillsProgram]);
-  const [currentWorldSkills, setCurrentWorldSkills] = React.useState([...worldSkills]);
+  const [filteredWorldSkills, setFilteredWorldSkills] = React.useState([...worldSkills]);
   const [searchName, setSearchName] = React.useState('');
   const [searchCode, setSearchCode] = React.useState('');
   const [isShowAddPopup, setIsShowAddPopup] = React.useState(false);
+  const [isShowEditPopup, setIsShowEditPopup] = React.useState(false);
+  const [isShowRemovePopup, setIsShowRemovePopup] = React.useState(false);
+  const [currentWorldSkills, setCurrentWorldSkills] = React.useState({});
 
   function handleSubmit(e) {
     e.preventDefault();
-    onSave(selectedWorldSkills);
+    onSave(selectedWorldSkills); 
   } 
 
   function showAddPopup() {
@@ -23,8 +28,22 @@ function WorldSkillsPopup({ isOpen, onClose, isLoading, worldSkills, worldSkills
 
   function closeAllPopups() {
     setIsShowAddPopup(false);
+    setIsShowEditPopup(false)
+    setIsShowRemovePopup(false);
   }
-  
+
+  function openRemovePopup(elem, hideMenu) {
+    setIsShowRemovePopup(true);
+    hideMenu();
+    setCurrentWorldSkills(elem);
+  }
+
+  function openEditPopup(elem, hideMenu) {  
+    setIsShowEditPopup(true);
+    hideMenu();
+    setCurrentWorldSkills(elem);
+  }
+
   function handleSearchByName(e) {
     setSearchName(e.target.value);
   }
@@ -39,7 +58,7 @@ function WorldSkillsPopup({ isOpen, onClose, isLoading, worldSkills, worldSkills
       const index = newWorldsSkills.findIndex(elem => elem.id === id);
       newWorldsSkills.splice(index, 1);
     } else {
-      currentWorldSkills.find((elem) => {
+      filteredWorldSkills.find((elem) => {
         if (elem.id === id) {
           return newWorldsSkills.push(elem);
         } else {
@@ -54,17 +73,17 @@ function WorldSkillsPopup({ isOpen, onClose, isLoading, worldSkills, worldSkills
     const filteredWorldSkills = worldSkills.filter((item) => {
       return item.name.toLowerCase().includes(searchName.toLowerCase()) && item.code.toLowerCase().includes(searchCode.toLowerCase());
     })
-    setCurrentWorldSkills(filteredWorldSkills)
+    setFilteredWorldSkills(filteredWorldSkills)
   }, [worldSkills, searchName, searchCode]);
 
   React.useEffect(() => {
     setSelectedWorldSkills([...worldSkillsProgram]);
-    setCurrentWorldSkills([...worldSkills]);
+    setFilteredWorldSkills([...worldSkills]);
     setSearchName('');
     setSearchCode('');
     return () => {
       setSelectedWorldSkills([]);
-      setCurrentWorldSkills([]);
+      setFilteredWorldSkills([]);
     };
     // eslint-disable-next-line
   }, [isOpen]);
@@ -80,7 +99,7 @@ function WorldSkillsPopup({ isOpen, onClose, isLoading, worldSkills, worldSkills
         <h3 className="initial-popup__title">Выбор компетенций WorldSkills</h3>
 
         {
-          isLoading ?
+          isLoadingPopup ?
           <figure className="preloader preloader_type_popup">
             <i className="preloader__circle"></i>
             <figcaption className="preloader__caption">Идёт загрузка...</figcaption>
@@ -127,25 +146,57 @@ function WorldSkillsPopup({ isOpen, onClose, isLoading, worldSkills, worldSkills
 
           <ul className="initial-popup__list">
           {
-            currentWorldSkills.map((item, i) => (
+            filteredWorldSkills.map((item, i) => (
               <WorldSkillsPopupItem
               item={item}
               i={i}
               key={i}
               selectedWorldSkills={selectedWorldSkills}
               onChange={handleChangeWorldSkills}
+              onEdit={openEditPopup}
+              onRemove={openRemovePopup}
               />
             ))
           }
           </ul>
           </>
         }
-        <button className="btn btn_type_save world-skills__btn-save" type="submit">Сохранить</button>
-
+        <button className={`btn btn_type_save profstandart__btn-save ${isLoading ? "btn_type_loading" : ""}`} type="submit">{isLoading ? "Сохранение.." : "Сохранить"}</button>
       </form>
     </Popup>
 
-    <AddWorldSkillsPopup isOpen={isShowAddPopup} onClose={closeAllPopups} onAdd={onAdd} />
+    {
+      isShowAddPopup && 
+      <AddWorldSkillsPopup
+      isOpen={isShowAddPopup} 
+      onClose={closeAllPopups} 
+      onAdd={onAdd} 
+      isLoading={isLoading}
+      />
+    }
+
+    {
+      isShowEditPopup &&
+      <EditWorldSkillsPopup 
+      isOpen={isShowEditPopup} 
+      currentWorldSkills={currentWorldSkills} 
+      onClose={closeAllPopups} 
+      onEdit={onEdit}
+      isLoading={isLoading}
+      />
+    }
+
+    {
+      isShowRemovePopup &&
+      <RemoveWorldSkillsPopup 
+      isOpen={isShowRemovePopup} 
+      currentWorldSkills={currentWorldSkills} 
+      onClose={closeAllPopups} 
+      onRemove={onRemove}
+      isLoading={isLoading}
+      isErrorRequest={isErrorRequest}
+      />
+    }
 
     </>
   )

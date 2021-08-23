@@ -347,7 +347,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
     api.removeProfStandarts({ token: token, id: id })
     .then((res) => {
       closeRemovePopup();
-      const newProfStandart = profStandarts.filter((elem) => (elem.id !== res.id));
+      const newProfStandart = profStandarts.filter((elem) => elem.id !== res);
       setProfStandarts(newProfStandart);
     })
     .catch((err) => {
@@ -459,6 +459,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
   /* WorldSkills */
 
   function handleAddWorldSkills(newDocument, closeAddPopup) { 
+    setIsLoading(true);
     const token = localStorage.getItem("token");
     api.createWorldSkills({ token: token, document: newDocument })
     .then((res) => {
@@ -471,7 +472,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
   }
 
   function worldSkillsPopupOpen() {
-    setIsLoading(true);
+    setIsLoadingPopup(true);
     closeInitialDataPopups();
     setIsWorldSkillsPopupOpen(true);
     const token = localStorage.getItem("token");
@@ -482,10 +483,11 @@ function InitialData({ loggedIn, history, dppDescription }) {
     .catch((err) => {
       console.error(err);
     })
-    .finally(() => setIsLoading(false));
+    .finally(() => setIsLoadingPopup(false));
   }
 
   function handleSelectWorldSkills(worldSkills) {
+    setIsLoading(true);
     const worldSkillsId = worldSkills.map(elem => elem.id);
     const token = localStorage.getItem("token");
     if (loggedIn) {
@@ -501,13 +503,50 @@ function InitialData({ loggedIn, history, dppDescription }) {
       .catch((err) =>{
         console.log(err);
       })
+      .finally(() => setIsLoading(false));
     }
+  }
+
+  function handleEditWorldSkills(newDocument, id, closeAddPopup) {
+    setIsLoading(true);
+    const token = localStorage.getItem("token");
+    api.editWorldSkills({ token: token, id: id, document: newDocument })
+    .then((res) => {
+      closeAddPopup();
+      const index = worldSkills.indexOf(worldSkills.find((elem) => (elem.id === id)));
+      setWorldSkills([...worldSkills.slice(0, index), res, ...worldSkills.slice(index + 1)]);
+      const indexProgram = worldSkillsProgram.indexOf(worldSkillsProgram.find((elem) => (elem.id === id)));
+      setWorldSkillsProgram([...worldSkillsProgram.slice(0, indexProgram), res, ...worldSkillsProgram.slice(indexProgram + 1)]);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => setIsLoading(false));
+  }
+
+  function handleRemoveWorldSkills(id, closeRemovePopup) {
+    setIsErrorRequest({ text: "", isShow: false });
+    setIsLoading(true);
+    const token = localStorage.getItem("token");
+    api.removeWorldSkills({ token: token, id: id })
+    .then((res) => {
+      closeRemovePopup();
+      const newWorldSkills = worldSkills.filter((elem) => elem.id !== res);
+      setWorldSkills(newWorldSkills);
+    })
+    .catch((err) => {
+      console.error(err);
+      if (err.status === 403) {
+        setIsErrorRequest({ text: "Удаление невозможно. Данный документ используется в другой программе.", isShow: true });
+      }
+    })
+    .finally(() => setIsLoading(false));
   }
 
   /* Корпоративные требования */
 
   function organizationRulesPopupOpen() {
-    setIsLoading(true);
+    setIsLoadingPopup(true);
     closeInitialDataPopups();
     setIsOrganizationRulesPopupOpen(true);
     const token = localStorage.getItem("token");
@@ -518,11 +557,11 @@ function InitialData({ loggedIn, history, dppDescription }) {
     .catch((err) => {
       console.error(err);
     })
-    .finally(() => setIsLoading(false));
+    .finally(() => setIsLoadingPopup(false));
   }
 
   function handleAddOrganizationRules(newDocument, closeAddPopup) { 
-
+    setIsLoading(true);
     const token = localStorage.getItem("token");
     api.createOrganizationRules({ token: token, document: newDocument })
     .then((res) => {
@@ -532,11 +571,29 @@ function InitialData({ loggedIn, history, dppDescription }) {
     .catch((err) => {
       console.error(err);
     })
+    .finally(() => setIsLoading(false));
+  }
+
+  function handleEditOrganizationRules(newDocument, id, closeAddPopup) {
+    setIsLoading(true);
+    const token = localStorage.getItem("token");
+    api.editOrganizationRules({ token: token, id: id, document: newDocument })
+    .then((res) => {
+      closeAddPopup();
+      const index = organizationRules.indexOf(worldSkills.find((elem) => (elem.id === id)));
+      setOrganizationRules([...organizationRules.slice(0, index), res, ...organizationRules.slice(index + 1)]);
+      const indexProgram = organizationRulesProgram.indexOf(organizationRulesProgram.find((elem) => (elem.id === id)));
+      setOrganizationRulesProgram([...organizationRulesProgram.slice(0, indexProgram), res, ...organizationRulesProgram.slice(indexProgram + 1)]);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => setIsLoading(false));
   }
 
   function handleSelectOrganizationRules(organizationRules) {
+    setIsLoading(true);
     const organizationRulesId = organizationRules.map(elem => elem.id);
-    
     const token = localStorage.getItem("token");
     if (loggedIn) {
       api.selectOrganizationRules({ 
@@ -551,7 +608,27 @@ function InitialData({ loggedIn, history, dppDescription }) {
       .catch((err) =>{
         console.log(err);
       })
+      .finally(() => setIsLoading(false));
     }
+  }
+
+  function handleRemoveOrganizationRules(id, closeRemovePopup) {
+    setIsErrorRequest({ text: "", isShow: false });
+    setIsLoading(true);
+    const token = localStorage.getItem("token");
+    api.removeOrganizationRules({ token: token, id: id })
+    .then((res) => {
+      closeRemovePopup();
+      const newOrganizationRules = organizationRules.filter((elem) => elem.id !== res);
+      setOrganizationRules(newOrganizationRules);
+    })
+    .catch((err) => {
+      console.error(err);
+      if (err.status === 403) {
+        setIsErrorRequest({ text: "Удаление невозможно. Данный документ используется в другой программе.", isShow: true });
+      }
+    })
+    .finally(() => setIsLoading(false));
   }
 
 
@@ -1097,10 +1174,14 @@ function InitialData({ loggedIn, history, dppDescription }) {
           isOpen={isWorldSkillsPopupOpen}
           onClose={closeInitialDataPopups}
           isLoading={isLoading}
+          isLoadingPopup={isLoadingPopup}
           worldSkills={worldSkills}
           worldSkillsProgram={worldSkillsProgram}
           onSave={handleSelectWorldSkills}
           onAdd={handleAddWorldSkills}
+          onEdit={handleEditWorldSkills}
+          onRemove={handleRemoveWorldSkills}
+          isErrorRequest={isErrorRequest}
         />
       }
 
@@ -1111,10 +1192,14 @@ function InitialData({ loggedIn, history, dppDescription }) {
           isOpen={isOrganizationRulesPopupOpen}
           onClose={closeInitialDataPopups}
           isLoading={isLoading}
+          isLoadingPopup={isLoadingPopup}
           organizationRules={organizationRules}
           organizationRulesProgram={organizationRulesProgram}
           onSave={handleSelectOrganizationRules}
           onAdd={handleAddOrganizationRules}
+          onEdit={handleEditOrganizationRules}
+          onRemove={handleRemoveOrganizationRules}
+          isErrorRequest={isErrorRequest}
         />
       }
 

@@ -1,8 +1,7 @@
 import React from 'react';
-import './AddWorldSkillsPopup.css';
 import Popup from '../../Popup.js';
 
-function EditWorldSkillsPopup({ isOpen, onClose, onAdd }) {
+function EditWorldSkillsPopup({ isOpen, currentWorldSkills, onClose, onEdit, isLoading }) {
 
   const [addName, setAddName] = React.useState('');
   const [addNameError, setAddNameError] = React.useState(false);
@@ -19,7 +18,7 @@ function EditWorldSkillsPopup({ isOpen, onClose, onAdd }) {
      fullName: addCode + " " + addName,
     }
 
-    onAdd(newDocument, onClose);
+    onEdit(newDocument, currentWorldSkills.id, onClose);
   }
 
   function handleAddName(e) {
@@ -41,12 +40,12 @@ function EditWorldSkillsPopup({ isOpen, onClose, onAdd }) {
   }
 
   React.useEffect(() => {
-    setAddName('');
-    setAddCode('');
+    setAddName(currentWorldSkills.name);
+    setAddCode(currentWorldSkills.code);
     setAddNameError(false);
     setAddCodeError(false);
     setIsBlockSubmitButton(true);
-  }, [isOpen]);
+  }, [currentWorldSkills ,isOpen]);
 
   React.useEffect(() => {
     if (
@@ -64,7 +63,7 @@ function EditWorldSkillsPopup({ isOpen, onClose, onAdd }) {
 
   return(
     <Popup isOpen={isOpen} onClose={onClose} >
-      <form className="popup__form popup__form_type_large" name="add-ws-form" action="#" noValidate onSubmit={handleSubmit}>
+      <form className="popup__form popup__form_type_large" name="edit-ws-form" action="#" noValidate onSubmit={handleSubmit}>
         <h3 className="initial-popup__title">Добавление новой компетенции WorldSkills</h3>
         <ul className="initial-popup__list-input">
           <li className="initial-popup__item-input">
@@ -110,7 +109,7 @@ function EditWorldSkillsPopup({ isOpen, onClose, onAdd }) {
           `}
         </p>
        
-        <button className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""}`} type="submit">Добавить</button>
+        <button className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} type="submit">{isLoading ? "Сохранение.." : "Сохранить"}</button>
 
       </form>
     </Popup>

@@ -2,7 +2,7 @@ import React from 'react';
 import './AddWorldSkillsPopup.css';
 import Popup from '../../Popup.js';
 
-function AddWorldSkillsPopup({ isOpen, onClose, onAdd }) {
+function AddWorldSkillsPopup({ isOpen, onClose, onAdd, isLoading }) {
 
   const [addName, setAddName] = React.useState('');
   const [addNameError, setAddNameError] = React.useState(false);
@@ -110,7 +110,7 @@ function AddWorldSkillsPopup({ isOpen, onClose, onAdd }) {
           `}
         </p>
        
-        <button className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""}`} type="submit">Добавить</button>
+        <button className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} type="submit">{isLoading ? "Добавление.." : "Добавить"}</button>
 
       </form>
     </Popup>

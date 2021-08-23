@@ -3,13 +3,18 @@ import './OrganizationRulesPopup.css';
 import Popup from '../Popup.js';
 import AddOrganizationRulesPopup from './AddOrganizationRulesPopup/AddOrganizationRulesPopup.js';
 import OrganizationRulesPopupItem from './OrganizationRulesPopupItem/OrganizationRulesPopupItem.js';
+import EditOrganizationRulesPopup from './EditOrganizationRulesPopup/EditOrganizationRulesPopup.js';
+import RemoveOrganizationRulesPopup from './RemoveOrganizationRulesPopup/RemoveOrganizationRulesPopup.js';
 
-function OrganizationRulesPopup({ isOpen, onClose, isLoading, organizationRules, organizationRulesProgram, onSave, onAdd }) {
+function OrganizationRulesPopup({ isOpen, onClose, isLoading, isLoadingPopup, organizationRules, organizationRulesProgram, onSave, onAdd, onEdit, onRemove, isErrorRequest }) {
 
   const [selectedOrganizationRules, setSelectedOrganizationRules] = React.useState([...organizationRulesProgram]);
-  const [currentOrganizationRules, setCurrentOrganizationRules] = React.useState([...organizationRules]);
+  const [filteredOrganizationRules, setFilteredOrganizationRules] = React.useState([...organizationRules]);
   const [searchName, setSearchName] = React.useState('');
   const [isShowAddPopup, setIsShowAddPopup] = React.useState(false);
+  const [isShowEditPopup, setIsShowEditPopup] = React.useState(false);
+  const [isShowRemovePopup, setIsShowRemovePopup] = React.useState(false);
+  const [currentOrganizationRules, setCurrentOrganizationRules] = React.useState({});
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -22,6 +27,20 @@ function OrganizationRulesPopup({ isOpen, onClose, isLoading, organizationRules,
 
   function closeAllPopups() {
     setIsShowAddPopup(false);
+    setIsShowEditPopup(false)
+    setIsShowRemovePopup(false);
+  }
+
+  function openRemovePopup(elem, hideMenu) {
+    setIsShowRemovePopup(true);
+    hideMenu();
+    setCurrentOrganizationRules(elem);
+  }
+
+  function openEditPopup(elem, hideMenu) {  
+    setIsShowEditPopup(true);
+    hideMenu();
+    setCurrentOrganizationRules(elem);
   }
   
   function handleSearchByName(e) {
@@ -35,7 +54,7 @@ function OrganizationRulesPopup({ isOpen, onClose, isLoading, organizationRules,
       const index = newOrganizationRules.findIndex(elem => elem.id === id);
       newOrganizationRules.splice(index, 1);
     } else {
-      currentOrganizationRules.find((elem) => {
+      filteredOrganizationRules.find((elem) => {
         if (elem.id === id) {
           return newOrganizationRules.push(elem);
         } else {
@@ -50,16 +69,16 @@ function OrganizationRulesPopup({ isOpen, onClose, isLoading, organizationRules,
     const filteredOrganizationRules = organizationRules.filter((item) => {
       return item.name.toLowerCase().includes(searchName.toLowerCase());
     })
-    setCurrentOrganizationRules(filteredOrganizationRules)
+    setFilteredOrganizationRules(filteredOrganizationRules)
   }, [organizationRules, searchName]);
 
   React.useEffect(() => {
     setSelectedOrganizationRules([...organizationRulesProgram]);
-    setCurrentOrganizationRules([...organizationRules]);
+    setFilteredOrganizationRules([...organizationRules]);
     setSearchName('');
     return () => {
       setSelectedOrganizationRules([]);
-      setCurrentOrganizationRules([]);
+      setFilteredOrganizationRules([]);
     };
     // eslint-disable-next-line
   }, [isOpen]);
@@ -75,7 +94,7 @@ function OrganizationRulesPopup({ isOpen, onClose, isLoading, organizationRules,
         <h3 className="initial-popup__title">Выбор корпоративных требований</h3>
 
         {
-          isLoading ?
+          isLoadingPopup ?
           <figure className="preloader preloader_type_popup">
             <i className="preloader__circle"></i>
             <figcaption className="preloader__caption">Идёт загрузка...</figcaption>
@@ -109,13 +128,15 @@ function OrganizationRulesPopup({ isOpen, onClose, isLoading, organizationRules,
 
           <ul className="initial-popup__list">
           {
-            currentOrganizationRules.map((item, i) => (
+            filteredOrganizationRules.map((item, i) => (
               <OrganizationRulesPopupItem
               item={item}
               i={i}
               key={i}
               selectedOrganizationRules={selectedOrganizationRules} 
               onChange={handleChangeWorldSkills}
+              onEdit={openEditPopup}
+              onRemove={openRemovePopup}
               />
             ))
           }
@@ -127,7 +148,38 @@ function OrganizationRulesPopup({ isOpen, onClose, isLoading, organizationRules,
       </form>
     </Popup>
 
-    <AddOrganizationRulesPopup isOpen={isShowAddPopup} onClose={closeAllPopups} onAdd={onAdd} />    
+    {
+      isShowAddPopup && 
+      <AddOrganizationRulesPopup
+      isOpen={isShowAddPopup} 
+      onClose={closeAllPopups} 
+      onAdd={onAdd} 
+      isLoading={isLoading}
+      />
+    } 
+
+    {
+      isShowEditPopup &&
+      <EditOrganizationRulesPopup
+      isOpen={isShowEditPopup} 
+      currentOrganizationRules={currentOrganizationRules} 
+      onClose={closeAllPopups} 
+      onEdit={onEdit}
+      isLoading={isLoading}
+      />
+    }
+
+    {
+      isShowRemovePopup &&
+      <RemoveOrganizationRulesPopup
+      isOpen={isShowRemovePopup} 
+      currentOrganizationRules={currentOrganizationRules} 
+      onClose={closeAllPopups} 
+      onRemove={onRemove}
+      isLoading={isLoading}
+      isErrorRequest={isErrorRequest}
+      />
+    }
 
     </>
   )
