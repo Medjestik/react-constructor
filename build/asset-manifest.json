@@ -1,17 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.3b5accb0.chunk.css",
-    "main.js": "/static/js/main.a4d92605.chunk.js",
-    "main.js.map": "/static/js/main.a4d92605.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.94a5f05f.js",
-    "runtime-main.js.map": "/static/js/runtime-main.94a5f05f.js.map",
-    "static/js/2.ee22184e.chunk.js": "/static/js/2.ee22184e.chunk.js",
-    "static/js/2.ee22184e.chunk.js.map": "/static/js/2.ee22184e.chunk.js.map",
-    "static/js/3.e4ca9489.chunk.js": "/static/js/3.e4ca9489.chunk.js",
-    "static/js/3.e4ca9489.chunk.js.map": "/static/js/3.e4ca9489.chunk.js.map",
+    "main.css": "/static/css/main.df199a28.chunk.css",
+    "main.js": "/static/js/main.bedefe8e.chunk.js",
+    "main.js.map": "/static/js/main.bedefe8e.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.fb14dca7.js",
+    "runtime-main.js.map": "/static/js/runtime-main.fb14dca7.js.map",
+    "static/css/2.ae36708e.chunk.css": "/static/css/2.ae36708e.chunk.css",
+    "static/js/2.89c7389d.chunk.js": "/static/js/2.89c7389d.chunk.js",
+    "static/js/2.89c7389d.chunk.js.map": "/static/js/2.89c7389d.chunk.js.map",
+    "static/js/3.0e2bd286.chunk.js": "/static/js/3.0e2bd286.chunk.js",
+    "static/js/3.0e2bd286.chunk.js.map": "/static/js/3.0e2bd286.chunk.js.map",
     "index.html": "/index.html",
-    "static/css/main.3b5accb0.chunk.css.map": "/static/css/main.3b5accb0.chunk.css.map",
-    "static/js/2.ee22184e.chunk.js.LICENSE.txt": "/static/js/2.ee22184e.chunk.js.LICENSE.txt",
+    "static/css/2.ae36708e.chunk.css.map": "/static/css/2.ae36708e.chunk.css.map",
+    "static/css/main.df199a28.chunk.css.map": "/static/css/main.df199a28.chunk.css.map",
+    "static/js/2.89c7389d.chunk.js.LICENSE.txt": "/static/js/2.89c7389d.chunk.js.LICENSE.txt",
     "static/media/index.css": "/static/media/Raleway-Thin.48c8c234.eot",
     "static/media/avatar-default.249de024.png": "/static/media/avatar-default.249de024.png",
     "static/media/ZoonChart.css": "/static/media/delete-color.38111e2a.png",
@@ -24,9 +26,10 @@
     "static/media/sequence-answer-icon.75a3aea8.png": "/static/media/sequence-answer-icon.75a3aea8.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.94a5f05f.js",
-    "static/js/2.ee22184e.chunk.js",
-    "static/css/main.3b5accb0.chunk.css",
-    "static/js/main.a4d92605.chunk.js"
+    "static/js/runtime-main.fb14dca7.js",
+    "static/css/2.ae36708e.chunk.css",
+    "static/js/2.89c7389d.chunk.js",
+    "static/css/main.df199a28.chunk.css",
+    "static/js/main.bedefe8e.chunk.js"
   ]
 }
