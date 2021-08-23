@@ -54,7 +54,19 @@ export const deleteQuestion = ({ token, omId, questionId }) => {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     },
-    body: JSON.stringify({ })
+  })
+  .then(res => handleResponse(res));
+};
+
+export const createTask = ({ token, omId, task }) => { 
+  return fetch(`${API_URL}/om/${omId}/tasks`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ task })
   })
   .then(res => handleResponse(res));
 };

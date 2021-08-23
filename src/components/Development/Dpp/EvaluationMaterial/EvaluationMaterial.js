@@ -3,6 +3,8 @@ import './EvaluationMaterial.css';
 import * as evaluationMaterialApi from '../../../../utils/evaluationMaterialApi/evaluationMaterialApi.js';
 import AccordionChooseKnowledge from '../../../Accordion/AccordionChooseKnowledge/AccordionChooseKnowledge.js';
 import KnowledgeMaterial from '../KnowledgeMaterial/KnowledgeMaterial.js';
+import Tasks from '../Tasks/Tasks.js'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 function EvaluationMaterial({ dppDescription, loggedIn }) {
 
@@ -10,6 +12,7 @@ function EvaluationMaterial({ dppDescription, loggedIn }) {
   const [questionTypes, setQuestionTypes] = React.useState([]);
   const [currentKnowledge, setCurrentKnowledge] = React.useState({});
   const [isRenderKnowledge, setIsRenderKnowledge] = React.useState(false);
+  const [tasks, setTasks] = React.useState([]);
 
   const [isLoadingKnowledges, setIsLoadingKnowledges] = React.useState(false);
 
@@ -22,6 +25,7 @@ function EvaluationMaterial({ dppDescription, loggedIn }) {
           console.log(res);
           setKnowledges(res.knowledges);
           setQuestionTypes(res.questionTypes);
+          setTasks(res.tasks);
         })
         .catch((err) => {
             console.error(err);
@@ -66,26 +70,37 @@ function EvaluationMaterial({ dppDescription, loggedIn }) {
   return (
     <div className="evaluation-material">
       <h1 className="main__title">Проектирование оценочных материалов</h1>
-      <p className="main__subtitle">Для работы с оценочными материалами выберите знание</p>
+      <Tabs className="tabs">
+        <TabList className="tab-list">
+          <Tab className="tab">Проектирование оценочных материалов к знаниям</Tab>
+          <Tab className="tab">Проектирование оценочных материалов к умениям и навыкам</Tab>
+        </TabList>
+        <TabPanel>
+        <p className="main__subtitle">Для работы с оценочными материалами выберите знание</p>
 
-      {
-        !isLoadingKnowledges &&
-        <AccordionChooseKnowledge 
-          children={knowledges} 
-          renderKnowledge={findKnowledge}
-        />
-      }
-      
-      {
-        isRenderKnowledge &&
+        {
+          !isLoadingKnowledges &&
+          <AccordionChooseKnowledge 
+            children={knowledges} 
+            renderKnowledge={findKnowledge}
+          />
+        }
 
-        <KnowledgeMaterial
-          dppDescription={dppDescription}
-          currentKnowledge={currentKnowledge}
-          questionTypes={questionTypes}
-          loggedIn={loggedIn}
-        />
-      }
+        {
+          isRenderKnowledge &&
+
+          <KnowledgeMaterial
+            dppDescription={dppDescription}
+            currentKnowledge={currentKnowledge} 
+            questionTypes={questionTypes}
+            loggedIn={loggedIn}
+          />
+        }
+        </TabPanel>
+        <TabPanel>
+          <Tasks loggedIn={loggedIn} dppDescription={dppDescription} tasks={tasks} />
+        </TabPanel>
+      </Tabs>
 
     </div>
   );

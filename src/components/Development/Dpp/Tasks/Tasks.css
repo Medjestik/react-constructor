@@ -1,0 +1,59 @@
+.task__add {
+  margin: 30px 0px 20px;
+}
+.task__add-menu {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-y: hidden;
+  transition: all .3s ease-in-out;
+}
+.task__add-menu_type_show {
+  height: 96px;
+}
+.task__add-menu_type_hide {
+  height: 0px;
+}
+.task__menu-btn {
+  background-color: var(--main-color);
+  border-radius: 0%;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 18px;
+  text-align: center;
+  letter-spacing: 1.2px;
+  padding: 15px;
+  min-width: 227px;
+  outline: none;
+  transition: .3s ease-in-out;
+}
+.task__add-btn_type_show {
+  border-radius: 0%;
+}
+.task__add-btn_type_show::after {
+  transform: rotate(180deg);
+}
+.task__add-btn_type_hide::after {
+  transform: rotate(0deg);
+}
+.task__list {
+  list-style-type: none;
+  padding: 0px;
+  margin: 10px 0px 0px 0px;
+  width: 100%;
+}
+.task__item {
+  width: 100%;
+  margin: 0px 0px 15px 0px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  background-color: var(--white-color);
+  border: 2px solid var(--border-card-color);
+  box-sizing: border-box;
+  border-radius: 10px;
+  transition: .3s;
+  position: relative;
+}

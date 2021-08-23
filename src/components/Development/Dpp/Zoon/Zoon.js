@@ -103,12 +103,12 @@ function Zoon({ dppDescription, loggedIn }) {
         isRendering ?
         <Preloader />
         :
-        <Tabs className="zoon_tabs">
-          <TabList className="zoon_tab-list">
-            <Tab className="zoon_tab">В виде графа</Tab>
-            <Tab className="zoon_tab">В виде списка</Tab>
-            <Tab className="zoon_tab">Типология ДПП</Tab>
-            <Tab className="zoon_tab">Экспорт</Tab>
+        <Tabs className="tabs">
+          <TabList className="tab-list">
+            <Tab className="tab">В виде графа</Tab>
+            <Tab className="tab">В виде списка</Tab>
+            <Tab className="tab">Типология ДПП</Tab>
+            <Tab className="tab">Экспорт</Tab>
           </TabList>
           <TabPanel>
             <div className="zoon__container">
