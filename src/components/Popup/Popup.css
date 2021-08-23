@@ -195,3 +195,20 @@
 .popup__choose-file {
   margin: 20px 0px;
 }
+.popup__error-request {
+  margin: 10px 0px 0px 0px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--third-light-color);
+  text-align: center;
+  transition: .3s ease-in-out;
+  max-width: 350px;
+}
+.popup__error-request_visible_show {
+  opacity: 1;
+}
+.popup__error-request_visible_hide {
+  opacity: 0;
+}

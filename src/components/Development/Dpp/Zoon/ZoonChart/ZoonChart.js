@@ -368,7 +368,12 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
     const token = localStorage.getItem("token");
     api.disconnectNode({ token: token, zoonVersion: dppDescription.zun_version_id, node: node })
     .then(() => {
-      node.pid = null;
+      let nodeIndex = nodes.indexOf(node);
+      if (node.type === 'Навык') {
+        nodes[nodeIndex].pid = "c";
+      } else {
+        nodes[nodeIndex].pid = "s";
+      }
       zoon.draw(OrgChart.action.init);
     })
     .catch((err) => {
@@ -390,9 +395,6 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
   function closeAddNsiPopup() {
     setIsAddNsiPopupOpen(false);
   }
-
-
-
 
   function removeLinkPopupOpen(nodeId, zoon) {
     const node = nodes.find(el=> el.id === nodeId);

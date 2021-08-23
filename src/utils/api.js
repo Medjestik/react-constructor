@@ -8,7 +8,7 @@ function handleResponse (res) {
     }
 }
 
-export const login= ({ email, password }) => {
+export const login = ({ email, password }) => {
   return fetch(`${API_URL}/auth/login`, {
     method: 'POST', 
     headers: {
@@ -156,6 +156,19 @@ export const createProfStandarts = ({ token, document }) => {
   .then(res => handleResponse(res))
 };
 
+export const editProfStandarts = ({ token, id, document }) => {
+  return fetch(`${API_URL}/profstandarts/${id}/update`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ document })
+  })
+  .then(res => handleResponse(res))
+};
+
 export const selectProfStandarts = ({ token, initialDataVersion, data }) => {
   return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/select_profstandarts`, {
     method: 'POST',
@@ -165,6 +178,19 @@ export const selectProfStandarts = ({ token, initialDataVersion, data }) => {
       'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify({ data })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const removeProfStandarts = ({ token, id }) => {
+  return fetch(`${API_URL}/profstandarts/${id}/destroy`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify()
   })
   .then(res => handleResponse(res))
 };
@@ -309,7 +335,7 @@ export const createOrganizationRules = ({ token, document }) => {
 };
 
 export const selectOrganizationRules = ({ token, initialDataVersion, data }) => {
-  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/select_crs`, {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/select_corporate_requirements`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',

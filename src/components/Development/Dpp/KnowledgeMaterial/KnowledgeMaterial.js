@@ -19,6 +19,7 @@ function KnowledgeMaterial({ dppDescription, currentKnowledge, questionTypes, lo
     setCurrentQuestion(question);
     setEditQuestion(question);
     setIsRenderQuestion(true);
+    setIsDefineTypeOfQuestion(false);
   }
 
   function chooseNewQuestionType() {

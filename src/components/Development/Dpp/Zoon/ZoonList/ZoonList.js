@@ -7,6 +7,53 @@ function ZoonList({ dppDescription, loggedIn }) {
 
   const [zoon, setZoon] = React.useState([]);
   const [isRendering, setIsRendering] = React.useState(true); 
+  const [competence, setCompetence] = React.useState([]);
+  const [crossKnowledge, setCrossKnowledge] = React.useState([]);
+  const [zoonWithoutCompetence, setZoonWithoutCompetence] = React.useState([]);
+
+  console.log(zoon);
+
+  function defineChildrenCompetence(id) {
+    const childrenFirst = zoon.zoons.filter((elem) => (elem.pid === id));
+    return childrenFirst.map((elem) => {
+      const childrenSecond = zoon.zoons.filter((zoon) => (zoon.pid === elem.id));
+      return (
+        <li className="zoon-list__item" key={elem.id}>
+          <p className={`zoon-list__name 
+          ${elem.tags[0] === "skill" ? "name_type_skill" : ""}
+          ${elem.tags[0] === "ability" ? "name_type_ability" : ""}
+          ${elem.tags[0] === "knowledge" ? "name_type_knowledge" : ""}
+          `}>{elem.name}</p>
+          <ul className="zoon-list__list">
+            {
+              childrenSecond.map((elem) => {
+                const childrenThird = zoon.zoons.filter((zoon) => (zoon.pid === elem.id));
+                return (
+                  <li className="zoon-list__item" key={elem.id}>
+                    <p className={`zoon-list__name 
+                    ${elem.tags[0] === "skill" ? "name_type_skill" : ""}
+                    ${elem.tags[0] === "ability" ? "name_type_ability" : ""}
+                    ${elem.tags[0] === "knowledge" ? "name_type_knowledge" : ""}
+                    `}>{elem.name}</p>
+                    <ul className="zoon-list__list">
+                      {
+                        childrenThird.map((elem) => (
+                          <li className="zoon-list__item" key={elem.id}>
+                            <p className="zoon-list__name name_type_knowledge">{elem.name}</p>
+                          </li>
+                        ))
+                      }
+                    </ul>
+                  </li>
+                )
+              })
+            }
+          </ul>
+        </li>
+      )
+    })
+  }
+    
 
   React.useEffect(() => {
     if (loggedIn) {
@@ -14,8 +61,13 @@ function ZoonList({ dppDescription, loggedIn }) {
       setIsRendering(true);
       api.getZoon({ token: token, dppId: dppDescription.id, zoonVersion: dppDescription.zun_version_id, })
       .then((res) => {
-        console.log(res)
         setZoon(res);
+        const competence = res.zoons.filter((elem) => (elem.type === "Компетенция"));
+        setCompetence(competence);
+        const crossKnowledge = res.zoons.filter((elem) => (elem.pid === "th"));
+        setCrossKnowledge(crossKnowledge);
+        const zoonWithoutCompetence = res.zoons.filter((elem) => (elem.pid && elem.pid.length === 1));
+        setZoonWithoutCompetence(zoonWithoutCompetence);
       })
       .catch((err) => {
         console.error(err);
@@ -57,14 +109,50 @@ function ZoonList({ dppDescription, loggedIn }) {
           </li>
         </ul>
 
-        <h3 className="zoon-list__title">Компоненты ЗУН</h3>
-        <ul>
+        <h3 className="zoon-list__title">Сформированные компетенции</h3>
+        <ul className="zoon-list__list">
           {
-            zoon.zoons.map((elem) => (
-              <li key={elem.id}>{elem.name}</li>
+            competence.map((elem) => (
+              <li className="zoon-list__item" key={elem.id}>
+                <p className="zoon-list__name name_type_competence">{elem.name}</p>
+                <ul className="zoon-list__list">
+                  {defineChildrenCompetence(elem.id)}
+                </ul>
+              </li>
             ))
           }
         </ul>
+
+        <h3 className="zoon-list__title">Сквозные знания</h3>
+        <ul className="zoon-list__list">
+          {
+            crossKnowledge.map((elem) => (
+              <li key={elem.id} className="zoon-list__item">
+                <p className="zoon-list__name name_type_cross-knowledge">{elem.name}</p>
+              </li>
+            ))
+          }
+        </ul>
+
+        <h3 className="zoon-list__title">Элементы, не прикрепленные к компетенциям</h3>
+        <ul className="zoon-list__list">
+          {
+            zoonWithoutCompetence.map((elem) => (
+              <li className="zoon-list__item" key={elem.id}>
+                <p className={`zoon-list__name                     
+                ${elem.tags[0] === "skill" ? "name_type_skill" : ""}
+                ${elem.tags[0] === "ability" ? "name_type_ability" : ""}
+                ${elem.tags[0] === "knowledge" ? "name_type_knowledge" : ""}
+                `}
+                >{elem.name}</p>
+                <ul className="zoon-list__list">
+                  {defineChildrenCompetence(elem.id)}
+                </ul>
+              </li>
+            ))
+          }
+        </ul>
+
         </>
       }
     </div>

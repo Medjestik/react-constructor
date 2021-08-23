@@ -1,9 +1,8 @@
 import React from 'react';
-import './AddProfStandartPopup.css';
 import Popup from '../../Popup.js';
 import InputMask from "react-input-mask";
 
-function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) {
+function EditProfStandartPopup({ isOpen, currentProfstandart, onClose, onEdit, printDate, isLoading }) {
 
   const [addNameText, setAddNameText] = React.useState('');
   const [addNameTextError, setAddNameTextError] = React.useState(false);
@@ -36,7 +35,7 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
      fullName: addFullName,
     }
 
-    onAdd(newProfStandart, onClose);
+    onEdit(newProfStandart, currentProfstandart.id, onClose);
   }
 
   function handleAddName(e) {
@@ -106,14 +105,14 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
   }
 
   React.useEffect(() => {
-    setAddNameText('');
-    setAddNameCode('');
-    setAddOrderNumber('');
-    setAddOrderDate('');
-    setAddRegistrationDate('');
-    setAddRegistrationNumber('');
-    setAddNameQual('');
-    setAddLinkQual('');
+    setAddNameText(currentProfstandart.nameText);
+    setAddNameCode(currentProfstandart.nameCode);
+    setAddOrderNumber(currentProfstandart.orderNumber);
+    setAddOrderDate(currentProfstandart.orderDate);
+    setAddRegistrationDate(currentProfstandart.registrationDate);
+    setAddRegistrationNumber(currentProfstandart.registrationNumber);
+    setAddNameQual(currentProfstandart.nameQual || "");
+    setAddLinkQual(currentProfstandart.linkQual || "");
     setAddNameTextError(false);
     setAddNameCodeError(false);
     setAddOrderDateError(false);
@@ -121,7 +120,7 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
     setAddRegistrationDateError(false);
     setAddRegistrationNumberError(false);
     setIsBlockSubmitButton(true);
-  }, [isOpen]);
+  }, [currentProfstandart, isOpen]);
 
   React.useEffect(() => {
     if (
@@ -162,7 +161,7 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
 
   return(
     <Popup isOpen={isOpen} onClose={onClose} >
-      <form className="popup__form popup__form_type_large" name="add-pf-form" action="#" noValidate onSubmit={handleSubmit}>
+      <form className="popup__form popup__form_type_large" name="edit-pf-form" action="#" noValidate onSubmit={handleSubmit}>
         <h3 className="initial-popup__title">Добавление нового профессионального стандарта</h3>
         <ul className="initial-popup__list-input">
           <li className="initial-popup__item-input">
@@ -171,8 +170,8 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
             className="initial-popup__input"
             placeholder="введите название профстандарта"
             type="text"
-            id="add-pf-input-name"
-            name="add-pf-input-name"
+            id="edit-pf-input-name"
+            name="edit-pf-input-name"
             autoComplete="off"
             value={addNameText}
             onChange={handleAddName}
@@ -187,8 +186,8 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
             className="initial-popup__input"
             placeholder="введите код профстандарта"
             type="text"
-            id="add-pf-input-code"
-            name="add-pf-input-code"
+            id="edit-pf-input-code"
+            name="edit-pf-input-code"
             autoComplete="off"
             value={addNameCode}
             onChange={handleAddCode}
@@ -207,8 +206,8 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
                 className="initial-popup__input"
                 placeholder="введите дату приказа Минтруда России"
                 type="date"
-                id="add-pf-input-order-date"
-                name="add-pf-input-order-date"
+                id="edit-pf-input-order-date"
+                name="edit-pf-input-order-date"
                 autoComplete="off"
                 value={addOrderDate}
                 onChange={handleAddOrderDate}
@@ -222,8 +221,8 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
                 className="initial-popup__input"
                 placeholder="введите номер приказа Минтруда России"
                 type="number"
-                id="add-pf-input-order-number"
-                name="add-pf-input-order-number"
+                id="edit-pf-input-order-number"
+                name="edit-pf-input-order-number"
                 autoComplete="off"
                 value={addOrderNumber}
                 onChange={handleAddOrderNumber}
@@ -238,8 +237,8 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
                 className="initial-popup__input"
                 placeholder="введите дату приказа Минюста России"
                 type="date"
-                id="add-pf-input-registration-date"
-                name="add-pf-input-registration-date"
+                id="edit-pf-input-registration-date"
+                name="edit-pf-input-registration-date"
                 autoComplete="off"
                 value={addRegistrationDate}
                 onChange={handleAddRegistrationDate}
@@ -253,8 +252,8 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
                 className="initial-popup__input"
                 placeholder="введите регистрационный номер"
                 type="number"
-                id="add-pf-input-registration-number"
-                name="add-pf-input-registration-number"
+                id="edit-pf-input-registration-number"
+                name="edit-pf-input-registration-number"
                 autoComplete="off"
                 pattern="[0-9]*"
                 value={addRegistrationNumber}
@@ -273,8 +272,8 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
             className="initial-popup__input"
             placeholder="введите название квалификации"
             type="text"
-            id="add-pf-input-qual"
-            name="add-pf-input-qual"
+            id="edit-pf-input-qual"
+            name="edit-pf-input-qual"
             autoComplete="off"
             value={addNameQual}
             onChange={handleAddQual}
@@ -287,8 +286,8 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
             className="initial-popup__input"
             placeholder="введите url ссылки"
             type="url"
-            id="add-pf-input-link"
-            name="add-pf-input-link"
+            id="edit-pf-input-link"
+            name="edit-pf-input-link"
             autoComplete="off"
             value={addLinkQual}
             onChange={handleLinkQual}
@@ -301,11 +300,11 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
           {addFullName}
         </p>
        
-        <button className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} type="submit">{isLoading ? "Добавление.." : "Добавить"}</button>
+        <button className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} type="submit">{isLoading ? "Сохранение.." : "Сохранить"}</button>
 
       </form>
     </Popup>
   )
 }
 
-export default AddProfStandartPopup;
+export default EditProfStandartPopup;

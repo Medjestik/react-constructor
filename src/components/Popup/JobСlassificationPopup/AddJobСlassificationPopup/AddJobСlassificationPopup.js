@@ -38,7 +38,12 @@ function AddJobСlassificationPopup({ isOpen, onClose, onAdd, printDate }) {
      chapterName: addNameChapter,
      nameProfession: addNameProfession,
      issueNumber: addIssueNumber,
+     rank: addRank,
+     organType: addOrganType,
+     documentType: addDocumentType,
+     editionNumber: addEditionNumber,
      editionDate: addEditionDate,
+     fullName: addFullName,
     }
 
     onAdd(newJobСlassification, onClose);

@@ -11,6 +11,7 @@ import JobСlassificationPopup from '../../../Popup/JobСlassificationPopup/Job�
 import JobDirectoryPopup from '../../../Popup/JobDirectoryPopup/JobDirectoryPopup.js';
 import WorldSkillsPopup from '../../../Popup/WorldSkillsPopup/WorldSkillsPopup.js';
 import OrganizationRulesPopup from '../../../Popup/OrganizationRulesPopup/OrganizationRulesPopup.js';
+import RemoveProgramDocumentPopup from '../../../Popup/RemoveProgramDocumentPopup/RemoveProgramDocumentPopup.js';
 import TypicalStructure from './TypicalStructure/TypicalStructure.js';
 import EditPartPopup from '../../../Popup/EditPartPopup/EditPartPopup.js';
 import RemovePartPopup from '../../../Popup/RemovePartPopup/RemovePartPopup.js';
@@ -29,6 +30,11 @@ function InitialData({ loggedIn, history, dppDescription }) {
 
   const [isRendering, setIsRendering] = React.useState(true);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoadingPopup, setIsLoadingPopup] = React.useState(false);
+  const [isErrorRequest, setIsErrorRequest] = React.useState({
+    text: "",
+    isShow: false,
+  })
 
   const [profLevels, setProfLevels] = React.useState([]);
   const [selectedProfLevels, setSelectedProfLevels] = React.useState([]);
@@ -56,6 +62,9 @@ function InitialData({ loggedIn, history, dppDescription }) {
   const [organizationRules, setOrganizationRules] = React.useState([]);
   const [organizationRulesProgram, setOrganizationRulesProgram] = React.useState([]);
   const [isOrganizationRulesPopupOpen, setIsOrganizationRulesPopupOpen] = React.useState(false);
+
+  const [currentProgramDocument, setCurrentProgramDocument] = React.useState({ id: "", type: "", });
+  const [isRemoveProgramDocumentPopupOpen, setIsRemoveProgramDocumentPopupOpen] = React.useState(false);
 
   const [newCompetence, setNewCompetence] = React.useState();
   const [userQualification, setUserQualification] = React.useState('');
@@ -180,6 +189,12 @@ function InitialData({ loggedIn, history, dppDescription }) {
     }
   }
 
+  function openRemoveProgramDocumentPopup(id, type) {
+    setCurrentProgramDocument( { id: id, type: type });
+    setIsRemoveProgramDocumentPopupOpen(true);
+  }
+
+
   function handleRemoveProgramDocument(id, type) {
     const token = localStorage.getItem("token");
     if (loggedIn) {
@@ -205,6 +220,9 @@ function InitialData({ loggedIn, history, dppDescription }) {
             break;
           case "ws":
             setWorldSkillsProgram(res);
+            break;
+          case "cr":
+            setOrganizationRulesProgram(res);
             break;
           default:
             alert( "Нет таких значений" );
@@ -256,7 +274,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
   /* Профстандарты */
 
   function profStandartPopupOpen() {
-    setIsLoading(true);
+    setIsLoadingPopup(true);
     closeInitialDataPopups();
     setIsProfStandartPopupOpen(true);
     const token = localStorage.getItem("token");
@@ -267,10 +285,11 @@ function InitialData({ loggedIn, history, dppDescription }) {
     .catch((err) => {
       console.error(err);
     })
-    .finally(() => setIsLoading(false));
+    .finally(() => setIsLoadingPopup(false));
   }
 
   function handleAddProfStandart(newDocument, closeAddPopup) {
+    setIsLoading(true);
     const token = localStorage.getItem("token");
     api.createProfStandarts({ token: token, document: newDocument })
     .then((res) => {
@@ -280,10 +299,28 @@ function InitialData({ loggedIn, history, dppDescription }) {
     .catch((err) => {
       console.error(err);
     })
-    //.finally(() => setIsLoading(false));
+    .finally(() => setIsLoading(false));
+  }
+
+  function handleEditProfStandart(newDocument, id, closeAddPopup) {
+    setIsLoading(true);
+    const token = localStorage.getItem("token");
+    api.editProfStandarts({ token: token, id: id, document: newDocument })
+    .then((res) => {
+      closeAddPopup();
+      const index = profStandarts.indexOf(profStandarts.find((elem) => (elem.id === id)));
+      setProfStandarts([...profStandarts.slice(0, index), res, ...profStandarts.slice(index + 1)]);
+      const indexProgram = profStandartsProgram.indexOf(profStandartsProgram.find((elem) => (elem.id === id)));
+      setProfStandartsProgram([...profStandartsProgram.slice(0, indexProgram), res, ...profStandartsProgram.slice(indexProgram + 1)]);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => setIsLoading(false));
   }
 
   function handleSelectProfStandart(profStandart) {
+    setIsLoading(true);
     const profStandartId = profStandart.map(elem => elem.id);
     const token = localStorage.getItem("token");
     if (loggedIn) {
@@ -299,7 +336,27 @@ function InitialData({ loggedIn, history, dppDescription }) {
       .catch((err) =>{
         console.log(err);
       })
+      .finally(() => setIsLoading(false));
     }
+  }
+
+  function handleRemoveProfStandart(id, closeRemovePopup) {
+    setIsErrorRequest({ text: "", isShow: false });
+    setIsLoading(true);
+    const token = localStorage.getItem("token");
+    api.removeProfStandarts({ token: token, id: id })
+    .then((res) => {
+      closeRemovePopup();
+      const newProfStandart = profStandarts.filter((elem) => (elem.id !== res.id));
+      setProfStandarts(newProfStandart);
+    })
+    .catch((err) => {
+      console.error(err);
+      if (err.status === 403) {
+        setIsErrorRequest({ text: "Удаление невозможно. Данный документ используется в другой программе.", isShow: true });
+      }
+    })
+    .finally(() => setIsLoading(false));
   }
 
   /* ЕТКС */
@@ -479,6 +536,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
 
   function handleSelectOrganizationRules(organizationRules) {
     const organizationRulesId = organizationRules.map(elem => elem.id);
+    
     const token = localStorage.getItem("token");
     if (loggedIn) {
       api.selectOrganizationRules({ 
@@ -672,6 +730,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
     setIsOpenChoosePartsPopup(false);
     setIsNsiPopupOpen(false);
     setIsRemoveNsiPopupOpen(false);
+    setIsRemoveProgramDocumentPopupOpen(false);
   }
 
   function closeOverlayPopups() {
@@ -679,6 +738,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
     setIsOpenRemovePartPopup(false);
     setIsOpenChoosePartsPopup(false);
     setIsRemoveNsiPopupOpen(false);
+    setIsRemoveProgramDocumentPopupOpen(false);
   }
 
   useOnClickOverlay(closeOverlayPopups);
@@ -706,6 +766,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
           setTypologies(initialData.typologies);
           setTypologiesParts(initialData.typology_parts);
           setNsiProgram(initialData.nsis);
+          setOrganizationRulesProgram(initialData.corporate_requirements);
         })
         .catch((err) => {
           console.error(err);
@@ -726,6 +787,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
       setTypologies([]);
       setTypologiesParts([]);
       setNsiProgram([]);
+      setOrganizationRulesProgram([]);
   }
   }, [loggedIn, dppDescription]);
   
@@ -769,7 +831,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
                       <div className="initial-data__documents-tags">
                         <span className="initial-data__documents-type">ФГОС</span>
                         <span className="initial-data__documents-code">{elem.code || "xx.xxx"}</span>
-                        <button className="initial-data__documents-delete-btn" type="button" onClick={() => handleRemoveProgramDocument(elem.id, "fgos")}></button>
+                        <button className="initial-data__documents-delete-btn" type="button" onClick={() => openRemoveProgramDocumentPopup(elem.id, "fgos")}></button>
                       </div>
                       <h4 className="initial-data__documents-name">{elem.name || "название"}</h4>
                     </div>
@@ -784,7 +846,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
                       <div className="initial-data__documents-tags">
                         <span className="initial-data__documents-type">Профстандарт</span>
                         <span className="initial-data__documents-code">{elem.nameCode || "xx.xxx"}</span>
-                        <button className="initial-data__documents-delete-btn" type="button" onClick={() => handleRemoveProgramDocument(elem.id, "prof")}></button>
+                        <button className="initial-data__documents-delete-btn" type="button" onClick={() => openRemoveProgramDocumentPopup(elem.id, "prof")}></button>
                       </div>
                       <h4 className="initial-data__documents-name">{elem.nameText || "название"}</h4>
                       <p className="initial-data__documents-order">{`приказ Минтруда России от ${elem.orderDate || "xx.xx.20xx"} г. № ${elem.orderNumber || "xxxx"}н (зарегистрирован Министерством юстиции Российской Федерации ${elem.registrationDate || "xx.xx.20xx"} г., регистрационный № ${elem.registrationNumber || "xxxxx"}`}</p>
@@ -800,7 +862,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
                       <div className="initial-data__documents-tags">
                         <span className="initial-data__documents-type">ЕТКС</span>
                         <span className="initial-data__documents-code">{elem.nameProfession || "xx.xxx"}</span>
-                        <button className="initial-data__documents-delete-btn" type="button" onClick={() => handleRemoveProgramDocument(elem.id, "etkc")}></button>
+                        <button className="initial-data__documents-delete-btn" type="button" onClick={() => openRemoveProgramDocumentPopup(elem.id, "etkc")}></button>
                       </div>
                       <h4 className="initial-data__documents-name">{elem.chapterName || "название"}</h4>
                       <p className="initial-data__documents-order">{`Выпуск № ${elem.issueNumber || "xx"}. Дата редакции ${elem.editionDate || "xx.xx.20xx"} г.`}</p>
@@ -816,7 +878,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
                       <div className="initial-data__documents-tags">
                         <span className="initial-data__documents-type">ЕКС</span>
                         <span className="initial-data__documents-code">{elem.nameProfession || "xx.xxx"}</span>
-                        <button className="initial-data__documents-delete-btn" type="button"onClick={() => handleRemoveProgramDocument(elem.id, "ekc")}></button>
+                        <button className="initial-data__documents-delete-btn" type="button"onClick={() => openRemoveProgramDocumentPopup(elem.id, "ekc")}></button>
                       </div>
                       <h4 className="initial-data__documents-name">{elem.chapterName || "название"}</h4>
                       <p className="initial-data__documents-order">{`Дата редакции ${elem.editionDate || "xx.xx.20xx"} г.`}</p>
@@ -832,9 +894,24 @@ function InitialData({ loggedIn, history, dppDescription }) {
                       <div className="initial-data__documents-tags">
                         <span className="initial-data__documents-type">WorldSkills</span>
                         <span className="initial-data__documents-code">{elem.code || "xxx"}</span>
-                        <button className="initial-data__documents-delete-btn" type="button" onClick={() => handleRemoveProgramDocument(elem.id, "ws")}></button>
+                        <button className="initial-data__documents-delete-btn" type="button" onClick={() => openRemoveProgramDocumentPopup(elem.id, "ws")}></button>
                       </div>
                       <h4 className="initial-data__documents-name">{elem.name || "название"}</h4>
+                    </div>
+                  </li>
+                ))
+              }
+              {
+                organizationRulesProgram.map((elem, i) => (
+                  <li className="initial-data__documents-item" key={`world-${i}`}>
+                    <img className="initial-data__documents-img" src={worldskillsIcon} alt="иконка worldskills"></img>
+                    <div className="initial-data__documents-info">
+                      <div className="initial-data__documents-tags">
+                        <span className="initial-data__documents-type">Корпоративные требования</span>
+                        <button className="initial-data__documents-delete-btn" type="button" onClick={() => openRemoveProgramDocumentPopup(elem.id, "cr")}></button>
+                      </div>
+                      <h4 className="initial-data__documents-name">{elem.name || "<название>"}</h4>
+                      <p className="initial-data__documents-order">{`Дата редакции ${elem.text || "<описание>"} г.`}</p>
                     </div>
                   </li>
                 ))
@@ -977,10 +1054,14 @@ function InitialData({ loggedIn, history, dppDescription }) {
           isOpen={isProfStandartPopupOpen}
           onClose={closeInitialDataPopups}
           isLoading={isLoading}
+          isLoadingPopup={isLoadingPopup}
           profStandarts={profStandarts}
           profStandartsProgram={profStandartsProgram}
           onSave={handleSelectProfStandart}
           onAdd={handleAddProfStandart}
+          onEdit={handleEditProfStandart}
+          onRemove={handleRemoveProfStandart}
+          isErrorRequest={isErrorRequest}
         />
       }
 
@@ -1034,6 +1115,17 @@ function InitialData({ loggedIn, history, dppDescription }) {
           organizationRulesProgram={organizationRulesProgram}
           onSave={handleSelectOrganizationRules}
           onAdd={handleAddOrganizationRules}
+        />
+      }
+
+      {
+        isRemoveProgramDocumentPopupOpen &&
+        <RemoveProgramDocumentPopup
+          isOpen={isRemoveProgramDocumentPopupOpen}
+          onClose={closeInitialDataPopups}  
+          document={currentProgramDocument}
+          onRemove={handleRemoveProgramDocument}
+          isLoading={isLoading}
         />
       }
 

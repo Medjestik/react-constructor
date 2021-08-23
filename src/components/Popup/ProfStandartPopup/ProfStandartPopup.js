@@ -3,14 +3,19 @@ import './ProfStandartPopup.css';
 import Popup from '../../Popup/Popup.js';
 import ProfStandartPopupItem from './ProfStandartPopupItem/ProfStandartPopupItem.js';
 import AddProfStandartPopup from './AddProfStandartPopup/AddProfStandartPopup.js';
+import EditProfStandartPopup from './EditProfStandartPopup/EditProfStandartPopup.js';
+import RemoveProfStandartPopup from './RemoveProfStandartPopup/RemoveProfStandartPopup.js';
 
-function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStandartsProgram, onSave, onAdd }) {
+function ProfStandartPopup({ isOpen, onClose, isLoading, isLoadingPopup, profStandarts, profStandartsProgram, onSave, onAdd, onEdit, onRemove, isErrorRequest }) {
 
   const [selectedProfStandart, setSelectedProfStandart] = React.useState([ ...profStandartsProgram]);
   const [filteredProfStandart, setFilteredProfStandart] = React.useState([...profStandarts]);
   const [searchName, setSearchName] = React.useState('');
   const [searchCode, setSearchCode] = React.useState('');
   const [isShowAddPopup, setIsShowAddPopup] = React.useState(false);
+  const [isShowEditPopup, setIsShowEditPopup] = React.useState(false);
+  const [isShowRemovePopup, setIsShowRemovePopup] = React.useState(false);
+  const [currentProfstandart, setCurrentProfstandart] = React.useState({});
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -23,8 +28,22 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
     setSearchCode('');
   }
 
+  function showEditPopup(elem, hideMenu) {  
+    setIsShowEditPopup(true)
+    hideMenu();
+    setCurrentProfstandart(elem);
+  }
+
+  function openRemovePopup(elem, hideMenu) {
+    setIsShowRemovePopup(true);
+    hideMenu();
+    setCurrentProfstandart(elem);
+  }
+
   function closeAllPopups() {
     setIsShowAddPopup(false);
+    setIsShowEditPopup(false);
+    setIsShowRemovePopup(false);
   }
 
   function handleSearchByName(e) {
@@ -104,10 +123,10 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
       onClose={onClose}
     >
       <form className="popup__form popup__form_type_large" name="pf-popup-form" action="#" noValidate onSubmit={handleSubmit}>
-        <h3 className="initial-popup__title">Выбор профессиональных стандартов</h3>
+        <h3 className="initial-popup__title">Редактирование профессиональных стандартов</h3>
 
         {
-          isLoading ?
+          isLoadingPopup ?
           <figure className="preloader preloader_type_popup">
             <i className="preloader__circle"></i>
             <figcaption className="preloader__caption">Идёт загрузка...</figcaption>
@@ -161,6 +180,8 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
                 key={i}
                 selectedProfStandart={selectedProfStandart}
                 onChange={handleChangeProfStandart}
+                onEdit={showEditPopup}
+                onRemove={openRemovePopup}
                 printDate={printDate}
                 />
               ))
@@ -169,12 +190,45 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, profStandarts, profStan
           </>
 
         }
-        <button className="btn btn_type_save profstandart__btn-save" type="submit">Сохранить</button>
-
+        <button className={`btn btn_type_save profstandart__btn-save ${isLoading ? "btn_type_loading" : ""}`} type="submit">{isLoading ? "Сохранение.." : "Сохранить"}</button>
       </form>
     </Popup>
 
-    <AddProfStandartPopup isOpen={isShowAddPopup} onClose={closeAllPopups} onAdd={onAdd} printDate={printDate} />
+    {
+      isShowAddPopup && 
+      <AddProfStandartPopup 
+      isOpen={isShowAddPopup} 
+      onClose={closeAllPopups} 
+      onAdd={onAdd} 
+      printDate={printDate}
+      isLoading={isLoading}
+      />
+    }
+
+    {
+      isShowEditPopup &&
+      <EditProfStandartPopup 
+      isOpen={isShowEditPopup} 
+      currentProfstandart={currentProfstandart} 
+      onClose={closeAllPopups} 
+      printDate={printDate}
+      onEdit={onEdit}
+      isLoading={isLoading}
+      />
+    }
+
+    {
+      isShowRemovePopup &&
+      <RemoveProfStandartPopup 
+      isOpen={isShowRemovePopup} 
+      currentProfstandart={currentProfstandart} 
+      onClose={closeAllPopups} 
+      onRemove={onRemove}
+      isLoading={isLoading}
+      isErrorRequest={isErrorRequest}
+      />
+    }
+
     </>
   )
 }
