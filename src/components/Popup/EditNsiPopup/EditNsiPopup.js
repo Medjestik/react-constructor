@@ -137,7 +137,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 14: /* Распоряжение Правительства РФ */
         return (
-          <FederalLawPopup
+          <GovernmentOrderPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -150,7 +150,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 15: /* Паспорт национального проекта */ 
         return (
-          <FederalLawPopup
+          <PassportNationalProjectPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -163,7 +163,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 16: /* Поручение Президента РФ */
         return (
-          <FederalLawPopup
+          <PresidentAssignmentPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -176,7 +176,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 17: /* Паспорт федерального проекта */ 
         return (
-          <FederalLawPopup
+          <PassportFederalProjectPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -189,7 +189,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 18: /* Паспорт проекта */
         return (
-          <FederalLawPopup
+          <PassportProjectPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -202,7 +202,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 19: /* Порядок */ 
         return (
-          <FederalLawPopup
+          <OrderPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -215,7 +215,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 20: /* Регламент */
         return (
-          <FederalLawPopup
+          <RegulationPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -228,7 +228,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 21: /* Технический регламент таможенного союза */ 
         return (
-          <FederalLawPopup
+          <TechnicalRegulationPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -241,7 +241,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 22: /* Постановление Госстроя России */
         return (
-          <FederalLawPopup
+          <RussiaConstructionResolutionPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -254,7 +254,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 23: /* Приказ Минобрнауки России */
         return (
-          <FederalLawPopup
+          <OrderRussiaSciencePopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -267,7 +267,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 24: /* Приказ Минтранса России */
         return (
-          <FederalLawPopup
+          <OrderRussiaTransportPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -280,7 +280,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 25: /* Приказ Госстроя России */ 
         return (
-          <FederalLawPopup
+          <OrderRussiaGosConstructionPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -293,7 +293,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 26: /* Приказ Минстроя России */
         return (
-          <FederalLawPopup
+          <OrderRussiaMinConstructionPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -306,7 +306,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 27: /* Приказ Федеральной службы */ 
         return (
-          <FederalLawPopup
+          <OrderFederalServicePopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -319,7 +319,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 28: /* Распоряжение Минобрнауки России */
         return (
-          <FederalLawPopup
+          <DispositionRussiaSciencePopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -332,7 +332,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 29: /* Распоряжение Минтранса России */
         return (
-          <FederalLawPopup
+          <DispositionRussiaTransportPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -345,7 +345,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 30: /* Распоряжение Минстроя России */ 
         return (
-          <FederalLawPopup
+          <DispositionRussiaMinConstructionPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -358,7 +358,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 31: /* Распоряжение Федеральной службы */ 
         return (
-          <FederalLawPopup
+          <DispositionFederalServicePopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -371,7 +371,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 32: /* Методические рекомендации */
         return (
-          <FederalLawPopup
+          <GuidelinesPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -384,7 +384,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 33: /* Примерная программа */ 
         return (
-          <FederalLawPopup
+          <SampleProgramPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -397,7 +397,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 35: /* Требования */ 
         return (
-          <FederalLawPopup
+          <RequirementsPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -410,7 +410,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 36: /* Каталог */ 
         return (
-          <FederalLawPopup
+          <CatalogPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -423,7 +423,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 37: /* ГОСТ Р */ 
         return (
-          <FederalLawPopup
+          <StandardRPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -436,7 +436,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 38: /* ГОСТ */
         return (
-          <FederalLawPopup
+          <StandardPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -449,7 +449,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 39: /* ОДМ */ 
         return (
-          <FederalLawPopup
+          <ODMPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -462,7 +462,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 40: /* СТО */
         return (
-          <FederalLawPopup
+          <STOPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -475,7 +475,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 41: /* СПО */
         return (
-          <FederalLawPopup
+          <SPOPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -488,7 +488,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 42: /* ГСН (Сборник) */
         return (
-          <FederalLawPopup
+          <GSNPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -501,7 +501,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 43: /* СНиПы */
         return (
-          <FederalLawPopup
+          <SNIPPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -514,7 +514,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 44: /* СП */
         return (
-          <FederalLawPopup
+          <SPPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -527,7 +527,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 45: /* ЕНИР */
         return (
-          <FederalLawPopup
+          <ENIRPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -540,7 +540,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 46: /* ТУ */
         return (
-          <FederalLawPopup
+          <TYPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -553,7 +553,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 47: /* ISO */
         return (
-          <FederalLawPopup
+          <ISOPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -566,7 +566,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 48: /* Учебники, монографии */ 
         return (
-          <FederalLawPopup
+          <TextbookPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -579,7 +579,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )
       case 49: /* ПНСТ */
         return (
-          <FederalLawPopup
+          <PNSTPopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}
@@ -592,7 +592,7 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
         )      
       case 50: /* Официальный сайт */ 
         return (
-          <FederalLawPopup
+          <OfficialSitePopup
             isOpen={isOpen}
             onClose={onClose}
             nsi={nsi}

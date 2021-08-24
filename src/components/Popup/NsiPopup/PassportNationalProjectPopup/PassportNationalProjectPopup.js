@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from '../../Popup.js';
 
-function PassportNationalProjectPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
+function PassportNationalProjectPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLoading }) {
 
   const [addName, setAddName] = React.useState('');
   const [addNameError, setAddNameError] = React.useState(false);
@@ -17,8 +17,8 @@ function PassportNationalProjectPopup({ isOpen, onClose, emptyNsi, onAdd, id, pr
 
   function handleSubmit(e) {
     e.preventDefault();
-    const newNsi = { ...emptyNsi, nsiName: addName, nsiApproveName: addApproveName, nsiProtocolNumber: addProtocolNumber, nsiProtocolDate: addProtocolDate, type_id: id, nsiFullName: addFullName };
-    onAdd(newNsi, onClose);
+    const newNsi = { ...nsi, nsiName: addName, nsiApproveName: addApproveName, nsiProtocolNumber: addProtocolNumber, nsiProtocolDate: addProtocolDate, type_id: id, nsiFullName: addFullName };
+    onSave(newNsi, onClose);
   }
 
   function handleAddName(e) {
@@ -59,17 +59,17 @@ function PassportNationalProjectPopup({ isOpen, onClose, emptyNsi, onAdd, id, pr
   }
 
   React.useEffect(() => {
-    setAddName('');
-    setAddApproveName('');
-    setAddProtocolNumber('');
-    setAddProtocolDate('');
+    setAddName(nsi.nsiName);
+    setAddApproveName(nsi.nsiApproveName);
+    setAddProtocolNumber(nsi.nsiProtocolNumber);
+    setAddProtocolDate(nsi.nsiProtocolDate);
     setAddFullName('');
     setAddNameError(false);
     setAddApproveNameError(false);
     setAddProtocolNumberError(false);
     setAddProtocolDateError(false)
     setIsBlockSubmitButton(true);
-  }, [isOpen]);
+  }, [nsi, isOpen]);
 
   React.useEffect(() => {
     if (
@@ -99,14 +99,13 @@ function PassportNationalProjectPopup({ isOpen, onClose, emptyNsi, onAdd, id, pr
   // eslint-disable-next-line
   }, [addName, addApproveName, addProtocolDate, addProtocolNumber])
   
-  
   return (
     <Popup 
       isOpen={isOpen}
       onClose={onClose}
     >
-      <form className="popup__form popup__form_type_large" name="edit-part-form" action="#" noValidate onSubmit={handleSubmit}>
-          <h3 className="nsi-popup__title">Добавление Паспорта Национального проекта</h3>
+      <form className="popup__form popup__form_type_large" name={`${type}-nsi-form-${id}`} action="#" noValidate onSubmit={handleSubmit}>
+          <h3 className="nsi-popup__title">{`${type === "edit" ? "Редактирование " : "Добавление "}`}Паспорта Национального проекта</h3>
           <ul className="nsi-popup__list-input">
           <li className="nsi-popup__item-input">
             <h5 className="nsi-popup__input-name">Название</h5>
@@ -114,8 +113,8 @@ function PassportNationalProjectPopup({ isOpen, onClose, emptyNsi, onAdd, id, pr
             className="nsi-popup__input"
             placeholder="введите название"
             type="text"
-            id="add-input-name"
-            name="add-input-name"
+            id={`${type}-nsi-input-name-${id}`}
+            name={`${type}-nsi-input-name-${id}`}
             autoComplete="off"
             value={addName}
             onChange={handleAddName}
@@ -130,8 +129,8 @@ function PassportNationalProjectPopup({ isOpen, onClose, emptyNsi, onAdd, id, pr
             className="nsi-popup__input"
             placeholder="введите кем утвержден"
             type="text"
-            id="add-input-approve"
-            name="add-input-approve"
+            id={`${type}-nsi-input-approve-name-${id}`}
+            name={`${type}-nsi-input-approve-name-${id}`}
             autoComplete="off"
             value={addApproveName}
             onChange={handleAddApproveName}
@@ -146,8 +145,8 @@ function PassportNationalProjectPopup({ isOpen, onClose, emptyNsi, onAdd, id, pr
             className="nsi-popup__input"
             placeholder="введите номер"
             type="text"
-            id="add-input-name"
-            name="add-input-name"
+            id={`${type}-nsi-input-approve-number-${id}`}
+            name={`${type}-nsi-input-approve-number-${id}`}
             autoComplete="off"
             value={addProtocolNumber}
             onChange={handleAddProtocolNumber}
@@ -162,8 +161,8 @@ function PassportNationalProjectPopup({ isOpen, onClose, emptyNsi, onAdd, id, pr
             className="nsi-popup__input"
             placeholder="введите редакцию"
             type="date"
-            id="add-input-date"
-            name="add-input-date"
+            id={`${type}-nsi-input-protocol-date-${id}`}
+            name={`${type}-nsi-input-protocol-date-${id}`}
             autoComplete="off"
             value={addProtocolDate}
             onChange={handleAddProtocolDate}
@@ -179,7 +178,22 @@ function PassportNationalProjectPopup({ isOpen, onClose, emptyNsi, onAdd, id, pr
           {addFullName}
         </p>
 
-        <button className={`btn btn_type_save nsi-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""}`} type="submit">Добавить</button>
+        {
+         type === "edit" ?
+         <button 
+         className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} 
+         type="submit"
+         >
+           {isLoading ? "Сохранение.." : "Сохранить"}
+         </button>
+         :
+         <button 
+         className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} 
+         type="submit"
+         >
+           {isLoading ? "Добавление.." : "Добавить"}
+         </button>
+        }
       </form>
     </Popup>
     )

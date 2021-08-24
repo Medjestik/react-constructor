@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from '../../Popup.js';
 
-function StandardRPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
+function StandardRPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLoading }) {
 
   const [addName, setAddName] = React.useState('');
   const [addNameError, setAddNameError] = React.useState(false);
@@ -13,8 +13,8 @@ function StandardRPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const newNsi = { ...emptyNsi, nsiName: addName, nsiCode: addCode, type_id: id, nsiFullName: addFullName };
-    onAdd(newNsi, onClose);
+    const newNsi = { ...nsi, nsiName: addName, nsiCode: addCode, type_id: id, nsiFullName: addFullName };
+    onSave(newNsi, onClose);
   }
 
   function handleAddName(e) {
@@ -36,13 +36,13 @@ function StandardRPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
   }
 
   React.useEffect(() => {
-    setAddName('');
+    setAddName(nsi.nsiName);
+    setAddCode(nsi.nsiCode);
     setAddFullName('');
-    setAddCode('');
     setAddNameError(false);
     setAddCodeError(false);
     setIsBlockSubmitButton(true);
-  }, [isOpen]);
+  }, [nsi, isOpen]);
 
   React.useEffect(() => {
     if (
@@ -71,8 +71,8 @@ function StandardRPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
       isOpen={isOpen}
       onClose={onClose}
     >
-      <form className="popup__form popup__form_type_large" name="add-nsi-form" action="#" noValidate onSubmit={handleSubmit}>
-          <h3 className="nsi-popup__title">Добавление ГОСТ Р</h3>
+      <form className="popup__form popup__form_type_large" name={`${type}-nsi-form-${id}`} action="#" noValidate onSubmit={handleSubmit}>
+          <h3 className="nsi-popup__title">{`${type === "edit" ? "Редактирование " : "Добавление "}`}ГОСТ Р</h3>
           <ul className="nsi-popup__list-input">
           <li className="nsi-popup__item-input">
             <h5 className="nsi-popup__input-name">Название</h5>
@@ -80,8 +80,8 @@ function StandardRPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
             className="nsi-popup__input"
             placeholder="введите название"
             type="text"
-            id="add-input-name"
-            name="add-input-name"
+            id={`${type}-nsi-input-name-${id}`}
+            name={`${type}-nsi-input-name-${id}`}
             autoComplete="off"
             value={addName}
             onChange={handleAddName}
@@ -96,8 +96,8 @@ function StandardRPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
             className="nsi-popup__input"
             placeholder="введите шифр"
             type="text"
-            id="add-input-edit-code"
-            name="add-input-edit-code"
+            id={`${type}-nsi-input-code-${id}`}
+            name={`${type}-nsi-input-code-${id}`}
             autoComplete="off"
             value={addCode}
             onChange={handleAddCode}
@@ -112,7 +112,23 @@ function StandardRPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
           {addFullName}
         </p>
 
-        <button className={`btn btn_type_save nsi-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""}`} type="submit">Добавить</button>
+        {
+          type === "edit" ?
+          <button 
+          className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} 
+          type="submit"
+          >
+            {isLoading ? "Сохранение.." : "Сохранить"}
+          </button>
+          :
+          <button 
+          className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} 
+          type="submit"
+          >
+            {isLoading ? "Добавление.." : "Добавить"}
+          </button>
+        }
+
       </form>
     </Popup>
     )

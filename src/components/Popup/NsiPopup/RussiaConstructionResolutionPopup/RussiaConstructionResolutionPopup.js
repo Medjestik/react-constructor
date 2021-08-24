@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from '../../Popup.js';
 
-function RussiaConstructionResolutionPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
+function RussiaConstructionResolutionPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLoading }) {
 
   const [addName, setAddName] = React.useState('');
   const [addNameError, setAddNameError] = React.useState(false);
@@ -16,8 +16,8 @@ function RussiaConstructionResolutionPopup({ isOpen, onClose, emptyNsi, onAdd, i
 
   function handleSubmit(e) {
     e.preventDefault();
-    const newNsi = { ...emptyNsi, nsiName: addName, nsiProtocolNumber: addProtocolNumber, nsiProtocolDate: addProtocolDate, nsiEdit: addEdition, type_id: id, nsiFullName: addFullName };
-    onAdd(newNsi, onClose);
+    const newNsi = { ...nsi, nsiName: addName, nsiProtocolNumber: addProtocolNumber, nsiProtocolDate: addProtocolDate, nsiEdit: addEdition, type_id: id, nsiFullName: addFullName };
+    onSave(newNsi, onClose);
   }
 
   function handleAddName(e) {
@@ -52,16 +52,16 @@ function RussiaConstructionResolutionPopup({ isOpen, onClose, emptyNsi, onAdd, i
   }
 
   React.useEffect(() => {
-    setAddName('');
-    setAddProtocolNumber('');
-    setAddProtocolDate('');
+    setAddName(nsi.nsiName);
+    setAddEdition(nsi.nsiEdit || "");
+    setAddProtocolNumber(nsi.nsiProtocolNumber);
+    setAddProtocolDate(nsi.nsiProtocolDate);
     setAddFullName('');
-    setAddEdition('');
     setAddNameError(false);
     setAddProtocolNumberError(false);
     setAddProtocolDateError(false)
     setIsBlockSubmitButton(true);
-  }, [isOpen]);
+  }, [nsi, isOpen]);
 
   React.useEffect(() => {
     if (
@@ -94,8 +94,8 @@ function RussiaConstructionResolutionPopup({ isOpen, onClose, emptyNsi, onAdd, i
       isOpen={isOpen}
       onClose={onClose}
     >
-      <form className="popup__form popup__form_type_large" name="add-nsi-form" action="#" noValidate onSubmit={handleSubmit}>
-          <h3 className="nsi-popup__title">Добавление Постановления Госстроя России</h3>
+      <form className="popup__form popup__form_type_large" name={`${type}-nsi-form-${id}`} action="#" noValidate onSubmit={handleSubmit}>
+          <h3 className="nsi-popup__title">{`${type === "edit" ? "Редактирование " : "Добавление "}`}Постановления Госстроя России</h3>
           <ul className="nsi-popup__list-input">
           <li className="nsi-popup__item-input">
             <h5 className="nsi-popup__input-name">Название</h5>
@@ -103,8 +103,8 @@ function RussiaConstructionResolutionPopup({ isOpen, onClose, emptyNsi, onAdd, i
             className="nsi-popup__input"
             placeholder="введите название"
             type="text"
-            id="add-input-name"
-            name="add-input-name"
+            id={`${type}-nsi-input-name-${id}`}
+            name={`${type}-nsi-input-name-${id}`}
             autoComplete="off"
             value={addName}
             onChange={handleAddName}
@@ -119,8 +119,8 @@ function RussiaConstructionResolutionPopup({ isOpen, onClose, emptyNsi, onAdd, i
             className="nsi-popup__input"
             placeholder="введите номер"
             type="text"
-            id="add-input-protocol-number"
-            name="add-input-protocol-number"
+            id={`${type}-nsi-input-approve-number-${id}`}
+            name={`${type}-nsi-input-approve-number-${id}`}
             autoComplete="off"
             value={addProtocolNumber}
             onChange={handleAddProtocolNumber}
@@ -135,8 +135,8 @@ function RussiaConstructionResolutionPopup({ isOpen, onClose, emptyNsi, onAdd, i
             className="nsi-popup__input"
             placeholder="введите редакцию"
             type="date"
-            id="add-input-protocol-date"
-            name="add-input-protocol-date"
+            id={`${type}-nsi-input-protocol-date-${id}`}
+            name={`${type}-nsi-input-protocol-date-${id}`}
             autoComplete="off"
             value={addProtocolDate}
             onChange={handleAddProtocolDate}
@@ -151,8 +151,8 @@ function RussiaConstructionResolutionPopup({ isOpen, onClose, emptyNsi, onAdd, i
             className="nsi-popup__input"
             placeholder="введите редакцию"
             type="date"
-            id="add-input-edit-date"
-            name="add-input-edit-date"
+            id={`${type}-nsi-input-edition-${id}`}
+            name={`${type}-nsi-input-edition-${id}`}
             autoComplete="off"
             value={addEdition}
             onChange={handleAddEdition}
@@ -166,7 +166,23 @@ function RussiaConstructionResolutionPopup({ isOpen, onClose, emptyNsi, onAdd, i
           {addFullName}
         </p>
 
-        <button className={`btn btn_type_save nsi-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""}`} type="submit">Добавить</button>
+        {
+         type === "edit" ?
+         <button 
+         className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} 
+         type="submit"
+         >
+           {isLoading ? "Сохранение.." : "Сохранить"}
+         </button>
+         :
+         <button 
+         className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} 
+         type="submit"
+         >
+           {isLoading ? "Добавление.." : "Добавить"}
+         </button>
+        }
+        
       </form>
     </Popup>
     )

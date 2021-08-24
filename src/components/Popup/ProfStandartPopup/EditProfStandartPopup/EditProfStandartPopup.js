@@ -4,6 +4,8 @@ import InputMask from "react-input-mask";
 
 function EditProfStandartPopup({ isOpen, currentProfstandart, onClose, onEdit, printDate, isLoading }) {
 
+  console.log(currentProfstandart)
+
   const [addNameText, setAddNameText] = React.useState('');
   const [addNameTextError, setAddNameTextError] = React.useState(false);
   const [addNameCode, setAddNameCode] = React.useState('');
@@ -109,8 +111,8 @@ function EditProfStandartPopup({ isOpen, currentProfstandart, onClose, onEdit, p
     setAddNameCode(currentProfstandart.nameCode);
     setAddOrderNumber(currentProfstandart.orderNumber);
     setAddOrderDate(currentProfstandart.orderDate);
-    setAddRegistrationDate(currentProfstandart.registrationDate);
-    setAddRegistrationNumber(currentProfstandart.registrationNumber);
+    setAddRegistrationDate(currentProfstandart.registrationDate || "");
+    setAddRegistrationNumber(currentProfstandart.registrationNumber || "");
     setAddNameQual(currentProfstandart.nameQual || "");
     setAddLinkQual(currentProfstandart.linkQual || "");
     setAddNameTextError(false);

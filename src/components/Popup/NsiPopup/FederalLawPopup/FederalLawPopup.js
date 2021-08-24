@@ -61,7 +61,7 @@ function FederalLawPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, is
     setAddDateError(false);
     setAddNumberError(false)
     setIsBlockSubmitButton(true);
-  }, [type, nsi, isOpen]);
+  }, [nsi, isOpen]);
 
   React.useEffect(() => {
     if (
@@ -182,7 +182,7 @@ function FederalLawPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, is
          >
            {isLoading ? "Добавление.." : "Добавить"}
          </button>
-       }
+        }
 
       </form>
     </Popup>

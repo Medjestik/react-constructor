@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from '../../Popup.js';
 
-function CatalogPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
+function CatalogPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLoading }) {
 
   const [addName, setAddName] = React.useState('');
   const [addNameError, setAddNameError] = React.useState(false);
@@ -14,8 +14,8 @@ function CatalogPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const newNsi = { ...emptyNsi, nsiName: addName, nsiPeriod: addPeriod, nsiCode: addCode, type_id: id, nsiFullName: addFullName };
-    onAdd(newNsi, onClose);
+    const newNsi = { ...nsi, nsiName: addName, nsiPeriod: addPeriod, nsiCode: addCode, type_id: id, nsiFullName: addFullName };
+    onSave(newNsi, onClose);
   }
 
   function handleAddName(e) {
@@ -41,14 +41,14 @@ function CatalogPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
   }
 
   React.useEffect(() => {
-    setAddName('');
+    setAddPeriod(nsi.nsiPeriod);
+    setAddName(nsi.nsiName);
+    setAddCode(nsi.nsiCode || "");
     setAddFullName('');
-    setAddCode('');
-    setAddPeriod('');
     setAddNameError(false);
     setAddPeriodError(false);
     setIsBlockSubmitButton(true);
-  }, [isOpen]);
+  }, [nsi, isOpen]);
 
   React.useEffect(() => {
     if (
@@ -80,8 +80,8 @@ function CatalogPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
       isOpen={isOpen}
       onClose={onClose}
     >
-      <form className="popup__form popup__form_type_large" name="add-nsi-form" action="#" noValidate onSubmit={handleSubmit}>
-          <h3 className="nsi-popup__title">Добавление Каталога</h3>
+      <form className="popup__form popup__form_type_large" name={`${type}-nsi-form-${id}`} action="#" noValidate onSubmit={handleSubmit}>
+          <h3 className="nsi-popup__title">{`${type === "edit" ? "Редактирование " : "Добавление "}`}Каталога</h3>
           <ul className="nsi-popup__list-input">
           <li className="nsi-popup__item-input">
             <h5 className="nsi-popup__input-name">Название</h5>
@@ -89,8 +89,8 @@ function CatalogPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
             className="nsi-popup__input"
             placeholder="введите название"
             type="text"
-            id="add-input-name"
-            name="add-input-name"
+            id={`${type}-nsi-input-name-${id}`}
+            name={`${type}-nsi-input-name-${id}`}
             autoComplete="off"
             value={addName}
             onChange={handleAddName}
@@ -105,8 +105,8 @@ function CatalogPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
             className="nsi-popup__input"
             placeholder="введите шифр"
             type="text"
-            id="add-input-edit-code"
-            name="add-input-edit-code"
+            id={`${type}-nsi-input-code-${id}`}
+            name={`${type}-nsi-input-code-${id}`}
             autoComplete="off"
             value={addCode}
             onChange={handleAddCode}
@@ -119,8 +119,8 @@ function CatalogPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
             className="nsi-popup__input"
             placeholder="введите период"
             type="text"
-            id="add-input-period"
-            name="add-input-period"
+            id={`${type}-nsi-input-period-${id}`}
+            name={`${type}-nsi-input-period-${id}`}
             autoComplete="off"
             value={addPeriod}
             onChange={handleAddPeriod}
@@ -136,7 +136,23 @@ function CatalogPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
           {addFullName}
         </p>
 
-        <button className={`btn btn_type_save nsi-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""}`} type="submit">Добавить</button>
+        {
+          type === "edit" ?
+          <button 
+          className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} 
+          type="submit"
+          >
+            {isLoading ? "Сохранение.." : "Сохранить"}
+          </button>
+          :
+          <button 
+          className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} 
+          type="submit"
+          >
+            {isLoading ? "Добавление.." : "Добавить"}
+          </button>
+        }
+
       </form>
     </Popup>
     )

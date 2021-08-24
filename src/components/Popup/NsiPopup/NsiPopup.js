@@ -690,331 +690,511 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {
       />
     }
 
+    {
+      isGovernmentOrderPopupOpen &&
+      <GovernmentOrderPopup
+        isOpen={isGovernmentOrderPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <GovernmentOrderPopup
-      isOpen={isGovernmentOrderPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isPresidentAssignmentPopupOpen &&
+      <PresidentAssignmentPopup
+        isOpen={isPresidentAssignmentPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <PresidentAssignmentPopup
-      isOpen={isPresidentAssignmentPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isPassportNationalProjectPopupOpen &&
+      <PassportNationalProjectPopup
+        isOpen={isPassportNationalProjectPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <PassportNationalProjectPopup
-      isOpen={isPassportNationalProjectPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isPassportFederalProjectPopupOpen &&
+      <PassportFederalProjectPopup
+        isOpen={isPassportFederalProjectPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <PassportFederalProjectPopup
-      isOpen={isPassportFederalProjectPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isPassportProjectPopupOpen &&
+      <PassportProjectPopup
+        isOpen={isPassportProjectPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <PassportProjectPopup
-      isOpen={isPassportProjectPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isOrderPopupOpen &&
+      <OrderPopup
+        isOpen={isOrderPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <OrderPopup
-      isOpen={isOrderPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isRegulationPopupOpen &&
+      <RegulationPopup
+        isOpen={isRegulationPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <RegulationPopup
-      isOpen={isRegulationPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isTechnicalRegulationPopupOpen &&
+      <TechnicalRegulationPopup
+        isOpen={isTechnicalRegulationPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <TechnicalRegulationPopup
-      isOpen={isTechnicalRegulationPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isRussiaConstructionResolutionPopupOpen &&
+      <RussiaConstructionResolutionPopup
+        isOpen={isRussiaConstructionResolutionPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <RussiaConstructionResolutionPopup
-      isOpen={isRussiaConstructionResolutionPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isOrderRussiaSciencePopupOpen &&
+      <OrderRussiaSciencePopup
+        isOpen={isOrderRussiaSciencePopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <OrderRussiaSciencePopup
-      isOpen={isOrderRussiaSciencePopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isOrderRussiaTransportPopupOpen &&
+      <OrderRussiaTransportPopup
+        isOpen={isOrderRussiaTransportPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <OrderRussiaTransportPopup
-      isOpen={isOrderRussiaTransportPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isOrderRussiaGosConstructionPopupOpen &&
+      <OrderRussiaGosConstructionPopup
+        isOpen={isOrderRussiaGosConstructionPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <OrderRussiaGosConstructionPopup
-      isOpen={isOrderRussiaGosConstructionPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isOrderRussiaMinConstructionPopupOpen &&
+      <OrderRussiaMinConstructionPopup
+        isOpen={isOrderRussiaMinConstructionPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <OrderRussiaMinConstructionPopup
-      isOpen={isOrderRussiaMinConstructionPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isOrderFederalServicePopupOpen &&
+      <OrderFederalServicePopup
+        isOpen={isOrderFederalServicePopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-  <DispositionRussiaSciencePopup
-      isOpen={isDispositionRussiaSciencePopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
 
-    <DispositionRussiaTransportPopup
-      isOpen={isDispositionRussiaTransportPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isDispositionRussiaSciencePopupOpen &&
+      <DispositionRussiaSciencePopup
+        isOpen={isDispositionRussiaSciencePopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <DispositionRussiaMinConstructionPopup
-      isOpen={isDispositionRussiaMinConstructionPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
 
-    <OrderFederalServicePopup
-      isOpen={isOrderFederalServicePopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isDispositionRussiaTransportPopupOpen &&
+      <DispositionRussiaTransportPopup
+        isOpen={isDispositionRussiaTransportPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
+
+    {
+      <DispositionRussiaMinConstructionPopup
+        isOpen={isDispositionRussiaMinConstructionPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
     
-    <DispositionFederalServicePopup
-      isOpen={isDispositionFederalServicePopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isDispositionFederalServicePopupOpen &&
+      <DispositionFederalServicePopup
+        isOpen={isDispositionFederalServicePopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <GuidelinesPopup
-      isOpen={isGuidelinesPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isGuidelinesPopupOpen &&
+      <GuidelinesPopup
+        isOpen={isGuidelinesPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <SampleProgramPopup
-      isOpen={isSampleProgramPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isSampleProgramPopupOpen &&
+      <SampleProgramPopup
+        isOpen={isSampleProgramPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <RequirementsPopup
-      isOpen={isRequirementsPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isRequirementsPopupOpen &&
+      <RequirementsPopup
+        isOpen={isRequirementsPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <CatalogPopup
-      isOpen={isCatalogPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isCatalogPopupOpen &&
+      <CatalogPopup
+        isOpen={isCatalogPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <StandardRPopup
-      isOpen={isStandardRPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isStandardRPopupOpen &&
+      <StandardRPopup
+        isOpen={isStandardRPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <StandardPopup
-      isOpen={isStandardPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isStandardPopupOpen &&
+      <StandardPopup
+        isOpen={isStandardPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <ODMPopup
-      isOpen={isODMPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
-    
-    <STOPopup
-      isOpen={isSTOPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isODMPopupOpen &&
+      <ODMPopup
+        isOpen={isODMPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <SPOPopup
-      isOpen={isSPOPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isSTOPopupOpen && 
+      <STOPopup
+        isOpen={isSTOPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <GSNPopup
-      isOpen={isGSNPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isSPOPopupOpen &&
+      <SPOPopup
+        isOpen={isSPOPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <SNIPPopup
-      isOpen={isSNIPPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isGSNPopupOpen && 
+      <GSNPopup
+        isOpen={isGSNPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <SPPopup
-      isOpen={isSPPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isSNIPPopupOpen &&
+      <SNIPPopup
+        isOpen={isSNIPPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <ENIRPopup
-      isOpen={isENIRPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isSPPopupOpen &&
+      <SPPopup
+        isOpen={isSPPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <TYPopup
-      isOpen={isTYPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isENIRPopupOpen &&
+      <ENIRPopup
+        isOpen={isENIRPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <ISOPopup
-      isOpen={isISOPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isTYPopupOpen &&
+      <TYPopup
+        isOpen={isTYPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <PNSTPopup
-      isOpen={isPNSTPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isISOPopupOpen &&
+      <ISOPopup
+        isOpen={isISOPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <OfficialSitePopup
-      isOpen={isOfficialSitePopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isPNSTPopupOpen &&
+      <PNSTPopup
+        isOpen={isPNSTPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <TextbookPopup
-      isOpen={isTextbookPopupPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
-    
+    {
+      isOfficialSitePopupOpen &&
+      <OfficialSitePopup
+        isOpen={isOfficialSitePopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />      
+    }
+
+    {
+      isTextbookPopupPopupOpen &&
+      <TextbookPopup
+        isOpen={isTextbookPopupPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
+
     </>
   )
 }

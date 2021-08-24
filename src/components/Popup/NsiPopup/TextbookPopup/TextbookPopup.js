@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from '../../Popup.js';
 
-function TextbookPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
+function TextbookPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLoading }) {
 
   const [addName, setAddName] = React.useState('');
   const [addNameError, setAddNameError] = React.useState(false);
@@ -20,8 +20,8 @@ function TextbookPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const newNsi = { ...emptyNsi, nsiName: addName, nsiAuthors: addAuthors, nsiEditor: addEditor, nsiCity: addCity, nsiYear: addYear, nsiPages: addPages, type_id: id, nsiFullName: addFullName };
-    onAdd(newNsi, onClose);
+    const newNsi = { ...nsi, nsiName: addName, nsiAuthors: addAuthors, nsiEditor: addEditor, nsiCity: addCity, nsiYear: addYear, nsiPages: addPages, type_id: id, nsiFullName: addFullName };
+    onSave(newNsi, onClose);
   }
 
   function handleAddName(e) {
@@ -74,12 +74,12 @@ function TextbookPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
   }
 
   React.useEffect(() => {
-    setAddName('');
-    setAddAuthors('');
-    setAddEditor('');
-    setAddCity('');
-    setAddYear('');
-    setAddPages('');
+    setAddName(nsi.nsiName);
+    setAddAuthors(nsi.nsiAuthors);
+    setAddEditor(nsi.nsiEditor);
+    setAddCity(nsi.nsiCity);
+    setAddYear(nsi.nsiYear);
+    setAddPages(nsi.nsiPages || "");
     setAddFullName('');
     setAddNameError(false);
     setAddAuthorsError(false);
@@ -87,7 +87,7 @@ function TextbookPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
     setAddCityError(false);
     setAddYearError(false);
     setIsBlockSubmitButton(true);
-  }, [isOpen]);
+  }, [nsi, isOpen]);
 
   React.useEffect(() => {
     if (
@@ -128,8 +128,8 @@ function TextbookPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
       isOpen={isOpen}
       onClose={onClose}
     >
-      <form className="popup__form popup__form_type_large" name="add-nsi-form" action="#" noValidate onSubmit={handleSubmit}>
-          <h3 className="nsi-popup__title">Добавление учебников и монографий</h3>
+      <form className="popup__form popup__form_type_large" name={`${type}-nsi-form-${id}`} action="#" noValidate onSubmit={handleSubmit}>
+          <h3 className="nsi-popup__title">{`${type === "edit" ? "Редактирование " : "Добавление "}`}учебников и монографий</h3>
           <ul className="nsi-popup__list-input">
           <li className="nsi-popup__item-input">
             <h5 className="nsi-popup__input-name">Наименование</h5>
@@ -137,8 +137,8 @@ function TextbookPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
             className="nsi-popup__input"
             placeholder="введите наименование"
             type="text"
-            id="add-input-name"
-            name="add-input-name"
+            id={`${type}-nsi-input-name-${id}`}
+            name={`${type}-nsi-input-name-${id}`}
             autoComplete="off"
             value={addName}
             onChange={handleAddName}
@@ -153,8 +153,8 @@ function TextbookPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
             className="nsi-popup__input"
             placeholder="введите фамилию и инициалы автора"
             type="text"
-            id="add-input-authors"
-            name="add-input-authors"
+            id={`${type}-nsi-input-authors-${id}`}
+            name={`${type}-nsi-input-authors-${id}`}
             autoComplete="off"
             value={addAuthors}
             onChange={handleAddAuthors}
@@ -169,8 +169,8 @@ function TextbookPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
             className="nsi-popup__input"
             placeholder="введите название издательства"
             type="text"
-            id="add-input-editor"
-            name="add-input-editor"
+            id={`${type}-nsi-input-editor-${id}`}
+            name={`${type}-nsi-input-editor-${id}`}
             autoComplete="off"
             value={addEditor}
             onChange={handleAddEditor}
@@ -185,8 +185,8 @@ function TextbookPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
             className="nsi-popup__input"
             placeholder="введите город издания"
             type="text"
-            id="add-input-city"
-            name="add-input-city"
+            id={`${type}-nsi-input-city-${id}`}
+            name={`${type}-nsi-input-city-${id}`}
             autoComplete="off"
             value={addCity}
             onChange={handleAddCity}
@@ -201,8 +201,8 @@ function TextbookPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
             className="nsi-popup__input"
             placeholder="введите год издания"
             type="number"
-            id="add-input-year"
-            name="add-input-year"
+            id={`${type}-nsi-input-year-${id}`}
+            name={`${type}-nsi-input-year-${id}`}
             autoComplete="off"
             value={addYear}
             onChange={handleAddYear}
@@ -221,8 +221,8 @@ function TextbookPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
             className="nsi-popup__input"
             placeholder="введите год издания"
             type="number"
-            id="add-input-pages"
-            name="add-input-pages"
+            id={`${type}-nsi-input-pages-${id}`}
+            name={`${type}-nsi-input-pages-${id}`}
             autoComplete="off"
             value={addPages}
             onChange={handleAddPages}
@@ -238,7 +238,23 @@ function TextbookPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
           {addFullName}
         </p>
 
-        <button className={`btn btn_type_save nsi-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""}`} type="submit">Добавить</button>
+        {
+          type === "edit" ?
+          <button 
+          className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} 
+          type="submit"
+          >
+            {isLoading ? "Сохранение.." : "Сохранить"}
+          </button>
+          :
+          <button 
+          className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} 
+          type="submit"
+          >
+            {isLoading ? "Добавление.." : "Добавить"}
+          </button>
+        }
+
       </form>
     </Popup>
     )
