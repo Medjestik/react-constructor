@@ -18,6 +18,7 @@ import RemovePartPopup from '../../../Popup/RemovePartPopup/RemovePartPopup.js';
 import ChoosePartsPopup from '../../../Popup/ChoosePartsPopup/ChoosePartsPopup.js';
 import AccordionChooseNewDocumentType from '../../../Accordion/AccordionChooseNewDocumentType/AccordionChooseNewDocumentType.js';
 import NsiPopup from '../../../Popup/NsiPopup/NsiPopup.js';
+import EditNsiPopup from '../../../Popup/EditNsiPopup/EditNsiPopup.js';
 import RemoveNsiPopup from '../../../Popup/RemoveNsiPopup/RemoveNsiPopup.js'
 
 import fgosIcon from '../../../../images/documents/fgos.png';
@@ -25,6 +26,7 @@ import profstandartIcon from '../../../../images/documents/profstandart.png';
 import etkcIcon from '../../../../images/documents/etkc.png';
 import ekcIcon from '../../../../images/documents/ekc.png';
 import worldskillsIcon from '../../../../images/documents/worldskills.png';
+import organizationIcon from '../../../../images/documents/organization.png';
 
 function InitialData({ loggedIn, history, dppDescription }) {
 
@@ -83,6 +85,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
   const [nsiTypes, setNsiTypes] = React.useState([]);
   const [nsiProgram, setNsiProgram] = React.useState([]);
   const [isRemoveNsiPopupOpen, setIsRemoveNsiPopupOpen] = React.useState(false);
+  const [isEditNsiPopupOpen, setIsEditNsiPopupOpen] = React.useState(false);
   const [currentNsiItem, setCurrentNsiItem] = React.useState({});
 
   function handleChangeProfLevels(id) {
@@ -311,7 +314,9 @@ function InitialData({ loggedIn, history, dppDescription }) {
       const index = profStandarts.indexOf(profStandarts.find((elem) => (elem.id === id)));
       setProfStandarts([...profStandarts.slice(0, index), res, ...profStandarts.slice(index + 1)]);
       const indexProgram = profStandartsProgram.indexOf(profStandartsProgram.find((elem) => (elem.id === id)));
-      setProfStandartsProgram([...profStandartsProgram.slice(0, indexProgram), res, ...profStandartsProgram.slice(indexProgram + 1)]);
+      if (indexProgram !== -1) {
+        setProfStandartsProgram([...profStandartsProgram.slice(0, indexProgram), res, ...profStandartsProgram.slice(indexProgram + 1)]);
+      }
     })
     .catch((err) => {
       console.error(err);
@@ -362,7 +367,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
   /* ЕТКС */
 
   function jobСlassificationPopupOpen() {
-    setIsLoading(true);
+    setIsLoadingPopup(true);
     closeInitialDataPopups();
     setIsJobСlassificationPopupOpen(true);
     const token = localStorage.getItem("token");
@@ -373,10 +378,11 @@ function InitialData({ loggedIn, history, dppDescription }) {
     .catch((err) => {
       console.error(err);
     })
-    .finally(() => setIsLoading(false));
+    .finally(() => setIsLoadingPopup(false));
   }
 
   function handleAddJobСlassification(newDocument, closeAddPopup) {
+    setIsLoading(true);
     const token = localStorage.getItem("token");
     api.createJobClassification({ token: token, document: newDocument })
     .then((res) => {
@@ -386,9 +392,30 @@ function InitialData({ loggedIn, history, dppDescription }) {
     .catch((err) => {
       console.error(err);
     })
+    .finally(() => setIsLoading(false));
+  }
+
+  function handleEditJobСlassification(newDocument, id, closeAddPopup) {
+    setIsLoading(true);
+    const token = localStorage.getItem("token");
+    api.editJobClassification({ token: token, id: id, document: newDocument })
+    .then((res) => {
+      closeAddPopup();
+      const index = jobСlassification.indexOf(jobСlassification.find((elem) => (elem.id === id)));
+      setJobСlassification([...jobСlassification.slice(0, index), res, ...jobСlassification.slice(index + 1)]);
+      const indexProgram = jobСlassificationProgram.indexOf(jobСlassificationProgram.find((elem) => (elem.id === id)));
+      if (indexProgram !== -1) {
+        setJobСlassificationProgram([...jobСlassificationProgram.slice(0, indexProgram), res, ...jobСlassificationProgram.slice(indexProgram + 1)]);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => setIsLoading(false));
   }
 
   function handleSelectJobСlassification(jobСlassification) {
+    setIsLoading(true);
     const jobСlassificationId = jobСlassification.map(elem => elem.id);
     const token = localStorage.getItem("token");
     if (loggedIn) {
@@ -404,13 +431,33 @@ function InitialData({ loggedIn, history, dppDescription }) {
       .catch((err) =>{
         console.log(err);
       })
+      .finally(() => setIsLoading(false));
     }
+  }
+
+  function handleRemoveJobСlassification(id, closeRemovePopup) {
+    setIsErrorRequest({ text: "", isShow: false });
+    setIsLoading(true);
+    const token = localStorage.getItem("token");
+    api.removeJobClassification({ token: token, id: id })
+    .then((res) => {
+      closeRemovePopup();
+      const newJobСlassification = jobСlassification.filter((elem) => elem.id !== res);
+      setJobСlassification(newJobСlassification);
+    })
+    .catch((err) => {
+      console.error(err);
+      if (err.status === 403) {
+        setIsErrorRequest({ text: "Удаление невозможно. Данный документ используется в другой программе.", isShow: true });
+      }
+    })
+    .finally(() => setIsLoading(false));
   }
 
   /* ЕКС */
 
   function jobDirectoryPopupOpen() {
-    setIsLoading(true);
+    setIsLoadingPopup(true);
     closeInitialDataPopups();
     setIsJobDirectoryPopupOpen(true);
     const token = localStorage.getItem("token");
@@ -421,10 +468,11 @@ function InitialData({ loggedIn, history, dppDescription }) {
     .catch((err) => {
       console.error(err);
     })
-    .finally(() => setIsLoading(false));
+    .finally(() => setIsLoadingPopup(false));
   }
 
   function handleAddJobDirectory(newDocument, closeAddPopup) {
+    setIsLoadingPopup(true);
     const token = localStorage.getItem("token");
     api.createDirectoryJob({ token: token, document: newDocument })
     .then((res) => {
@@ -434,10 +482,30 @@ function InitialData({ loggedIn, history, dppDescription }) {
     .catch((err) => {
       console.error(err);
     })
-    //.finally(() => setIsLoading(false));
+    .finally(() => setIsLoading(false));
+  }
+
+  function handleEditJobDirectory(newDocument, id, closeAddPopup) {
+    setIsLoading(true);
+    const token = localStorage.getItem("token");
+    api.editDirectoryJob({ token: token, id: id, document: newDocument })
+    .then((res) => {
+      closeAddPopup();
+      const index = jobDirectory.indexOf(jobDirectory.find((elem) => (elem.id === id)));
+      setJobDirectory([...jobDirectory.slice(0, index), res, ...jobDirectory.slice(index + 1)]);
+      const indexProgram = jobDirectoryProgram.indexOf(jobDirectoryProgram.find((elem) => (elem.id === id)));
+      if (indexProgram !== -1) {
+        setJobDirectoryProgram([...jobDirectoryProgram.slice(0, indexProgram), res, ...jobDirectoryProgram.slice(indexProgram + 1)]);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => setIsLoading(false));
   }
 
   function handleSelectJobDirectory(jobDirectory) {
+    setIsLoading(true);
     const jobDirectoryId = jobDirectory.map(elem => elem.id);
     const token = localStorage.getItem("token");
     if (loggedIn) {
@@ -453,7 +521,27 @@ function InitialData({ loggedIn, history, dppDescription }) {
       .catch((err) =>{
         console.log(err);
       })
+      .finally(() => setIsLoading(false));
     }
+  }
+
+  function handleRemoveJobDirectory(id, closeRemovePopup) {
+    setIsErrorRequest({ text: "", isShow: false });
+    setIsLoading(true);
+    const token = localStorage.getItem("token");
+    api.removeDirectoryJob({ token: token, id: id })
+    .then((res) => {
+      closeRemovePopup();
+      const newJobDirectory = jobDirectory.filter((elem) => elem.id !== res);
+      setJobDirectory(newJobDirectory);
+    })
+    .catch((err) => {
+      console.error(err);
+      if (err.status === 403) {
+        setIsErrorRequest({ text: "Удаление невозможно. Данный документ используется в другой программе.", isShow: true });
+      }
+    })
+    .finally(() => setIsLoading(false));
   }
 
   /* WorldSkills */
@@ -516,7 +604,9 @@ function InitialData({ loggedIn, history, dppDescription }) {
       const index = worldSkills.indexOf(worldSkills.find((elem) => (elem.id === id)));
       setWorldSkills([...worldSkills.slice(0, index), res, ...worldSkills.slice(index + 1)]);
       const indexProgram = worldSkillsProgram.indexOf(worldSkillsProgram.find((elem) => (elem.id === id)));
-      setWorldSkillsProgram([...worldSkillsProgram.slice(0, indexProgram), res, ...worldSkillsProgram.slice(indexProgram + 1)]);
+      if (indexProgram !== -1) {
+        setWorldSkillsProgram([...worldSkillsProgram.slice(0, indexProgram), res, ...worldSkillsProgram.slice(indexProgram + 1)]);
+      }
     })
     .catch((err) => {
       console.error(err);
@@ -580,10 +670,12 @@ function InitialData({ loggedIn, history, dppDescription }) {
     api.editOrganizationRules({ token: token, id: id, document: newDocument })
     .then((res) => {
       closeAddPopup();
-      const index = organizationRules.indexOf(worldSkills.find((elem) => (elem.id === id)));
+      const index = organizationRules.indexOf(organizationRules.find((elem) => (elem.id === id)));
       setOrganizationRules([...organizationRules.slice(0, index), res, ...organizationRules.slice(index + 1)]);
       const indexProgram = organizationRulesProgram.indexOf(organizationRulesProgram.find((elem) => (elem.id === id)));
-      setOrganizationRulesProgram([...organizationRulesProgram.slice(0, indexProgram), res, ...organizationRulesProgram.slice(indexProgram + 1)]);
+      if (indexProgram !== -1) {
+        setOrganizationRulesProgram([...organizationRulesProgram.slice(0, indexProgram), res, ...organizationRulesProgram.slice(indexProgram + 1)]);
+      }
     })
     .catch((err) => {
       console.error(err);
@@ -741,6 +833,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
   /* NSI */
 
   function openNsiPopup() {
+    setIsLoadingPopup(true);
     const token = localStorage.getItem("token");
     api.getNsiType({ token: token })
     .then((res) => {
@@ -751,10 +844,11 @@ function InitialData({ loggedIn, history, dppDescription }) {
     .catch((err) => {
       console.error(err);
     })
-    .finally(() => setIsLoading(false));
+    .finally(() => setIsLoadingPopup(false));
   }
 
   function handleAddNsi(elem, closeAllNsiPopup) {
+    setIsLoading(true);
     const token = localStorage.getItem("token");
     if (loggedIn) {
       api.createNsiElem({ 
@@ -769,8 +863,36 @@ function InitialData({ loggedIn, history, dppDescription }) {
       .catch((err) =>{
         console.log(err);
       })
+      .finally(() => setIsLoading(false));
+    }
   }
-}
+
+  function openEditNsiPopup(nsi) {
+    setCurrentNsiItem(nsi);
+    setIsEditNsiPopupOpen(true);
+  }
+
+  function handleEditNsi(elem) {
+    setIsLoading(true);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.editNsiElem({ 
+        token: token, 
+        initialDataVersion:dppDescription.ish_version_id, 
+        elem: elem,
+        id: currentNsiItem.id
+      })
+      .then((res) => {
+        const index = nsiProgram.indexOf(nsiProgram.find((elem) => (elem.id === currentNsiItem.id)));
+        setNsiProgram([...nsiProgram.slice(0, index), res, ...nsiProgram.slice(index + 1)]);
+        closeInitialDataPopups();
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+      .finally(() => setIsLoading(false));
+    }
+  }
 
   function openRemoveNsiPopup(nsi) {
     setCurrentNsiItem(nsi);
@@ -778,6 +900,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
   }
 
   function handleRemoveNsi(id) {
+    setIsLoading(true);
     const token = localStorage.getItem("token");
     api.removeNsiElem({ 
       token: token, 
@@ -808,6 +931,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
     setIsNsiPopupOpen(false);
     setIsRemoveNsiPopupOpen(false);
     setIsRemoveProgramDocumentPopupOpen(false);
+    setIsEditNsiPopupOpen(false);
   }
 
   function closeOverlayPopups() {
@@ -815,6 +939,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
     setIsOpenRemovePartPopup(false);
     setIsOpenChoosePartsPopup(false);
     setIsRemoveNsiPopupOpen(false);
+    setIsEditNsiPopupOpen(false);
     setIsRemoveProgramDocumentPopupOpen(false);
   }
 
@@ -980,15 +1105,15 @@ function InitialData({ loggedIn, history, dppDescription }) {
               }
               {
                 organizationRulesProgram.map((elem, i) => (
-                  <li className="initial-data__documents-item" key={`world-${i}`}>
-                    <img className="initial-data__documents-img" src={worldskillsIcon} alt="иконка worldskills"></img>
+                  <li className="initial-data__documents-item" key={`organization-${i}`}>
+                    <img className="initial-data__documents-img" src={organizationIcon} alt="иконка worldskills"></img>
                     <div className="initial-data__documents-info">
                       <div className="initial-data__documents-tags">
                         <span className="initial-data__documents-type">Корпоративные требования</span>
                         <button className="initial-data__documents-delete-btn" type="button" onClick={() => openRemoveProgramDocumentPopup(elem.id, "cr")}></button>
                       </div>
                       <h4 className="initial-data__documents-name">{elem.name || "<название>"}</h4>
-                      <p className="initial-data__documents-order">{`Дата редакции ${elem.text || "<описание>"} г.`}</p>
+                      <p className="initial-data__documents-order">{`${elem.text || "<описание>"}`}</p>
                     </div>
                   </li>
                 ))
@@ -1103,6 +1228,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
             <button className="btn btn_type_add initial-data__btn_type_add-nsi" onClick={openNsiPopup}>Добавить новый источник</button>
             <ReferenceInformation 
               nsi={nsiProgram}
+              onEdit={openEditNsiPopup}
               onRemove={openRemoveNsiPopup}
             />
           </li>
@@ -1140,7 +1266,7 @@ function InitialData({ loggedIn, history, dppDescription }) {
           onRemove={handleRemoveProfStandart}
           isErrorRequest={isErrorRequest}
         />
-      }
+      } 
 
       {
         isJobСlassificationPopupOpen &&
@@ -1148,10 +1274,14 @@ function InitialData({ loggedIn, history, dppDescription }) {
           isOpen={isJobСlassificationPopupOpen}
           onClose={closeInitialDataPopups}
           isLoading={isLoading}
+          isLoadingPopup={isLoadingPopup}
           jobСlassification={jobСlassification}
           jobСlassificationProgram={jobСlassificationProgram}
           onSave={handleSelectJobСlassification}
           onAdd={handleAddJobСlassification}
+          onEdit={handleEditJobСlassification}
+          onRemove={handleRemoveJobСlassification}
+          isErrorRequest={isErrorRequest}
         />
       }
 
@@ -1161,10 +1291,14 @@ function InitialData({ loggedIn, history, dppDescription }) {
           isOpen={isJobDirectoryPopupOpen}
           onClose={closeInitialDataPopups}
           isLoading={isLoading}
+          isLoadingPopup={isLoadingPopup}
           jobDirectory={jobDirectory}
           jobDirectoryProgram={jobDirectoryProgram}
           onSave={handleSelectJobDirectory}
           onAdd={handleAddJobDirectory}
+          onEdit={handleEditJobDirectory}
+          onRemove={handleRemoveJobDirectory}
+          isErrorRequest={isErrorRequest}
         />
       }
 
@@ -1254,9 +1388,21 @@ function InitialData({ loggedIn, history, dppDescription }) {
           isOpen={isNsiPopupOpen}
           onClose={closeInitialDataPopups} 
           nsiTypes={nsiTypes}
-          onAdd={handleAddNsi} 
+          onAdd={handleAddNsi}
+          isLoading={isLoading}
         />
 
+      }
+
+      {
+        isEditNsiPopupOpen &&
+        <EditNsiPopup
+          isOpen={isEditNsiPopupOpen}
+          onClose={closeInitialDataPopups}  
+          nsi={currentNsiItem}
+          onEdit={handleEditNsi}
+          isLoading={isLoading}
+        />
       }
       
       {

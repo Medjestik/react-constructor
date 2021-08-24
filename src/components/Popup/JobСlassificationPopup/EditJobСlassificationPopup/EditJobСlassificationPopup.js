@@ -1,9 +1,8 @@
 import React from 'react';
 import InputMask from "react-input-mask";
 import Popup from '../../Popup.js';
-import './AddJobСlassificationPopup.css';
 
-function AddJobСlassificationPopup({ isOpen, onClose, onAdd, isLoading, printDate }) {
+function EditJobСlassificationPopup({ isOpen, currentJobСlassification, onClose, onEdit, isLoading, printDate }) {
 
   const [addNameChapter, setAddNameChapter] = React.useState('');
   const [addNameChapterError, setAddNameChapterError] = React.useState(false);
@@ -14,10 +13,10 @@ function AddJobСlassificationPopup({ isOpen, onClose, onAdd, isLoading, printDa
   const [addRank, setAddRank] = React.useState('');
   const [addRankError, setAddRankError] = React.useState(false);
 
-  const [addDocumentTypeSelect, setAddDocumentTypeSelect] = React.useState('');
+  const [addDocumentTypeSelect, setAddDocumentTypeSelect] = React.useState(currentJobСlassification.documentType || "null");
   const [addDocumentType, setAddDocumentType] = React.useState('');
 
-  const [addOrganTypeSelect, setAddOrganTypeSelect] = React.useState('');
+  const [addOrganTypeSelect, setAddOrganTypeSelect] = React.useState(currentJobСlassification.organType || "placeholder");
   const [addOrganType, setAddOrganType] = React.useState('');
 
   const [addEditionNumber, setAddEditionNumber] = React.useState('');
@@ -46,7 +45,7 @@ function AddJobСlassificationPopup({ isOpen, onClose, onAdd, isLoading, printDa
      fullName: addFullName,
     }
 
-    onAdd(newJobСlassification, onClose);
+    onEdit(newJobСlassification, currentJobСlassification.id, onClose);
   }
 
   function handleAddNameChapter(e) {
@@ -92,11 +91,11 @@ function AddJobСlassificationPopup({ isOpen, onClose, onAdd, isLoading, printDa
   function handleAddDocumentType(e) {
     setAddDocumentTypeSelect(e.target.value);
     switch (e.target.value) {
-      case "decree":
+      case "Постановлением":
         setAddDocumentType("Постановлением");
         setIsShowMoreFields(true);
         break;
-      case "order":
+      case "Приказом":
         setAddDocumentType("Приказом");
         setIsShowMoreFields(true);
         break;
@@ -116,22 +115,22 @@ function AddJobСlassificationPopup({ isOpen, onClose, onAdd, isLoading, printDa
   function handleAddOrganType(e) {
     setAddOrganTypeSelect(e.target.value);
     switch (e.target.value) {
-      case "1":
+      case "Госкомтруд СССР":
         setAddOrganType("Госкомтруда СССР");
         break;
-      case "2":
+      case "Секретариат ВЦСПС":
         setAddOrganType("Секретариата ВЦСПС");
         break;
-      case "3":
+      case "ВЦСПС":
         setAddOrganType("ВЦСПС");
         break;
-      case "4":
+      case "Минтруд РФ":
         setAddOrganType("Минтруда РФ");
         break;
-      case "5":
+      case "Минздравсоцразвития РФ":
         setAddOrganType("Минздравсоцразвития РФ");
         break;
-      case "6":
+      case "утв. Госкомтрудом СССР":
         setAddOrganType("Госкомтруда СССР");
         break;
       default:
@@ -148,7 +147,6 @@ function AddJobСlassificationPopup({ isOpen, onClose, onAdd, isLoading, printDa
     }
   }
 
-
   function handleAddEditionDate(e) {
     setAddEditionDate(e.target.value);
     if (e.target.value.length !== 10) {
@@ -159,16 +157,27 @@ function AddJobСlassificationPopup({ isOpen, onClose, onAdd, isLoading, printDa
   }
 
   React.useEffect(() => {
-    setAddNameChapter('');
-    setAddNameProfession('');
-    setAddIssueNumber('');
-    setAddEditionNumber('');
-    setAddRank('');
-    setAddEditionDate('');
-    setAddDocumentType('');
-    setAddDocumentTypeSelect('placeholder');
-    setAddOrganType('');
-    setAddOrganTypeSelect('placeholder');
+    setAddNameChapter(currentJobСlassification.chapterName);
+    setAddNameProfession(currentJobСlassification.nameProfession);
+    setAddRank(currentJobСlassification.rank);
+    setAddIssueNumber(currentJobСlassification.issueNumber);
+    setAddDocumentType(currentJobСlassification.documentType || "");
+    setAddDocumentTypeSelect(currentJobСlassification.documentType || "null");
+
+    if (currentJobСlassification.documentType !== null) {
+      setIsShowMoreFields(true);
+      setAddEditionNumber(currentJobСlassification.editionNumber || "");
+      setAddEditionDate(currentJobСlassification.editionDate || "");
+      setAddOrganType(currentJobСlassification.organType || "");
+      setAddOrganTypeSelect(currentJobСlassification.organType || "placeholder");
+  
+    } else {
+      setIsShowMoreFields(false);
+      setAddEditionNumber("");
+      setAddEditionDate("");
+      setAddOrganType("");
+      setAddOrganTypeSelect('placeholder');
+    }
     setAddNameChapterError(false);
     setAddNameProfessionError(false);
     setAddIssueNumberError(false);
@@ -176,10 +185,28 @@ function AddJobСlassificationPopup({ isOpen, onClose, onAdd, isLoading, printDa
     setAddEditionNumberError(false);
     setAddEditionDateError(false);
     setIsBlockSubmitButton(true);
-    setIsShowMoreFields(false);
-  }, [isOpen]);
+    return () => {
+      setAddNameChapter('');
+      setAddNameProfession('');
+      setAddIssueNumber('');
+      setAddEditionNumber('');
+      setAddRank('');
+      setAddEditionDate('');
+      setAddDocumentType('');
+      setAddDocumentTypeSelect('placeholder');
+      setAddOrganType('');
+      setAddOrganTypeSelect('placeholder');
+      setAddNameChapterError(false);
+      setAddNameProfessionError(false);
+      setAddIssueNumberError(false);
+      setAddRankError(false);
+      setAddEditionNumberError(false);
+      setAddEditionDateError(false);
+      setIsBlockSubmitButton(true);
+      setIsShowMoreFields(false);
+    }
+  }, [currentJobСlassification, isOpen]);
 
-  console.log()
 
   React.useEffect(() => {
     if (
@@ -237,8 +264,8 @@ function AddJobСlassificationPopup({ isOpen, onClose, onAdd, isLoading, printDa
 
   return(
     <Popup isOpen={isOpen} onClose={onClose} >
-      <form className="popup__form popup__form_type_large" name="add-etks-popup-form" action="#" noValidate onSubmit={handleSubmit}>
-        <h3 className="initial-popup__title">Добавление нового документа ЕТКС</h3>
+      <form className="popup__form popup__form_type_large" name="edit-etks-popup-form" action="#" noValidate onSubmit={handleSubmit}>
+        <h3 className="initial-popup__title">Редактирование документа ЕТКС</h3>
         <ul className="initial-popup__list-input">
           <li className="initial-popup__item-input">
             <h5 className="initial-popup__input-name">Название раздела</h5>
@@ -313,14 +340,13 @@ function AddJobСlassificationPopup({ isOpen, onClose, onAdd, isLoading, printDa
               <select           
               id="add-etks-input-document-type"
               name="add-etks-input-document-type"
-
               onChange={handleAddDocumentType}
-              defaultValue="placeholder"
+              defaultValue={addDocumentTypeSelect}
               required   
               >
                 <option value="placeholder" disabled hidden>Выберите тип документа</option>
-                <option value="decree">Постановление</option>
-                <option value="order">Приказ</option>
+                <option value="Постановлением">Постановление</option>
+                <option value="Приказом">Приказ</option>
                 <option value="null">Документ отсутствует</option>
               </select>
               <div className="select-arrow"></div>
@@ -337,16 +363,16 @@ function AddJobСlassificationPopup({ isOpen, onClose, onAdd, isLoading, printDa
               name="add-etks-input-organ-type"
 
               onChange={handleAddOrganType}
-              defaultValue="placeholder"
+              defaultValue={addOrganTypeSelect}
               required
               >
                 <option value="placeholder" disabled hidden>Выберите орган, выпустивший документ</option>
-                <option value="1">Госкомтруд СССР</option>
-                <option value="2">Секретариат ВЦСПС</option>
-                <option value="3">ВЦСПС</option>
-                <option value="4">Минтруд РФ </option>
-                <option value="5">Минздравсоцразвития РФ</option>
-                <option value="6">утв. Госкомтрудом СССР</option>
+                <option value="Госкомтруд СССР">Госкомтруд СССР</option>
+                <option value="Секретариат ВЦСПС">Секретариат ВЦСПС</option>
+                <option value="ВЦСПС">ВЦСПС</option>
+                <option value="Минтруд РФ">Минтруд РФ </option>
+                <option value="Минздравсоцразвития РФ">Минздравсоцразвития РФ</option>
+                <option value="утв. Госкомтрудом СССР">утв. Госкомтрудом СССР</option>
               </select>
               <div className="select-arrow"></div>
               <div className="select-arrow"></div>
@@ -392,11 +418,11 @@ function AddJobСlassificationPopup({ isOpen, onClose, onAdd, isLoading, printDa
           {addFullName}
         </p>
        
-        <button className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} type="submit">{isLoading ? "Добавление.." : "Добавить"}</button>
+        <button className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} type="submit">{isLoading ? "Сохранение.." : "Сохранить"}</button>
 
       </form>
     </Popup>
   )
 }
 
-export default AddJobСlassificationPopup;
+export default EditJobСlassificationPopup;

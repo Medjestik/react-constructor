@@ -64,7 +64,7 @@ function EditOrganizationRulesPopup({ isOpen, currentOrganizationRules, onClose,
   return(
     <Popup isOpen={isOpen} onClose={onClose} >
       <form className="popup__form popup__form_type_large" name="edit-or-form" action="#" noValidate onSubmit={handleSubmit}>
-        <h3 className="initial-popup__title">Добавление нового корпоративного требования</h3>
+        <h3 className="initial-popup__title">Редактирование корпоративного требования</h3>
         <ul className="initial-popup__list-input">
           <li className="initial-popup__item-input">
             <h5 className="initial-popup__input-name">Название документа</h5>

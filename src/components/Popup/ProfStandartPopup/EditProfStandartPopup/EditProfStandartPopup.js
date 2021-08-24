@@ -162,7 +162,7 @@ function EditProfStandartPopup({ isOpen, currentProfstandart, onClose, onEdit, p
   return(
     <Popup isOpen={isOpen} onClose={onClose} >
       <form className="popup__form popup__form_type_large" name="edit-pf-form" action="#" noValidate onSubmit={handleSubmit}>
-        <h3 className="initial-popup__title">Добавление нового профессионального стандарта</h3>
+        <h3 className="initial-popup__title">Редактирование профессионального стандарта</h3>
         <ul className="initial-popup__list-input">
           <li className="initial-popup__item-input">
             <h5 className="initial-popup__input-name">Название профстандарта</h5>
@@ -235,7 +235,7 @@ function EditProfStandartPopup({ isOpen, currentProfstandart, onClose, onEdit, p
               <li className="initial-popup__item-input">
                 <input  
                 className="initial-popup__input"
-                placeholder="введите дату приказа Минюста России"
+                placeholder="введите дату регистрации Минюста России"
                 type="date"
                 id="edit-pf-input-registration-date"
                 name="edit-pf-input-registration-date"
@@ -245,12 +245,12 @@ function EditProfStandartPopup({ isOpen, currentProfstandart, onClose, onEdit, p
                 required
                 >
                 </input>
-                <span className={`initial-popup__input-error ${addRegistrationDateError ? "initial-popup__input-error_type_show" : ""}`}>Заполните дату приказа Минюста России</span>
+                <span className={`initial-popup__input-error ${addRegistrationDateError ? "initial-popup__input-error_type_show" : ""}`}>Заполните дату регистрации Минюста России</span>
               </li>
               <li className="initial-popup__item-input">
                 <input 
                 className="initial-popup__input"
-                placeholder="введите регистрационный номер"
+                placeholder="введите регистрационный номер Минюста России"
                 type="number"
                 id="edit-pf-input-registration-number"
                 name="edit-pf-input-registration-number"
@@ -262,7 +262,7 @@ function EditProfStandartPopup({ isOpen, currentProfstandart, onClose, onEdit, p
                 onWheel={(e) => e.target.blur()}
                 >
                 </input>
-                <span className={`initial-popup__input-error ${addRegistrationNumberError ? "initial-popup__input-error_type_show" : ""}`}>Заполните регистрационный номер</span>
+                <span className={`initial-popup__input-error ${addRegistrationNumberError ? "initial-popup__input-error_type_show" : ""}`}>Заполните регистрационный номер Минюста России</span>
               </li>
             </ul>
           </li>

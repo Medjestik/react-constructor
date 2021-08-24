@@ -44,7 +44,7 @@ import OfficialSitePopup from './OfficialSitePopup/OfficialSitePopup.js';
 import TextbookPopup from './TextbookPopup/TextbookPopup.js';
 import DefineNsiImg from '../../Define/DefineNsiImg/DefineNsiImg.js';
 
-function NsiPopup({ isOpen, onClose, nsiTypes, onAdd }) {       
+function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {       
   const [isFederalLawPopupOpen, setIsFederalLawPopupOpen] = React.useState(false);  
   const [isRussiaLawPopupOpen, setIsRussiaLawPopupOpen] = React.useState(false);
   const [isRussiaCodexPopupOpen, setIsRussiaCodexPopupOpen] = React.useState(false);
@@ -590,19 +590,19 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd }) {
     >
       <div className="popup__form popup__form_type_large">
         <h3 className="initial-popup__title">Выберите тип источника</h3>
-          <div className="search nsi-seacrh">
-            <input
-            className="input-search"
-            placeholder="поиск по названию типа"
-            type="text"
-            id="search-input-nsi-type"
-            name="search-input-nsi-name"
-            autoComplete="off"
-            value={searchText}
-            onChange={searchByType}
-            >
-            </input>
-          </div>
+        <div className="search nsi-seacrh">
+          <input
+          className="input-search"
+          placeholder="поиск по названию типа"
+          type="text"
+          id="search-input-nsi-type"
+          name="search-input-nsi-name"
+          autoComplete="off"
+          value={searchText}
+          onChange={searchByType}
+          >
+          </input>
+        </div>
         <ul className="nsi-popup__list">
           {
             filteredNsiTypes.map((type, i) => (
@@ -620,50 +620,76 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd }) {
       </div>
     </Popup>
 
-    <FederalLawPopup
-      isOpen={isFederalLawPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isFederalLawPopupOpen && 
+      <FederalLawPopup
+        isOpen={isFederalLawPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <RussiaLawPopup
-      isOpen={isRussiaLawPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isRussiaLawPopupOpen &&
+      <RussiaLawPopup
+        isOpen={isRussiaLawPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <RussiaCodexPopup
-      isOpen={isRussiaCodexPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isRussiaCodexPopupOpen &&
+      <RussiaCodexPopup
+        isOpen={isRussiaCodexPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <PresidentEdictPopup
-      isOpen={isPresidentEdictPopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isPresidentEdictPopupOpen &&
+      <PresidentEdictPopup
+        isOpen={isPresidentEdictPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
 
-    <GovernmentDecreePopup
-      isOpen={isGovernmentDecreePopupOpen}
-      onClose={closeAllNsiPopup}
-      emptyNsi={emptyNsi}
-      onAdd={onAdd}
-      id={currentElemId}
-      printDate={printDate}
-    />
+    {
+      isGovernmentDecreePopupOpen &&
+      <GovernmentDecreePopup
+        isOpen={isGovernmentDecreePopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
+
 
     <GovernmentOrderPopup
       isOpen={isGovernmentOrderPopupOpen}

@@ -64,7 +64,7 @@ function EditWorldSkillsPopup({ isOpen, currentWorldSkills, onClose, onEdit, isL
   return(
     <Popup isOpen={isOpen} onClose={onClose} >
       <form className="popup__form popup__form_type_large" name="edit-ws-form" action="#" noValidate onSubmit={handleSubmit}>
-        <h3 className="initial-popup__title">Добавление новой компетенции WorldSkills</h3>
+        <h3 className="initial-popup__title">Редактирование компетенции WorldSkills</h3>
         <ul className="initial-popup__list-input">
           <li className="initial-popup__item-input">
             <h5 className="initial-popup__input-name">Название компетенции</h5>

@@ -3,14 +3,19 @@ import './JobDirectoryPopup.css';
 import Popup from '../Popup.js';
 import AddJobDirectoryPopup from './AddJobDirectoryPopup/AddJobDirectoryPopup.js';
 import JobDirectoryPopupItem from './JobDirectoryPopupItem/JobDirectoryPopupItem.js';
+import EditJobDirectoryPopup from './EditJobDirectoryPopup/EditJobDirectoryPopup.js';
+import RemoveJobDirectoryPopup from './RemoveJobDirectoryPopup/RemoveJobDirectoryPopup.js';
 
-function JobDirectoryPopup({ isOpen, onClose, isLoading, jobDirectory, jobDirectoryProgram, onSave, onAdd }) {
+function JobDirectoryPopup({ isOpen, onClose, isLoading, isLoadingPopup, jobDirectory, jobDirectoryProgram, onSave, onAdd, onEdit, onRemove, isErrorRequest }) {
 
   const [selectedJobDirectory, setSelectedJobDirectory] = React.useState([ ...jobDirectoryProgram]);
-  const [currentJobDirectory, setCurrentJobDirectory] = React.useState([...jobDirectory]);
+  const [filteredJobDirectory, setFilteredJobDirectory] = React.useState([...jobDirectory]);
   const [searchName, setSearchName] = React.useState('');
   const [searchJob, setSearchJob] = React.useState('');
   const [isShowAddPopup, setIsShowAddPopup] = React.useState(false);
+  const [isShowEditPopup, setIsShowEditPopup] = React.useState(false);
+  const [isShowRemovePopup, setIsShowRemovePopup] = React.useState(false);
+  const [currentJobDirectory, setCurrentJobDirectory] = React.useState({});
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -23,6 +28,20 @@ function JobDirectoryPopup({ isOpen, onClose, isLoading, jobDirectory, jobDirect
 
   function closeAllPopups() {
     setIsShowAddPopup(false);
+    setIsShowEditPopup(false)
+    setIsShowRemovePopup(false);
+  }
+
+  function openRemovePopup(elem, hideMenu) { 
+    setIsShowRemovePopup(true);
+    hideMenu();
+    setCurrentJobDirectory(elem);
+  }
+
+  function openEditPopup(elem, hideMenu) {  
+    setIsShowEditPopup(true);
+    hideMenu();
+    setCurrentJobDirectory(elem);
   }
   
   function handleSearchByName(e) {
@@ -39,7 +58,7 @@ function JobDirectoryPopup({ isOpen, onClose, isLoading, jobDirectory, jobDirect
       const index = newJobDirectory.findIndex(elem => elem.id === id);
       newJobDirectory.splice(index, 1);
     } else {
-      currentJobDirectory.find((elem) => {
+      filteredJobDirectory.find((elem) => {
         if (elem.id === id) {
           return newJobDirectory.push(elem);
         } else {
@@ -79,17 +98,17 @@ function JobDirectoryPopup({ isOpen, onClose, isLoading, jobDirectory, jobDirect
     const filteredJobDirectory = jobDirectory.filter((item) => {
       return item.chapterName.toLowerCase().includes(searchName.toLowerCase()) && item.nameProfession.toLowerCase().includes(searchJob.toLowerCase());
     })
-    setCurrentJobDirectory(filteredJobDirectory)
+    setFilteredJobDirectory(filteredJobDirectory)
   }, [jobDirectory, searchName, searchJob]);
 
   React.useEffect(() => {
-    setSelectedJobDirectory([ ...jobDirectoryProgram]);
-    setCurrentJobDirectory([...jobDirectory]);
+    setFilteredJobDirectory([ ...jobDirectoryProgram]);
+    setFilteredJobDirectory([...jobDirectory]);
     setSearchName('');
     setSearchJob('');
     return () => {
       setSelectedJobDirectory([]);
-      setCurrentJobDirectory([]);
+      setFilteredJobDirectory([]);
     };
     // eslint-disable-next-line
   }, [isOpen]);
@@ -105,7 +124,7 @@ function JobDirectoryPopup({ isOpen, onClose, isLoading, jobDirectory, jobDirect
         <h3 className="initial-popup__title">Выбор документов ЕКС</h3>
 
         {
-          isLoading ?
+          isLoadingPopup ?
           <figure className="preloader preloader_type_popup">
             <i className="preloader__circle"></i>
             <figcaption className="preloader__caption">Идёт загрузка...</figcaption>
@@ -152,7 +171,7 @@ function JobDirectoryPopup({ isOpen, onClose, isLoading, jobDirectory, jobDirect
 
           <ul className="initial-popup__list">
           {
-            currentJobDirectory.map((item, i) => (
+            filteredJobDirectory.map((item, i) => (
               <JobDirectoryPopupItem
               item={item}
               i={i}
@@ -160,6 +179,8 @@ function JobDirectoryPopup({ isOpen, onClose, isLoading, jobDirectory, jobDirect
               selectedJobDirectory={selectedJobDirectory}
               onChange={handleChangeJobDirectory}
               printDate={printDate}
+              onEdit={openEditPopup}
+              onRemove={openRemovePopup}
               />
             ))
           }
@@ -167,12 +188,45 @@ function JobDirectoryPopup({ isOpen, onClose, isLoading, jobDirectory, jobDirect
           
           </>
         }
-        <button className="btn btn_type_save job-directory__btn-save" type="submit">Сохранить</button>
+        <button className={`btn btn_type_save profstandart__btn-save ${isLoading ? "btn_type_loading" : ""}`} type="submit">{isLoading ? "Сохранение.." : "Сохранить"}</button>
 
       </form>
     </Popup>
 
-    <AddJobDirectoryPopup isOpen={isShowAddPopup} onClose={closeAllPopups} onAdd={onAdd} printDate={printDate} />
+    {
+      isShowAddPopup && 
+      <AddJobDirectoryPopup
+      isOpen={isShowAddPopup} 
+      onClose={closeAllPopups} 
+      onAdd={onAdd} 
+      isLoading={isLoading}
+      printDate={printDate}
+      />
+    }
+
+    {
+      isShowEditPopup &&
+      <EditJobDirectoryPopup
+      isOpen={isShowEditPopup} 
+      currentJobDirectory={currentJobDirectory} 
+      onClose={closeAllPopups} 
+      onEdit={onEdit}
+      isLoading={isLoading}
+      printDate={printDate}
+      />
+    }
+
+    {
+      isShowRemovePopup &&
+      <RemoveJobDirectoryPopup
+      isOpen={isShowRemovePopup} 
+      currentJobDirectory={currentJobDirectory} 
+      onClose={closeAllPopups} 
+      onRemove={onRemove}
+      isLoading={isLoading}
+      isErrorRequest={isErrorRequest}
+      />
+    }
 
     </>
   )

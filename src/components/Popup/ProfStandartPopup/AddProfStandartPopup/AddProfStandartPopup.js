@@ -236,7 +236,7 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
               <li className="initial-popup__item-input">
                 <input  
                 className="initial-popup__input"
-                placeholder="введите дату приказа Минюста России"
+                placeholder="введите дату регистрации Минюста России"
                 type="date"
                 id="add-pf-input-registration-date"
                 name="add-pf-input-registration-date"
@@ -246,12 +246,12 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
                 required
                 >
                 </input>
-                <span className={`initial-popup__input-error ${addRegistrationDateError ? "initial-popup__input-error_type_show" : ""}`}>Заполните дату приказа Минюста России</span>
+                <span className={`initial-popup__input-error ${addRegistrationDateError ? "initial-popup__input-error_type_show" : ""}`}>Заполните дату регистрации Минюста России</span>
               </li>
               <li className="initial-popup__item-input">
                 <input 
                 className="initial-popup__input"
-                placeholder="введите регистрационный номер"
+                placeholder="введите регистрационный номер Минюста России"
                 type="number"
                 id="add-pf-input-registration-number"
                 name="add-pf-input-registration-number"
@@ -263,7 +263,7 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
                 onWheel={(e) => e.target.blur()}
                 >
                 </input>
-                <span className={`initial-popup__input-error ${addRegistrationNumberError ? "initial-popup__input-error_type_show" : ""}`}>Заполните регистрационный номер</span>
+                <span className={`initial-popup__input-error ${addRegistrationNumberError ? "initial-popup__input-error_type_show" : ""}`}>Заполните регистрационный номер Минюста России</span>
               </li>
             </ul>
           </li>

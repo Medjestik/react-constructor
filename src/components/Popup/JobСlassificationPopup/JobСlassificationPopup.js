@@ -3,14 +3,19 @@ import './JobСlassificationPopup.css';
 import Popup from '../Popup.js';
 import AddJobСlassificationPopup from './AddJobСlassificationPopup/AddJobСlassificationPopup.js';
 import JobСlassificationPopupItem from './JobСlassificationPopupItem/JobСlassificationPopupItem.js';
+import EditJobСlassificationPopup from './EditJobСlassificationPopup/EditJobСlassificationPopup.js';
+import RemoveJobСlassificationPopup from './RemoveJobСlassificationPopup/RemoveJobСlassificationPopup.js';
 
-function JobСlassificationPopup({ isOpen, onClose, isLoading, jobСlassification, jobСlassificationProgram, onSave, onAdd }) {
+function JobСlassificationPopup({ isOpen, onClose, isLoading, isLoadingPopup, jobСlassification, jobСlassificationProgram, onSave, onAdd, onEdit, onRemove, isErrorRequest }) {
 
   const [selectedJobСlassification, setSelectedJobСlassification] = React.useState([...jobСlassificationProgram]);
-  const [currentJobСlassification, setCurrentJobСlassification] = React.useState([...jobСlassification]);
+  const [filteredJobСlassification, setFilteredJobСlassification] = React.useState([...jobСlassification]);
   const [searchName, setSearchName] = React.useState('');
   const [searchProfession, setSearchProfession] = React.useState('');
   const [isShowAddPopup, setIsShowAddPopup] = React.useState(false);
+  const [isShowEditPopup, setIsShowEditPopup] = React.useState(false);
+  const [isShowRemovePopup, setIsShowRemovePopup] = React.useState(false);
+  const [currentJobСlassification, setCurrentJobСlassification] = React.useState({});
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -23,9 +28,21 @@ function JobСlassificationPopup({ isOpen, onClose, isLoading, jobСlassificatio
 
   function closeAllPopups() {
     setIsShowAddPopup(false);
+    setIsShowEditPopup(false)
+    setIsShowRemovePopup(false);
   }
-  
 
+  function openRemovePopup(elem, hideMenu) {
+    setIsShowRemovePopup(true);
+    hideMenu();
+    setCurrentJobСlassification(elem);
+  }
+
+  function openEditPopup(elem, hideMenu) {  
+    setIsShowEditPopup(true);
+    hideMenu();
+    setCurrentJobСlassification(elem);
+  }
 
   function handleSearchByName(e) {
     setSearchName(e.target.value);
@@ -41,7 +58,7 @@ function JobСlassificationPopup({ isOpen, onClose, isLoading, jobСlassificatio
       const index = newJobClassification.findIndex(elem => elem.id === id);
       newJobClassification.splice(index, 1);
     } else {
-      currentJobСlassification.find((elem) => {
+      filteredJobСlassification.find((elem) => {
         if (elem.id === id) {
           return newJobClassification.push(elem);
         } else {
@@ -81,17 +98,17 @@ function JobСlassificationPopup({ isOpen, onClose, isLoading, jobСlassificatio
     const filteredJobСlassification = jobСlassification.filter((item) => {
       return item.chapterName.toLowerCase().includes(searchName.toLowerCase()) && item.nameProfession.toLowerCase().includes(searchProfession.toLowerCase());
     })
-    setCurrentJobСlassification(filteredJobСlassification)
+    setFilteredJobСlassification(filteredJobСlassification)
   }, [jobСlassification, searchName, searchProfession]);
 
   React.useEffect(() => {
     setSelectedJobСlassification([ ...jobСlassificationProgram]);
-    setCurrentJobСlassification([...jobСlassification]);
+    setFilteredJobСlassification([...jobСlassification]);
     setSearchName('');
     setSearchProfession('');
     return () => {
       setSelectedJobСlassification([]);
-      setCurrentJobСlassification([]);
+      setFilteredJobСlassification([]);
     };
     // eslint-disable-next-line
   }, [isOpen]);
@@ -107,7 +124,7 @@ function JobСlassificationPopup({ isOpen, onClose, isLoading, jobСlassificatio
         <h3 className="initial-popup__title">Выбор документов ЕТКС</h3>
 
         {
-          isLoading ?
+          isLoadingPopup ?
           <figure className="preloader preloader_type_popup">
             <i className="preloader__circle"></i>
             <figcaption className="preloader__caption">Идёт загрузка...</figcaption>
@@ -154,7 +171,7 @@ function JobСlassificationPopup({ isOpen, onClose, isLoading, jobСlassificatio
 
           <ul className="initial-popup__list">
             {
-              currentJobСlassification.map((item, i) => (
+              filteredJobСlassification.map((item, i) => (
                 <JobСlassificationPopupItem
                 item={item}
                 i={i}
@@ -162,6 +179,8 @@ function JobСlassificationPopup({ isOpen, onClose, isLoading, jobСlassificatio
                 selectedJobСlassification={selectedJobСlassification}
                 onChange={handleChangeJobClassification}
                 printDate={printDate}
+                onEdit={openEditPopup}
+                onRemove={openRemovePopup}
                 />
               ))
             }
@@ -169,12 +188,45 @@ function JobСlassificationPopup({ isOpen, onClose, isLoading, jobСlassificatio
 
           </>
         }
-        <button className="btn btn_type_save job-classification__btn-save" type="submit">Сохранить</button>
+        <button className={`btn btn_type_save profstandart__btn-save ${isLoading ? "btn_type_loading" : ""}`} type="submit">{isLoading ? "Сохранение.." : "Сохранить"}</button>
 
       </form>
     </Popup>
 
-    <AddJobСlassificationPopup isOpen={isShowAddPopup} onClose={closeAllPopups} onAdd={onAdd} printDate={printDate} />
+    {
+      isShowAddPopup && 
+      <AddJobСlassificationPopup
+      isOpen={isShowAddPopup} 
+      onClose={closeAllPopups} 
+      onAdd={onAdd} 
+      isLoading={isLoading}
+      printDate={printDate}
+      />
+    }
+
+    {
+      isShowEditPopup &&
+      <EditJobСlassificationPopup
+      isOpen={isShowEditPopup} 
+      currentJobСlassification={currentJobСlassification} 
+      onClose={closeAllPopups} 
+      onEdit={onEdit}
+      isLoading={isLoading}
+      printDate={printDate}
+      />
+    }
+
+    {
+      isShowRemovePopup &&
+      <RemoveJobСlassificationPopup 
+      isOpen={isShowRemovePopup} 
+      currentJobСlassification={currentJobСlassification} 
+      onClose={closeAllPopups} 
+      onRemove={onRemove}
+      isLoading={isLoading}
+      isErrorRequest={isErrorRequest}
+      />
+    }
 
     </>
   )

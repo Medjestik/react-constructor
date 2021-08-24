@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from '../../Popup.js';
 
-function FederalLawPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
+function FederalLawPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLoading }) {
 
   const [addName, setAddName] = React.useState('');
   const [addNameError, setAddNameError] = React.useState(false);
@@ -16,8 +16,8 @@ function FederalLawPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const newNsi = { ...emptyNsi, nsiName: addName, nsiDate: addDate, nsiNumber: addNumber, nsiEdit: addEdition, type_id: id, nsiFullName: addFullName };
-    onAdd(newNsi, onClose);
+    const newNsi = { ...nsi, nsiName: addName, nsiDate: addDate, nsiNumber: addNumber, nsiEdit: addEdition, type_id: id, nsiFullName: addFullName };
+    onSave(newNsi, onClose);
   }
 
   function handleAddName(e) {
@@ -52,16 +52,16 @@ function FederalLawPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
   }
 
   React.useEffect(() => {
-    setAddName('');
-    setAddDate('');
-    setAddNumber('')
-    setAddEdition('');
+    setAddName(nsi.nsiName);
+    setAddDate(nsi.nsiDate);
+    setAddNumber(nsi.nsiNumber);
+    setAddEdition(nsi.nsiEdit || "");
     setAddFullName('');
     setAddNameError(false);
     setAddDateError(false);
     setAddNumberError(false)
     setIsBlockSubmitButton(true);
-  }, [isOpen]);
+  }, [type, nsi, isOpen]);
 
   React.useEffect(() => {
     if (
@@ -95,8 +95,8 @@ function FederalLawPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
       isOpen={isOpen}
       onClose={onClose}
     >
-      <form className="popup__form popup__form_type_large" name="edit-part-form" action="#" noValidate onSubmit={handleSubmit}>
-          <h3 className="nsi-popup__title">Добавление Федерального закона</h3>
+      <form className="popup__form popup__form_type_large" name={`${type}-nsi-form-${id}`} action="#" noValidate onSubmit={handleSubmit}>
+          <h3 className="nsi-popup__title">{`${type === "edit" ? "Редактирование " : "Добавление "}`}Федерального закона</h3>
           <ul className="nsi-popup__list-input">
           <li className="nsi-popup__item-input">
             <h5 className="nsi-popup__input-name">Название</h5>
@@ -104,8 +104,8 @@ function FederalLawPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
             className="nsi-popup__input"
             placeholder="введите название"
             type="text"
-            id="add-input-name"
-            name="add-input-name"
+            id={`${type}-nsi-input-name-${id}`}
+            name={`${type}-nsi-input-name-${id}`}
             autoComplete="off"
             value={addName}
             onChange={handleAddName}
@@ -120,8 +120,8 @@ function FederalLawPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
             className="nsi-popup__input"
             placeholder="введите дату"
             type="date"
-            id="add-input-date"
-            name="add-input-date"
+            id={`${type}-nsi-input-date-${id}`}
+            name={`${type}-nsi-input-date-${id}`}
             autoComplete="off"
             value={addDate}
             onChange={handleAddDate}
@@ -136,8 +136,8 @@ function FederalLawPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
             className="nsi-popup__input"
             placeholder="введите номер"
             type="text"
-            id="add-input-name"
-            name="add-input-name"
+            id={`${type}-nsi-input-number-${id}`}
+            name={`${type}-nsi-input-number-${id}`}
             autoComplete="off"
             value={addNumber}
             onChange={handleAddNumber}
@@ -152,8 +152,8 @@ function FederalLawPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
             className="nsi-popup__input"
             placeholder="введите редакцию"
             type="date"
-            id="add-input-date"
-            name="add-input-date"
+            id={`${type}-nsi-input-edition-date-${id}`}
+            name={`${type}-nsi-input-edition-date-${id}`}
             autoComplete="off"
             value={addEdition}
             onChange={handleAddEdition}
@@ -167,7 +167,23 @@ function FederalLawPopup({ isOpen, onClose, emptyNsi, onAdd, id, printDate }) {
           {addFullName}
         </p>
 
-        <button className={`btn btn_type_save nsi-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""}`} type="submit">Добавить</button>
+        {
+         type === "edit" ?
+         <button 
+         className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} 
+         type="submit"
+         >
+           {isLoading ? "Сохранение.." : "Сохранить"}
+         </button>
+         :
+         <button 
+         className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} 
+         type="submit"
+         >
+           {isLoading ? "Добавление.." : "Добавить"}
+         </button>
+       }
+
       </form>
     </Popup>
     )

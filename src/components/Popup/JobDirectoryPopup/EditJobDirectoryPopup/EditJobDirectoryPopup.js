@@ -1,8 +1,7 @@
 import React from 'react';
-import './AddJobDirectoryPopup.css';
 import Popup from '../../Popup.js';
 
-function AddJobDirectoryPopup({ isOpen, onClose, onAdd, printDate }) { 
+function EditJobDirectoryPopup({ isOpen, currentJobDirectory, onClose, onEdit, isLoading, printDate }) { 
 
   const [addNameChapter, setAddNameChapter] = React.useState('');
   const [addNameChapterError, setAddNameChapterError] = React.useState(false);
@@ -23,7 +22,7 @@ function AddJobDirectoryPopup({ isOpen, onClose, onAdd, printDate }) {
       fullName: addFullName,
     }
 
-    onAdd(newJobСlassification, onClose);
+    onEdit(newJobСlassification, currentJobDirectory.id, onClose);
   }
 
   function handleAddNameChapter(e) {
@@ -54,14 +53,14 @@ function AddJobDirectoryPopup({ isOpen, onClose, onAdd, printDate }) {
   }
 
   React.useEffect(() => {
-    setAddNameChapter('');
-    setAddNameJob('');
-    setAddEditionDate('');
+    setAddNameChapter(currentJobDirectory.chapterName);
+    setAddNameJob(currentJobDirectory.nameProfession);
+    setAddEditionDate(currentJobDirectory.editionDate);
     setAddNameChapterError(false);
     setAddNameJobError(false);
     setAddEditionDateError(false);
     setIsBlockSubmitButton(true);
-  }, [isOpen]);
+  }, [currentJobDirectory, isOpen]);
 
   React.useEffect(() => {
     if (
@@ -93,7 +92,7 @@ function AddJobDirectoryPopup({ isOpen, onClose, onAdd, printDate }) {
   return(
     <Popup isOpen={isOpen} onClose={onClose} >
       <form className="popup__form popup__form_type_large" name="add-eks-popup-form" action="#" noValidate onSubmit={handleSubmit}>
-        <h3 className="initial-popup__title">Добавление нового документа ЕКС</h3>
+        <h3 className="initial-popup__title">Редактирование документа ЕКС</h3>
         <ul className="initial-popup__list-input">
           <li className="initial-popup__item-input">
             <h5 className="initial-popup__input-name">Название раздела</h5>
@@ -151,12 +150,12 @@ function AddJobDirectoryPopup({ isOpen, onClose, onAdd, printDate }) {
           <span className="initial-popup__result-name_weight_bold">Итоговое название: </span>
           {addFullName}
         </p>
-       
-        <button className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""}`} type="submit">Добавить</button>
+         
+        <button className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} type="submit">{isLoading ? "Сохранение.." : "Сохранить"}</button>
 
       </form>
     </Popup>
   )
 }
 
-export default AddJobDirectoryPopup;
+export default EditJobDirectoryPopup;

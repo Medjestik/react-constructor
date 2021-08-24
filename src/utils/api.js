@@ -220,6 +220,19 @@ export const createJobClassification = ({ token, document }) => {
   .then(res => handleResponse(res))
 };
 
+export const editJobClassification = ({ token, id, document }) => {
+  return fetch(`${API_URL}/ekts/${id}/update`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ document })
+  })
+  .then(res => handleResponse(res))
+};
+
 export const selectJobClassification = ({ token, initialDataVersion, data }) => {
   return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/select_ektses`, {
     method: 'POST',
@@ -229,6 +242,19 @@ export const selectJobClassification = ({ token, initialDataVersion, data }) => 
       'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify({ data })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const removeJobClassification = ({ token, id }) => {
+  return fetch(`${API_URL}/ekts/${id}/destroy`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify()
   })
   .then(res => handleResponse(res))
 };
@@ -258,6 +284,19 @@ export const createDirectoryJob = ({ token, document }) => {
   .then(res => handleResponse(res))
 };
 
+export const editDirectoryJob = ({ token, id, document }) => {
+  return fetch(`${API_URL}/eks/${id}/update`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ document })
+  })
+  .then(res => handleResponse(res))
+};
+
 export const selectDirectoryJob = ({ token, initialDataVersion, data }) => {
   return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/select_ekses`, {
     method: 'POST',
@@ -267,6 +306,19 @@ export const selectDirectoryJob = ({ token, initialDataVersion, data }) => {
       'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify({ data })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const removeDirectoryJob = ({ token, id }) => {
+  return fetch(`${API_URL}/eks/${id}/destroy`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify()
   })
   .then(res => handleResponse(res))
 };
@@ -517,6 +569,19 @@ export const getNsiType = ({ token }) => {
 
 export const createNsiElem = ({ token, initialDataVersion, elem }) => {
   return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/nsis`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ elem })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const editNsiElem = ({ token, initialDataVersion, elem, id }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/nsis/${id}/update`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
