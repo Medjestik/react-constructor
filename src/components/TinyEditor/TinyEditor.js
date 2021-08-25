@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 
-function TinyEditor({ onChange }) {
+function TinyEditor({ onChange, currentTask, currentTaskType }) {
 
   const editorRef = useRef(null);
   const [value, setValue] = React.useState();
@@ -16,7 +16,7 @@ function TinyEditor({ onChange }) {
       <Editor
         apiKey='fuegeebfi4wbyx35ou0prw31rof6p1sadgeids1lmfkz3r6c'
         onInit={(evt, editor) => editorRef.current = editor}
-        initialValue="<p>Введите ваш контент...</p>"
+        initialValue={currentTaskType === "edit" ? currentTask.description : "<p>Введите ваш контент...</p>"}
         value={value}
         onEditorChange={(newValue, editor) => setValue(newValue)}
         init={{

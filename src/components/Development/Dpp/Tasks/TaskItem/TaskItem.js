@@ -1,6 +1,6 @@
 import React from 'react';
 
-function TaskItem({ task, index }) {
+function TaskItem({ task, index, onEdit }) {
 
   const [isShowMenu, setIsShowMenu] = React.useState(false);
 
@@ -23,7 +23,7 @@ function TaskItem({ task, index }) {
       </div>
       <div className={`task__item___buttons ${isShowMenu ? "task__item___buttons_type_show" : ""}`}>
         <button className={`task__item___btn-menu ${isShowMenu ? "task__item___btn-menu_type_show" : ""}`} type="button" onClick={toggleMenu}></button>
-        <button className="task__item___btn task__item___btn-edit" type="button">Редактировать</button>
+        <button className="task__item___btn task__item___btn-edit" type="button" onClick={() => onEdit(task)}>Редактировать</button>
         <button className="task__item___btn task__item___btn-delete" type="button" onClick={removeElement}>Удалить</button>
       </div>        
     </li>

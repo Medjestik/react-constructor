@@ -14,7 +14,7 @@ function LearningPlan({ programStructure, onEdit }) {
             <span className="learning-plan__table-head-column-name">Трудоемкость, ч</span>
             <ul className="learning-plan__table-head-column-list">
               <li className="learning-plan__table-head-column-item">
-                <span className="learning-plan__table-head-column-caption">Итого</span>
+                <span className="learning-plan__table-head-column-caption learning-plan__table-head-column-caption_font_weight">Итого</span>
               </li>
               <li className="learning-plan__table-head-column-item">
                 <span className="learning-plan__table-head-column-caption">Лек.</span>
@@ -50,7 +50,7 @@ function LearningPlan({ programStructure, onEdit }) {
                   <li className="learning-plan__table-body-row table-body-row_type_hours">
                     <ul className="learning-plan__table-head-column-list">
                       <li className="learning-plan__table-head-column-item">
-                        <span className="learning-plan__table-head-column-caption">{elem.total_hours}</span>
+                        <span className="learning-plan__table-head-column-caption learning-plan__table-head-column-caption_font_weight">{elem.total_hours}</span>
                       </li>
                       <li className="learning-plan__table-head-column-item">
                         <span className="learning-plan__table-head-column-caption">{elem.lection_hours}</span>
@@ -82,7 +82,7 @@ function LearningPlan({ programStructure, onEdit }) {
                       <li className="learning-plan__table-body-row table-body-row_type_hours">
                         <ul className="learning-plan__table-head-column-list">
                           <li className="learning-plan__table-head-column-item">
-                            <span className="learning-plan__table-head-column-caption">{theme.total_hours}</span>
+                            <span className="learning-plan__table-head-column-caption learning-plan__table-head-column-caption_font_weight">{theme.total_hours}</span>
                           </li>
                           <li className="learning-plan__table-head-column-item">
                             <span className="learning-plan__table-head-column-caption">{theme.lection_hours}</span>

@@ -2,12 +2,22 @@ import React from 'react';
 import './AddPracticalTask.css';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import TinyEditor from '../../../../TinyEditor/TinyEditor.js';
+import AddAssessmentItemPopup from '../AddAssessmentItemPopup/AddAssessmentItemPopup.js';
 
-function AddPracticalTask({ onAdd }) {
+function AddPracticalTask({ currentTask, currentTaskType, onBack, onAdd, onEdit }) {
   
   const [description, setDescription] = React.useState("");
-  const [place, setplace] = React.useState("");
+  const [place, setPlace] = React.useState("");
   const [time, setTime] = React.useState("");
+  const [isOpenAddAssessmentItemPopup, setIsOpenAddAssessmentItemPopup] = React.useState(false);
+
+  function openAddAssessmentItemPopup() {
+    setIsOpenAddAssessmentItemPopup(true);
+  }
+
+  function closeAddAddAssessmentItemPopups() {
+    setIsOpenAddAssessmentItemPopup(false);
+  }
 
   function onAddTask() {
     const newTask = {
@@ -19,12 +29,15 @@ function AddPracticalTask({ onAdd }) {
       portfolioPresentationReq: "",
       portfolioProcedure: "",
     }
-    onAdd(newTask);
-    console.log(newTask);
+    if (currentTaskType === "edit") {
+      onEdit(newTask, currentTask.id);
+    } else {
+      onAdd(newTask);
+    }
   }
 
   function handleChangePlace(e) {
-    setplace(e.target.value);
+    setPlace(e.target.value);
   }
 
   function handleChangeTime(e) {
@@ -35,8 +48,22 @@ function AddPracticalTask({ onAdd }) {
     setDescription(content);
   }
 
+  React.useEffect(() => {
+    setDescription(currentTask.description || "");
+    setPlace(currentTask.place || "");
+    setTime(currentTask.time || "");
+    return () => {
+      setDescription("");
+      setPlace("");
+      setTime("");
+    };
+    // eslint-disable-next-line
+  }, [currentTask]);
+
   return (
-    <div className="practical-task"> 
+    <>
+    <div className="practical-task">
+      <button className="btn btn_type_back practical-task__btn-back" type="button" onClick={onBack}>К списку заданий</button>
       <Tabs className="tabs">
         <TabList className="tab-list">
           <Tab className="tab">Описание</Tab>
@@ -49,7 +76,7 @@ function AddPracticalTask({ onAdd }) {
           <ul className="practical-task__list">
             <li className="practical-task__item">
               <h5 className="practical-task__item-name">Описание ситуации и постановка задачи</h5>
-              <TinyEditor onChange={handleChangeDescription} />
+              <TinyEditor onChange={handleChangeDescription} currentTask={currentTask} currentTaskType={currentTaskType} />
             </li>
             <li className="practical-task__item">
               <h5 className="practical-task__item-name">Место выполнения</h5>
@@ -84,16 +111,24 @@ function AddPracticalTask({ onAdd }) {
               </input>
             </li>
           </ul>
-          <button className="btn btn_type_save practical-task__save-btn" type="button" onClick={onAddTask}>Сохранить</button>
-        </TabPanel>
+        </TabPanel> 
         <TabPanel>
+          <div className="practical-task__buttons">
+            <button className="btn btn_type_add practical-task__btn-add" type="button" onClick={openAddAssessmentItemPopup}>Добавить предмет оценки</button>
+            <button className="btn btn_type_add practical-task__btn-add" type="button">Добавить объект оценки</button>
+          </div>
         </TabPanel>
         <TabPanel>
         </TabPanel>
         <TabPanel>
         </TabPanel>
       </Tabs>
+      <button className="btn btn_type_save practical-task__save-btn" type="button" onClick={onAddTask}>Сохранить</button>
     </div>
+
+    <AddAssessmentItemPopup isOpen={isOpenAddAssessmentItemPopup} onClose={closeAddAddAssessmentItemPopups} />
+
+    </>
   );
 }
 

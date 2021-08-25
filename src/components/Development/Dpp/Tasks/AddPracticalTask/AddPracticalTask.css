@@ -2,6 +2,7 @@
   padding: 0px;
   margin: 0px;
   list-style-type: none;
+  width: 100%;
 }
 .practical-task__item {
   margin: 15px 0px 0px 0px;
@@ -57,4 +58,14 @@
 }
 .practical-task__save-btn {
   margin: 20px 0px 0px 0px;
+}
+.practical-task__btn-back {
+  margin-top: 25px;
+}
+.practical-task__buttons {
+  display: flex;
+  margin-top: 40px;
+}
+.practical-task__btn-add {
+  margin-right: 30px;
 }

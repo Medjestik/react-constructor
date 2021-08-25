@@ -3,18 +3,39 @@ import './Tasks.css';
 import * as evaluationMaterialApi from '../../../../utils/evaluationMaterialApi/evaluationMaterialApi.js';
 import AddPracticalTask from './AddPracticalTask/AddPracticalTask.js';
 import TaskItem from './TaskItem/TaskItem.js';
+import Preloader from '../../../Preloader/Preloader.js'
 
-function Tasks({ loggedIn, dppDescription, tasks }) {
+function Tasks({ loggedIn, dppDescription }) {
 
   const [isShowAddTaskType, setIsShowAddTaskType] = React.useState(false);
   const [isShowAddPracticalTask, setIsShowAddPracticalTask] = React.useState(false);
   const [isShowAddMenu, setIsShowAddMenu] = React.useState(true);
-
-  const [currentTasks, setCurrentsTasks] = React.useState(tasks);
+  const [tasks, setTasks] = React.useState([]);
+  const [currentTask, setCurrentsTask] = React.useState({});
+  const [currentTaskType, setCurrentTaskType] = React.useState("")
+  const [isLoadingTasks, setIsLoadingTasks] = React.useState(true);
 
   function openAddPracticalTask() {
     setIsShowAddPracticalTask(true);
     setIsShowAddMenu(false);
+    setCurrentTaskType("add");
+    setCurrentsTask({});
+    setIsShowAddTaskType(false);
+  }
+
+  function openEditPracticalTask(task) {
+    setIsShowAddPracticalTask(true);
+    setIsShowAddMenu(false);
+    setCurrentTaskType("edit");
+    setCurrentsTask(task);
+    setIsShowAddTaskType(false);
+  }
+
+  function backToTaskList() {
+    setIsShowAddPracticalTask(false);
+    setIsShowAddMenu(true);
+    setCurrentTaskType("");
+    setCurrentsTask({});
   }
 
   function toggleShowAddMenu() {
@@ -26,7 +47,7 @@ function Tasks({ loggedIn, dppDescription, tasks }) {
     if (loggedIn) {
       evaluationMaterialApi.createTask({ token: token, omId: dppDescription.om_version_id, task: task })
         .then((res) => {
-          setCurrentsTasks([...currentTasks, res]);
+          setTasks([...tasks, res]);
         })
         .catch((err) => {
             console.error(err);
@@ -37,8 +58,61 @@ function Tasks({ loggedIn, dppDescription, tasks }) {
       }
   }
 
+  function handleEditPracticalTask(task, id) {
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      evaluationMaterialApi.editTask({ token: token, omId: dppDescription.om_version_id, task: task, taskId: id })
+        .then((res) => {
+          //setCurrentsTasks([...currentTasks, res]);
+          console.log(res);
+        })
+        .catch((err) => {
+            console.error(err);
+        })
+        .finally(() => {
+
+        });
+      }
+  }
+
+  function getTasks() {
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      setIsLoadingTasks(true);
+      evaluationMaterialApi.getTask({ token: token, dppId: dppDescription.id, omId: dppDescription.om_version_id })
+        .then((res) => {
+          console.log(res);
+          setTasks(res.tasks);
+        })
+        .catch((err) => {
+            console.error(err);
+        })
+        .finally(() => {
+          setIsLoadingTasks(false);
+        });
+    }
+  }
+
+  React.useEffect(() => {
+    getTasks();
+    setCurrentTaskType("");
+    setCurrentsTask({});
+    return () => {
+      setTasks([]);
+    };
+    // eslint-disable-next-line
+  }, []);
+
   return (
+    <>
     <div className="tasks"> 
+
+    {
+      isLoadingTasks 
+      ?
+      <Preloader />
+      :
+      <>
       <p className="main__subtitle">Для работы с оценочными материалами выберите или создайте новое задание.</p>
       {
         isShowAddMenu &&
@@ -53,19 +127,28 @@ function Tasks({ loggedIn, dppDescription, tasks }) {
           <h5 className="practical-task__item-name">Добавленные задания</h5>
           <ul className="task__list">
             {
-              currentTasks.map((elem, i) => (
-                <TaskItem key={elem.id} task={elem} index={i} />
+              tasks.map((elem, i) => (
+                <TaskItem key={elem.id} task={elem} index={i} onEdit={openEditPracticalTask} />
               ))
             }
           </ul>
         </>
+        }
+        </>
       }
-      {
-        isShowAddPracticalTask &&
-        <AddPracticalTask onAdd={handleAddPracticalTask} />
-      }
-
+      
     </div>
+    {
+      isShowAddPracticalTask &&
+      <AddPracticalTask 
+      currentTask={currentTask} 
+      currentTaskType={currentTaskType}
+      onBack={backToTaskList}
+      onAdd={handleAddPracticalTask}
+      onEdit={handleEditPracticalTask}
+      />
+    }
+    </>
   );
 }
 

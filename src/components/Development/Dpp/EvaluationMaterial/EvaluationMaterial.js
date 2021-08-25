@@ -12,8 +12,6 @@ function EvaluationMaterial({ dppDescription, loggedIn }) {
   const [questionTypes, setQuestionTypes] = React.useState([]);
   const [currentKnowledge, setCurrentKnowledge] = React.useState({});
   const [isRenderKnowledge, setIsRenderKnowledge] = React.useState(false);
-  const [tasks, setTasks] = React.useState([]);
-
   const [isLoadingKnowledges, setIsLoadingKnowledges] = React.useState(false);
 
   function getKnowledges() {
@@ -25,7 +23,6 @@ function EvaluationMaterial({ dppDescription, loggedIn }) {
           console.log(res);
           setKnowledges(res.knowledges);
           setQuestionTypes(res.questionTypes);
-          setTasks(res.tasks);
         })
         .catch((err) => {
             console.error(err);
@@ -98,7 +95,7 @@ function EvaluationMaterial({ dppDescription, loggedIn }) {
         }
         </TabPanel>
         <TabPanel>
-          <Tasks loggedIn={loggedIn} dppDescription={dppDescription} tasks={tasks} />
+          <Tasks loggedIn={loggedIn} dppDescription={dppDescription} />
         </TabPanel>
       </Tabs>
 
