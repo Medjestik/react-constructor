@@ -954,7 +954,6 @@ function InitialData({ loggedIn, history, dppDescription }) {
           api.getInitialData({ token: token, dppId: dppDescription.id, initialDataVersion: dppDescription.ish_version_id, })
         ])
         .then(([ profLevels, initialData ]) => {
-          console.log(initialData);
           setProfLevels(profLevels);
           setProfStandartsProgram(initialData.prof_standarts);
           setJobСlassificationProgram(initialData.ektses);

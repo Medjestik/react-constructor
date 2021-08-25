@@ -11,8 +11,6 @@ function ZoonList({ dppDescription, loggedIn }) {
   const [crossKnowledge, setCrossKnowledge] = React.useState([]);
   const [zoonWithoutCompetence, setZoonWithoutCompetence] = React.useState([]);
 
-  console.log(zoon);
-
   function defineChildrenCompetence(id) {
     const childrenFirst = zoon.zoons.filter((elem) => (elem.pid === id));
     return childrenFirst.map((elem) => {

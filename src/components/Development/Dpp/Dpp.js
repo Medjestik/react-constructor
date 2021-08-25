@@ -86,7 +86,10 @@ function Dpp({ loggedIn, history, pathname, }) {
 
         <Switch>    
           <Route path="/main/development/dpp/program-structure" exact>
-            <ProgramStructure />
+            <ProgramStructure
+            dppDescription={dppDescription}
+            loggedIn={loggedIn} 
+            />
           </Route>
         </Switch>
 

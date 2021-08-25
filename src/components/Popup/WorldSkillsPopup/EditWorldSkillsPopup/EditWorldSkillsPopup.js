@@ -72,8 +72,8 @@ function EditWorldSkillsPopup({ isOpen, currentWorldSkills, onClose, onEdit, isL
             className="initial-popup__input"
             placeholder="введите название компетенции"
             type="text"
-            id="add-ws-input-name"
-            name="add-ws-input-name"
+            id="edit-ws-input-name"
+            name="edit-ws-input-name"
             autoComplete="off"
             value={addName}
             onChange={handleAddName}
@@ -88,8 +88,8 @@ function EditWorldSkillsPopup({ isOpen, currentWorldSkills, onClose, onEdit, isL
             className="initial-popup__input"
             placeholder="введите наименование должности"
             type="text"
-            id="add-ws-input-code"
-            name="add-ws-input-code"
+            id="edit-ws-input-code"
+            name="edit-ws-input-code"
             autoComplete="off"
             value={addCode}
             onChange={handleAddCode}

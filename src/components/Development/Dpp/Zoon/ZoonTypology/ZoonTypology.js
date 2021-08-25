@@ -14,7 +14,6 @@ function ZoonTypology({ dppDescription, loggedIn }) {
       setIsRendering(true);
       api.getZoon({ token: token, dppId: dppDescription.id, zoonVersion: dppDescription.zun_version_id, })
       .then((res) => {
-        console.log(res)
         setZoon(res);
       })
       .catch((err) => {

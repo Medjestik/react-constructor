@@ -1,0 +1,65 @@
+.learning-result__list {
+  padding: 0px;
+  margin: 0px;
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.learning-result__item {
+  margin: 0px;
+}
+.learning-result__item-info {
+  display: flex;
+  align-items: center;
+}
+.learning-result__symbol {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin: 0px 5px 0px 0px;
+} 
+.learning-result__symbol_type_skill {
+  background-color: var(--secondary-light-color);
+}
+.learning-result__symbol_type_ability {
+  background-color: var(--main-color);
+}
+.learning-result__symbol_type_knowledge {
+  background-color: var(--third-light-color);
+}
+.learning-result__item-title {
+  margin: 10px 0px 10px 15px;
+  font-size: 20px;
+  line-height: 1.3;
+  font-weight: bold;
+  color: var(--subtitle-color);
+  max-width: 80%;
+}
+.learning-result__theme-list {
+  padding: 0px;
+  margin: 0px;
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+}
+.learning-result__theme-item {
+  display: flex;
+  align-items: center;
+  margin: 5px 0px;
+  padding-left: 45px;
+}
+.learning-result__theme-count {
+  margin: 0px 5px 0px 0px;
+  font-size: 16px;
+  line-height: 1.3;
+  font-weight: normal;
+  color: var(--subtitle-color);
+}
+.learning-result__theme-name {
+  margin: 0px;
+  font-size: 16px;
+  line-height: 1.3;
+  font-weight: normal;
+  color: var(--subtitle-color);
+}
