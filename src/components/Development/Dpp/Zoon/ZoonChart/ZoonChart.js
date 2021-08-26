@@ -11,6 +11,7 @@ import BuildCompetence from '../BuildCompetence/BuildCompetence.js';
 import NsiPopup from '../../../../Popup/NsiPopup/NsiPopup.js';
 import * as api from '../../../../../utils/api.js';
 import ErrorDragAndDropPopup from '../ErrorDragAndDropPopup/ErrorDragAndDropPopup.js';
+import SwapChildrenPopup from '../SwapChildrenPopup/SwapChildrenPopup.js';
 
 function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi, zoonLinks, typologyParts }) {
 
@@ -30,6 +31,9 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
   const [errorDragAndDrop, setErrorDragAndDrop] = React.useState('');
   const [isErrorDragAndDropPopupOpen, setIsErrorDragAndDropPopupOpen] = React.useState(false);
   const [isAddNsiPopupOpen , setIsAddNsiPopupOpen] = React.useState(false);
+  const [isSwapChildrenPopupOpen, setIsSwapChildrenPopupOpen] = React.useState(false);
+  const [nodeChildren, setNodeChildren] = React.useState([]);
+  const [currentActionType, setCurrentActionType] = React.useState("");
 
   const divRef = React.createRef();
   OrgChart.templates.myTemplate = Object.assign({}, OrgChart.templates.ana);
@@ -40,8 +44,12 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
 
   OrgChart.templates.myTemplate.ripple = { radius: 40, color: "#0890D3", rect: { x: 0, y: 0, width: 400, height: 120, rx: 40, ry: 40 }};
 
-  OrgChart.templates.myTemplate.field_name = '<foreignObject x="10" y="32" width="365" height="80"><p class="field__name" style="margin: 0px;">{val}</p></foreignObject>';
-  OrgChart.templates.myTemplate.field_title = '<foreignObject x="10" y="5" width="365" height="24"><p class="field__title" style="margin: 0px;">{val}</p></foreignObject>';
+  OrgChart.templates.myTemplate.field_name = '<foreignObject x="10" y="34" width="365" height="80"><p class="field__name" style="margin: 0px;">{val}</p></foreignObject>';
+  OrgChart.templates.myTemplate.field_title = '<foreignObject x="10" y="10" width="365" height="24"><p class="field__title" style="margin: 0px;">{val}</p></foreignObject>';
+
+  OrgChart.templates.myTemplate.tooltip = '<foreignObject x="10" y="-35" width="365" height="80"><p class="field__tooltip">{val}</p></foreignObject>';
+
+  OrgChart.templates.myTemplate.valid = '<foreignObject x="330" y="8" width="22" height="22"><img class="field__warning" style="opacity: {val}" src="https://edu.emiit.ru/warning.png" alt="кнопка меню" control-node-menu-id="{id}"></img></foreignObject>';
 
   OrgChart.templates.myTemplate.nodeMenuButton = '<foreignObject x="370" y="8" width="20" height="20"><img class="field__menu" src="https://edu.emiit.ru/menu-button.png" alt="кнопка меню" control-node-menu-id="{id}"></img></foreignObject>';
 
@@ -83,7 +91,9 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
       scaleInitial: OrgChart.match.boundary,
       nodeBinding: {
         field_name: "name",
-        field_title: "type"
+        field_title: "type",
+        valid: "valid",
+        tooltip: "name"
       },
       isBusy: false,
       toolbar: {
@@ -111,6 +121,9 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
             remove: { text: "Удалить", icon: "", onClick: function (nodeId) {
               removeNode(nodeId, zoon, "competence");
             } },
+            order: { text: "Упорядочить", icon: "", onClick: function (nodeId) {
+              openSwapChildrenPopup(nodeId, zoon);
+            } },
           },
         },
         "skill": {
@@ -128,6 +141,9 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
             disconnect: { text: "Отсоединить", icon: "", onClick: function (nodeId) {
               disconnectNode(nodeId, zoon);
             } },
+            order: { text: "Упорядочить", icon: "", onClick: function (nodeId) {
+              openSwapChildrenPopup(nodeId, zoon);
+            } },
           },
         },
         "ability": {
@@ -144,6 +160,9 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
             } },
             disconnect: { text: "Отсоединить", icon: "", onClick: function (nodeId) {
               disconnectNode(nodeId, zoon);
+            } },
+            order: { text: "Упорядочить", icon: "", onClick: function (nodeId) {
+              openSwapChildrenPopup(nodeId, zoon);
             } },
           }
         },
@@ -177,7 +196,7 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
         }
       },
     });
-
+   
   zoon.on('drop', function (sender, draggedNodeId, droppedNodeId) {
     if (droppedNodeId !== undefined) {
       const draggedNode = nodes.find(elem => elem.id === draggedNodeId);
@@ -259,9 +278,12 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
 
     }
   })
-  setZoonChart(zoon);
+
   return () => {
     setZoonChart({});
+    setCurrentNode({});
+    setCurrentNodeId('');
+    setNodeChildren([]);
   };
   // eslint-disable-next-line
   }, [nodes]);
@@ -280,6 +302,7 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
   }
 
   function addNode(nodeId, zoon, type) {
+    setCurrentActionType("add");
     setZoonChart(zoon);
     const node = { id: OrgChart.randomId(), pid: nodeId, tags: [type], };
     setCurrentNode(node);
@@ -344,10 +367,74 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
   }
 
   function editNode(nodeId, zoon) {
+    setCurrentActionType("edit");
     setZoonChart(zoon);
     const node = nodes.find(elem => elem.id === nodeId);
     setCurrentNode(node);
-    setIsEditNodePopupOpen(true);
+    setIsAddNodePopupOpen(true);
+  }
+
+  function handleEditNode(zoon, node) {
+    const token = localStorage.getItem("token");
+    setIsLoadingRequest(true);
+    switch(node.tags[0]) {
+      case 'knowledge':
+        api.editKnowledge(({ token: token, zoonVersion: dppDescription.zun_version_id, nodeId: node.id, node: node }))
+        .then((res) => {
+          const index = nodes.indexOf(nodes.find((elem) => (elem.id === node.id)));
+          nodes[index] = res;
+          zoon.draw(OrgChart.action.init);
+          closeZoonPopups();
+          setIsErrorRequest(false);
+          zoon.center(res.id);
+        })
+        .catch((err) => {
+          setIsErrorRequest(true);
+          console.error(err);
+        })
+        .finally(() => {
+          setIsLoadingRequest(false);
+        });
+        break;
+      case 'ability':
+        api.editAbility(({ token: token, zoonVersion: dppDescription.zun_version_id, nodeId: node.id, node: node }))
+        .then((res) => {
+          const index = nodes.indexOf(nodes.find((elem) => (elem.id === node.id)));
+          nodes[index] = res;
+          zoon.draw(OrgChart.action.init);
+          closeZoonPopups();
+          setIsErrorRequest(false);
+          zoon.center(res.id);
+        })
+        .catch((err) => {
+          setIsErrorRequest(true);
+          console.error(err);
+        })
+        .finally(() => {
+          setIsLoadingRequest(false);
+        });
+        break;
+      case 'skill':
+        api.editSkill(({ token: token, zoonVersion: dppDescription.zun_version_id, nodeId: node.id, node: node }))
+        .then((res) => {
+          const index = nodes.indexOf(nodes.find((elem) => (elem.id === node.id)));
+          nodes[index] = res;
+          zoon.draw(OrgChart.action.init);
+          closeZoonPopups();
+          setIsErrorRequest(false);
+          zoon.center(res.id);
+        })
+        .catch((err) => {
+          setIsErrorRequest(true);
+          console.error(err);
+        })
+        .finally(() => {
+          setIsLoadingRequest(false);
+        });
+        break;
+      default: 
+        return false;
+    }
   }
 
   function removeNode(nodeId, zoon, type) {
@@ -389,7 +476,6 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
 
   function addNsiPopupOpen() {
     setIsAddNsiPopupOpen(true);
-    console.log(nsiTypes);
   }
   
   function closeAddNsiPopup() {
@@ -400,6 +486,17 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
     const node = nodes.find(el=> el.id === nodeId);
     setCurrentNode(node);
     setIsRemoveLinkPopupOpen(true);
+  }
+
+  function openSwapChildrenPopup(nodeId, zoon) {
+    setZoonChart(zoon);
+    setCurrentNodeId(nodeId);
+    setIsSwapChildrenPopupOpen(true);
+    let children = nodes.filter((elem) => (nodeId === elem.pid));
+    children.sort(function(a, b) {
+      return parseInt(a.position) - parseInt(b.position);
+    });
+    setNodeChildren(children);
   }
 
   function handleAddLink(nodeId, abilityId) {
@@ -491,8 +588,6 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
 
   function handleBuildCompetence(zoon, competence, nodesId) {
     const token = localStorage.getItem("token");
-    console.log(competence)
-    console.log(nodesId)
     setIsLoadingRequest(true);
     api.buildCompetence(({ token: token, zoonVersion: dppDescription.zun_version_id, node: competence, nodesId: nodesId }))
     .then((res) => {
@@ -514,11 +609,28 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
     });
   }
 
+  function handleSwapChildren(children) {
+    setIsLoadingRequest(true);
+    const token = localStorage.getItem("token");
+    api.swapChildren({ token: token, zoonVersion: dppDescription.zun_version_id, nodeId: currentNodeId, children: children })
+    .then(() => {
+      children.forEach((childId, i) => {
+         nodes.find((node) => (node.id === childId ? node.position = i + 1 : false));
+      })
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => {
+      closeZoonPopups();
+      zoonChart.draw(OrgChart.action.init);
+      setIsLoadingRequest(false);
+    });
+  }
 
   function buildCompetencePopupOpen() {
     setIsBuildCompetencePopupOpen(true);
   }
-
 
   function closeZoonPopups() {
     setIsAddNodePopupOpen(false);
@@ -529,6 +641,7 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
     setIsAddNewLinkPopupOpen(false);
     setIsRemoveLinkPopupOpen(false);
     setIsBuildCompetencePopupOpen(false);
+    setIsSwapChildrenPopupOpen(false);
   }
 
   return (
@@ -551,13 +664,15 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
       onClose={closeZoonPopups}
       zoonChart={zoonChart}
       currentNode={currentNode}
-      onSave={handleAddNode}
+      onAdd={handleAddNode}
+      onEdit={handleEditNode}
       isLoadingRequest={isLoadingRequest}
       isErrorRequest={isErrorRequest}
       addNsiPopupOpen={addNsiPopupOpen}
       onRemoveNsi={onRemoveNsi}
       nsi={nsi}
       typologyParts={typologyParts}
+      currentActionType={currentActionType}
       />
     }
     {
@@ -656,7 +771,18 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
       nsiTypes={nsiTypes}
       onAdd={onAddNsi}
       />
-      
+    }
+
+    {
+      isSwapChildrenPopupOpen
+      &&
+      <SwapChildrenPopup
+      isOpen={isSwapChildrenPopupOpen}
+      onClose={closeZoonPopups}
+      nodeChildren={nodeChildren}
+      onSave={handleSwapChildren}
+      isLoadingRequest={isLoadingRequest}
+      />
     }
 
 

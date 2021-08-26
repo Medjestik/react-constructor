@@ -11,6 +11,8 @@ function Tasks({ loggedIn, dppDescription }) {
   const [isShowAddPracticalTask, setIsShowAddPracticalTask] = React.useState(false);
   const [isShowAddMenu, setIsShowAddMenu] = React.useState(true);
   const [tasks, setTasks] = React.useState([]);
+  const [skills, setSkills] = React.useState([]);
+  const [abilities, setAbilities] = React.useState([]);
   const [currentTask, setCurrentsTask] = React.useState({});
   const [currentTaskType, setCurrentTaskType] = React.useState("")
   const [isLoadingTasks, setIsLoadingTasks] = React.useState(true);
@@ -47,7 +49,7 @@ function Tasks({ loggedIn, dppDescription }) {
     if (loggedIn) {
       evaluationMaterialApi.createTask({ token: token, omId: dppDescription.om_version_id, task: task })
         .then((res) => {
-          setTasks([...tasks, res]);
+          setTasks([...tasks, res.tasks]);
         })
         .catch((err) => {
             console.error(err);
@@ -81,8 +83,9 @@ function Tasks({ loggedIn, dppDescription }) {
       setIsLoadingTasks(true);
       evaluationMaterialApi.getTask({ token: token, dppId: dppDescription.id, omId: dppDescription.om_version_id })
         .then((res) => {
-          console.log(res);
           setTasks(res.tasks);
+          setSkills(res.skills);
+          setAbilities(res.abilities);
         })
         .catch((err) => {
             console.error(err);
@@ -99,6 +102,8 @@ function Tasks({ loggedIn, dppDescription }) {
     setCurrentsTask({});
     return () => {
       setTasks([]);
+      setSkills([]);
+      setAbilities([]);
     };
     // eslint-disable-next-line
   }, []);
@@ -143,6 +148,8 @@ function Tasks({ loggedIn, dppDescription }) {
       <AddPracticalTask 
       currentTask={currentTask} 
       currentTaskType={currentTaskType}
+      skills={skills}
+      abilities={abilities}
       onBack={backToTaskList}
       onAdd={handleAddPracticalTask}
       onEdit={handleEditPracticalTask}

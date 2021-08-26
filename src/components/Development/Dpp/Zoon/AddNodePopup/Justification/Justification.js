@@ -2,11 +2,11 @@ import React from 'react';
 import './Justification.css';
 import JustificationItem from '../JustificationItem/JustificationItem.js';
 
-function Justification({ nsi, onChooseJustificationType, onChangeExpertOpinion, onChooseNsi, onSwapType, addNsiPopupOpen, onRemoveNsi }) {
+function Justification({ nsi, onChooseJustificationType, onChangeExpertOpinion, onChooseNsi, onSwapType, addNsiPopupOpen, onRemoveNsi, currentActionType, currentNode }) {
 
   const [isJustificationType, setIsJustificationType] = React.useState("");
-  const [isExpertOpinion, setIsExpertOpinion] = React.useState("")
-  
+  const [isExpertOpinion, setIsExpertOpinion] = React.useState("");
+ 
   function handleJustificationType(e) {
     onSwapType();
     setIsJustificationType(e.target.id);
@@ -39,6 +39,8 @@ function Justification({ nsi, onChooseJustificationType, onChangeExpertOpinion, 
                 key={i}
                 onChooseNsi={onChooseNsi}
                 onRemoveNsi={onRemoveNsi}
+                currentActionType={currentActionType}
+                currentNode={currentNode}
                 />
               ))
             }
@@ -65,9 +67,17 @@ function Justification({ nsi, onChooseJustificationType, onChangeExpertOpinion, 
   }
     
   React.useEffect(() => {
-    setIsJustificationType("");
-    setIsExpertOpinion("");
-  }, []);
+    if (currentActionType === "edit") {
+      if (currentNode.justificationType === 0) {
+        setIsJustificationType("nsi");
+      } else {
+        setIsJustificationType("expert");
+      }
+    } else {
+      setIsJustificationType("");
+    }
+    setIsExpertOpinion(currentActionType === "edit" ? currentNode.expertOpinion || "" : "");
+  }, [currentNode, currentActionType]);
 
   return (
     <div className="popup__justification">
@@ -80,7 +90,7 @@ function Justification({ nsi, onChooseJustificationType, onChangeExpertOpinion, 
             name="justification"
             type="radio"
             id="nsi"
-            defaultChecked={false}
+            defaultChecked={(currentActionType === "edit" && currentNode.justificationType === 0) ? true : false}
             onChange={handleJustificationType}
           >
           </input>
@@ -93,7 +103,7 @@ function Justification({ nsi, onChooseJustificationType, onChangeExpertOpinion, 
             name="justification"
             type="radio"
             id="expert"
-            defaultChecked={false}
+            defaultChecked={(currentActionType === "edit" && currentNode.justificationType === 1) ? true : false}
             onChange={handleJustificationType}
           >
           </input>

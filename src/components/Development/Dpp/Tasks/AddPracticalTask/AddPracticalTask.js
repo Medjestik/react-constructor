@@ -4,7 +4,9 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import TinyEditor from '../../../../TinyEditor/TinyEditor.js';
 import AddAssessmentItemPopup from '../AddAssessmentItemPopup/AddAssessmentItemPopup.js';
 
-function AddPracticalTask({ currentTask, currentTaskType, onBack, onAdd, onEdit }) {
+function AddPracticalTask({ currentTask, currentTaskType, skills, abilities, onBack, onAdd, onEdit }) {
+
+  console.log(skills)
   
   const [description, setDescription] = React.useState("");
   const [place, setPlace] = React.useState("");
@@ -111,6 +113,7 @@ function AddPracticalTask({ currentTask, currentTaskType, onBack, onAdd, onEdit 
               </input>
             </li>
           </ul>
+          <button className="btn btn_type_save practical-task__save-btn" type="button" onClick={onAddTask}>Сохранить</button>
         </TabPanel> 
         <TabPanel>
           <div className="practical-task__buttons">
@@ -123,10 +126,18 @@ function AddPracticalTask({ currentTask, currentTaskType, onBack, onAdd, onEdit 
         <TabPanel>
         </TabPanel>
       </Tabs>
-      <button className="btn btn_type_save practical-task__save-btn" type="button" onClick={onAddTask}>Сохранить</button>
+      
     </div>
 
-    <AddAssessmentItemPopup isOpen={isOpenAddAssessmentItemPopup} onClose={closeAddAddAssessmentItemPopups} />
+    {
+      isOpenAddAssessmentItemPopup &&
+      <AddAssessmentItemPopup 
+      isOpen={isOpenAddAssessmentItemPopup} 
+      onClose={closeAddAddAssessmentItemPopups}
+      skills={skills}
+      abilities={abilities}
+      />
+    }
 
     </>
   );

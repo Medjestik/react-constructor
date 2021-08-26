@@ -53,6 +53,9 @@
   margin: 0px;
   box-shadow: 0 2px 4px rgb(0 0 0 / 20%);
 }
+.practical-task__item_type_hide {
+  display: none;
+}
 .practical-task__item-input::placeholder {
   font-size: 14px;
 }

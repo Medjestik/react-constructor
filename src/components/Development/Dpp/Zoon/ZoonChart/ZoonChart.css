@@ -24,6 +24,14 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  z-index: 1000;
+}
+.field__tooltip {
+  font-size: 18px;
+  opacity: 0;
+}
+.field__name:hover .field__tooltip {
+  opacity: 1;
 }
 .field__menu {
   width: 20px;
@@ -35,6 +43,12 @@
 }
 .field__menu:hover {
   opacity: .7;
+}
+.field__warning {
+  width: 22px;
+  height: 22px;
+  object-position: center;
+  object-fit: cover;
 }
 .field__title {
   margin: 0px;
@@ -128,6 +142,14 @@
 .chart-menu div[data-item ="removeLink"] span::before {
   content: '';
   background-image: url('../../../../../images/remove-connection-color.png');
+  position: absolute;
+  left: 0px;
+  top: -2px;
+  z-index: 10000;
+}
+.chart-menu div[data-item ="order"] span::before {
+  content: '';
+  background-image: url('../../../../../images/swap.png');
   position: absolute;
   left: 0px;
   top: -2px;

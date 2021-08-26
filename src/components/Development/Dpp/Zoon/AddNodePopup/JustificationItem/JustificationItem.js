@@ -1,6 +1,6 @@
 import React from 'react';
 
-function JustificationItem({ elem, i, onChooseNsi, onRemoveNsi }) {
+function JustificationItem({ elem, i, onChooseNsi, onRemoveNsi, currentActionType, currentNode }) {
 
   const [isShowMenu, setIsShowMenu] = React.useState(false);
 
@@ -20,7 +20,7 @@ function JustificationItem({ elem, i, onChooseNsi, onRemoveNsi }) {
           name="prof-standard"
           type="checkbox"
           id={i}
-          //defaultChecked={selectedProfStandart.some(elem => elem.id === item.id)}
+          defaultChecked={currentActionType === "edit" ? currentNode.nsis.some(item => item.id === elem.id) : false}
           onChange={() => onChooseNsi(elem.id)}
           >
         </input>

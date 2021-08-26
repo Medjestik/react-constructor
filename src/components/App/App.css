@@ -516,6 +516,9 @@
   -webkit-appearance: none;
   -moz-appearance: none;
 }
+.select-option {
+  max-width: 400px;
+}
 
 .select-wrapper > select:focus {
   outline: none;

@@ -15,7 +15,7 @@ function Method() {
       {
         hideMethod 
         ? 
-        <p className="main__subtitle">Этап находится в разработке.</p>
+        <p className="main__subtitle">Раздел находится в разработке.</p>
         :
         <ul className="method__list">
           <li className="method__item">

@@ -4,7 +4,7 @@ import Popup from '../../../../Popup/Popup.js';
 import Justification from './Justification/Justification.js';
 import KnowledgeTypology from './KnowledgeTypology/KnowledgeTypology.js';
 
-function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadingRequest, isErrorRequest, openAddJustificationPopup, addNsiPopupOpen, onRemoveNsi, nsi, typologyParts }) {
+function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, isLoadingRequest, isErrorRequest, openAddJustificationPopup, addNsiPopupOpen, onRemoveNsi, nsi, typologyParts, currentActionType }) {
 
   const [knowledgeWhat, setKnowledgeWhat] = React.useState('');
   const [errorKnowledgeWhat, setErrorKnowledgeWhat] = React.useState(true);
@@ -24,11 +24,12 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
   const [errorSkillWhere, setErrorSkillWhere] = React.useState(true);
   const [formErrorSkill, setFormErrorSkill] = React.useState(true); 
 
-  const [newNode, setNewNode] = React.useState({})
+  const [newNode, setNewNode] = React.useState();
   const [nsiArray, setNsiArray] = React.useState([])
 
   function handleChooseJustificationType(number) {
     setNewNode({ ...newNode, justificationType: number });
+    console.log(newNode)
   }
 
   function handleChangeExpertOpinion(text) {
@@ -56,23 +57,37 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
 
   function handleSubmit(e) {
     e.preventDefault();
+    console.log(currentActionType)
     switch(currentNode.tags[0]) {
       case 'knowledge':
         const newKnowledge = "Знать " + knowledgeWhat;
         const newKnowledgeNode = { ...newNode, name: newKnowledge, what: knowledgeWhat, nsis: nsiArray };
-        onSave(zoonChart, newKnowledgeNode);
+        if (currentActionType === "edit") {
+          onEdit(zoonChart, newKnowledgeNode);
+        } else {
+          onAdd(zoonChart, newKnowledgeNode);
+        }
+        
         break;
       
       case 'ability': 
         const newAbility = "Уметь " + abilityWhat + " " + abilityWith + " " + abilityWhere;
         const newAbilityNode = { ...newNode, name: newAbility, what: abilityWhat, with: abilityWith, where: abilityWhere, nsis: nsiArray };
-        onSave(zoonChart, newAbilityNode);
+        if (currentActionType === "edit") {
+          onEdit(zoonChart, newAbilityNode);
+        } else {
+          onAdd(zoonChart, newAbilityNode);
+        }
         break;
 
         case 'skill': 
         const newSkill = "Владеть навыком " + skillWhat + " " + skillWith + " " + skillWhere;
         const newSkillNode = { ...newNode, name: newSkill, what: skillWhat, with: skillWith, where: skillWhere, nsis: nsiArray };
-        onSave(zoonChart, newSkillNode);
+        if (currentActionType === "edit") {
+          onEdit(zoonChart, newSkillNode);
+        } else {
+          onAdd(zoonChart, newSkillNode);
+        }
         break;
 
       default: 
@@ -143,25 +158,30 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
     }
   }
 
+
+
   React.useEffect(() => {
-    setKnowledgeWhat('');
-    setErrorKnowledgeWhat(true);
+    console.log(currentNode);
+    console.log(typologyParts);
+    console.log(currentActionType);
+    setKnowledgeWhat(currentActionType === "edit" ? currentNode.what : "");
+    setErrorKnowledgeWhat(currentActionType === "edit" ? false : true);
     setFormErrorKnowledge(true);
-    setAbilityWhat('');
-    setAbilityWith('');
-    setAbilityWhere('');
-    setErrorAbilityWhat(true);
-    setErrorAbilityWith(true);
-    setErrorAbilityWhere(true);
+    setAbilityWhat(currentActionType === "edit" ? currentNode.what : "");
+    setAbilityWith(currentActionType === "edit" ? currentNode.with : "");
+    setAbilityWhere(currentActionType === "edit" ? currentNode.where : "");
+    setErrorAbilityWhat(currentActionType === "edit" ? false : true);
+    setErrorAbilityWith(currentActionType === "edit" ? false : true);
+    setErrorAbilityWhere(currentActionType === "edit" ? false : true);
     setFormErrorAbility(true);
-    setSkillWhat('');
-    setSkillWith('');
-    setSkillWhere('');
-    setErrorSkillWhat(true);
-    setErrorSkillWith(true);
-    setErrorSkillWhere(true);
+    setSkillWhat(currentActionType === "edit" ? currentNode.what : "");
+    setSkillWith(currentActionType === "edit" ? currentNode.with : "");
+    setSkillWhere(currentActionType === "edit" ? currentNode.where : "");
+    setErrorSkillWhat(currentActionType === "edit" ? false : true);
+    setErrorSkillWith(currentActionType === "edit" ? false : true);
+    setErrorSkillWhere(currentActionType === "edit" ? false : true);
     setFormErrorSkill(true);
-    setNewNode({ ...currentNode, justificationType: "", expertOpinion: "", nsis: [], typologyPartId: "" });
+    setNewNode(currentActionType === "edit" ? { ...currentNode, justificationType: "", expertOpinion: "", nsis: [], typologyPartId: "" } : currentNode);
 
     return () => {
       setNewNode({})
@@ -198,7 +218,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
       case 'knowledge':
         return (
           <>
-          <h3 className="popup__title add-node__main-title">Создание нового знания</h3>
+          <h3 className="popup__title add-node__main-title">{currentActionType === "edit" ? "Редактирование знания" : "Создание нового знания"}</h3>
           <h5 className="popup__title add-node__title">Название знания</h5>
           <p className="popup__subtitle add-node__subtitle">Заполните параметры названия компонента</p>
           <input 
@@ -217,6 +237,8 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
 
           <KnowledgeTypology
             typologyParts={typologyParts}
+            currentNode={currentNode}
+            currentActionType={currentActionType}
             onChoose={handleChooseTypologyPart}
           />
           
@@ -229,6 +251,8 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
           onSwapType={handleSwapType}
           addNsiPopupOpen={addNsiPopupOpen}
           onRemoveNsi={onRemoveNsi}
+          currentActionType={currentActionType}
+          currentNode={currentNode}
           />
 
           <div className="add-zoon__error">
@@ -247,7 +271,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
       case 'ability':
         return(
           <>
-          <h3 className="popup__title add-node__main-title">Создание нового умения</h3>
+          <h3 className="popup__title add-node__main-title">{currentActionType === "edit" ? "Редактирование умения" : "Создание нового умения"}</h3>
           <h5 className="popup__title add-node__title">Название умения</h5>
           <p className="popup__subtitle add-node__subtitle">Заполните параметры названия компонента</p>
           <input 
@@ -297,6 +321,8 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
           onSwapType={handleSwapType}
           addNsiPopupOpen={addNsiPopupOpen}
           onRemoveNsi={onRemoveNsi}
+          currentActionType={currentActionType}
+          currentNode={currentNode}
           />
 
           <div className="add-zoon__error">
@@ -315,7 +341,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
         case "skill":
           return(
             <>
-            <h3 className="popup__title add-node__main-title">Создание нового навыка</h3>
+            <h3 className="popup__title add-node__main-title">{currentActionType === "edit" ? "Редактирование навыка" : "Создание нового навыка"}</h3>
             <h5 className="popup__title add-node__title">Название навыка</h5>
             <p className="popup__subtitle add-node__subtitle">Заполните параметры названия компонента</p>
             <input 
@@ -364,6 +390,8 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onSave, isLoadi
             onSwapType={handleSwapType}
             addNsiPopupOpen={addNsiPopupOpen}
             onRemoveNsi={onRemoveNsi}
+            currentActionType={currentActionType}
+            currentNode={currentNode}
             />
 
             <div className="add-zoon__error">

@@ -2,6 +2,9 @@
   display: flex;
   margin: 20px 0px 0px 0px;
 }
+.droppable-column__container {
+  width: 100%;
+}
 .droppable__count-list {
   display: flex;
   flex-direction: column;

@@ -58,6 +58,9 @@
 .justification-source__item:hover {
   border: 2px solid var(--main-color);
 }
+.justification-source__item:last-of-type {
+  margin: 0px;
+}
 .justification-source__item-checkbox {
   margin: 0px 0px 15px 0px;
 }

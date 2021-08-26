@@ -647,6 +647,19 @@ export const addKnowledge = ({ token, zoonVersion, node }) => {
   .then(res => handleResponse(res))
 };
 
+export const editKnowledge = ({ token, zoonVersion, nodeId, node }) => {
+  return fetch(`${API_URL}/zuns/${zoonVersion}/knowledges/${nodeId}/update`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ node })
+  })
+  .then(res => handleResponse(res))
+};
+
 export const removeKnowledge = ({ token, zoonVersion, nodeId }) => {
   return fetch(`${API_URL}/zuns/${zoonVersion}/knowledges/destroy`, {
     method: 'POST',
@@ -673,6 +686,19 @@ export const addAbility = ({ token, zoonVersion, node }) => {
   .then(res => handleResponse(res))
 };
 
+export const editAbility  = ({ token, zoonVersion, nodeId, node }) => {
+  return fetch(`${API_URL}/zuns/${zoonVersion}/abilities/${nodeId}/update`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ node })
+  })
+  .then(res => handleResponse(res))
+};
+
 export const removeAbility = ({ token, zoonVersion, nodeId }) => {
   return fetch(`${API_URL}/zuns/${zoonVersion}/abilities/destroy`, {
     method: 'POST',
@@ -688,6 +714,19 @@ export const removeAbility = ({ token, zoonVersion, nodeId }) => {
 
 export const addSkill = ({ token, zoonVersion, node }) => {
   return fetch(`${API_URL}/zuns/${zoonVersion}/skills`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ node })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const editSkill  = ({ token, zoonVersion, nodeId, node }) => {
+  return fetch(`${API_URL}/zuns/${zoonVersion}/skills/${nodeId}/update`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -786,6 +825,19 @@ export const removeCompetence = ({ token, zoonVersion, nodeId }) => {
       'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify({ nodeId })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const swapChildren = ({ token, zoonVersion, nodeId, children }) => {
+  return fetch(`${API_URL}/zuns/${zoonVersion}/nodes/${nodeId}/children_order`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ children })
   })
   .then(res => handleResponse(res))
 };

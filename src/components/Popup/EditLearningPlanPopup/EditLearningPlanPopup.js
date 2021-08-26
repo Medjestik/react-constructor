@@ -17,8 +17,6 @@ function EditLearningPlanPopup({ isOpen, currentLearningPlanElem, onClose, onEdi
   const [addAttError, setAddAttError] = React.useState(false);
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
 
-  console.log(currentLearningPlanElem);
-
   function handleSubmit(e) {
     e.preventDefault();
 
@@ -31,6 +29,8 @@ function EditLearningPlanPopup({ isOpen, currentLearningPlanElem, onClose, onEdi
      self_hours: addSam,
      attestation_hours: addAtt,
     }
+
+    console.log(newElem);
 
     onEdit(newElem, currentLearningPlanElem.id, onClose);
   }
@@ -82,6 +82,7 @@ function EditLearningPlanPopup({ isOpen, currentLearningPlanElem, onClose, onEdi
 
   function handleAddAtt(e) {
     setAddAtt(e.target.value);
+    console.log(e.target.value);
     if (e.target.checkValidity()) {
       setAddAttError(false);
     } else {

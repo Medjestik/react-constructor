@@ -66,8 +66,6 @@ const AccordionChooseQuestionType = ({ addNewQuestion, questionTypes }) => {
     setFill("#404040");
   });
 
-  console.log(questionTypes)
-
   return (
     <div className="accordion__section accordion__section_type_choose" ref={sensitive}>
       <button className={`accordion ${active}`} onClick={toggleAccordion} type="button">

@@ -1,12 +1,11 @@
 import React from 'react';
 import './KnowledgeTypology.css';
 
-function KnowledgeTypology({ typologyParts, onChoose }) {
+function KnowledgeTypology({ typologyParts, currentNode, currentActionType, onChoose }) {
 
   function handleChangeTypologyPart(e) {
     onChoose(e.target.id)
   }
-
 
   return (
     <div className="knowledge-typology">
@@ -23,7 +22,7 @@ function KnowledgeTypology({ typologyParts, onChoose }) {
                   name="developingResult"
                   type="radio"
                   id={part.id}
-                  //defaultChecked={newCompetence === 1 ? true : false}
+                  defaultChecked={(currentActionType === "edit" && currentNode.dtp) ? currentNode.dtp.id === part.id : false}
                   onChange={handleChangeTypologyPart}
                 >
                 </input>
