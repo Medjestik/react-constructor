@@ -52,6 +52,42 @@ function ProgramStructure({ dppDescription, loggedIn }) {
     }
   }
 
+  function handleUpTheme(id) {
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      setIsLoading(true);
+      programStructureApi.moveThemeUp({ token: token, stId: dppDescription.st_version_id, themeId: id, })
+        .then((res) => {
+          const index = programStructure.indexOf(programStructure.find((elem) => (elem.id === res.id)));
+          setProgramStructure([...programStructure.slice(0, index), res, ...programStructure.slice(index + 1)]);
+        })
+        .catch((err) => {
+            console.error(err);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  }
+
+  function handleDownTheme(id) {
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      setIsLoading(true);
+      programStructureApi.moveThemeDown({ token: token, stId: dppDescription.st_version_id, themeId: id, })
+        .then((res) => {
+          const index = programStructure.indexOf(programStructure.find((elem) => (elem.id === res.id)));
+          setProgramStructure([...programStructure.slice(0, index), res, ...programStructure.slice(index + 1)]);
+        })
+        .catch((err) => {
+            console.error(err);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  }
+
   function getStructure() {
     const token = localStorage.getItem("token");
     if (loggedIn) {
@@ -95,7 +131,7 @@ function ProgramStructure({ dppDescription, loggedIn }) {
           <TabPanel>
             <h3 className="program-structure__hours">Планируется часов: <span className="program-structure__hours program-structure__hours_type_main">{dppDescription.total_hours}</span></h3>
             <h3 className="program-structure__hours">Распределено часов: {defineHours()}</h3>  
-            <LearningPlan programStructure={programStructure} onEdit={openEditLearningPlan} />
+            <LearningPlan programStructure={programStructure} onEdit={openEditLearningPlan} moveUp={handleUpTheme} moveDown={handleDownTheme} />
           </TabPanel>
           <TabPanel>
             <LearningResult dppDescription={dppDescription} loggedIn={loggedIn} />

@@ -114,3 +114,6 @@
   opacity: .7;
   cursor: pointer;
 }
+.learning-plan__button_type_hide {
+  display: none;
+}

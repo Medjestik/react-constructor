@@ -24,6 +24,31 @@
 }
 .questions__control-edit {
   display: flex;
+  position: relative;
+}
+.questions_save-caption {
+  position: absolute;
+  bottom: -30px;
+  left: 2px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 1.3;
+  text-align: left;
+  color: var(--subtitle-color);
+  transition: .3s ease-in-out;
+}
+.questions_save-caption_type_success {
+  color: var(--secondary-color);
+}
+.questions_save-caption_type_error {
+  color: var(--third-light-color);
+}
+.questions_save-caption_type_show {
+  opacity: 1;
+}
+.questions_save-caption_type_hide {
+  opacity: 0;
 }
 .questions__btn_type_save {
   background-color: var(--secondary-color);

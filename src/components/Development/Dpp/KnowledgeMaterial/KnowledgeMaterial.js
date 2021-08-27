@@ -13,13 +13,23 @@ function KnowledgeMaterial({ dppDescription, currentKnowledge, questionTypes, lo
   const [isRenderQuestion, setIsRenderQuestion] = React.useState(false);
   const [textQuestion, setTextQuestion] = React.useState('');
   const [isDefineTypeOfQuestion, setIsDefineTypeOfQuestion] = React.useState(false);
-  const [isBlockSaveButton, setIsBlockSaveButton] = React.useState(false);
+  const [isSaveLoading, setIsSaveLoading] = React.useState(false);
+  const [successMessage, setSuccessMessage] = React.useState({
+    isShow: false,
+    text: "Данные успешно сохранены!"
+  });
+  const [errorMessage, setErrorMessage] = React.useState({
+    isShow: false,
+    text: ""
+  });
+  const [isCreateNewQuestion, setIsCreateNewQuestion] = React.useState(false);
 
   function chooseQuestion(question) {
     setCurrentQuestion(question);
     setEditQuestion(question);
     setIsRenderQuestion(true);
     setIsDefineTypeOfQuestion(false);
+    setIsCreateNewQuestion(false);
   }
 
   function chooseNewQuestionType() {
@@ -30,6 +40,7 @@ function KnowledgeMaterial({ dppDescription, currentKnowledge, questionTypes, lo
   function addNewQuestion(type) {
     setIsDefineTypeOfQuestion(false);
     setIsRenderQuestion(true);
+    setIsCreateNewQuestion(true);
     const newQuestion = {
       knowledgeId: currentKnowledge.id,
       questionType: type,
@@ -87,27 +98,60 @@ function KnowledgeMaterial({ dppDescription, currentKnowledge, questionTypes, lo
   }
 
   function handleSaveQuestion() {
-    const token = localStorage.getItem("token");
-
+    setSuccessMessage({ ...successMessage, isShow: false });
+    let success = true; 
+    let hasRight = false;
+    if (editQuestion.questionType === "sequence-answer") (hasRight = true)
+    if (editQuestion.questionType === "open-answer") (hasRight = true)
+    if (editQuestion.questionType === "conformity-answer") (hasRight = true)
+    if (editQuestion.text.length === 0) { 
+      success = false;
+      setErrorMessage({ text: "Не заполнен текст вопроса!", isShow: true });
+    }
+    editQuestion.answers.forEach((elem) => {
+      if (editQuestion.questionType === "conformity-answer")
+      {
+        if (!elem.firstPart || !elem.secondPart) {
+          success = false;
+          setErrorMessage({ text: "Не заполнен текст ответа!", isShow: true });
+        }
+      }else{
+        if (elem.text.length === 0) { 
+          success = false;
+          setErrorMessage({ text: "Не заполнен текст ответа!", isShow: true });
+        }
+        if ((elem.isCorrect === 1) || (elem.isCorrect === true)) { hasRight = true }
+      }
+    })
+    if(!hasRight)
+    {
+      setErrorMessage({ text: "Не выбран правильный ответ!", isShow: true });
+    }
+    if (!success || !hasRight) {
+    } else {
+      setIsSaveLoading(true);
+      const token = localStorage.getItem("token");
     if (editQuestion.id === "new") {
       if (loggedIn) {
         evaluationMaterialApi.createQuestion({ token: token, omId: dppDescription.om_version_id, questionData: editQuestion })
         .then((res) => {
           setCurrentQuestions([res, ...currentQuestions]);
           chooseQuestion(res);
+          setIsCreateNewQuestion(false);
+          setErrorMessage({ text: "", isShow: false });
+          setSuccessMessage({ ...successMessage, isShow: true });
         })
         .catch((err) => {
             console.error(err);
         })
         .finally(() => {
-
+          setIsSaveLoading(false);
         });
       }
-    } else  {
+    } else {
         if (loggedIn) {
           evaluationMaterialApi.editQuestion({ token: token, omId: dppDescription.om_version_id, questionId: currentQuestion.id, questionData: editQuestion })
           .then((res) => {
-            console.log(res);
             const newQuestions = [];
             if (currentQuestions.find(elem => (elem.id === res.id)) === undefined) {
               newQuestions.unshift(editQuestion);
@@ -119,16 +163,25 @@ function KnowledgeMaterial({ dppDescription, currentKnowledge, questionTypes, lo
               newQuestions.push(elem);
             })
             setCurrentQuestions(newQuestions);
+            setErrorMessage({ text: "", isShow: false });
+            setSuccessMessage({ ...successMessage, isShow: true });
           })
           .catch((err) => {
               console.error(err);
           })
           .finally(() => {
-  
+            setIsSaveLoading(false);
           });
       }
     }
+    }
   }
+
+  React.useEffect(() => {
+    setSuccessMessage({ ...successMessage, isShow: false });
+    setErrorMessage({ text: "", isShow: false });
+    // eslint-disable-next-line
+  }, [editQuestion]);
 
   React.useEffect(() => {
     setCurrentQuestions(currentKnowledge.questions);
@@ -157,13 +210,15 @@ function KnowledgeMaterial({ dppDescription, currentKnowledge, questionTypes, lo
               isRenderQuestion &&
               <div className="questions__control-edit">
                 <button 
-                className={`btn btn_type_save questions__btn_type_save ${isBlockSaveButton ? "questions__btn_type_block" : ""}`}
+                className={`btn btn_type_save questions__btn_type_save ${isSaveLoading ? "questions__btn_type_block" : ""}`}
                 onClick={handleSaveQuestion} 
                 type="button"
                 >
                   Сохранить вопрос
                 </button>
-                <button className="btn btn_type_delete" onClick={handleDeleteQuestion} type="button">Удалить вопрос</button>
+                <button className={`btn btn_type_delete ${isCreateNewQuestion ? "btn_type_block" : ""}`} onClick={handleDeleteQuestion} type="button">Удалить вопрос</button>
+                <span className={`questions_save-caption questions_save-caption_type_error ${errorMessage.isShow ? "questions_save-caption_type_show" : "questions_save-caption_type_hide"}`} >{errorMessage.text}</span>
+                <span className={`questions_save-caption questions_save-caption_type_success ${successMessage.isShow ? "questions_save-caption_type_show" : "questions_save-caption_type_hide"}`} >{successMessage.text}</span>
               </div>
             }
           </div>

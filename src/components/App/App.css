@@ -165,17 +165,6 @@
   top: 6px;
   z-index: 5;
 }
-.btn_type_block {
-  pointer-events: none;
-  user-select: none;
-  background-color: var(--background-main-color);
-  color: var(--background-third-color);
-}
-.btn_type_block::after {
-  content: '';
-  background-image: url('../../images/save-block.png');
-  background-repeat: no-repeat;
-}
 .btn_type_next {
   background-color: var(--secondary-color);
 }
@@ -252,6 +241,17 @@
   pointer-events: none;
   user-select: none;
   background-color: var(--background-third-color);
+}
+.btn_type_block {
+  pointer-events: none;
+  user-select: none;
+  background-color: var(--background-main-color);
+  color: var(--background-third-color);
+}
+.btn_type_block::after {
+  content: '';
+  background-image: url('../../images/save-block.png');
+  background-repeat: no-repeat;
 }
 .request-message {
   font-style: normal;

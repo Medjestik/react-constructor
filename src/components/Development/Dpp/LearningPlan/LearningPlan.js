@@ -1,7 +1,7 @@
 import React from 'react';
 import './LearningPlan.css';
 
-function LearningPlan({ programStructure, onEdit }) {
+function LearningPlan({ programStructure, onEdit, moveUp, moveDown }) {
 
   return (
     <div className="learning-plan">
@@ -77,6 +77,8 @@ function LearningPlan({ programStructure, onEdit }) {
                     <ul className="learning-plan__table-head">
                       <li className="learning-plan__table-body-row table-body-row_type_name">
                         <span className="learning-plan__table-body-row-name">{`${elemIndex + 1}.${themeIndex + 1} ${theme.name}`}</span>
+                        <button onClick={() => moveUp(theme.id)} className={`${themeIndex === 0 ? "learning-plan__button_type_hide" : ""} `}>&uarr;</button>
+                        <button onClick={() => moveDown(theme.id)} className={`${themeIndex === elem.themes.length - 1 ? "learning-plan__button_type_hide" : ""} `}>&darr;</button>
                         <button className="learning-plan__btn-edit" onClick={() => onEdit(theme)}></button>
                       </li>
                       <li className="learning-plan__table-body-row table-body-row_type_hours">

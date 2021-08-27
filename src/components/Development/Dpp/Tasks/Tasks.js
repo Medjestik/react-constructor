@@ -9,7 +9,7 @@ function Tasks({ loggedIn, dppDescription }) {
 
   const [isShowAddTaskType, setIsShowAddTaskType] = React.useState(false);
   const [isShowAddPracticalTask, setIsShowAddPracticalTask] = React.useState(false);
-  const [isShowAddMenu, setIsShowAddMenu] = React.useState(true);
+  const [isShowAddMenu, setIsShowAddMenu] = React.useState(false);
   const [tasks, setTasks] = React.useState([]);
   const [skills, setSkills] = React.useState([]);
   const [abilities, setAbilities] = React.useState([]);
@@ -118,10 +118,11 @@ function Tasks({ loggedIn, dppDescription }) {
       <Preloader />
       :
       <>
-      <p className="main__subtitle">Для работы с оценочными материалами выберите или создайте новое задание.</p>
+      <p className="main__subtitle">Функционал находится на доработке и временно не доступен.</p>
       {
         isShowAddMenu &&
         <>
+          <p className="main__subtitle">Для работы с оценочными материалами выберите или создайте новое задание.</p>
           <div className="task__add">
             <button className={`btn btn_type_add task__add-btn ${isShowAddTaskType ? "task__add-btn_type_show" : "task__add-btn_type_hide"}`}type="button" onClick={toggleShowAddMenu}>Добавить задание</button>
             <div className={`task__add-menu ${isShowAddTaskType ? "task__add-menu_type_show" : "task__add-menu_type_hide"}`}>

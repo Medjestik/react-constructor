@@ -33,6 +33,32 @@ export const editProgramStructure = ({ token, stId, sectionsId, section }) => {
   .then(res => handleResponse(res));
 };
 
+export const moveThemeUp = ({ token, stId, themeId }) => { 
+  return fetch(`${API_URL}/structure/${stId}/sections/${themeId}/move_up`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify()
+  })
+  .then(res => handleResponse(res));
+};
+
+export const moveThemeDown = ({ token, stId, themeId }) => { 
+  return fetch(`${API_URL}/structure/${stId}/sections/${themeId}/move_down`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify()
+  })
+  .then(res => handleResponse(res));
+};
+
 export const getProgramZoons = ({ token, stId }) => { 
   return fetch(`${API_URL}/structure/${stId}/zoons`, {
     method: 'GET', 
