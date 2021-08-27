@@ -2,7 +2,7 @@ import React from 'react';
 import './Justification.css';
 import JustificationItem from '../JustificationItem/JustificationItem.js';
 
-function Justification({ nsi, onChooseJustificationType, onChangeExpertOpinion, onChooseNsi, onSwapType, addNsiPopupOpen, onRemoveNsi, currentActionType, currentNode }) {
+function Justification({ nsi, onChooseJustificationType, onChangeExpertOpinion, onChooseNsi, onSwapType, addNsiPopupOpen, onEditNsi, onRemoveNsi, currentActionType, currentNode }) {
 
   const [isJustificationType, setIsJustificationType] = React.useState("");
   const [isExpertOpinion, setIsExpertOpinion] = React.useState("");
@@ -38,6 +38,7 @@ function Justification({ nsi, onChooseJustificationType, onChangeExpertOpinion, 
                 i={i}
                 key={i}
                 onChooseNsi={onChooseNsi}
+                onEditNsi={onEditNsi}
                 onRemoveNsi={onRemoveNsi}
                 currentActionType={currentActionType}
                 currentNode={currentNode}
@@ -67,7 +68,7 @@ function Justification({ nsi, onChooseJustificationType, onChangeExpertOpinion, 
   }
     
   React.useEffect(() => {
-    if (currentActionType === "edit") {
+    if ((currentActionType === "edit") && (currentNode.justificationType !== null)) {
       if (currentNode.justificationType === 0) {
         setIsJustificationType("nsi");
       } else {

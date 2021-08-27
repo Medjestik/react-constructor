@@ -4,7 +4,7 @@ import Popup from '../../../../Popup/Popup.js';
 import Justification from './Justification/Justification.js';
 import KnowledgeTypology from './KnowledgeTypology/KnowledgeTypology.js';
 
-function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, isLoadingRequest, isErrorRequest, openAddJustificationPopup, addNsiPopupOpen, onRemoveNsi, nsi, typologyParts, currentActionType }) {
+function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, isLoadingRequest, isErrorRequest, openAddJustificationPopup, addNsiPopupOpen, onEditNsi, onRemoveNsi, nsi, typologyParts, currentActionType }) {
 
   const [knowledgeWhat, setKnowledgeWhat] = React.useState('');
   const [errorKnowledgeWhat, setErrorKnowledgeWhat] = React.useState(true);
@@ -84,6 +84,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
         const newSkill = "Владеть навыком " + skillWhat + " " + skillWith + " " + skillWhere;
         const newSkillNode = { ...newNode, name: newSkill, what: skillWhat, with: skillWith, where: skillWhere, nsis: nsiArray };
         if (currentActionType === "edit") {
+          console.log(newSkillNode);
           onEdit(zoonChart, newSkillNode);
         } else {
           onAdd(zoonChart, newSkillNode);
@@ -181,7 +182,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
     setErrorSkillWith(currentActionType === "edit" ? false : true);
     setErrorSkillWhere(currentActionType === "edit" ? false : true);
     setFormErrorSkill(true);
-    setNewNode(currentActionType === "edit" ? { ...currentNode, justificationType: "", expertOpinion: "", nsis: [], typologyPartId: "" } : currentNode);
+    setNewNode(currentActionType === "edit" ? currentNode : { ...currentNode, justificationType: "", expertOpinion: "", nsis: [], typologyPartId: "" });
 
     return () => {
       setNewNode({})
@@ -250,6 +251,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
           onChooseNsi={handleChooseNsi}
           onSwapType={handleSwapType}
           addNsiPopupOpen={addNsiPopupOpen}
+          onEditNsi={onEditNsi}
           onRemoveNsi={onRemoveNsi}
           currentActionType={currentActionType}
           currentNode={currentNode}
@@ -320,6 +322,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
           onChooseNsi={handleChooseNsi}
           onSwapType={handleSwapType}
           addNsiPopupOpen={addNsiPopupOpen}
+          onEditNsi={onEditNsi}
           onRemoveNsi={onRemoveNsi}
           currentActionType={currentActionType}
           currentNode={currentNode}
@@ -389,6 +392,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
             onChooseNsi={handleChooseNsi}
             onSwapType={handleSwapType}
             addNsiPopupOpen={addNsiPopupOpen}
+            onEditNsi={onEditNsi}
             onRemoveNsi={onRemoveNsi}
             currentActionType={currentActionType}
             currentNode={currentNode}

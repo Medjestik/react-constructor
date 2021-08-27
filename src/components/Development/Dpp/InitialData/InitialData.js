@@ -935,12 +935,12 @@ function InitialData({ loggedIn, history, dppDescription }) {
   }
 
   function closeOverlayPopups() {
-    setIsOpenEditPartPopup(false);
-    setIsOpenRemovePartPopup(false);
-    setIsOpenChoosePartsPopup(false);
-    setIsRemoveNsiPopupOpen(false);
-    setIsEditNsiPopupOpen(false);
-    setIsRemoveProgramDocumentPopupOpen(false);
+    //setIsOpenEditPartPopup(false);
+    //setIsOpenRemovePartPopup(false);
+    //setIsOpenChoosePartsPopup(false);
+    //setIsRemoveNsiPopupOpen(false);
+    //setIsEditNsiPopupOpen(false);
+    //setIsRemoveProgramDocumentPopupOpen(false);
   }
 
   useOnClickOverlay(closeOverlayPopups);

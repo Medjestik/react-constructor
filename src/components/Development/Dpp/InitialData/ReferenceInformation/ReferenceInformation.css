@@ -37,6 +37,7 @@
   font-size: 16px;
   line-height: 1.3;
   max-width: calc(100% - 40px - 80px - 20px);
+  overflow-x: hidden;
 }
 .reference-information___buttons {
   position: absolute;

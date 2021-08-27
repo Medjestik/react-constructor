@@ -13,7 +13,7 @@ import * as api from '../../../../../utils/api.js';
 import ErrorDragAndDropPopup from '../ErrorDragAndDropPopup/ErrorDragAndDropPopup.js';
 import SwapChildrenPopup from '../SwapChildrenPopup/SwapChildrenPopup.js';
 
-function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi, zoonLinks, typologyParts }) {
+function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, onRemoveNsi, zoonLinks, typologyParts }) {
 
   const [zoonChart, setZoonChart] = React.useState({});
   const [currentNode, setCurrentNode] = React.useState({});
@@ -302,6 +302,7 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
   }
 
   function addNode(nodeId, zoon, type) {
+    setIsErrorRequest(false);
     setCurrentActionType("add");
     setZoonChart(zoon);
     const node = { id: OrgChart.randomId(), pid: nodeId, tags: [type], };
@@ -367,6 +368,7 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
   }
 
   function editNode(nodeId, zoon) {
+    setIsErrorRequest(false);
     setCurrentActionType("edit");
     setZoonChart(zoon);
     const node = nodes.find(elem => elem.id === nodeId);
@@ -665,6 +667,7 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
       zoonChart={zoonChart}
       currentNode={currentNode}
       onAdd={handleAddNode}
+      onEditNsi={onEditNsi}
       onEdit={handleEditNode}
       isLoadingRequest={isLoadingRequest}
       isErrorRequest={isErrorRequest}
@@ -784,7 +787,6 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onRemoveNsi
       isLoadingRequest={isLoadingRequest}
       />
     }
-
 
     </>
   );

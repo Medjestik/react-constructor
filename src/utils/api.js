@@ -609,7 +609,6 @@ export const removeNsiElem = ({ token, initialDataVersion, id }) => {
 
 
 
-
 export const getZoon = ({ token, dppId, zoonVersion }) => {
   return fetch(`${API_URL}/dpps/${dppId}/get_zun_version_data/${zoonVersion}`, {
     method: 'GET',

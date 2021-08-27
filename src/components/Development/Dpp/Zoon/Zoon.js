@@ -8,6 +8,7 @@ import ZoonList from './ZoonList/ZoonList.js';
 import ZoonTypology from './ZoonTypology/ZoonTypology.js';
 import ZoonExport from './ZoonExport/ZoonExport.js';
 import Preloader from '../../../Preloader/Preloader.js';
+import EditNsiPopup from '../../../Popup/EditNsiPopup/EditNsiPopup.js';
 import RemoveNsiPopup from '../../../Popup/RemoveNsiPopup/RemoveNsiPopup.js';
 
 function Zoon({ dppDescription, loggedIn }) {
@@ -18,6 +19,7 @@ function Zoon({ dppDescription, loggedIn }) {
   const [nsiProgram, setNsiProgram] = React.useState([]);
   const [nsiTypes, setNsiTypes] = React.useState([]);
   const [isRemoveNsiPopupOpen, setIsRemoveNsiPopupOpen] = React.useState(false);
+  const [isEditNsiPopupOpen , setIsEditNsiPopupOpen] = React.useState(false);
   const [currentNsiItem, setCurrentNsiItem] = React.useState({});
   const [isRendering, setIsRendering] = React.useState(true);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -67,9 +69,36 @@ function Zoon({ dppDescription, loggedIn }) {
     }
   }
 
+  function handleEditNsi(elem) {
+    setIsLoading(true);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.editNsiElem({ 
+        token: token, 
+        initialDataVersion:dppDescription.ish_version_id, 
+        elem: elem,
+        id: currentNsiItem.id
+      })
+      .then((res) => {
+        const index = nsiProgram.indexOf(nsiProgram.find((elem) => (elem.id === currentNsiItem.id)));
+        setNsiProgram([...nsiProgram.slice(0, index), res, ...nsiProgram.slice(index + 1)]);
+        closeZoonPopups();
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+      .finally(() => setIsLoading(false));
+    }
+  }
+
   function openRemoveNsiPopup(nsi) {
     setCurrentNsiItem(nsi);
     setIsRemoveNsiPopupOpen(true);
+  }
+
+  function openEditNsiPopup(nsi) {
+    setCurrentNsiItem(nsi);
+    setIsEditNsiPopupOpen(true);
   }
 
   function handleRemoveNsi(id) {
@@ -93,6 +122,7 @@ function Zoon({ dppDescription, loggedIn }) {
 
   function closeZoonPopups() {
     setIsRemoveNsiPopupOpen(false);
+    setIsEditNsiPopupOpen(false);
   }
 
 
@@ -118,6 +148,7 @@ function Zoon({ dppDescription, loggedIn }) {
               nsi={nsiProgram} 
               nsiTypes={nsiTypes}
               onAddNsi={handleAddNsi}
+              onEditNsi={openEditNsiPopup}
               onRemoveNsi={openRemoveNsiPopup}
               zoonLinks={zoonLinks} 
               typologyParts={typologyParts} 
@@ -134,6 +165,16 @@ function Zoon({ dppDescription, loggedIn }) {
             <ZoonExport dppDescription={dppDescription} /> 
           </TabPanel>
         </Tabs>
+      }
+      {
+      isEditNsiPopupOpen &&
+      <EditNsiPopup
+        isOpen={isEditNsiPopupOpen}
+        onClose={closeZoonPopups}  
+        nsi={currentNsiItem}
+        onEdit={handleEditNsi}
+        isLoading={isLoading}
+      />
       }
       {
         isRemoveNsiPopupOpen &&
