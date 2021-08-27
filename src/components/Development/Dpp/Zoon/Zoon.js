@@ -37,6 +37,9 @@ function Zoon({ dppDescription, loggedIn }) {
           setZoon(zoon.zoons);
           setZoonLinks(zoon.links);
           setTypologyParts(zoon.typologyParts);
+          nsi.sort(function(a,b) {
+            return parseInt(a.type.position) - parseInt(b.type.position)
+          })
           setNsiProgram(nsi);
           setNsiTypes(nsiTypes);
         })

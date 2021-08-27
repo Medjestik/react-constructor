@@ -966,6 +966,9 @@ function InitialData({ loggedIn, history, dppDescription }) {
           setSelectedProfLevels(initialData.prof_levels);
           setTypologies(initialData.typologies);
           setTypologiesParts(initialData.typology_parts);
+          initialData.nsis.sort(function(a,b) {
+            return parseInt(a.type.position) - parseInt(b.type.position)
+          })
           setNsiProgram(initialData.nsis);
           setOrganizationRulesProgram(initialData.corporate_requirements);
         })

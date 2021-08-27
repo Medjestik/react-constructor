@@ -2,7 +2,7 @@ import React from 'react';
 import './BuildCompetence.css';
 import Popup from '../../../../Popup/Popup.js';
 
-function BuildCompetence({ isOpen, onClose, onSave, nodes, zoonChart, isLoadingRequest, isErrorRequest }) {
+function BuildCompetence({ isOpen, onClose, onBuild, onEdit, nodes, zoonChart, isLoadingRequest, isErrorRequest, currentNode, currentActionType }) {
 
   const [currentNodes, setCurrentNodes] = React.useState([]);
   const [chooseNodesId, setChooseNodesId] = React.useState([]);
@@ -12,13 +12,22 @@ function BuildCompetence({ isOpen, onClose, onSave, nodes, zoonChart, isLoadingR
   const [competenceWithError, setCompetenceWithError] = React.useState(false);
   const [competenceWhere, setCompetenceWhere] = React.useState("");
   const [competenceWhereError, setCompetenceWhereError] = React.useState(false);
-  const [formErrorCompetence, setFormErrorCompetence] = React.useState(true); 
+  const [formErrorCompetence, setFormErrorCompetence] = React.useState(true);
+  const [currentCompetence, setCurrentCompetence] = React.useState({});
+  
+  console.log(currentNode);
 
   function handleSubmit(e) {
     e.preventDefault();
     const newCompetence = "Способен " + competenceWhat + competenceWith + competenceWhere;
     const newCompetenceNode = { name: newCompetence, what: competenceWhat, with: competenceWith, where: competenceWhere };
-    onSave(zoonChart, newCompetenceNode, chooseNodesId);
+    if (currentActionType === "edit") {
+      //console.log(newSkillNode);
+      //onEdit(zoonChart, newSkillNode);
+      onEdit(zoonChart, { ...currentCompetence, name: newCompetence, what: competenceWhat, with: competenceWith, where: competenceWhere }, currentCompetence.id);
+    } else {
+      onBuild(zoonChart, newCompetenceNode, chooseNodesId);
+    }
   }
 
   function handleChooseNode(id) {
@@ -68,17 +77,18 @@ function BuildCompetence({ isOpen, onClose, onSave, nodes, zoonChart, isLoadingR
   }, [competenceWhatError, competenceWithError, competenceWhereError]);
 
   React.useEffect(() => {
-    setCompetenceWhat('');
-    setCompetenceWith('');
-    setCompetenceWhere('');
-    setCompetenceWhatError(true);
-    setCompetenceWithError(true);
-    setCompetenceWhereError(true);
-    setFormErrorCompetence(true);
+    setCompetenceWhat(currentActionType === "edit" ? currentNode.what : "");
+    setCompetenceWith(currentActionType === "edit" ? currentNode.with : "");
+    setCompetenceWhere(currentActionType === "edit" ? currentNode.where : "");
+    setCompetenceWhatError(currentActionType === "edit" ? false : true);
+    setCompetenceWithError(currentActionType === "edit" ? false : true);
+    setCompetenceWhereError(currentActionType === "edit" ? false : true);
+    setFormErrorCompetence(currentActionType === "edit" ? false : true);
 
     const unLinksNodes = nodes.filter((elem) => ((elem.pid === "c")) || ((elem.pid === "s")));
     const filteredNodes = unLinksNodes.filter((elem) => ((elem.type === "Навык") || (elem.type === "Умение")));
     setCurrentNodes(filteredNodes);
+    setCurrentCompetence(currentActionType === "edit" ? currentNode : {});
 
     return () => {
       setCurrentNodes([]);
@@ -86,14 +96,13 @@ function BuildCompetence({ isOpen, onClose, onSave, nodes, zoonChart, isLoadingR
     // eslint-disable-next-line
   }, [isOpen]);
 
-
   return (
     <Popup 
       isOpen={isOpen}
       onClose={onClose}
     >
       <form className="popup__form popup__form_type_large" name="build-competence" action="#" noValidate onSubmit={handleSubmit}>
-      <h3 className="popup__title add-node__main-title">Формирование новой компетенции</h3>
+      <h3 className="popup__title add-node__main-title">{currentActionType === "edit" ? "Редактирование компетенции" : "Формирование новой компетенции"}</h3>
       <h5 className="popup__title add-node__title">Название компетенции</h5>
       <p className="popup__subtitle add-node__subtitle">Заполните параметры названия компонента</p>
       <input 
@@ -134,31 +143,39 @@ function BuildCompetence({ isOpen, onClose, onSave, nodes, zoonChart, isLoadingR
       ></input>
       <span className="popup__subtitle add-node__caption">{`Итоговое название: Способен ${competenceWhat || ""} ${competenceWith || ""} ${competenceWhere || ""}`}</span>
 
-      <h5 className="popup__title add-node__title build-competence__title">Навыки и умения, которые войдут в компетенцию</h5>
-      <p className="popup__subtitle add-node__subtitle">Выберите необходимые компоненты</p>
-      <ul className="build-competence__list">
-        {
-          currentNodes.map((elem, i) => (
-            <li className="build-competence__item" key={i}>
-              <label className="checkbox build-competence__checkbox">
-                <input 
-                  name="nodes"
-                  type="checkbox"
-                  id={elem.id}
-                  //defaultChecked={selectedProfStandart.some(elem => elem.id === item.id)}
-                  onChange={() => handleChooseNode(elem.id)}
-                  >
-                </input>
-                <span></span>
-              </label>
-              <div className="build-competence__info">
-                <span className={`build-competence__type ${elem.type === "Навык" ? "build-competence__type-skill" : ""}`}>{elem.type || "тип"}</span>
-                <h4 className="build-competence__name">{elem.name || "название"}</h4>
-              </div>
-            </li>
-          ))
-        }
-      </ul>
+      {
+        currentActionType === "add" ?
+        <>
+        <h5 className="popup__title add-node__title build-competence__title">Навыки и умения, которые войдут в компетенцию</h5>
+        <p className="popup__subtitle add-node__subtitle">Выберите необходимые компоненты</p>
+        <ul className="build-competence__list">
+          {
+            currentNodes.map((elem, i) => (
+              <li className="build-competence__item" key={i}>
+                <label className="checkbox build-competence__checkbox">
+                  <input 
+                    name="nodes"
+                    type="checkbox"
+                    id={elem.id}
+                    //defaultChecked={selectedProfStandart.some(elem => elem.id === item.id)}
+                    onChange={() => handleChooseNode(elem.id)}
+                    >
+                  </input>
+                  <span></span>
+                </label>
+                <div className="build-competence__info">
+                  <span className={`build-competence__type ${elem.type === "Навык" ? "build-competence__type-skill" : ""}`}>{elem.type || "тип"}</span>
+                  <h4 className="build-competence__name">{elem.name || "название"}</h4>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+        </>
+        :
+        <div></div>
+      }
+      
 
 
       <div className="add-zoon__error">

@@ -111,7 +111,9 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
         "competence": {
           template: "competence",
           nodeMenu: {
-            //edit: { text: "Редактировать" },
+            edit: { text: "Редактировать", icon: "", onClick: function (nodeId) {
+              editCompetencePopupOpen(nodeId, zoon);
+            } },
             addSkill: { text: "Добавить навык", icon: "", onClick: function (nodeId) {
               addNode(nodeId, zoon, "skill");
             } },
@@ -590,6 +592,32 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
       }
   }
 
+  function handleSwapChildren(children) {
+    setIsLoadingRequest(true);
+    const token = localStorage.getItem("token");
+    api.swapChildren({ token: token, zoonVersion: dppDescription.zun_version_id, nodeId: currentNodeId, children: children })
+    .then(() => {
+      children.forEach((childId, i) => {
+         nodes.find((node) => (node.id === childId ? node.position = i + 1 : false));
+      })
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => {
+      closeZoonPopups();
+      zoonChart.draw(OrgChart.action.init);
+      setIsLoadingRequest(false);
+    });
+  }
+
+  function buildCompetencePopupOpen() {
+    setIsErrorRequest(false);
+    setIsBuildCompetencePopupOpen(true);
+    setCurrentActionType("add");
+  }
+
+  
   function handleBuildCompetence(zoon, competence, nodesId) {
     const token = localStorage.getItem("token");
     setIsLoadingRequest(true);
@@ -613,27 +641,35 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
     });
   }
 
-  function handleSwapChildren(children) {
-    setIsLoadingRequest(true);
+  function editCompetencePopupOpen(nodeId, zoon) {
+    setIsErrorRequest(false);
+    setCurrentActionType("edit");
+    setZoonChart(zoon);
+    const node = nodes.find(elem => elem.id === nodeId);
+    setCurrentNode(node);
+    setIsBuildCompetencePopupOpen(true);
+  }
+
+  function handleEditCompetence(zoon, competence, competenceId) {
+    console.log(competence);
     const token = localStorage.getItem("token");
-    api.swapChildren({ token: token, zoonVersion: dppDescription.zun_version_id, nodeId: currentNodeId, children: children })
-    .then(() => {
-      children.forEach((childId, i) => {
-         nodes.find((node) => (node.id === childId ? node.position = i + 1 : false));
-      })
+    setIsLoadingRequest(true);
+    api.editCompetence(({ token: token, zoonVersion: dppDescription.zun_version_id, node: competence, competenceId: competenceId }))
+    .then((res) => {
+      const index = nodes.indexOf(nodes.find((elem) => (elem.id === competenceId)));
+      nodes[index] = res;
+      zoon.draw(OrgChart.action.init);
+      closeZoonPopups();
+      setIsErrorRequest(false);
+      zoon.center(res.id);
     })
     .catch((err) => {
+      setIsErrorRequest(true);
       console.error(err);
     })
     .finally(() => {
-      closeZoonPopups();
-      zoonChart.draw(OrgChart.action.init);
       setIsLoadingRequest(false);
     });
-  }
-
-  function buildCompetencePopupOpen() {
-    setIsBuildCompetencePopupOpen(true);
   }
 
   function closeZoonPopups() {
@@ -759,11 +795,14 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
       <BuildCompetence
       isOpen={isBuildCompetencePopupOpen}
       onClose={closeZoonPopups}
-      onSave={handleBuildCompetence}
+      onBuild={handleBuildCompetence}
+      onEdit={handleEditCompetence}
       nodes={nodes}
       zoonChart={zoonChart}
       isLoadingRequest={isLoadingRequest}
       isErrorRequest={isErrorRequest}
+      currentNode={currentNode}
+      currentActionType={currentActionType}
       />
     }
 

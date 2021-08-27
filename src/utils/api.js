@@ -815,6 +815,19 @@ export const buildCompetence = ({ token, zoonVersion, node, nodesId }) => {
   .then(res => handleResponse(res))
 };
 
+export const editCompetence = ({ token, zoonVersion, node, competenceId }) => {
+  return fetch(`${API_URL}/zuns/${zoonVersion}/competences/${competenceId}/update`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ node })
+  })
+  .then(res => handleResponse(res))
+};
+
 export const removeCompetence = ({ token, zoonVersion, nodeId }) => {
   return fetch(`${API_URL}/zuns/${zoonVersion}/competences/destroy`, {
     method: 'POST',

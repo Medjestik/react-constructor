@@ -108,14 +108,12 @@ function TechnicalRegulationPopup({ isOpen, onClose, nsi, onSave, id, printDate,
     let code = addCode.length > 0 ? addCode : "<шифр>"
     let approve = addApproveName.length > 0 ? "(утв. " + addApproveName  : "(утв. <кем утвержден> "
 	  let date = addProtocolDate.length > 0 ? printDate(addProtocolDate) : "xx.xx.xxxx"
-	  let number = addProtocolNumber.length > 0 ? addName : "XX" 
-    setAddFullName("Технический регламент таможенного союза ТР ТС " + code + " " + name + ". " + approve + " от " + date + " г. № " + number + ")."); 
+	  let number = addProtocolNumber.length > 0 ? addProtocolNumber : "XX" 
+    setAddFullName("Технический регламент таможенного союза ТР ТС " + code + " «" + name + "». " + approve + " от " + date + " г. № " + number + ")."); 
     
     // eslint-disable-next-line
     }, [addName, addCode, addApproveName, addProtocolDate, addProtocolNumber])
 
-  
-  
   return (
     <Popup 
       isOpen={isOpen}

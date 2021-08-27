@@ -78,7 +78,7 @@ function PNSTPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLoadin
     let code = addCode.length > 0 ? addCode : "<шифр>"; 
     let link = addLink.length > 0 ? addLink : "<URL>"; 
     
-    setAddFullName("ПНСТ " + code + ". Предварительный национальный стандарт РФ " + name + ".– " + link);
+    setAddFullName("ПНСТ " + code + ". Предварительный национальный стандарт РФ. " + name + ".– " + link);
 
   // eslint-disable-next-line
   }, [addName,addCode,addLink])
