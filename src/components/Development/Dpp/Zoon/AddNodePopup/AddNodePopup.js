@@ -39,6 +39,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
   function handleChooseNsi(id) {
     let index = nsiArray.indexOf(id);
     let newArray = nsiArray;
+    console.log(newArray);
     if (index === -1) {
       newArray.push(id);
     } else {
@@ -182,6 +183,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
     setErrorSkillWith(currentActionType === "edit" ? false : true);
     setErrorSkillWhere(currentActionType === "edit" ? false : true);
     setFormErrorSkill(true);
+    setNsiArray(currentActionType === "edit" ? currentNode.nsis : []);
     setNewNode(currentActionType === "edit" ? currentNode : { ...currentNode, justificationType: "", expertOpinion: "", nsis: [], typologyPartId: "" });
 
     return () => {

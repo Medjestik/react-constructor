@@ -25,7 +25,7 @@ function JustificationItem({ elem, i, onChooseNsi, onEditNsi, onRemoveNsi, curre
           name="prof-standard"
           type="checkbox"
           id={i}
-          defaultChecked={currentActionType === "edit" ? currentNode.nsis.some(item => item.id === elem.id) : false}
+          defaultChecked={currentActionType === "edit" ? currentNode.nsis.some(item => item === elem.id) : false}
           onChange={() => onChooseNsi(elem.id)}
           >
         </input>
