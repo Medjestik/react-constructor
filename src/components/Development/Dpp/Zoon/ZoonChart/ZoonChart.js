@@ -291,12 +291,14 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
   
   function handleCreateNewSkill() {
     const data = { id: OrgChart.randomId(), pid: "", tags: ["skill"], };
+    setCurrentActionType("add");
     setCurrentNode(data);
     setIsAddNodePopupOpen(true);
   }
 
   function handleCreateNewAbility() {
     const data = { id: OrgChart.randomId(), pid: "", tags: ["ability"], };
+    setCurrentActionType("add");
     setCurrentNode(data);
     setIsAddNodePopupOpen(true);
   }
