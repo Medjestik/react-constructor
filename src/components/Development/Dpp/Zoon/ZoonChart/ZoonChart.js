@@ -194,6 +194,9 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
             addKnowledge: { text: "Добавить знание", icon: "", onClick: function (nodeId) {
               addNode(nodeId, zoon, "knowledge");
             } },
+            order: { text: "Упорядочить", icon: "", onClick: function (nodeId) {
+              openSwapChildrenPopup(nodeId, zoon);
+            } },
           },
         }
       },
