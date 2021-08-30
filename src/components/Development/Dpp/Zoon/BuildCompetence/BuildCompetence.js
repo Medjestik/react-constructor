@@ -114,6 +114,7 @@ function BuildCompetence({ isOpen, onClose, onBuild, onEdit, nodes, zoonChart, i
       autoComplete="off"
       value={competenceWhat || ""}
       onChange={handleChangeCompetenceWhat}
+      spellCheck="true"
       minLength="1"
       required
       ></input>
@@ -126,6 +127,7 @@ function BuildCompetence({ isOpen, onClose, onBuild, onEdit, nodes, zoonChart, i
       autoComplete="off"
       value={competenceWith || ""}
       onChange={handleChangeCompetenceWith}
+      spellCheck="true"
       minLength="1"
       required
       ></input>
@@ -138,6 +140,7 @@ function BuildCompetence({ isOpen, onClose, onBuild, onEdit, nodes, zoonChart, i
       autoComplete="off"
       value={competenceWhere || ""}
       onChange={handleChangeCompetenceWhere}
+      spellCheck="true"
       minLength="1"
       required
       ></input>

@@ -233,6 +233,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
           autoComplete="off"
           value={knowledgeWhat || ""}
           onChange={handleChangeKnowledgeWhat}
+          spellCheck="true"
           minLength="1"
           required
           ></input>
@@ -287,6 +288,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
           autoComplete="off"
           value={abilityWhat || ""}
           onChange={handleChangeAbilityWhat}
+          spellCheck="true"
           minLength="1"
           required
           ></input>
@@ -299,6 +301,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
           autoComplete="off"
           value={abilityWith || ""}
           onChange={handleChangeAbilityWith}
+          spellCheck="true"
           minLength="1"
           required
           ></input>
@@ -311,6 +314,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
           autoComplete="off"
           value={abilityWhere || ""}
           onChange={handleChangeAbilityWhere}
+          spellCheck="true"
           minLength="1"
           required
           ></input>
@@ -358,6 +362,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
             autoComplete="off"
             value={skillWhat || ""}
             onChange={handleChangeSkillWhat}
+            spellCheck="true"
             minLength="1"
             required
             ></input>
@@ -370,6 +375,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
             autoComplete="off"
             value={skillWith || ""}
             onChange={handleChangeSkillWith}
+            spellCheck="true"
             minLength="1"
             required
             ></input>
@@ -382,6 +388,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
             autoComplete="off"
             value={skillWhere || ""}
             onChange={handleChangeSkillWhere}
+            spellCheck="true"
             minLength="1"
             required
             ></input>
