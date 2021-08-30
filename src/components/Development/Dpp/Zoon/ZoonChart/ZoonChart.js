@@ -390,9 +390,7 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
       case 'knowledge':
         api.editKnowledge(({ token: token, zoonVersion: dppDescription.zun_version_id, nodeId: node.id, node: node }))
         .then((res) => {
-          const index = nodes.indexOf(nodes.find((elem) => (elem.id === node.id)));
-          nodes[index] = res;
-          zoon.draw(OrgChart.action.init);
+          zoon.updateNode(res);
           closeZoonPopups();
           setIsErrorRequest(false);
           zoon.center(res.id);
@@ -408,9 +406,7 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
       case 'ability':
         api.editAbility(({ token: token, zoonVersion: dppDescription.zun_version_id, nodeId: node.id, node: node }))
         .then((res) => {
-          const index = nodes.indexOf(nodes.find((elem) => (elem.id === node.id)));
-          nodes[index] = res;
-          zoon.draw(OrgChart.action.init);
+          zoon.updateNode(res);
           closeZoonPopups();
           setIsErrorRequest(false);
           zoon.center(res.id);
@@ -426,9 +422,7 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
       case 'skill':
         api.editSkill(({ token: token, zoonVersion: dppDescription.zun_version_id, nodeId: node.id, node: node }))
         .then((res) => {
-          const index = nodes.indexOf(nodes.find((elem) => (elem.id === node.id)));
-          nodes[index] = res;
-          zoon.draw(OrgChart.action.init);
+          zoon.updateNode(res);
           closeZoonPopups();
           setIsErrorRequest(false);
           zoon.center(res.id);
@@ -654,14 +648,11 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
   }
 
   function handleEditCompetence(zoon, competence, competenceId) {
-    console.log(competence);
     const token = localStorage.getItem("token");
     setIsLoadingRequest(true);
     api.editCompetence(({ token: token, zoonVersion: dppDescription.zun_version_id, node: competence, competenceId: competenceId }))
     .then((res) => {
-      const index = nodes.indexOf(nodes.find((elem) => (elem.id === competenceId)));
-      nodes[index] = res;
-      zoon.draw(OrgChart.action.init);
+      zoon.updateNode(res);
       closeZoonPopups();
       setIsErrorRequest(false);
       zoon.center(res.id);
