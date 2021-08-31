@@ -83,6 +83,8 @@ export const createTask = ({ token, omId, task }) => {
   .then(res => handleResponse(res));
 };
 
+
+
 export const editTask = ({ token, omId, task, taskId }) => { 
   return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/update`, {
     method: 'POST', 
@@ -92,6 +94,82 @@ export const editTask = ({ token, omId, task, taskId }) => {
       'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify({ task })
+  })
+  .then(res => handleResponse(res));
+};
+
+export const addAssessmentItem = ({ token, omId, taskId, subject }) => {
+  return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/subject`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ subject })
+  })
+  .then(res => handleResponse(res));
+};
+
+export const removeAssessmentItem = ({ token, omId, taskId, subjectId }) => {
+  return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/subjects/${subjectId}/destroy`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+  .then(res => handleResponse(res));
+};
+
+export const addAssessmentObject = ({ token, omId, taskId, subjectId, object }) => {
+  return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/subjects/${subjectId}/object`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ object })
+  })
+  .then(res => handleResponse(res));
+};
+
+export const removeObject = ({ token, omId, taskId, subjectId, objectId }) => {
+  return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/subjects/${subjectId}/object/${objectId}/destroy`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+  .then(res => handleResponse(res));
+};
+
+
+export const selectTaskNsi = ({ token, omId, taskId, nsis }) => {
+  return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/nsis/select`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ nsis })
+  })
+  .then(res => handleResponse(res));
+};
+
+export const unSelectTaskNsi = ({ token, omId, taskId, nsiId, }) => {
+  return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/nsis/${nsiId}/unselect`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
   })
   .then(res => handleResponse(res));
 };

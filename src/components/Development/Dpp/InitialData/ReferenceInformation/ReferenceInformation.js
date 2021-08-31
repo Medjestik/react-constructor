@@ -2,8 +2,7 @@ import React from 'react';
 import './ReferenceInformation.css';
 import ReferenceInformationItem from './ReferenceInformationItem/ReferenceInformationItem.js';
 
-function ReferenceInformation({ nsi, onEdit, onRemove }) { 
-
+function ReferenceInformation({ nsi, onEdit, onRemove, isEditRights }) { 
 
   return (
     <>
@@ -16,6 +15,7 @@ function ReferenceInformation({ nsi, onEdit, onRemove }) {
               key={i}
               onEdit={onEdit}
               onRemove={onRemove}
+              isEditRights={isEditRights}
             />
           ))
         }

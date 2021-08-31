@@ -19,7 +19,7 @@ import ChoosePartsPopup from '../../../Popup/ChoosePartsPopup/ChoosePartsPopup.j
 import AccordionChooseNewDocumentType from '../../../Accordion/AccordionChooseNewDocumentType/AccordionChooseNewDocumentType.js';
 import NsiPopup from '../../../Popup/NsiPopup/NsiPopup.js';
 import EditNsiPopup from '../../../Popup/EditNsiPopup/EditNsiPopup.js';
-import RemoveNsiPopup from '../../../Popup/RemoveNsiPopup/RemoveNsiPopup.js'
+import RemoveNsiPopup from '../../../Popup/RemoveNsiPopup/RemoveNsiPopup.js';
 
 import fgosIcon from '../../../../images/documents/fgos.png';
 import profstandartIcon from '../../../../images/documents/profstandart.png';
@@ -28,7 +28,7 @@ import ekcIcon from '../../../../images/documents/ekc.png';
 import worldskillsIcon from '../../../../images/documents/worldskills.png';
 import organizationIcon from '../../../../images/documents/organization.png';
 
-function InitialData({ loggedIn, history, dppDescription }) {
+function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
 
   const [isRendering, setIsRendering] = React.useState(true);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -1011,9 +1011,12 @@ function InitialData({ loggedIn, history, dppDescription }) {
           <li className="initial-data__item initial-data__item_type_basis">
             <h3 className="initial-data__item-name">Нормативные правовые основания разработки</h3>
             <p className="initial-data__item-subtitle initial-data__item-subtitle_type_basis">Выберите нормативные документы, на основе которых разрабатывается ДПП.</p>
-            <AccordionChooseNewDocumentType 
-            onChoose={handleAddNewDocument}
-            />
+            {
+              isEditRights &&
+              <AccordionChooseNewDocumentType 
+              onChoose={handleAddNewDocument}
+              />
+            }
 
             {
               requirementFgosProgram.length > 0 || 
@@ -1035,7 +1038,10 @@ function InitialData({ loggedIn, history, dppDescription }) {
                       <div className="initial-data__documents-tags">
                         <span className="initial-data__documents-type">ФГОС</span>
                         <span className="initial-data__documents-code">{elem.code || "xx.xxx"}</span>
-                        <button className="initial-data__documents-delete-btn" type="button" onClick={() => openRemoveProgramDocumentPopup(elem.id, "fgos")}></button>
+                        {
+                          isEditRights &&
+                          <button className="initial-data__documents-delete-btn" type="button" onClick={() => openRemoveProgramDocumentPopup(elem.id, "fgos")}></button>
+                        }
                       </div>
                       <h4 className="initial-data__documents-name">{elem.name || "название"}</h4>
                     </div>
@@ -1050,7 +1056,10 @@ function InitialData({ loggedIn, history, dppDescription }) {
                       <div className="initial-data__documents-tags">
                         <span className="initial-data__documents-type">Профстандарт</span>
                         <span className="initial-data__documents-code">{elem.nameCode || "xx.xxx"}</span>
-                        <button className="initial-data__documents-delete-btn" type="button" onClick={() => openRemoveProgramDocumentPopup(elem.id, "prof")}></button>
+                        {
+                          isEditRights &&
+                          <button className="initial-data__documents-delete-btn" type="button" onClick={() => openRemoveProgramDocumentPopup(elem.id, "prof")}></button>
+                        }
                       </div>
                       <h4 className="initial-data__documents-name">{elem.nameText || "название"}</h4>
                       <p className="initial-data__documents-order">{`приказ Минтруда России от ${elem.orderDate || "xx.xx.20xx"} г. № ${elem.orderNumber || "xxxx"}н (зарегистрирован Министерством юстиции Российской Федерации ${elem.registrationDate || "xx.xx.20xx"} г., регистрационный № ${elem.registrationNumber || "xxxxx"}`}</p>
@@ -1066,7 +1075,10 @@ function InitialData({ loggedIn, history, dppDescription }) {
                       <div className="initial-data__documents-tags">
                         <span className="initial-data__documents-type">ЕТКС</span>
                         <span className="initial-data__documents-code">{elem.nameProfession || "xx.xxx"}</span>
-                        <button className="initial-data__documents-delete-btn" type="button" onClick={() => openRemoveProgramDocumentPopup(elem.id, "etkc")}></button>
+                        {
+                          isEditRights && 
+                          <button className="initial-data__documents-delete-btn" type="button" onClick={() => openRemoveProgramDocumentPopup(elem.id, "etkc")}></button>
+                        }
                       </div>
                       <h4 className="initial-data__documents-name">{elem.chapterName || "название"}</h4>
                       <p className="initial-data__documents-order">{`Выпуск № ${elem.issueNumber || "xx"}. Дата редакции ${elem.editionDate || "xx.xx.20xx"} г.`}</p>
@@ -1082,7 +1094,10 @@ function InitialData({ loggedIn, history, dppDescription }) {
                       <div className="initial-data__documents-tags">
                         <span className="initial-data__documents-type">ЕКС</span>
                         <span className="initial-data__documents-code">{elem.nameProfession || "xx.xxx"}</span>
-                        <button className="initial-data__documents-delete-btn" type="button"onClick={() => openRemoveProgramDocumentPopup(elem.id, "ekc")}></button>
+                        {
+                          isEditRights &&
+                          <button className="initial-data__documents-delete-btn" type="button"onClick={() => openRemoveProgramDocumentPopup(elem.id, "ekc")}></button>
+                        }
                       </div>
                       <h4 className="initial-data__documents-name">{elem.chapterName || "название"}</h4>
                       <p className="initial-data__documents-order">{`Дата редакции ${elem.editionDate || "xx.xx.20xx"} г.`}</p>
@@ -1098,7 +1113,10 @@ function InitialData({ loggedIn, history, dppDescription }) {
                       <div className="initial-data__documents-tags">
                         <span className="initial-data__documents-type">WorldSkills</span>
                         <span className="initial-data__documents-code">{elem.code || "xxx"}</span>
-                        <button className="initial-data__documents-delete-btn" type="button" onClick={() => openRemoveProgramDocumentPopup(elem.id, "ws")}></button>
+                        { 
+                          isEditRights &&
+                          <button className="initial-data__documents-delete-btn" type="button" onClick={() => openRemoveProgramDocumentPopup(elem.id, "ws")}></button>
+                        }
                       </div>
                       <h4 className="initial-data__documents-name">{elem.name || "название"}</h4>
                     </div>
@@ -1112,7 +1130,10 @@ function InitialData({ loggedIn, history, dppDescription }) {
                     <div className="initial-data__documents-info">
                       <div className="initial-data__documents-tags">
                         <span className="initial-data__documents-type">Корпоративные требования</span>
-                        <button className="initial-data__documents-delete-btn" type="button" onClick={() => openRemoveProgramDocumentPopup(elem.id, "cr")}></button>
+                        {
+                          isEditRights &&
+                          <button className="initial-data__documents-delete-btn" type="button" onClick={() => openRemoveProgramDocumentPopup(elem.id, "cr")}></button>
+                        }
                       </div>
                       <h4 className="initial-data__documents-name">{elem.name || "<название>"}</h4>
                       <p className="initial-data__documents-order">{`${elem.text || "<описание>"}`}</p>
@@ -1155,11 +1176,13 @@ function InitialData({ loggedIn, history, dppDescription }) {
               onChange={handleChangeUserQualification}
             >
             </textarea>
-            <div className="initial-data__buttons initial-data__buttons_type_requirements">
-              <button className="btn btn_type_save" type="button" onClick={handleSaveRequirements}>Сохранить данные</button>
-              <span className={`initial-data__buttons-message ${requestMessageRequirements.isShow ? "initial-data__buttons-message_type_show" : "initial-data__buttons-message_type_hide"} ${requestMessageRequirements.type === 'error' ? "initial-data__buttons-message_type_error" : "initial-data__buttons-message_type_success"}`}>{requestMessageRequirements.text}</span>
-            </div>
-            
+            {
+              isEditRights &&
+              <div className="initial-data__buttons initial-data__buttons_type_requirements">
+                <button className="btn btn_type_save" type="button" onClick={handleSaveRequirements}>Сохранить данные</button>
+                <span className={`initial-data__buttons-message ${requestMessageRequirements.isShow ? "initial-data__buttons-message_type_show" : "initial-data__buttons-message_type_hide"} ${requestMessageRequirements.type === 'error' ? "initial-data__buttons-message_type_error" : "initial-data__buttons-message_type_success"}`}>{requestMessageRequirements.text}</span>
+              </div>
+            }
           </li>
 
           <li className="initial-data__item initial-data__item_type_target">
@@ -1204,10 +1227,13 @@ function InitialData({ loggedIn, history, dppDescription }) {
                 </label>
               </li>
             </ul>
-            <div className="initial-data__buttons initial-data__buttons_type_requirements">
-              <button className="btn btn_type_save" type="button" onClick={handleSaveNewCompetence}>Сохранить данные</button>
-              <span className={`initial-data__buttons-message ${requestMessageCompetence.isShow ? "initial-data__buttons-message_type_show" : "initial-data__buttons-message_type_hide"} ${requestMessageCompetence.type === 'error' ? "initial-data__buttons-message_type_error" : "initial-data__buttons-message_type_success"}`}>{requestMessageCompetence.text}</span>
-            </div>
+            {
+              isEditRights &&
+              <div className="initial-data__buttons initial-data__buttons_type_requirements">
+                <button className="btn btn_type_save" type="button" onClick={handleSaveNewCompetence}>Сохранить данные</button>
+                <span className={`initial-data__buttons-message ${requestMessageCompetence.isShow ? "initial-data__buttons-message_type_show" : "initial-data__buttons-message_type_hide"} ${requestMessageCompetence.type === 'error' ? "initial-data__buttons-message_type_error" : "initial-data__buttons-message_type_success"}`}>{requestMessageCompetence.text}</span>
+              </div>
+            }
           </li>
 
           <li className="initial-data__item initial-data__item_type_structure">
@@ -1221,17 +1247,22 @@ function InitialData({ loggedIn, history, dppDescription }) {
               onRemove={openRemovePartPopup}
               onChoose={openChoosePartsPopup}
               onChangeOrder={changeTypologyPartsOrder}
+              isEditRights={isEditRights}
             />
           </li>
 
           <li className="initial-data__item initial-data__item_type_info">
             <h3 className="initial-data__item-name">Нормативно-справочная информация</h3>
             <p className="initial-data__item-subtitle initial-data__item-subtitle_type_info">Добавьте названия источников НСИ, которые будут использованы в ДПП. Вы также сможете дополнить данный список на последующих этапах разработки ДПП.</p>
-            <button className="btn btn_type_add initial-data__btn_type_add-nsi" onClick={openNsiPopup}>Добавить новый источник</button>
+            {
+              isEditRights && 
+              <button className="btn btn_type_add initial-data__btn_type_add-nsi" onClick={openNsiPopup}>Добавить новый источник</button>
+            }
             <ReferenceInformation 
               nsi={nsiProgram}
               onEdit={openEditNsiPopup}
               onRemove={openRemoveNsiPopup}
+              isEditRights={isEditRights}
             />
           </li>
 

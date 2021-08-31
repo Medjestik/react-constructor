@@ -7,7 +7,7 @@ import LearningPlan from '../LearningPlan/LearningPlan.js';
 import LearningResult from '../LearningResult/LearningResult.js';
 import EditLearningPlanPopup from '../../../Popup/EditLearningPlanPopup/EditLearningPlanPopup.js';
 
-function ProgramStructure({ dppDescription, loggedIn }) { 
+function ProgramStructure({ dppDescription, loggedIn, isEditRights }) { 
 
   const [programStructure, setProgramStructure] = React.useState([]);
   const [isLoadingProgramStructure, setIsLoadingProgramStructure] = React.useState(false);
@@ -131,7 +131,13 @@ function ProgramStructure({ dppDescription, loggedIn }) {
           <TabPanel>
             <h3 className="program-structure__hours">Планируется часов: <span className="program-structure__hours program-structure__hours_type_main">{dppDescription.total_hours}</span></h3>
             <h3 className="program-structure__hours">Распределено часов: {defineHours()}</h3>  
-            <LearningPlan programStructure={programStructure} onEdit={openEditLearningPlan} moveUp={handleUpTheme} moveDown={handleDownTheme} />
+            <LearningPlan 
+            programStructure={programStructure} 
+            onEdit={openEditLearningPlan} 
+            moveUp={handleUpTheme} 
+            moveDown={handleDownTheme}
+            isEditRights={isEditRights}
+            />
           </TabPanel>
           <TabPanel>
             <LearningResult dppDescription={dppDescription} loggedIn={loggedIn} />

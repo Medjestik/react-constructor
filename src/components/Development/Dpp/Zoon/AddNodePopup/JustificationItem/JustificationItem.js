@@ -1,6 +1,6 @@
 import React from 'react';
 
-function JustificationItem({ elem, i, onChooseNsi, onEditNsi, onRemoveNsi, currentActionType, currentNode }) {
+function JustificationItem({ elem, i, onChooseNsi, onEditNsi, onRemoveNsi, currentActionType, currentNode, isEditRights }) {
 
   const [isShowMenu, setIsShowMenu] = React.useState(false);
 
@@ -35,11 +35,15 @@ function JustificationItem({ elem, i, onChooseNsi, onEditNsi, onRemoveNsi, curre
         <h4 className="justification-source__item-name">{elem.type.name || "Название"}</h4>
         <p className="justification-source__item-description">{elem.nsiFullName || ""}</p>
       </div>
-      <div className={`justification-source___buttons ${isShowMenu ? "justification-source___buttons_type_show" : ""}`}>
-        <button className={`justification-source___btn-menu ${isShowMenu ? "justification-source___btn-menu_type_show" : ""}`} type="button" onClick={toggleMenu}></button>
-        <button className="justification-source___btn justification-source___btn-edit" type="button" onClick={editElement}>Редактировать</button>
-        <button className="justification-source___btn justification-source___btn-delete" type="button" onClick={deleteElement}>Удалить</button>
-      </div>
+      {
+        isEditRights &&
+        <div className={`justification-source___buttons ${isShowMenu ? "justification-source___buttons_type_show" : ""}`}>
+          <button className={`justification-source___btn-menu ${isShowMenu ? "justification-source___btn-menu_type_show" : ""}`} type="button" onClick={toggleMenu}></button>
+          <button className="justification-source___btn justification-source___btn-edit" type="button" onClick={editElement}>Редактировать</button>
+          <button className="justification-source___btn justification-source___btn-delete" type="button" onClick={deleteElement}>Удалить</button>
+        </div>
+      }
+
     </li>
   )
 }

@@ -4,7 +4,7 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import DroppableColumn from './DroppableColumn/DroppableColumn.js';
 
 
-function DragAndDrop({ data, onEdit, onRemove, onChangeOrder }) {
+function DragAndDrop({ data, onEdit, onRemove, onChangeOrder, isEditRights }) {
 
   const [dataQuestion, setDataQuestion] = React.useState([]);
 
@@ -57,7 +57,11 @@ function DragAndDrop({ data, onEdit, onRemove, onChangeOrder }) {
     };
 
     setDataQuestion(newState);
-    onChangeOrder(newState.column.partIds);
+
+    if (isEditRights) {
+      onChangeOrder(newState.column.partIds);
+    }
+    
   }
  
   
@@ -79,6 +83,7 @@ function DragAndDrop({ data, onEdit, onRemove, onChangeOrder }) {
         })}
         onEdit={onEdit}
         onRemove={onRemove}
+        isEditRights={isEditRights}
       />
     </DragDropContext>
   )

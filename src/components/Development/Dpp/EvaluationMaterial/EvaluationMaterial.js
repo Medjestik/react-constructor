@@ -6,7 +6,7 @@ import KnowledgeMaterial from '../KnowledgeMaterial/KnowledgeMaterial.js';
 import Tasks from '../Tasks/Tasks.js'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
-function EvaluationMaterial({ dppDescription, loggedIn }) {
+function EvaluationMaterial({ dppDescription, loggedIn, isEditRights }) {
 
   const [knowledges, setKnowledges] = React.useState([]);
   const [questionTypes, setQuestionTypes] = React.useState([]);
@@ -91,11 +91,16 @@ function EvaluationMaterial({ dppDescription, loggedIn }) {
             currentKnowledge={currentKnowledge} 
             questionTypes={questionTypes}
             loggedIn={loggedIn}
+            isEditRights={isEditRights}
           />
         }
         </TabPanel>
         <TabPanel>
-          <Tasks loggedIn={loggedIn} dppDescription={dppDescription} />
+          <Tasks 
+          loggedIn={loggedIn} 
+          dppDescription={dppDescription}
+          isEditRights={isEditRights} 
+          />
         </TabPanel>
       </Tabs>
 

@@ -5,7 +5,7 @@ import Question from './Question/Question.js';
 import AccordionChooseQuestionType from '../../../Accordion/AccordionChooseQuestionType/AccordionChooseQuestionType.js';
 import DefineQuestionType from '../../../Define/DefineQuestionType/DefineQuestionType.js';
 
-function KnowledgeMaterial({ dppDescription, currentKnowledge, questionTypes, loggedIn }) {
+function KnowledgeMaterial({ dppDescription, currentKnowledge, questionTypes, loggedIn, isEditRights }) {
 
   const [currentQuestion, setCurrentQuestion] = React.useState({});
   const [currentQuestions, setCurrentQuestions] = React.useState(currentKnowledge.questions);
@@ -207,7 +207,7 @@ function KnowledgeMaterial({ dppDescription, currentKnowledge, questionTypes, lo
           <div className="questions__control"> 
             <button className="btn btn_type_add" onClick={chooseNewQuestionType} type="button">Новый вопрос</button>
             {
-              isRenderQuestion &&
+              (isRenderQuestion && isEditRights) &&
               <div className="questions__control-edit">
                 <button 
                 className={`btn btn_type_save questions__btn_type_save ${isSaveLoading ? "questions__btn_type_block" : ""}`}

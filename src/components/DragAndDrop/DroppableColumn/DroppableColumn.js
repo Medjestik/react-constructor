@@ -3,7 +3,7 @@ import './DroppableColumn.css';
 import { Droppable } from 'react-beautiful-dnd';
 import DraggableItem from '../DraggableItem/DraggableItem.js';
 
-function DroppableColumn({ parts, onEdit, onRemove }) {
+function DroppableColumn({ parts, onEdit, onRemove, isEditRights }) {
 
   return (
     <div className="question__answer-container">
@@ -21,6 +21,7 @@ function DroppableColumn({ parts, onEdit, onRemove }) {
                 index={index}
                 onEdit={onEdit}
                 onRemove={onRemove}
+                isEditRights={isEditRights}
                 />
               ))}
                 {provided.placeholder}

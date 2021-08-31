@@ -15,6 +15,7 @@ function Dpp({ loggedIn, history, pathname, }) {
 
   const [dppDescription, setDppDescription] = React.useState({});
   const [isLoadingProgram, setIsLoadingProgram] = React.useState({});
+  const [isEditRights, setIsEditRights] = React.useState(true);
 
   function getDppDescription() {
     const token = localStorage.getItem("token");
@@ -23,7 +24,11 @@ function Dpp({ loggedIn, history, pathname, }) {
       setIsLoadingProgram(true);
       api.getProgramDescription({ token: token, id: currentProgramId })
         .then((res) => {
+          console.log(res);
           setDppDescription(res);
+          if (res.userRole === 5) {
+            setIsEditRights(false);
+          }
         })
         .catch((err) => {
             console.error(err);
@@ -62,6 +67,7 @@ function Dpp({ loggedIn, history, pathname, }) {
               loggedIn={loggedIn}
               history={history}
               dppDescription={dppDescription}
+              isEditRights={isEditRights}
             />
           </Route>
         </Switch>
@@ -71,6 +77,7 @@ function Dpp({ loggedIn, history, pathname, }) {
             <Zoon 
             dppDescription={dppDescription}
             loggedIn={loggedIn}
+            isEditRights={isEditRights}
             />
           </Route>
         </Switch>
@@ -79,7 +86,8 @@ function Dpp({ loggedIn, history, pathname, }) {
           <Route path="/main/development/dpp/evaluation-material" exact>
             <EvaluationMaterial
             dppDescription={dppDescription}
-            loggedIn={loggedIn} 
+            loggedIn={loggedIn}
+            isEditRights={isEditRights}
             />
           </Route>
         </Switch>
@@ -88,7 +96,8 @@ function Dpp({ loggedIn, history, pathname, }) {
           <Route path="/main/development/dpp/program-structure" exact>
             <ProgramStructure
             dppDescription={dppDescription}
-            loggedIn={loggedIn} 
+            loggedIn={loggedIn}
+            isEditRights={isEditRights}
             />
           </Route>
         </Switch>

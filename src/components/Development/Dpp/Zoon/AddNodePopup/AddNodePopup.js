@@ -4,7 +4,7 @@ import Popup from '../../../../Popup/Popup.js';
 import Justification from './Justification/Justification.js';
 import KnowledgeTypology from './KnowledgeTypology/KnowledgeTypology.js';
 
-function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, isLoadingRequest, isErrorRequest, openAddJustificationPopup, addNsiPopupOpen, onEditNsi, onRemoveNsi, nsi, typologyParts, currentActionType }) {
+function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, isLoadingRequest, isErrorRequest, openAddJustificationPopup, addNsiPopupOpen, onEditNsi, onRemoveNsi, nsi, typologyParts, currentActionType, isEditRights }) {
 
   const [knowledgeWhat, setKnowledgeWhat] = React.useState('');
   const [errorKnowledgeWhat, setErrorKnowledgeWhat] = React.useState(true);
@@ -258,19 +258,26 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
           onRemoveNsi={onRemoveNsi}
           currentActionType={currentActionType}
           currentNode={currentNode}
+          isEditRights={isEditRights}
           />
 
-          <div className="add-zoon__error">
-          <span className={`add-zoon__error-message ${isErrorRequest ? "add-zoon__error-message_type_show" : "add-zoon__error-message_type_hide"}`}>К сожалению, произошла ошибка, попробуйте обновить страницу.</span>
-          </div>
-          <button className={`
-          btn btn_type_save initial-popup__btn-save 
-          ${isLoadingRequest || formErrorKnowledge ? "btn_type_loading" : ""}
-          `} 
-          type="submit"
-          >
-          {isLoadingRequest ? "Сохранение.." : "Сохранить"}
-          </button>
+          {
+            isEditRights &&
+            <>
+            <div className="add-zoon__error">
+              <span className={`add-zoon__error-message ${isErrorRequest ? "add-zoon__error-message_type_show" : "add-zoon__error-message_type_hide"}`}>К сожалению, произошла ошибка, попробуйте обновить страницу.</span>
+            </div>
+            <button className={`
+            btn btn_type_save initial-popup__btn-save 
+            ${isLoadingRequest || formErrorKnowledge ? "btn_type_loading" : ""}
+            `} 
+            type="submit"
+            >
+            {isLoadingRequest ? "Сохранение.." : "Сохранить"}
+            </button>
+            </>
+          }
+
           </>
         )
       case 'ability':
@@ -332,19 +339,26 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
           onRemoveNsi={onRemoveNsi}
           currentActionType={currentActionType}
           currentNode={currentNode}
+          isEditRights={isEditRights}
           />
 
-          <div className="add-zoon__error">
-          <span className={`add-zoon__error-message ${isErrorRequest ? "add-zoon__error-message_type_show" : "add-zoon__error-message_type_hide"}`}>К сожалению, произошла ошибка, попробуйте обновить страницу.</span>
-          </div>
-          <button className={`
-          btn btn_type_save initial-popup__btn-save 
-          ${isLoadingRequest || formErrorAbility ? "btn_type_loading" : ""}
-          `} 
-          type="submit"
-          >
-          {isLoadingRequest ? "Сохранение.." : "Сохранить"}
-          </button>
+          {
+            isEditRights &&
+            <>
+            <div className="add-zoon__error">
+              <span className={`add-zoon__error-message ${isErrorRequest ? "add-zoon__error-message_type_show" : "add-zoon__error-message_type_hide"}`}>К сожалению, произошла ошибка, попробуйте обновить страницу.</span>
+            </div>
+            <button className={`
+            btn btn_type_save initial-popup__btn-save 
+            ${isLoadingRequest || formErrorAbility ? "btn_type_loading" : ""}
+            `} 
+            type="submit"
+            >
+            {isLoadingRequest ? "Сохранение.." : "Сохранить"}
+            </button>
+            </>
+          }
+          
           </>
         )
         case "skill":
@@ -405,19 +419,25 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
             onRemoveNsi={onRemoveNsi}
             currentActionType={currentActionType}
             currentNode={currentNode}
+            isEditRights={isEditRights}
             />
 
-            <div className="add-zoon__error">
-            <span className={`add-zoon__error-message ${isErrorRequest ? "add-zoon__error-message_type_show" : "add-zoon__error-message_type_hide"}`}>К сожалению, произошла ошибка, попробуйте обновить страницу.</span>
-            </div>
-            <button className={`
-            btn btn_type_save initial-popup__btn-save 
-            ${isLoadingRequest || formErrorSkill ? "btn_type_loading" : ""}
-            `} 
-            type="submit"
-            >
-            {isLoadingRequest ? "Сохранение.." : "Сохранить"}
-            </button>
+            {
+              isEditRights && 
+              <>
+              <div className="add-zoon__error">
+                <span className={`add-zoon__error-message ${isErrorRequest ? "add-zoon__error-message_type_show" : "add-zoon__error-message_type_hide"}`}>К сожалению, произошла ошибка, попробуйте обновить страницу.</span>
+              </div>
+              <button className={`
+              btn btn_type_save initial-popup__btn-save 
+              ${isLoadingRequest || formErrorSkill ? "btn_type_loading" : ""}
+              `} 
+              type="submit"
+              >
+              {isLoadingRequest ? "Сохранение.." : "Сохранить"}
+              </button>
+              </>
+            }
             </>
           )
       default:

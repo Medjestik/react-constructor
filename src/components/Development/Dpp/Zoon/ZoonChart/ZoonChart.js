@@ -13,7 +13,7 @@ import * as api from '../../../../../utils/api.js';
 import ErrorDragAndDropPopup from '../ErrorDragAndDropPopup/ErrorDragAndDropPopup.js';
 import SwapChildrenPopup from '../SwapChildrenPopup/SwapChildrenPopup.js';
 
-function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, onRemoveNsi, zoonLinks, typologyParts }) {
+function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, onRemoveNsi, zoonLinks, typologyParts, isEditRights }) {
 
   const [zoonChart, setZoonChart] = React.useState({});
   const [currentNode, setCurrentNode] = React.useState({});
@@ -110,13 +110,14 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
       tags: {
         "competence": {
           template: "competence",
-          nodeMenu: {
+          nodeMenu: isEditRights ?
+          {
             edit: { text: "Редактировать", icon: "", onClick: function (nodeId) {
               editCompetencePopupOpen(nodeId, zoon);
             } },
-            addSkill: { text: "Добавить навык", icon: "", onClick: function (nodeId) {
+            addSkill: isEditRights ? { text: "Добавить навык", icon: "", onClick: function (nodeId) {
               addNode(nodeId, zoon, "skill");
-            } },
+            } } : null,
             addAbility: { text: "Добавить умение", icon: "", onClick: function (nodeId) {
               addNode(nodeId, zoon, "ability");
             } },
@@ -126,11 +127,16 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
             order: { text: "Упорядочить", icon: "", onClick: function (nodeId) {
               openSwapChildrenPopup(nodeId, zoon);
             } },
-          },
+          } : 
+          {
+            edit: { text: "Редактировать", icon: "", onClick: function (nodeId) {
+              editCompetencePopupOpen(nodeId, zoon);
+            } },
+          }
         },
         "skill": {
           template: "skill",
-          nodeMenu: {
+          nodeMenu: isEditRights ? {
             edit: { text: "Редактировать", icon: "", onClick: function (nodeId) {
               editNode(nodeId, zoon);
             } },
@@ -146,11 +152,15 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
             order: { text: "Упорядочить", icon: "", onClick: function (nodeId) {
               openSwapChildrenPopup(nodeId, zoon);
             } },
+          } : {
+            edit: { text: "Редактировать", icon: "", onClick: function (nodeId) {
+              editNode(nodeId, zoon);
+            } },
           },
         },
         "ability": {
           template: "ability", 
-          nodeMenu: {
+          nodeMenu: isEditRights ? {
             edit: { text: "Редактировать", icon: "", onClick: function (nodeId) {
               editNode(nodeId, zoon);
             } },
@@ -166,11 +176,15 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
             order: { text: "Упорядочить", icon: "", onClick: function (nodeId) {
               openSwapChildrenPopup(nodeId, zoon);
             } },
+          } : {
+            edit: { text: "Редактировать", icon: "", onClick: function (nodeId) {
+              editNode(nodeId, zoon);
+            } },
           }
         },
         "knowledge": {
           template: "knowledge",
-          nodeMenu: {
+          nodeMenu: isEditRights ? {
             edit: { text: "Редактировать", icon: "", onClick: function (nodeId) {
               editNode(nodeId, zoon);
             } },
@@ -186,17 +200,23 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
             removeLink: { text: "Удалить связь", icon: "", onClick: function (nodeId) {
               removeLinkPopupOpen(nodeId, zoon);
             } },
+          } : {
+            edit: { text: "Редактировать", icon: "", onClick: function (nodeId) {
+              editNode(nodeId, zoon);
+            } },
           },
         },
         "through": {
           template: "through",
-          nodeMenu: {
+          nodeMenu: isEditRights ? {
             addKnowledge: { text: "Добавить знание", icon: "", onClick: function (nodeId) {
               addNode(nodeId, zoon, "knowledge");
             } },
             order: { text: "Упорядочить", icon: "", onClick: function (nodeId) {
               openSwapChildrenPopup(nodeId, zoon);
             } },
+          } : {
+
           },
         }
       },
@@ -682,11 +702,14 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
     <>
 
     <div className="zoon__container">
-      <div className="zoon-chart__btn-control">
-        <button className="btn btn_type_add zoon-chart__btn_type_add-skill" onClick={handleCreateNewSkill}>Создать новый навык</button>
-        <button className="btn btn_type_add zoon-chart__btn_type_add-ability" onClick={handleCreateNewAbility}>Создать новое умение</button>
-        <button className="btn btn_type_add zoon-chart__btn_type_build-competence" onClick={buildCompetencePopupOpen}>Сформировать компетенцию</button>
-      </div>
+      {
+        isEditRights && 
+        <div className="zoon-chart__btn-control">
+          <button className="btn btn_type_add zoon-chart__btn_type_add-skill" onClick={handleCreateNewSkill}>Создать новый навык</button>
+          <button className="btn btn_type_add zoon-chart__btn_type_add-ability" onClick={handleCreateNewAbility}>Создать новое умение</button>
+          <button className="btn btn_type_add zoon-chart__btn_type_build-competence" onClick={buildCompetencePopupOpen}>Сформировать компетенцию</button>
+        </div>
+      }
       <div id="tree" className="zoon-chart" ref={divRef}></div>
     </div>
 
@@ -708,6 +731,7 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
       nsi={nsi}
       typologyParts={typologyParts}
       currentActionType={currentActionType}
+      isEditRights={isEditRights}
       />
     }
     {

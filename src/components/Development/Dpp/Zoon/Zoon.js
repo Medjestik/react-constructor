@@ -11,7 +11,7 @@ import Preloader from '../../../Preloader/Preloader.js';
 import EditNsiPopup from '../../../Popup/EditNsiPopup/EditNsiPopup.js';
 import RemoveNsiPopup from '../../../Popup/RemoveNsiPopup/RemoveNsiPopup.js';
 
-function Zoon({ dppDescription, loggedIn }) {
+function Zoon({ dppDescription, loggedIn, isEditRights }) {
 
   const [zoon, setZoon] = React.useState([]);
   const [zoonLinks, setZoonLinks] = React.useState([]);
@@ -128,7 +128,6 @@ function Zoon({ dppDescription, loggedIn }) {
     setIsEditNsiPopupOpen(false);
   }
 
-
   return (
     <div className="zoon">
       <h1 className="main__title">Проектирование ПК и ЗУН</h1>
@@ -154,7 +153,8 @@ function Zoon({ dppDescription, loggedIn }) {
               onEditNsi={openEditNsiPopup}
               onRemoveNsi={openRemoveNsiPopup}
               zoonLinks={zoonLinks} 
-              typologyParts={typologyParts} 
+              typologyParts={typologyParts}
+              isEditRights={isEditRights}
               /> 
             </div>
           </TabPanel>

@@ -3,7 +3,7 @@ import './DraggableItem.css';
 import { Draggable } from 'react-beautiful-dnd';
 
 
-function DraggableItem ({ part, index, onEdit, onRemove }) {
+function DraggableItem ({ part, index, onEdit, onRemove, isEditRights }) {
 
   const [isShowMenu, setShowMenu] = React.useState(false);
 
@@ -30,11 +30,14 @@ function DraggableItem ({ part, index, onEdit, onRemove }) {
         >
           <span className="draggable-item__count">{`${index + 1}.`}</span>
           <h3 className={`draggable-item__text ${isShowMenu ? "draggable-item__text_type_short" : ""}`}>{part.name}</h3>
-          <div className={`draggable-item__buttons ${isShowMenu ? "draggable-item__buttons_type_show" : ""}`}>
-            <button className={`draggable-item__btn-menu ${isShowMenu ? "draggable-item__btn-menu_type_show" : ""}`} type="button" onClick={toggleMenu}></button>
-            <button className="draggable-item__btn draggable-item__btn-edit" type="button" onClick={onClickEdit}>Редактировать</button>
-            <button className="draggable-item__btn draggable-item__btn-delete" type="button" onClick={onClickRemove}>Удалить</button>
-          </div>
+          {
+            isEditRights &&
+            <div className={`draggable-item__buttons ${isShowMenu ? "draggable-item__buttons_type_show" : ""}`}>
+              <button className={`draggable-item__btn-menu ${isShowMenu ? "draggable-item__btn-menu_type_show" : ""}`} type="button" onClick={toggleMenu}></button>
+              <button className="draggable-item__btn draggable-item__btn-edit" type="button" onClick={onClickEdit}>Редактировать</button>
+              <button className="draggable-item__btn draggable-item__btn-delete" type="button" onClick={onClickRemove}>Удалить</button>
+            </div>
+          }
         </li>
       )}
     </Draggable>

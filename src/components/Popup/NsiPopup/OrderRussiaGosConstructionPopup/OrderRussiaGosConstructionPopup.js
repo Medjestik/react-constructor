@@ -130,10 +130,10 @@ function OrderRussiaGosConstructionPopup({ isOpen, onClose, nsi, onSave, id, pri
             <span className={`nsi-popup__input-error ${addProtocolNumberError ? "nsi-popup__input-error_type_show" : ""}`}>Заполните номер</span>
           </li>
           <li className="nsi-popup__item-input">
-            <h5 className="nsi-popup__input-name">Протокол от</h5>
+            <h5 className="nsi-popup__input-name">Приказ от</h5>
             <input  
             className="nsi-popup__input"
-            placeholder="введите редакцию"
+            placeholder="введите дату приказа"
             type="date"
             id={`${type}-nsi-input-protocol-date-${id}`}
             name={`${type}-nsi-input-protocol-date-${id}`}

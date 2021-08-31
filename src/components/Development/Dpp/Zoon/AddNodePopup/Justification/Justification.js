@@ -2,7 +2,7 @@ import React from 'react';
 import './Justification.css';
 import JustificationItem from '../JustificationItem/JustificationItem.js';
 
-function Justification({ nsi, onChooseJustificationType, onChangeExpertOpinion, onChooseNsi, onSwapType, addNsiPopupOpen, onEditNsi, onRemoveNsi, currentActionType, currentNode }) {
+function Justification({ nsi, onChooseJustificationType, onChangeExpertOpinion, onChooseNsi, onSwapType, addNsiPopupOpen, onEditNsi, onRemoveNsi, currentActionType, currentNode, isEditRights }) {
 
   const [isJustificationType, setIsJustificationType] = React.useState("");
   const [isExpertOpinion, setIsExpertOpinion] = React.useState("");
@@ -29,7 +29,10 @@ function Justification({ nsi, onChooseJustificationType, onChangeExpertOpinion, 
           <>
           <h5 className="popup__title add-node__title">Источники НСИ</h5>
           <p className="popup__subtitle add-node__subtitle">Соотнесите элемент с источниками НСИ</p>
-          <button className="btn btn_type_add justification__btn_type_add" type="button" onClick={addNsiPopupOpen}>Добавить новый источник</button>
+          {
+            isEditRights &&
+            <button className="btn btn_type_add justification__btn_type_add" type="button" onClick={addNsiPopupOpen}>Добавить новый источник</button>
+          }
           <ul className="justification-source__list">
             {
               nsi.map((elem, i) => (
@@ -42,6 +45,7 @@ function Justification({ nsi, onChooseJustificationType, onChangeExpertOpinion, 
                 onRemoveNsi={onRemoveNsi}
                 currentActionType={currentActionType}
                 currentNode={currentNode}
+                isEditRights={isEditRights}
                 />
               ))
             }
