@@ -1,6 +1,6 @@
 import React from 'react';
 
-function TaskItem({ task, index, onEdit, isEditRights }) {
+function TaskItem({ task, index, onEdit, onRemove, isEditRights }) {
 
   const [isShowMenu, setIsShowMenu] = React.useState(false);
 
@@ -10,7 +10,7 @@ function TaskItem({ task, index, onEdit, isEditRights }) {
 
   function removeElement() {
     setIsShowMenu(false);
-    //onRemove(elem);
+    onRemove(task);
   }
 
   return (

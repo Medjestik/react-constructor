@@ -10,10 +10,14 @@ import RemoveAssessmentItemPopup from '../RemoveAssessmentItemPopup/RemoveAssess
 import ChooseNsiTaskPopup from '../ChooseNsiTaskPopup/ChooseNsiTaskPopup.js';
 import NsiPopup from '../../../../Popup/NsiPopup/NsiPopup.js';
 import NsiTaskItem from '../NsiTaskItem/NsiTaskItem.js';
+import TechnicalProvisionTaskPopup from '../TechnicalProvisionTaskPopup/TechnicalProvisionTaskPopup.js';
+import ChooseMTOPopup from '../../../../Popup/ChooseMTOPopup/ChooseMTOPopup.js';
+import MTOTaskItem from '../MTOTaskItem/MTOTaskItem.js';
+import RemoveMTOPopup from '../../../../Popup/RemoveMTOPopup/RemoveMTOPopup.js';
 
 function PracticalTask({ 
   currentTask, 
-  currentTaskType, 
+  currentTaskType,
   skills, 
   abilities, 
   onBack, 
@@ -30,6 +34,12 @@ function PracticalTask({
   onAddNsi,
   onEditNsi,
   onRemoveNsi,
+  MTO, 
+  onAddMTO,
+  onEditMTO,
+  onRemoveMTO,
+  onSelectMTO,
+  onUnSelectMTO,
   isLoadingRequest 
 }) {
 
@@ -47,12 +57,38 @@ function PracticalTask({
   const [currentObject, setCurrentObject] = React.useState({});
   const [isOpenChooseNsiTaskPopup, setIsOpenChooseNsiTaskPopup] = React.useState(false);
   const [isOpenAddNsiPopup, setIsOpenAddNsiPopup] = React.useState(false);
+  const [isOpenTechnicalProvisionTaskPopup, setIsOpenTechnicalProvisionTaskPopup] = React.useState(false);
+  const [mtoTask, setMTOTask] = React.useState([]);
+  const [isOpenChooseMTOPopup, setIsOpenChooseMTOPopup] = React.useState(false);
+  const [currentMTO, setCurrentMTO] = React.useState({});
+  const [currentActionType, setCurrentActionType] = React.useState("");
+  const [isOpenRemoveMTOPopup, setIsOpenRemoveMTOPopup] = React.useState(false);
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
 
   console.log(currentTask);
 
   function unSelectNsi(elem) {
     onUnSelectNsi(currentTask.id, elem.id);
+  }
+
+  function openEditMTOPopup(elem) {
+    setCurrentMTO(elem);
+    setIsOpenTechnicalProvisionTaskPopup(true);
+    setCurrentActionType("edit");
+  }
+
+  function openRemoveMTOPopup(elem) { 
+    setCurrentMTO(elem);
+    setIsOpenRemoveMTOPopup(true);
+  }
+
+  function openChooseMTOPopup() { 
+    setIsOpenChooseMTOPopup(true);
+  }
+
+  function openTechnicalProvisionTaskPopup() { 
+    setIsOpenTechnicalProvisionTaskPopup(true);
+    setCurrentActionType("add");
   }
 
   function openAddNsiPopup() { 
@@ -89,10 +125,17 @@ function PracticalTask({
     setIsOpenRemoveAssessmentObjectPopup(false);
     setIsOpenRemoveAssessmentItemPopup(false);
     setIsOpenChooseNsiTaskPopup(false);
+    setIsOpenChooseMTOPopup(false);
   }
 
   function closeAddNsiPopup() {
     setIsOpenAddNsiPopup(false);
+  }
+
+  function closeMTOPopup() {
+    setIsOpenTechnicalProvisionTaskPopup(false);
+    setIsOpenRemoveMTOPopup(false);
+    setCurrentActionType("");
   }
 
   function onAddTask() {
@@ -148,6 +191,7 @@ function PracticalTask({
     setPlace(currentTask.place || "");
     setTime(currentTask.time || "");
     setNsiTask(currentTask.nsis);
+    setMTOTask(currentTask.mtos);
     return () => {
       setDescription("");
       setPlace("");
@@ -156,9 +200,12 @@ function PracticalTask({
       setCurrentSubject({});
       setCurrentObject({});
       setNsiTask([]);
+      setMTOTask([]);
+      setCurrentMTO({});
     };
-    // eslint-disable-next-line
+  // eslint-disable-next-line
   }, [currentTask]);
+
 
   return (
     <>
@@ -167,9 +214,9 @@ function PracticalTask({
       <Tabs className="tabs">
         <TabList className="tab-list">
           <Tab className="tab">Описание</Tab>
-          <Tab className="tab">Критерии оценки</Tab>
-          <Tab className="tab">Источники информации для выполнения</Tab>
-          <Tab className="tab">Материально-техническое обеспечение</Tab>
+          <Tab disabled={currentTaskType === "add" ? true : false} className="tab">Критерии оценки</Tab>
+          <Tab disabled={currentTaskType === "add" ? true : false} className="tab">Источники информации для выполнения</Tab>
+          <Tab disabled={currentTaskType === "add" ? true : false} className="tab">Материально-техническое обеспечение</Tab>
         </TabList>
         <TabPanel>
           <p className="main__subtitle">Добавление задания на применение навыков в реальных или модельных условиях (Практическое задание).</p>
@@ -215,6 +262,9 @@ function PracticalTask({
         </TabPanel> 
         <TabPanel>
           <button className="btn btn_type_add practical-task__btn-add" type="button" onClick={openAddAssessmentItemPopup}>Добавить предмет оценки</button>
+          {
+
+          }
           <h3 className="practical-task__subtitle-count">{`Предметов оценки добавлено: ${currentTask.subjects.length || 0}`}</h3>
           <ul className="practical-task__subject-list"> 
           {
@@ -233,20 +283,35 @@ function PracticalTask({
         </TabPanel> 
         <TabPanel>
           <button className="btn btn_type_choose practical-task__btn-add" type="button" onClick={openChooseNsiTaskPopup}>Выбрать источники НСИ</button>
-          <h3 className="practical-task__subtitle-count">{`Текущие источники добавлено: ${nsiTask.length}`}</h3>
+          <h3 className="practical-task__subtitle-count">{`Источников добавлено: ${nsiTask.length}`}</h3>
           <ul className="reference-information__list">
-              {
-                nsiTask.map((elem, i) => (
-                  <NsiTaskItem             
-                  elem={elem}
-                  key={i}
-                  unSelectNsi={unSelectNsi}
-                  />
-                ))
-              }
+            {
+              nsiTask.map((elem, i) => (
+                <NsiTaskItem             
+                elem={elem}
+                key={i}
+                unSelectNsi={unSelectNsi}
+                />
+              ))
+            }
           </ul>
         </TabPanel>
         <TabPanel>
+          <button className="btn btn_type_choose practical-task__btn-add" type="button" onClick={openChooseMTOPopup}>Выбрать МТО</button>
+          <h3 className="practical-task__subtitle-count">{`МТО добавлено: ${mtoTask.length}`}</h3>
+          <ul className="mto-item__list">
+            {
+              mtoTask.map((elem) => (
+                <MTOTaskItem
+                key={elem.id}
+                elem={elem}
+                onUnSelectMTO={onUnSelectMTO}
+                currentTask={currentTask}
+                />
+              ))
+            }
+          </ul>
+
         </TabPanel>
       </Tabs>
       
@@ -313,18 +378,56 @@ function PracticalTask({
       openAddNsiPopup={openAddNsiPopup}
       onEditNsi={onEditNsi}
       onRemoveNsi={onRemoveNsi}
-      isLoadingRequest={isLoadingRequest}
+      isLoadingRequest={isLoadingRequest} 
       />
     }
 
     { 
-      isOpenAddNsiPopup
-      &&
+      isOpenAddNsiPopup &&
       <NsiPopup
       isOpen={isOpenAddNsiPopup}
       onClose={closeAddNsiPopup}
       nsiTypes={nsiTypes}
       onAdd={onAddNsi}
+      />
+    }
+
+    {
+      isOpenChooseMTOPopup &&
+      <ChooseMTOPopup
+      isOpen={isOpenChooseMTOPopup}
+      onClose={closeAddAddAssessmentItemPopups}
+      MTO={MTO}
+      openAddMTOPopup={openTechnicalProvisionTaskPopup}
+      onEditMTO={openEditMTOPopup}
+      onRemoveMTO={openRemoveMTOPopup}
+      onSelectMTO={onSelectMTO}
+      currentTask={currentTask}
+      isLoadingRequest={isLoadingRequest}
+      />
+    }
+
+    {
+      isOpenRemoveMTOPopup &&
+      <RemoveMTOPopup 
+      isOpen={isOpenRemoveMTOPopup}
+      onClose={closeMTOPopup}
+      onRemove={onRemoveMTO}
+      currentMTO={currentMTO}
+      isLoadingRequest={isLoadingRequest}
+      />
+    }
+
+    {
+      isOpenTechnicalProvisionTaskPopup &&  
+      <TechnicalProvisionTaskPopup
+      isOpen={isOpenTechnicalProvisionTaskPopup}
+      onClose={closeMTOPopup}
+      currentActionType={currentActionType}
+      currentMTO={currentMTO}
+      onAddMTO={onAddMTO}
+      onEditMTO={onEditMTO}
+      isLoadingRequest={isLoadingRequest}
       />
     }
 

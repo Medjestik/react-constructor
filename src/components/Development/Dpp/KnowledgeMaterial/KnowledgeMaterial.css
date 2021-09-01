@@ -1,6 +1,9 @@
 .knowledge-material {
   margin: 40px 0px 0px 0px;
 }
+.knowledge-material__btn-back {
+  margin: 0px 0px 20px 0px;
+}
 
 .questions__container {
   display: flex;

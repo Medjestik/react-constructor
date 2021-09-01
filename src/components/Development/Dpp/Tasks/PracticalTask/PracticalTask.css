@@ -5,7 +5,9 @@
   width: 100%;
 }
 .practical-task__item {
-  margin: 15px 0px 0px 0px;
+  margin: 0px 0px 15px 0px;
+  padding: 0px 0px 25px 0px;
+  position: relative;
 }
 .practical-task__item-name {
   margin: 20px 10px 10px 0px;
@@ -204,5 +206,24 @@
   text-align: left;
   color: var(--title-color);
 }
+.practical-task__input {
+  width: calc(100% - 60px);
+  justify-content: space-between;
+  padding: 12px 22px;
+  border-radius: 100px;
+  border: none;
+  outline: none;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 1.15;
+  color: var(--title-color);
+  letter-spacing: 1.5px;
+  margin: 0px;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 20%);
+}
+.practical-task__input::placeholder {
+  font-size: 14px;
+} 
 
 

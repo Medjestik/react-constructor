@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import Chevron from "../Chevron.js";
 import "./AccordionChooseQuestionType.css";
+import "../AccordionChooseKnowledge/AccordionChooseKnowledge.css";
 import useOnClickOutside from "../../../hooks/useOnClickOutside.js";
 import oneAnswerIcon from '../../../images/quiz/one-answer-color.png';
 import multiAnswerIcon from '../../../images/quiz/multi-answer-color.png';

@@ -83,8 +83,6 @@ export const createTask = ({ token, omId, task }) => {
   .then(res => handleResponse(res));
 };
 
-
-
 export const editTask = ({ token, omId, task, taskId }) => { 
   return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/update`, {
     method: 'POST', 
@@ -94,6 +92,18 @@ export const editTask = ({ token, omId, task, taskId }) => {
       'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify({ task })
+  })
+  .then(res => handleResponse(res));
+};
+
+export const removeTask = ({ token, omId, taskId }) => { 
+  return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/destroy`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
   })
   .then(res => handleResponse(res));
 };
@@ -164,6 +174,71 @@ export const selectTaskNsi = ({ token, omId, taskId, nsis }) => {
 
 export const unSelectTaskNsi = ({ token, omId, taskId, nsiId, }) => {
   return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/nsis/${nsiId}/unselect`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+  .then(res => handleResponse(res));
+};
+
+export const createTaskMTO = ({ token, dppId, mto }) => { 
+  return fetch(`${API_URL}/dpps/${dppId}/mtos`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ mto })
+  })
+  .then(res => handleResponse(res));
+};
+
+export const editTaskMTO = ({ token, dppId, mtoId, mto }) => { 
+  return fetch(`${API_URL}/dpps/${dppId}/mtos/${mtoId}/update`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ mto })
+  })
+  .then(res => handleResponse(res));
+};
+
+
+
+export const removeTaskMTO = ({ token, dppId, mtoId }) => {
+  return fetch(`${API_URL}/dpps/${dppId}/mtos/${mtoId}/destroy`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+  .then(res => handleResponse(res));
+};
+
+export const selectTaskMTO = ({ token, omId, taskId, mtos }) => {
+  return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/mtos/select`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ mtos })
+  })
+  .then(res => handleResponse(res));
+};
+
+export const unSelectTaskMTO = ({ token, omId, taskId, mtoId }) => {
+  return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/mtos/${mtoId}/unselect`, {
     method: 'POST', 
     headers: {
       'Accept': 'application/json',

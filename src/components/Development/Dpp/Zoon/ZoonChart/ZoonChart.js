@@ -75,7 +75,7 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
     const zoon = new OrgChart(divRef.current , {
       nodes: nodes,
       slinks: zoonLinks,
-      layout: OrgChart.treeRightOffset,
+      layout: OrgChart.tree,
       nodeMouseClick: OrgChart.action.none,
       enableSearch: false,
       enableDragDrop: true,

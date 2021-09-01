@@ -1,0 +1,10 @@
+.mto-img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  object-position: center;
+  margin-right: 20px;
+  -webkit-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}
