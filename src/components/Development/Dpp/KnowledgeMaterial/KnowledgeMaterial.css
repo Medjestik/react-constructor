@@ -4,6 +4,28 @@
 .knowledge-material__btn-back {
   margin: 0px 0px 20px 0px;
 }
+.knowledge-material__description {
+  display: flex;
+  align-items: center;
+  margin: 0px 0px 20px 0px;
+}
+.knowledge-material__name {
+  margin: 0px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.3;
+  text-align: left;
+  color: var(--title-color);
+}
+.knowledge-material__symbol {
+  flex-shrink: 0;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  margin: 0px 15px 0px 0px;
+  background-color: var(--third-light-color);
+}
 
 .questions__container {
   display: flex;

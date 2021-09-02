@@ -279,6 +279,11 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
         ?
         <>
         <button className="btn btn_type_back knowledge-material__btn-back" type="button" onClick={backToKnowledges}>К списку знаний</button>
+        <div className="knowledge-material__description">
+          <span className="knowledge-material__symbol"></span>
+          <h3 className="knowledge-material__name">{currentKnowledge.name}</h3>
+        </div>
+
         <div className="questions__container">
           <div className="questions__main">
             <div className="questions__control"> 

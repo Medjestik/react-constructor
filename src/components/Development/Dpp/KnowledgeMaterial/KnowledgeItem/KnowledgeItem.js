@@ -3,14 +3,54 @@ import './KnowledgeItem.css';
 
 function KnowledgeItem({ knowledges, chooseKnowledge }) {
 
-  console.log(knowledges);
+  const [searchName, setSearchName] = React.useState('');
+  const [currentKnowledges, setCurrentKnowledges] = React.useState([]);
+
+  function handleSearchByName(e) {
+    setSearchName(e.target.value);
+  }
+
+  function handleChooseKnowledge(knowledge) {
+    chooseKnowledge(knowledge);
+    setSearchName('');
+  }
+
+  React.useEffect(() => {
+    const filteredKnowledges = knowledges.filter((item) => {
+      return item.name.toLowerCase().includes(searchName.toLowerCase());
+    })
+    setCurrentKnowledges(filteredKnowledges)
+  }, [knowledges, searchName]);
+
+  React.useEffect(() => {
+    setSearchName('');
+    setCurrentKnowledges([...knowledges]);
+    return () => {
+      setCurrentKnowledges([]);
+    }
+  }, [knowledges]);
+
   
   return (
     <>
     <p className="main__subtitle">Для работы с оценочными материалами выберите знание</p>
+    <div className="search">
+      <input
+      className="input-search"
+      placeholder="поиск по наименованию знания"
+      type="text"
+      id="search-knowledge-input-name"
+      name="search-knowledge-input-name"
+      spellCheck="true"
+      autoComplete="off"
+      value={searchName}
+      onChange={handleSearchByName}
+      >
+      </input>
+    </div>
     <ul className="knowledge-item__list">
     {
-      knowledges.map((knowledge) => (
+      currentKnowledges.map((knowledge) => (
         <li key={knowledge.id} className="knowledge-item__item">
           <span 
           className={`
@@ -23,7 +63,7 @@ function KnowledgeItem({ knowledges, chooseKnowledge }) {
             {knowledge.questions.length}
           </span>
           <h3 className="knowledge-item__name">{knowledge.name}</h3>
-          <button className="knowledge-item__btn" onClick={() => chooseKnowledge(knowledge)}>Выбрать</button>
+          <button className="knowledge-item__btn" onClick={() => handleChooseKnowledge(knowledge)}>Выбрать</button>
         </li>
       ))
     }

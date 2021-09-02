@@ -2,7 +2,6 @@ import React from 'react';
 import './ZoonChart.css';
 import OrgChart from '@balkangraph/orgchart.js';
 import AddNodePopup from '../AddNodePopup/AddNodePopup.js';
-import EditNodePopup from '../EditNodePopup/EditNodePopup.js';
 import ConfirmRemovePopup from '../ConfirmRemovePopup/ConfirmRemovePopup.js';
 import ErrorRemovePopup from '../ErrorRemovePopup/ErrorRemovePopup.js';
 import AddNewLinkPopup from '../AddNewLinkPopup/AddNewLinkPopup.js';
@@ -20,7 +19,6 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
   const [currentNodeId, setCurrentNodeId] = React.useState('');
   const [currentNodeType, setCurrentNodeType] = React.useState('');
   const [isAddNodePopupOpen, setIsAddNodePopupOpen] = React.useState(false);
-  const [isEditNodePopupOpen, setIsEditNodePopupOpen] = React.useState(false);
   const [isConfirmRemovePopupOpen, setIsConfirmRemovePopupOpen] = React.useState(false); 
   const [isErrorRemovePopupOpen, setIsErrorRemovePopupOpen] = React.useState(false);
   const [isAddNewLinkPopupOpen, setIsAddNewLinkPopupOpen] = React.useState(false);
@@ -691,7 +689,6 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
     setIsConfirmRemovePopupOpen(false);
     setIsErrorRemovePopupOpen(false);
     setIsErrorDragAndDropPopupOpen(false);
-    setIsEditNodePopupOpen(false);
     setIsAddNewLinkPopupOpen(false);
     setIsRemoveLinkPopupOpen(false);
     setIsBuildCompetencePopupOpen(false);
@@ -732,19 +729,6 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
       typologyParts={typologyParts}
       currentActionType={currentActionType}
       isEditRights={isEditRights}
-      />
-    }
-    {
-      isEditNodePopupOpen
-      &&
-      <EditNodePopup
-      isOpen={isEditNodePopupOpen}
-      onClose={closeZoonPopups}
-      zoonChart={zoonChart}
-      currentNode={currentNode}
-      onSave={handleAddNode}
-      isLoadingRequest={isLoadingRequest}
-      isErrorRequest={isErrorRequest}
       />
     }
     {
