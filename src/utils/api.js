@@ -854,5 +854,18 @@ export const swapChildren = ({ token, zoonVersion, nodeId, children }) => {
   .then(res => handleResponse(res))
 };
 
+export const changeTypologyKnowledgeOrder = ({ token, zoonVersion, dtpId, order }) => {
+  return fetch(`${API_URL}/zuns/${zoonVersion}/dtps/${dtpId}/reorder`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ order })
+  })
+  .then(res => handleResponse(res))
+};
+
 
 

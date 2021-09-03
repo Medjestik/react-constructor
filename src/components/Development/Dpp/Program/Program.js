@@ -85,6 +85,9 @@ function Program({ program, history, }) {
     if (role === 'Супервайзер') {
       return (<span className="development__performers-role performers-role_type_supervisor">{role}</span>)
     }
+    if (role === "Наблюдатель") {
+      return (<span className="development__performers-role performers-role_type_observer">{role}</span>)
+    }
     return (<span className="development__performers-role performers-role_type_methodist">{role}</span>);
   }
 

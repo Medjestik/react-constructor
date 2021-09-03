@@ -2,10 +2,11 @@ import React from 'react';
 import './Justification.css';
 import JustificationItem from '../JustificationItem/JustificationItem.js';
 
-function Justification({ nsi, onChooseJustificationType, onChangeExpertOpinion, onChooseNsi, onSwapType, addNsiPopupOpen, onEditNsi, onRemoveNsi, currentActionType, currentNode, isEditRights }) {
+function Justification({ nsi, onChooseJustificationType, onChangeExpertOpinion, onChangeNsiNote, onChooseNsi, onSwapType, addNsiPopupOpen, onEditNsi, onRemoveNsi, currentActionType, currentNode, isEditRights }) {
 
   const [isJustificationType, setIsJustificationType] = React.useState("");
   const [isExpertOpinion, setIsExpertOpinion] = React.useState("");
+  const [isNsiNote, setIsNsiNote] = React.useState("");
  
   function handleJustificationType(e) {
     onSwapType();
@@ -20,6 +21,11 @@ function Justification({ nsi, onChooseJustificationType, onChangeExpertOpinion, 
   function handleChangeExpertOpinion(e) {
     setIsExpertOpinion(e.target.value);
     onChangeExpertOpinion(e.target.value);
+  }
+
+  function handleChangeNsiNote(e) {
+    setIsNsiNote(e.target.value);
+    onChangeNsiNote(e.target.value);
   }
 
   function defineJustification(type) {
@@ -50,6 +56,16 @@ function Justification({ nsi, onChooseJustificationType, onChangeExpertOpinion, 
               ))
             }
           </ul>
+          <h5 className="popup__title add-node__title">Примечание для источников НСИ</h5>
+          <textarea 
+          className="justification__expert-opinion" 
+          name="nsi-note" 
+          placeholder="Введите примечание для источников НСИ"
+          defaultValue={isNsiNote}
+          onChange={handleChangeNsiNote}
+          spellCheck="true"
+          >
+          </textarea>
           </>
         )
       case 'expert':
@@ -75,6 +91,7 @@ function Justification({ nsi, onChooseJustificationType, onChangeExpertOpinion, 
     if ((currentActionType === "edit") && (currentNode.justificationType !== null)) {
       if (currentNode.justificationType === 0) {
         setIsJustificationType("nsi");
+        setIsNsiNote(currentNode.note);
       } else {
         setIsJustificationType("expert");
       }

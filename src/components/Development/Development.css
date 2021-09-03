@@ -182,10 +182,13 @@
   background-color: var(--third-light-color);
 }
 .performers-role_type_validator {
-  background-color: var(--secondary-color);
+  background-color: var(--five-light-color);
 }
 .performers-role_type_supervisor {
   background-color: var(--fourth-light-color);
+}
+.performers-role_type_observer {
+  background-color: var(--secondary-color);
 }
 .development__performers-contacts {
   margin: 0px 0px 0px auto;

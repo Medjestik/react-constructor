@@ -29,11 +29,14 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
 
   function handleChooseJustificationType(number) {
     setNewNode({ ...newNode, justificationType: number });
-    console.log(newNode)
   }
 
   function handleChangeExpertOpinion(text) {
     setNewNode({ ...newNode, expertOpinion: text });
+  }
+
+  function handleChangeNsiNote(text) {
+    setNewNode({ ...newNode, note: text });
   }
 
   function handleChooseNsi(id) {
@@ -163,9 +166,6 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
 
 
   React.useEffect(() => {
-    console.log(currentNode);
-    console.log(typologyParts);
-    console.log(currentActionType);
     setKnowledgeWhat(currentActionType === "edit" ? currentNode.what : "");
     setErrorKnowledgeWhat(currentActionType === "edit" ? false : true);
     setFormErrorKnowledge(true);
@@ -184,7 +184,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
     setErrorSkillWhere(currentActionType === "edit" ? false : true);
     setFormErrorSkill(true);
     setNsiArray(currentActionType === "edit" ? currentNode.nsis : []);
-    setNewNode(currentActionType === "edit" ? currentNode : { ...currentNode, justificationType: "", expertOpinion: "", nsis: [], typologyPartId: "" });
+    setNewNode(currentActionType === "edit" ? currentNode : { ...currentNode, justificationType: "", expertOpinion: "", nsis: [], typologyPartId: "", note: "", });
 
     return () => {
       setNewNode({})
@@ -251,6 +251,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
           nsi={nsi} 
           onChooseJustificationType={handleChooseJustificationType}
           onChangeExpertOpinion={handleChangeExpertOpinion}
+          onChangeNsiNote={handleChangeNsiNote}
           onChooseNsi={handleChooseNsi}
           onSwapType={handleSwapType}
           addNsiPopupOpen={addNsiPopupOpen}
@@ -332,6 +333,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
           nsi={nsi} 
           onChooseJustificationType={handleChooseJustificationType}
           onChangeExpertOpinion={handleChangeExpertOpinion}
+          onChangeNsiNote={handleChangeNsiNote}
           onChooseNsi={handleChooseNsi}
           onSwapType={handleSwapType}
           addNsiPopupOpen={addNsiPopupOpen}
@@ -412,6 +414,7 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
             nsi={nsi} 
             onChooseJustificationType={handleChooseJustificationType}
             onChangeExpertOpinion={handleChangeExpertOpinion}
+            onChangeNsiNote={handleChangeNsiNote}
             onChooseNsi={handleChooseNsi}
             onSwapType={handleSwapType}
             addNsiPopupOpen={addNsiPopupOpen}

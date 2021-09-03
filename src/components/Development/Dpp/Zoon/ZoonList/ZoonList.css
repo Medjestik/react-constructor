@@ -133,3 +133,9 @@
   margin: 0px 7px 0px 0px;
   background-color: var(--fourth-light-color);
 }
+.zoon-list__caption {
+  font-weight: 700;
+}
+.zoon-list__count {
+  margin-right: 5px;
+}

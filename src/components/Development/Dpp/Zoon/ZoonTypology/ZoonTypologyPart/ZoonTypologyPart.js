@@ -1,12 +1,10 @@
 import React from 'react';
-import './DragAndDrop.css';
 import { DragDropContext } from 'react-beautiful-dnd';
-import DroppableColumn from './DroppableColumn/DroppableColumn.js';
+import ZoonTypologyColumn from '../ZoonTypologyColumn/ZoonTypologyColumn.js';
 
+function ZoonTypologyPart({ elem, data, onChangeOrder, knowledgeIndex, isEditRights }) {
 
-function DragAndDrop({ data, onEdit, onRemove, onChangeOrder, isEditRights }) {
-
-  const [dataQuestion, setDataQuestion] = React.useState([]);
+  const [dataPart, setDataPart] = React.useState([]);
 
   React.useEffect(() => {
 
@@ -25,7 +23,7 @@ function DragAndDrop({ data, onEdit, onRemove, onChangeOrder, isEditRights }) {
       },
     }
 
-    setDataQuestion(newData);
+    setDataPart(newData);
     
   }, [data]);
 
@@ -41,7 +39,7 @@ function DragAndDrop({ data, onEdit, onRemove, onChangeOrder, isEditRights }) {
       return;
     }
 
-    const column = dataQuestion.column;
+    const column = dataPart.column;
 
     const newPartIds = Array.from(column.partIds);
     newPartIds.splice(source.index, 1);
@@ -52,27 +50,27 @@ function DragAndDrop({ data, onEdit, onRemove, onChangeOrder, isEditRights }) {
     };
 
     const newState = {
-      ...dataQuestion,
+      ...dataPart,
       column: newColumn,
     };
 
-    setDataQuestion(newState);
+    setDataPart(newState);
 
     if (isEditRights) {
-      onChangeOrder(newState.column.partIds);
+      onChangeOrder(newState.column.partIds, elem.id);
     }
   }
  
   
   return (
-    dataQuestion.length === 0 ?
+    dataPart.length === 0 ?
     <div></div>
     :
     <DragDropContext onDragEnd={onDragEnd} >
-      <DroppableColumn 
-        parts={dataQuestion.column.partIds.map((partId) => {
+      <ZoonTypologyColumn
+        parts={dataPart.column.partIds.map((partId) => {
           let part = {};
-          dataQuestion.parts.find(element => {
+          dataPart.parts.find(element => {
             if (element.stringIds === partId) {
               return part = element;
             }
@@ -80,12 +78,11 @@ function DragAndDrop({ data, onEdit, onRemove, onChangeOrder, isEditRights }) {
           });
           return part;
         })}
-        onEdit={onEdit}
-        onRemove={onRemove}
+        knowledgeIndex={knowledgeIndex}
         isEditRights={isEditRights}
       />
     </DragDropContext>
   )
 }
 
-export default DragAndDrop;
+export default ZoonTypologyPart;

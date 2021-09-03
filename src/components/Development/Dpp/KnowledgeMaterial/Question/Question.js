@@ -172,7 +172,7 @@ function Question({ editQuestion, setEditQuestion }) {
     if (type === 'conformity-answer') {
       return (
         <>
-        <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса:</span> Вопрос с установлением соответсвия</p>
+        <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса:</span> Вопрос с установлением соответствия</p>
         <textarea value={questionText || ""} onChange={handleChangeQuestionText} className="question__text" name="question__text" placeholder="Введите текст вопроса"></textarea>
         <ul className="questions__answers">
           {

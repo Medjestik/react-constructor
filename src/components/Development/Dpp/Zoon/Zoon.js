@@ -162,7 +162,7 @@ function Zoon({ dppDescription, loggedIn, isEditRights }) {
             <ZoonList dppDescription={dppDescription} loggedIn={loggedIn} />
           </TabPanel>
           <TabPanel>
-            <ZoonTypology dppDescription={dppDescription} loggedIn={loggedIn} />
+            <ZoonTypology dppDescription={dppDescription} loggedIn={loggedIn} isEditRights={isEditRights} />
           </TabPanel>
           <TabPanel>
             <ZoonExport dppDescription={dppDescription} /> 

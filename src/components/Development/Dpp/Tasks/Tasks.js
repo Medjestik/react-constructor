@@ -7,10 +7,12 @@ import TaskItem from './TaskItem/TaskItem.js';
 import Preloader from '../../../Preloader/Preloader.js';
 import EditNsiPopup from '../../../Popup/EditNsiPopup/EditNsiPopup.js';
 import RemoveNsiPopup from '../../../Popup/RemoveNsiPopup/RemoveNsiPopup.js';
+import RemoveTaskPopup from './RemoveTaskPopup/RemoveTaskPopup.js';
 
 function Tasks({ loggedIn, dppDescription, isEditRights }) {
 
   const [isShowAddTaskType, setIsShowAddTaskType] = React.useState(false);
+  const [isShowRemoveTaskPopup, setIsShowRemoveTaskPopup] = React.useState(false);
   const [isShowAddPracticalTask, setIsShowAddPracticalTask] = React.useState(false);
   const [isShowAddMenu, setIsShowAddMenu] = React.useState(true);
   const [tasks, setTasks] = React.useState([]);
@@ -52,6 +54,16 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
     setCurrentTaskType("edit");
     setCurrentTask(task);
     setIsShowAddTaskType(false);
+  }
+
+  function openRemoveTaskPopup(task) {
+    setIsShowRemoveTaskPopup(true);
+    setCurrentTask(task);
+  }
+
+  function closeRemoveTaskPopup(task) {
+    setIsShowRemoveTaskPopup(false);
+    setCurrentTask({});
   }
 
   function backToTaskList() {
@@ -444,7 +456,7 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
       }
   }
 
-  function handleRemovePracticalTask(task) {
+  function handleRemovePracticalTask(task, closePopup) {
     setIsLoadingRequest(true);
     const token = localStorage.getItem("token");
     if (loggedIn) {
@@ -452,6 +464,7 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
         .then((res) => {
           const newTasks = tasks.filter((elem) => elem.id !== res)
           setTasks(newTasks);
+          closePopup();
         })
         .catch((err) => {
             console.error(err);
@@ -538,7 +551,7 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
                 task={elem} 
                 index={i} 
                 onEdit={openEditPracticalTask} 
-                onRemove={handleRemovePracticalTask} 
+                onRemove={openRemoveTaskPopup} 
                 isEditRights={isEditRights} 
                 />
               ))
@@ -599,6 +612,17 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
           onRemove={handleRemoveNsi}
           isLoading={isLoadingRequest}
         />
+      }
+      {
+        isShowRemoveTaskPopup &&
+        <RemoveTaskPopup 
+          isOpen={isShowRemoveTaskPopup}
+          onClose={closeRemoveTaskPopup}  
+          currentTask={currentTask}
+          onConfirm={handleRemovePracticalTask}
+          isLoading={isLoadingRequest}
+        />
+
       }
     </>
   );

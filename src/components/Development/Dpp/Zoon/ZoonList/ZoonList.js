@@ -13,31 +13,73 @@ function ZoonList({ dppDescription, loggedIn }) {
 
   function defineChildrenCompetence(id) {
     const childrenFirst = zoon.zoons.filter((elem) => (elem.pid === id));
-    return childrenFirst.map((elem) => {
+    return childrenFirst.map((elem, firstIndex) => {
       const childrenSecond = zoon.zoons.filter((zoon) => (zoon.pid === elem.id));
       return (
         <li className="zoon-list__item" key={elem.id}>
-          <p className={`zoon-list__name 
-          ${elem.tags[0] === "skill" ? "name_type_skill" : ""}
-          ${elem.tags[0] === "ability" ? "name_type_ability" : ""}
-          ${elem.tags[0] === "knowledge" ? "name_type_knowledge" : ""}
-          `}>{elem.name}</p>
+          {
+            elem.tags[0] === "skill" &&
+            <p className="zoon-list__name name_type_skill">
+              <span className="zoon-list__caption">Н</span>
+              <span className="zoon-list__count">({firstIndex + 1}).</span>
+              {elem.name}
+            </p>
+          }
+          {
+            elem.tags[0] === "ability" &&
+            <p className="zoon-list__name name_type_ability">
+              <span className="zoon-list__caption">У</span>
+              <span className="zoon-list__count">({firstIndex + 1}).</span>
+              {elem.name}
+            </p>
+          }
+          {
+            elem.tags[0] === "knowledge" &&
+            <p className="zoon-list__name name_type_knowledge">
+              <span className="zoon-list__caption">З</span>
+              <span className="zoon-list__count">({firstIndex + 1}).</span>
+              {elem.name}
+            </p>
+          }
           <ul className="zoon-list__list">
             {
-              childrenSecond.map((elem) => {
+              childrenSecond.map((elem, secondIndex) => {
                 const childrenThird = zoon.zoons.filter((zoon) => (zoon.pid === elem.id));
                 return (
                   <li className="zoon-list__item" key={elem.id}>
-                    <p className={`zoon-list__name 
-                    ${elem.tags[0] === "skill" ? "name_type_skill" : ""}
-                    ${elem.tags[0] === "ability" ? "name_type_ability" : ""}
-                    ${elem.tags[0] === "knowledge" ? "name_type_knowledge" : ""}
-                    `}>{elem.name}</p>
+                    {
+                      elem.tags[0] === "skill" &&
+                      <p className="zoon-list__name name_type_skill">
+                        <span className="zoon-list__caption">Н</span>
+                        <span className="zoon-list__count">{`(${firstIndex + 1}${secondIndex + 1}).`}</span>
+                        {elem.name}
+                      </p>
+                    }
+                    {
+                      elem.tags[0] === "ability" &&
+                      <p className="zoon-list__name name_type_ability">
+                        <span className="zoon-list__caption">У</span>
+                        <span className="zoon-list__count">{`(${firstIndex + 1}${secondIndex + 1}).`}</span>
+                        {elem.name}
+                      </p>
+                    }
+                    {
+                      elem.tags[0] === "knowledge" &&
+                      <p className="zoon-list__name name_type_knowledge">
+                        <span className="zoon-list__caption">З</span>
+                        <span className="zoon-list__count">{`(${firstIndex + 1}${secondIndex + 1}).`}</span>
+                        {elem.name}
+                      </p>
+                    }
                     <ul className="zoon-list__list">
                       {
-                        childrenThird.map((elem) => (
+                        childrenThird.map((elem, thirdIndex) => (
                           <li className="zoon-list__item" key={elem.id}>
-                            <p className="zoon-list__name name_type_knowledge">{elem.name}</p>
+                            <p className="zoon-list__name name_type_knowledge">
+                            <span className="zoon-list__caption">З</span>
+                            <span className="zoon-list__count">{`(${firstIndex + 1}${secondIndex + 1}-${thirdIndex + 1}).`}</span>
+                            {elem.name}
+                          </p>
                           </li>
                         ))
                       }
@@ -124,9 +166,13 @@ function ZoonList({ dppDescription, loggedIn }) {
         <h3 className="zoon-list__title">Сквозные знания</h3>
         <ul className="zoon-list__list">
           {
-            crossKnowledge.map((elem) => (
+            crossKnowledge.map((elem, indexCrossKnowledge) => (
               <li key={elem.id} className="zoon-list__item">
-                <p className="zoon-list__name name_type_cross-knowledge">{elem.name}</p>
+                <p className="zoon-list__name name_type_cross-knowledge">
+                  <span className="zoon-list__caption">СЗ</span>
+                  <span className="zoon-list__count">({indexCrossKnowledge + 1}).</span>
+                  {elem.name}
+                </p>
               </li>
             ))
           }
