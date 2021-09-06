@@ -56,6 +56,9 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
     return () => {
       setKnowledges([]);
       setQuestionTypes([]);
+      setCurrentKnowledge({});
+      setCurrentQuestion({});
+      setEditQuestion({});
     };
     // eslint-disable-next-line
   },[]);
@@ -71,8 +74,9 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
     setIsRenderKnowledge(false);
     setIsDefineTypeOfQuestion(false);
     setIsRenderQuestion(false);
-    setCurrentQuestions([]);
     setCurrentKnowledge({});
+    setCurrentQuestion({});
+    setEditQuestion({});
   }
 
   function chooseQuestion(question) {
@@ -137,9 +141,10 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
         .then(() => {
           const newQuestions = currentQuestions.filter((item) => item.id !== currentQuestion.id);
           const indexKnowledge = knowledges.indexOf(knowledges.find((elem) => (elem.id === currentKnowledge.id)));
-          const newKnowledge = {...currentKnowledge, questions: newQuestions};
-          setCurrentQuestions(newQuestions);  
+          const newKnowledge = {...knowledges[indexKnowledge], questions: newQuestions};
           setKnowledges([...knowledges.slice(0, indexKnowledge), newKnowledge, ...knowledges.slice(indexKnowledge + 1)]);
+          setCurrentKnowledge(newKnowledge);
+          setCurrentQuestions(newQuestions);  
           setIsRenderQuestion(false);
         })
         .catch((err) => {
@@ -190,7 +195,7 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
         evaluationMaterialApi.createQuestion({ token: token, omId: dppDescription.om_version_id, questionData: editQuestion })
         .then((res) => {
           const indexKnowledge = knowledges.indexOf(knowledges.find((elem) => (elem.id === currentKnowledge.id)));
-          const newKnowledge = {...currentKnowledge, questions: [res, ...currentKnowledge.questions]};
+          const newKnowledge = {...knowledges[indexKnowledge], questions: [...knowledges[indexKnowledge].questions, res]};
           setKnowledges([...knowledges.slice(0, indexKnowledge), newKnowledge, ...knowledges.slice(indexKnowledge + 1)]);
           setCurrentQuestions([res, ...currentQuestions]);
           chooseQuestion(res);
@@ -209,16 +214,11 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
         if (loggedIn) {
           evaluationMaterialApi.editQuestion({ token: token, omId: dppDescription.om_version_id, questionId: currentQuestion.id, questionData: editQuestion })
           .then((res) => {
-            const newQuestions = [];
-            if (currentQuestions.find(elem => (elem.id === res.id)) === undefined) {
-              newQuestions.unshift(editQuestion);
-            }
-            currentQuestions.forEach((elem) => {
-              if (elem.id === res.id) {
-                elem = res;
-              }
-              newQuestions.push(elem);
-            })
+            const indexKnowledge = knowledges.indexOf(knowledges.find((elem) => (elem.id === currentKnowledge.id)));
+            const indexQuestion = currentQuestions.indexOf(currentQuestions.find((elem) => (elem.id === res.id)));
+            const newQuestions = ([...currentQuestions.slice(0, indexQuestion), res, ...currentQuestions.slice(indexQuestion + 1)]);
+            const newKnowledge = {...knowledges[indexKnowledge], questions: newQuestions};
+            setKnowledges([...knowledges.slice(0, indexKnowledge), newKnowledge, ...knowledges.slice(indexKnowledge + 1)]);
             setCurrentQuestions(newQuestions);
             setErrorMessage({ text: "", isShow: false });
             setSuccessMessage({ ...successMessage, isShow: true });
@@ -261,9 +261,10 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
 
   React.useEffect(() => {
     if (isRenderKnowledge) {
-      setCurrentQuestions(currentKnowledge.questions.filter((item) => item.text.toLowerCase().includes(textQuestion.toLowerCase())));
+      const indexKnowledge = knowledges.indexOf(knowledges.find((elem) => (elem.id === currentKnowledge.id)));
+      setCurrentQuestions(knowledges[indexKnowledge].questions.filter((item) => item.text.toLowerCase().includes(textQuestion.toLowerCase())));
     }
-  }, [currentKnowledge, textQuestion, isRenderKnowledge]);
+  }, [knowledges, currentKnowledge, textQuestion, isRenderKnowledge]);
 
   return (
     

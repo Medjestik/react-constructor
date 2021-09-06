@@ -1,5 +1,6 @@
 import React from 'react';
 import './SequenceAnswer.css';
+import TextareaAutosize from 'react-textarea-autosize';
 
 function SequenceAnswer({ onDelete, answer, index, onChangeAnswerText }) {
 
@@ -14,16 +15,16 @@ function SequenceAnswer({ onDelete, answer, index, onChangeAnswerText }) {
   return (
     <li className="sequence-answer" id={answer.id}>
       <span className="sequence-answer__count">{`${index + 1}.`}</span>
-      <input
-        className="sequence-answer__input"
-        placeholder="Введите ответ"
-        value={answer.text || ''}
-        onChange={handleChangeAnswerText}
-        type="text"
+      <TextareaAutosize
+        className="sequence-answer__textarea"
         id={`sequence-answer-text ${answer.id}`}
         name={`sequence-answer-text ${answer.id}`}
+        placeholder="Введите ответ..."
+        defaultValue={answer.text || ''}
+        onChange={handleChangeAnswerText}
+        required
       >
-      </input>
+      </TextareaAutosize>
       <button className="questions__btn_type_delete" type="button" onClick={handleClickDelete}></button>
     </li>
   );

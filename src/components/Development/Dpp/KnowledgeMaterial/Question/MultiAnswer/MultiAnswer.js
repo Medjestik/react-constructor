@@ -1,5 +1,6 @@
 import React from 'react';
 import './MultiAnswer.css';
+import TextareaAutosize from 'react-textarea-autosize';
 
 function MultiAnswer({ onDelete, answer, onChangeAnswer, onChangeAnswerText }) {
 
@@ -24,16 +25,16 @@ function MultiAnswer({ onDelete, answer, onChangeAnswer, onChangeAnswerText }) {
         </input>
         <span className="test"></span>
       </label>
-      <input
-        className="multi-answer__input"
-        placeholder="Введите ответ"
-        value={answer.text || ''}
-        onChange={handleChangeAnswerText}
-        type="text"
+      <TextareaAutosize
+        className="multi-answer__textarea"
         id={`multi-answer-text ${answer.id}`}
         name={`multi-answer-text ${answer.id}`}
+        placeholder="Введите ответ..."
+        defaultValue={answer.text || ''}
+        onChange={handleChangeAnswerText}
+        required
       >
-      </input>
+      </TextareaAutosize>
       <button className="questions__btn_type_delete" type="button" onClick={handleClickDelete}></button>
     </li>
   );

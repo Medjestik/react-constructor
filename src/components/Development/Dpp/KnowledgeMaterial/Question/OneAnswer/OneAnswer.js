@@ -1,5 +1,6 @@
 import React from 'react';
 import './OneAnswer.css';
+import TextareaAutosize from 'react-textarea-autosize';
 
 function OneAnswer({ onDelete, answer, onChangeAnswer, onChangeAnswerText }) {
 
@@ -25,17 +26,17 @@ function OneAnswer({ onDelete, answer, onChangeAnswer, onChangeAnswerText }) {
         </input>
         <span></span>
       </label>
-      <input
-        className="one-answer__input"
-        placeholder="Введите ответ"
-        value={answer.text || ''}
-        onChange={handleChangeAnswerText}
-        type="text"
+      <TextareaAutosize
+        className="one-answer__textarea"
         id={`one-answer-text ${answer.id}`}
         name={`one-answer-text ${answer.id}`}
+        placeholder="Введите ответ..."
+        defaultValue={answer.text || ''}
+        onChange={handleChangeAnswerText}
         required
       >
-      </input>
+      </TextareaAutosize>
+      
       <button className="questions__btn_type_delete" type="button" onClick={handleClickDelete}></button>
     </li>
   );

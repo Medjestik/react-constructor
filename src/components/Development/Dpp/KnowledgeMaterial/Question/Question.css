@@ -79,6 +79,7 @@
   cursor: pointer;
   transition: opacity .3s ease-in-out;
   outline: none;
+  flex-shrink: 0;
 }
 .questions__btn_type_delete:hover {
   opacity: .7;

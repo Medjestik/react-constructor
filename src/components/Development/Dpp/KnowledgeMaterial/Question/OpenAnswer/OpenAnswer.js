@@ -1,5 +1,6 @@
 import React from 'react';
 import './OpenAnswer.css';
+import TextareaAutosize from 'react-textarea-autosize';
 
 function OpenAnswer({ onDelete, answer, index, onChangeAnswerText }) {
 
@@ -14,16 +15,16 @@ function OpenAnswer({ onDelete, answer, index, onChangeAnswerText }) {
   return (
     <li className="open-answer" id={answer.id}>
       <span className="open-answer__count">{`${index + 1}.`}</span>
-      <input
-        className="open-answer__input"
-        placeholder="Введите ответ"
-        value={answer.text || ''}
+      <TextareaAutosize
+        className="open-answer__textarea"
+        id={`open-answer-text ${answer.id}`}
+        name={`open-answer-text ${answer.id}`}
+        placeholder="Введите ответ..."
+        defaultValue={answer.text || ''}
         onChange={handleChangeAnswerText}
-        type="text"
-        id={answer.id}
-        name={`open-answer ${answer.id}`}
+        required
       >
-      </input>
+      </TextareaAutosize>
       <button className="questions__btn_type_delete" type="button" onClick={handleClickDelete}></button>
     </li>
   );
