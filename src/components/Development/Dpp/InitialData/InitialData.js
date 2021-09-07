@@ -135,6 +135,11 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
 
   function handleChangeCountHours(e) {
     setCountHours(e.target.value);
+    setRequestMessageCompetence({ 
+      text: '',
+      isShow: false,
+      type: 'success',
+    })
   }
 
   function handleSaveNewCompetence() {
