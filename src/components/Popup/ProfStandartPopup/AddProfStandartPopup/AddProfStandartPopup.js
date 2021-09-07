@@ -13,10 +13,10 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
   const [addOrderDateError, setAddOrderDateError] = React.useState(false);
   const [addOrderNumber, setAddOrderNumber] = React.useState('');
   const [addOrderNumberError, setAddOrderNumberError] = React.useState(false);
-  const [addRegistrationDate, setAddRegistrationDate] = React.useState('');
-  const [addRegistrationDateError, setAddRegistrationDateError] = React.useState(false);
-  const [addRegistrationNumber, setAddRegistrationNumber] = React.useState('');
-  const [addRegistrationNumberError, setAddRegistrationNumberError] = React.useState('');
+  //const [addRegistrationDate, setAddRegistrationDate] = React.useState('');
+  //const [addRegistrationDateError, setAddRegistrationDateError] = React.useState(false);
+  //const [addRegistrationNumber, setAddRegistrationNumber] = React.useState('');
+  //const [addRegistrationNumberError, setAddRegistrationNumberError] = React.useState('');
   const [addNameQual, setAddNameQual] = React.useState('');
   const [addLinkQual, setAddLinkQual] = React.useState('');
   const [addFullName, setAddFullName] = React.useState('');
@@ -29,8 +29,8 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
      nameCode: addNameCode,
      orderDate: addOrderDate,
      orderNumber: addOrderNumber,
-     registrationDate: addRegistrationDate,
-     registrationNumber: addRegistrationNumber,
+     registrationDate: "",
+     registrationNumber: "",
      nameQual: addNameQual,
      linkQual: addLinkQual,
      fullName: addFullName,
@@ -79,7 +79,7 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
     }
   }
 
-  function handleAddRegistrationDate(e) {
+  /*function handleAddRegistrationDate(e) {
     setAddRegistrationDate(e.target.value);
     if (e.target.value.length !== 10) {
       setAddRegistrationDateError(true);
@@ -95,7 +95,7 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
     } else {
       setAddRegistrationNumberError(true);
     }
-  }
+  }*/
 
   function handleAddQual(e) {
     setAddNameQual(e.target.value);
@@ -110,16 +110,16 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
     setAddNameCode('');
     setAddOrderNumber('');
     setAddOrderDate('');
-    setAddRegistrationDate('');
-    setAddRegistrationNumber('');
+    //setAddRegistrationDate('');
+    //setAddRegistrationNumber('');
     setAddNameQual('');
     setAddLinkQual('');
     setAddNameTextError(false);
     setAddNameCodeError(false);
     setAddOrderDateError(false);
     setAddOrderNumberError(false);
-    setAddRegistrationDateError(false);
-    setAddRegistrationNumberError(false);
+    //setAddRegistrationDateError(false);
+    //setAddRegistrationNumberError(false);
     setIsBlockSubmitButton(true);
   }, [isOpen]);
 
@@ -129,35 +129,35 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
       addNameCodeError || 
       addOrderDateError || 
       addOrderNumberError || 
-      addRegistrationDateError || 
-      addRegistrationNumberError ||
+      //addRegistrationDateError || 
+      //addRegistrationNumberError ||
       addNameText.length < 1 ||
       addNameCode.length < 5 ||
       addOrderDate.length < 10 ||
-      addOrderNumber.length < 1 ||
-      addRegistrationDate.length < 10 ||
-      addRegistrationNumber.length < 1
+      addOrderNumber.length < 1
+      //addRegistrationDate.length < 10 ||
+      //addRegistrationNumber.length < 1
       ) {
       setIsBlockSubmitButton(true);
     } else {
       setIsBlockSubmitButton(false);
     }
     // eslint-disable-next-line
-  }, [addNameText, addNameCode, addOrderDate, addOrderNumber, addRegistrationDate, addRegistrationNumber]);
+  }, [addNameText, addNameCode, addOrderDate, addOrderNumber]);
 
   React.useEffect(() => { 
     let code = addNameCode.length > 0 ? addNameCode : "xx.xxx";
     let name = addNameText.length > 0 ? addNameText : "<наименование профстандарта>";
     let orderDate = addOrderDate.length > 0 ? printDate(addOrderDate) : "xx.xx.xxxx";
     let orderNumber = addOrderNumber.length > 0 ? addOrderNumber : "xxxx";
-    let registrationDate = addRegistrationDate.length > 0 ? printDate(addRegistrationDate) : "xx.xx.xxxx";
-    let registrationNumber = addRegistrationNumber.length > 0 ? addRegistrationNumber : "xxx";
+    //let registrationDate = addRegistrationDate.length > 0 ? printDate(addRegistrationDate) : "xx.xx.xxxx";
+    //let registrationNumber = addRegistrationNumber.length > 0 ? addRegistrationNumber : "xxx";
      
-    setAddFullName(code + " " + name + ", приказ от " + orderDate + " г. № " + orderNumber + "н (зарегистрирован Министерством юстиции Российской Федерации " + registrationDate + " г., регистрационный № " + registrationNumber + ")" );
+    setAddFullName(code + " " + name + ", приказ от " + orderDate + " г. № " + orderNumber + "н");
 
 
     // eslint-disable-next-line
-  }, [addNameCode, addNameText, addOrderDate, addOrderNumber, addRegistrationDate, addRegistrationNumber])
+  }, [addNameCode, addNameText, addOrderDate, addOrderNumber])
   
 
   return(
@@ -233,6 +233,9 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
                 </input>
                 <span className={`initial-popup__input-error ${addOrderNumberError ? "initial-popup__input-error_type_show" : ""}`}>Заполните номер приказа Минтруда России</span>
               </li>
+              {
+                /*
+              
               <li className="initial-popup__item-input">
                 <input  
                 className="initial-popup__input"
@@ -265,6 +268,7 @@ function AddProfStandartPopup({ isOpen, onClose, onAdd, printDate, isLoading }) 
                 </input>
                 <span className={`initial-popup__input-error ${addRegistrationNumberError ? "initial-popup__input-error_type_show" : ""}`}>Заполните регистрационный номер Минюста России</span>
               </li>
+              */}
             </ul>
           </li>
           <li className="initial-popup__item-input">

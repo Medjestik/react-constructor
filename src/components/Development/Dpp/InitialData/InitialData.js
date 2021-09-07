@@ -38,6 +38,8 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
     isShow: false,
   })
 
+  const [countHours, setCountHours] = React.useState(0);
+
   const [profLevels, setProfLevels] = React.useState([]);
   const [selectedProfLevels, setSelectedProfLevels] = React.useState([]);
 
@@ -68,7 +70,6 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
   const [currentProgramDocument, setCurrentProgramDocument] = React.useState({ id: "", type: "", });
   const [isRemoveProgramDocumentPopupOpen, setIsRemoveProgramDocumentPopupOpen] = React.useState(false);
 
-  const [newCompetence, setNewCompetence] = React.useState();
   const [userQualification, setUserQualification] = React.useState('');
   const [typologies, setTypologies] = React.useState([]);
   const [typologiesParts, setTypologiesParts] = React.useState([]);
@@ -132,13 +133,8 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
     }
   }
 
-  function handleChangeNewCompetence(e) {
-    if (e.target.id === "1") {
-      setNewCompetence(1);
-    } else {
-      setNewCompetence(0);
-    }
-    setRequestMessageCompetence({ text: '', isShow: false, type: '',});
+  function handleChangeCountHours(e) {
+    setCountHours(e.target.value);
   }
 
   function handleSaveNewCompetence() {
@@ -147,7 +143,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
       api.saveCompetence({ 
         token: token, 
         initialDataVersion: dppDescription.ish_version_id, 
-        newCompetence: newCompetence,
+        countHours: countHours,
       })
       .then(() => {
         setRequestMessageCompetence({ 
@@ -954,7 +950,9 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
           api.getInitialData({ token: token, dppId: dppDescription.id, initialDataVersion: dppDescription.ish_version_id, })
         ])
         .then(([ profLevels, initialData ]) => {
+          console.log(initialData)
           setProfLevels(profLevels);
+          setCountHours(initialData.total_hours);
           setProfStandartsProgram(initialData.prof_standarts);
           setJobСlassificationProgram(initialData.ektses);
           setJobDirectoryProgram(initialData.ekses);
@@ -962,7 +960,6 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
           setRequirementFgos(initialData.fgoses);
           setRequirementFgosProgram(initialData.fgoses);
           setUserQualification(initialData.req_user_kval);
-          setNewCompetence(initialData.make_new_competence);
           setSelectedProfLevels(initialData.prof_levels);
           setTypologies(initialData.typologies);
           setTypologiesParts(initialData.typology_parts);
@@ -978,6 +975,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
         .finally(() => setIsRendering(false));
     }
     return () => {
+      setCountHours(0);
       setProfLevels([]);
       setProfStandartsProgram([]);
       setJobСlassificationProgram([]);
@@ -986,7 +984,6 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
       setRequirementFgos([]);
       setRequirementFgosProgram([]);
       setUserQualification("");
-      setNewCompetence(0);
       setSelectedProfLevels([]);
       setTypologies([]);
       setTypologiesParts([]);
@@ -1062,7 +1059,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
                         }
                       </div>
                       <h4 className="initial-data__documents-name">{elem.nameText || "название"}</h4>
-                      <p className="initial-data__documents-order">{`приказ Минтруда России от ${elem.orderDate || "xx.xx.20xx"} г. № ${elem.orderNumber || "xxxx"}н (зарегистрирован Министерством юстиции Российской Федерации ${elem.registrationDate || "xx.xx.20xx"} г., регистрационный № ${elem.registrationNumber || "xxxxx"}`}</p>
+                      <p className="initial-data__documents-order">{`приказ Минтруда России от ${elem.orderDate || "xx.xx.20xx"} г. № ${elem.orderNumber || "xxxx"}н`}</p>
                     </div>
                   </li>
                 ))
@@ -1195,42 +1192,50 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
               <li className="initial-data__item-target-task target-task_type_first">приобретение обучающимися знаний, умений и навыков в соответствии с учебным планом и календарным графиком учебного процесса</li>
               <li className="initial-data__item-target-task target-task_type_second">оценка достижений обучающимися планируемых результатов обучения</li>
             </ul>
-            <h5 className="initial-data__item-title">Планируемые результаты освоения</h5>
-            <p className="initial-data__item-subtitle">Программа направлена на:</p>
-            <ul className="initial-data__item-target-list">
-              <li className="initial-data__item-target-item">
-                <label className="radio">
-                  <input 
-                    className="radio"
-                    name="developingResult"
-                    type="radio"
-                    id="1"
-                    defaultChecked={newCompetence === 1 ? true : false}
-                    onChange={handleChangeNewCompetence}
-                  >
-                  </input>
-                  <span>Получение у обучающихся новой компетенции, необходимой для профессиональной деятельности</span>
-                </label>
-              </li>
-              <li className="initial-data__item-target-item">
-                <label className="radio">
-                  <input 
-                    className="radio"
-                    name="developingResult"
-                    type="radio"
-                    id="0"
-                    defaultChecked={newCompetence === 0 ? true : false}
-                    onChange={handleChangeNewCompetence}
-                  >
-                  </input>
-                  <span>Совершенствование компетенции, необходимой для профессиональной деятельности и (или) повышение профессионального уровня в рамках имеющейся квалификации</span>
-                </label>
-              </li>
-            </ul>
+
+            <h5 className="initial-data__item-title">Трудоемкость освоения программы (в часах)</h5>
+
+            <input 
+              className="initial-popup__input initial-data__target-input"
+              placeholder="введите количество часов трудоемкости освоения"
+              type="number"
+              id="initial-data-target-input-hours"
+              name="initial-data-target-input-hours"
+              autoComplete="off"
+              value={countHours}
+              onChange={handleChangeCountHours}
+              onWheel={(e) => e.target.blur()}
+              min="0"
+              required
+            >
+            </input>
+
+
+            {
+              countHours > 15 ?
+              <>
+              {
+                countHours < 250 
+                ?
+                <div className="initial-data__target-info target-info_type_first">
+                  <h6 className="initial-data__target-title">Повышение квалификации</h6>
+                  <p className="initial-data__target-subtitle">программа направлена на совершенствование компетенции, необходимой для профессиональной деятельности и (или) повышение профессионального уровня в рамках имеющейся квалификации</p>
+                </div>
+                :
+                <div className="initial-data__target-info target-info_type_second">
+                  <h6 className="initial-data__target-title">Профессиональная переподготовка</h6>
+                  <p className="initial-data__target-subtitle">программа направлена на получение у обучающихся новой компетенции, необходимой для профессиональной деятельности</p>
+                </div>
+              }
+              </>
+              :
+              ""
+            }
+            
             {
               isEditRights &&
               <div className="initial-data__buttons initial-data__buttons_type_requirements">
-                <button className="btn btn_type_save" type="button" onClick={handleSaveNewCompetence}>Сохранить данные</button>
+                <button className={`btn btn_type_save ${countHours > 15 ? "" : "btn_type_block" }`} type="button" onClick={handleSaveNewCompetence}>Сохранить данные</button>
                 <span className={`initial-data__buttons-message ${requestMessageCompetence.isShow ? "initial-data__buttons-message_type_show" : "initial-data__buttons-message_type_hide"} ${requestMessageCompetence.type === 'error' ? "initial-data__buttons-message_type_error" : "initial-data__buttons-message_type_success"}`}>{requestMessageCompetence.text}</span>
               </div>
             }

@@ -13,8 +13,10 @@ function ZoonExport({ dppDescription }) {
         <li className="zoon-export__item">
           <a className="btn btn_type_export-pdf" href={`https://constructor.emiit.ru:8887/dpps/${dppDescription.id}/export_zun/${dppDescription.zun_version_id}/pdf`} target="_blank" rel="noreferrer">Экспорт в PDF</a>
         </li>
+        <li className="zoon-export__item">
+          <a className="btn btn_type_export-word" href={`https://constructor.emiit.ru:8887/dpps/${dppDescription.id}/export_zun_justification`} target="_blank" rel="noreferrer">Экспорт обоснования ЗУН</a>
+        </li>
       </ul>
-
     </div>
   );
 }

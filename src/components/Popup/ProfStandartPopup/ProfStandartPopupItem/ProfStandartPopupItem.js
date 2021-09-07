@@ -31,7 +31,7 @@ function ProfStandartPopupItem({ item, i, selectedProfStandart, onChange, onEdit
           <a className="initial-popup__link" target="_blank" rel="noreferrer" href={item.url}>Ссылка на источник</a>
         </div>
         <h4 className="initial-popup__name">{item.nameText || "название"}</h4>
-        <p className="initial-popup__order">{`приказ Минтруда России от ${printDate(item.orderDate) || "xx.xx.20xx"} г. № ${item.orderNumber || "xxxx"}н (зарегистрирован Министерством юстиции Российской Федерации ${printDate(item.registrationDate) || "xx.xx.20xx"} г., регистрационный № ${item.registrationNumber || "xxxxx"}`}</p>
+        <p className="initial-popup__order">{`приказ Минтруда России от ${printDate(item.orderDate) || "xx.xx.20xx"} г. № ${item.orderNumber || "xxxx"}н`}</p>
       </div>
       <div className={`initial-popup___buttons ${isShowMenu ? "initial-popup___buttons_type_show" : ""}`}>
         <button className={`initial-popup___btn-menu ${isShowMenu ? "initial-popup___btn-menu_type_show" : ""}`} type="button" onClick={toggleMenu}></button>

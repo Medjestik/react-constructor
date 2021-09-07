@@ -67,7 +67,7 @@ function ZoonList({ dppDescription, loggedIn }) {
                       elem.tags[0] === "knowledge" &&
                       <p className="zoon-list__name name_type_knowledge">
                         <span className="zoon-list__caption">З</span>
-                        <span className="zoon-list__count">{`(${firstIndex + 1}${secondIndex + 1}).`}</span>
+                        <span className="zoon-list__count">{`(${firstIndex + 1}-${secondIndex + 1}).`}</span>
                         {elem.name}
                       </p>
                     }

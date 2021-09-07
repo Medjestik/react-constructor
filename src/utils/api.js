@@ -477,7 +477,7 @@ export const saveRequirements = ({ token, initialDataVersion, profLevels, userQu
   .then(res => handleResponse(res))
 };
 
-export const saveCompetence = ({ token, initialDataVersion, newCompetence }) => {
+export const saveCompetence = ({ token, initialDataVersion, countHours }) => {
   return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/results`, {
     method: 'POST',
     headers: {
@@ -485,7 +485,7 @@ export const saveCompetence = ({ token, initialDataVersion, newCompetence }) => 
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     },
-    body: JSON.stringify({ newCompetence })
+    body: JSON.stringify({ countHours })
   })
   .then(res => handleResponse(res))
 };

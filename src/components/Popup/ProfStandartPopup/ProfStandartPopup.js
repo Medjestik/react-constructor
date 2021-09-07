@@ -123,7 +123,7 @@ function ProfStandartPopup({ isOpen, onClose, isLoading, isLoadingPopup, profSta
       onClose={onClose}
     >
       <form className="popup__form popup__form_type_large" name="pf-popup-form" action="#" noValidate onSubmit={handleSubmit}>
-        <h3 className="initial-popup__title">Редактирование профессиональных стандартов</h3>
+        <h3 className="initial-popup__title">Выбор профессиональных стандартов</h3>
 
         {
           isLoadingPopup ?
