@@ -79,6 +79,9 @@
   background-color: var(--secondary-color);
   margin: 0px 10px 0px 0px;
 }
+.questions__btn_type_copy {
+  margin: 0px 10px 0px 0px;
+}
 .questions__btn_type_block {
   pointer-events: none;
   user-select: none;

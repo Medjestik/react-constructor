@@ -1,7 +1,7 @@
 import React from 'react';
 import './KnowledgeItem.css';
 
-function KnowledgeItem({ knowledges, chooseKnowledge }) {
+function KnowledgeItem({ knowledges, chooseKnowledge, dppDescription }) {
 
   const [searchName, setSearchName] = React.useState('');
   const [currentKnowledges, setCurrentKnowledges] = React.useState([]);
@@ -29,11 +29,11 @@ function KnowledgeItem({ knowledges, chooseKnowledge }) {
       setCurrentKnowledges([]);
     }
   }, [knowledges]);
-
   
   return (
     <>
-    <p className="main__subtitle">Для работы с оценочными материалами выберите знание</p>
+    <a className="btn btn_type_export-word" href={`https://constructor.emiit.ru:8887/dpps/${dppDescription.id}/export_om_questions/${dppDescription.om_version_id}`} target="_blank" rel="noreferrer">Экспорт в Word</a>
+    <p className="main__subtitle knowledge-item__subtitle">Для работы с оценочными материалами выберите знание</p>
     <div className="search">
       <input
       className="input-search"

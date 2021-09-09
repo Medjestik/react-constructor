@@ -46,6 +46,31 @@ export const editQuestion = ({ token, omId, questionId, questionData }) => {
   .then(res => handleResponse(res));
 };
 
+export const copyQuestion = ({ token, omId, questionId }) => {
+  return fetch(`${API_URL}/om/${omId}/questions/${questionId}/copy`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+  .then(res => handleResponse(res));
+};
+
+export const changeQuestionType = ({ token, omId, questionId, questionType }) => {
+  return fetch(`${API_URL}/om/${omId}/questions/${questionId}/change_type`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ questionType })
+  })
+  .then(res => handleResponse(res));
+};
+
 export const deleteQuestion = ({ token, omId, questionId }) => { 
   return fetch(`${API_URL}/om/${omId}/questions/${questionId}/destroy`, {
     method: 'POST', 

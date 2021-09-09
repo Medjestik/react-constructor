@@ -7,11 +7,11 @@ import SequenceAnswer from './SequenceAnswer/SequenceAnswer.js';
 import ConformityAnswer from './ConformityAnswer/ConformityAnswer.js';
 
 
-function Question({ editQuestion, setEditQuestion }) {
+function Question({ editQuestion, setEditQuestion, openChangeTypePopup }) {
 
   const [questionText, setQuestionText] = React.useState(editQuestion.text);
   const [questionAnswers, setQuestionAnswers] = React.useState(editQuestion.answers);
-
+ 
   function handleChangeQuestionText(e) {
     setQuestionText(e.target.value);
     setEditQuestion({ ...editQuestion, text: e.target.value });
@@ -109,7 +109,13 @@ function Question({ editQuestion, setEditQuestion }) {
     if (type === 'multi-answer') {
       return (
         <>
-        <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса:</span> Вопрос с несколькими вариантами ответа</p>
+        <div className="questions__type-info">
+          {
+            editQuestion.id !== "new" &&
+            <button className="questions__type-img-popup" type="button" onClick={openChangeTypePopup}></button>
+          }
+          <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса: </span>Вопрос с множественным выбором</p>
+        </div>
         <textarea value={questionText || ""} onChange={handleChangeQuestionText} className="question__text" name="question__text" placeholder="Введите текст вопроса"></textarea>
         <ul className="questions__answers">
           {
@@ -130,7 +136,9 @@ function Question({ editQuestion, setEditQuestion }) {
     if (type === 'open-answer') {
       return (
         <>
-        <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса:</span> Вопрос с открытым ответом</p>
+        <div className="questions__type-info">
+          <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса: </span>Вопрос с открытым ответом</p>
+        </div>
         <textarea value={questionText || ""} onChange={handleChangeQuestionText} className="question__text" name="question__text" placeholder="Введите текст вопроса"></textarea>
         <ul className="questions__answers">
           {
@@ -151,7 +159,9 @@ function Question({ editQuestion, setEditQuestion }) {
     if (type === 'sequence-answer') {
       return (
         <>
-        <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса:</span> Вопрос с установлением последовательности</p>
+        <div className="questions__type-info">
+          <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса: </span>Вопрос с установлением последовательности</p>
+        </div>
         <textarea value={questionText || ""} onChange={handleChangeQuestionText} className="question__text" name="question__text" placeholder="Введите текст вопроса"></textarea>
         <ul className="questions__answers">
           {
@@ -172,7 +182,13 @@ function Question({ editQuestion, setEditQuestion }) {
     if (type === 'conformity-answer') {
       return (
         <>
-        <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса:</span> Вопрос с установлением соответствия</p>
+        <div className="questions__type-info">
+          {
+            editQuestion.id !== "new" &&
+            <button className="questions__type-img-popup" type="button" onClick={openChangeTypePopup}></button>
+          }
+          <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса: </span>Вопрос с установлением соответствия</p>
+        </div>
         <textarea value={questionText || ""} onChange={handleChangeQuestionText} className="question__text" name="question__text" placeholder="Введите текст вопроса"></textarea>
         <ul className="questions__answers">
           {
@@ -193,7 +209,13 @@ function Question({ editQuestion, setEditQuestion }) {
     }
     return (
       <>
-      <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса:</span> Вопрос с одним вариантом ответа</p>
+      <div className="questions__type-info">
+        {
+          editQuestion.id !== "new" &&
+          <button className="questions__type-img-popup" type="button" onClick={openChangeTypePopup}></button>
+        }
+        <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса: </span>Вопрос с одним вариантом ответа</p>
+      </div>
       <textarea value={questionText || ""} onChange={handleChangeQuestionText} className="question__text" name="question__text" placeholder="Введите текст вопроса"></textarea>
       <ul className="questions__answers">
         {

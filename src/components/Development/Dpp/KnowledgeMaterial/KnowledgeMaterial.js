@@ -6,6 +6,7 @@ import AccordionChooseQuestionType from '../../../Accordion/AccordionChooseQuest
 import DefineQuestionType from '../../../Define/DefineQuestionType/DefineQuestionType.js';
 import KnowledgeItem from './KnowledgeItem/KnowledgeItem.js';
 import Preloader from '../../../Preloader/Preloader.js';
+import ChangeQuestionTypePopup from './ChangeQuestionTypePopup/ChangeQuestionTypePopup.js';
 
 function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
 
@@ -14,13 +15,13 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
   const [currentKnowledge, setCurrentKnowledge] = React.useState({});
   const [isRenderKnowledge, setIsRenderKnowledge] = React.useState(false);
   const [isLoadingKnowledges, setIsLoadingKnowledges] = React.useState(false);
-
+  const [isChangeQuestionTypePopupOpen, setIsChangeQuestionTypePopupOpen] = React.useState(false);
   const [currentQuestion, setCurrentQuestion] = React.useState({});
   const [currentQuestions, setCurrentQuestions] = React.useState();
   const [editQuestion, setEditQuestion] = React.useState({});
   const [isRenderQuestion, setIsRenderQuestion] = React.useState(false);
   const [textQuestion, setTextQuestion] = React.useState('');
-  const [isDefineTypeOfQuestion, setIsDefineTypeOfQuestion] = React.useState(false);
+  const [isDefineTypeOfQuestion, setIsDefineTypeOfQuestion] = React.useState(false); 
   const [isSaveLoading, setIsSaveLoading] = React.useState(false);
   const [successMessage, setSuccessMessage] = React.useState({
     isShow: false,
@@ -63,6 +64,14 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
     // eslint-disable-next-line
   },[]);
 
+  function openChangeTypePopup() {
+    setIsChangeQuestionTypePopupOpen(true);
+  }
+
+  function closeKnowledgeMaterialPopups() {
+    setIsChangeQuestionTypePopupOpen(false);
+  }
+
   
   const chooseKnowledge = (knowledge) => {
     setCurrentQuestions(knowledge.questions)
@@ -90,6 +99,7 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
   function chooseNewQuestionType() {
     setIsDefineTypeOfQuestion(true);
     setIsRenderQuestion(false);
+    setEditQuestion({});
   }
 
   function addNewQuestion(type) {
@@ -133,9 +143,31 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
     setTextQuestion(e.target.value);
   }
 
+  function handleCopyQuestion() {
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      evaluationMaterialApi.copyQuestion({ token: token, omId: dppDescription.om_version_id, questionId: currentQuestion.id })
+      .then((res) => {
+        console.log(res);
+        const indexKnowledge = knowledges.indexOf(knowledges.find((elem) => (elem.id === currentKnowledge.id)));
+        const newQuestions = ([...currentQuestions, res]);
+        const newKnowledge = {...knowledges[indexKnowledge], questions: newQuestions};
+        setKnowledges([...knowledges.slice(0, indexKnowledge), newKnowledge, ...knowledges.slice(indexKnowledge + 1)]);
+        setCurrentQuestions(newQuestions);
+        setCurrentQuestion(res);
+        setEditQuestion(res);
+      })
+      .catch((err) => {
+          console.error(err);
+      })
+      .finally(() => {
+        setIsSaveLoading(false);
+      });
+  }
+  }
+
   function handleDeleteQuestion() {
     const token = localStorage.getItem("token");
-    console.log(editQuestion);
     if (loggedIn) {
       evaluationMaterialApi.deleteQuestion({ token: token, omId: dppDescription.om_version_id, questionId: currentQuestion.id })
         .then(() => {
@@ -152,6 +184,38 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
         })
         .finally(() => {
 
+        });
+      }
+  }
+
+  function handleChangeQuestionType(type) {
+    setIsSaveLoading(true);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      evaluationMaterialApi.changeQuestionType({ 
+        token: token, 
+        omId: dppDescription.om_version_id, 
+        questionId: currentQuestion.id, 
+        questionType: type 
+      })
+        .then((res) => {
+          const indexKnowledge = knowledges.indexOf(knowledges.find((elem) => (elem.id === currentKnowledge.id)));
+          const indexQuestion = currentQuestions.indexOf(currentQuestions.find((elem) => (elem.id === res.id)));
+          const newQuestions = ([...currentQuestions.slice(0, indexQuestion), res, ...currentQuestions.slice(indexQuestion + 1)]);
+          const newKnowledge = {...knowledges[indexKnowledge], questions: newQuestions};
+          setKnowledges([...knowledges.slice(0, indexKnowledge), newKnowledge, ...knowledges.slice(indexKnowledge + 1)]);
+          setCurrentQuestions(newQuestions);
+          setErrorMessage({ text: "", isShow: false });
+          setSuccessMessage({ ...successMessage, isShow: true });
+          setCurrentQuestion(res);
+          setEditQuestion(res);
+          closeKnowledgeMaterialPopups();
+        })
+        .catch((err) => {
+            console.error(err);
+        })
+        .finally(() => {
+          setIsSaveLoading(false);
         });
       }
   }
@@ -299,7 +363,14 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
                   >
                     Сохранить вопрос
                   </button>
-                  <button className={`btn btn_type_delete ${isCreateNewQuestion ? "btn_type_block" : ""}`} onClick={handleDeleteQuestion} type="button">Удалить вопрос</button>
+                  {
+                    !isCreateNewQuestion &&
+                    <button className={`btn btn_type_copy questions__btn_type_copy`} onClick={handleCopyQuestion} type="button">Копировать вопрос</button>
+                  }
+                  {
+                    !isCreateNewQuestion &&
+                    <button className={`btn btn_type_delete`} onClick={handleDeleteQuestion} type="button">Удалить вопрос</button>
+                  }
                   <span className={`questions_save-caption questions_save-caption_type_error ${errorMessage.isShow ? "questions_save-caption_type_show" : "questions_save-caption_type_hide"}`} >{errorMessage.text}</span>
                   <span className={`questions_save-caption questions_save-caption_type_success ${successMessage.isShow ? "questions_save-caption_type_show" : "questions_save-caption_type_hide"}`} >{successMessage.text}</span>
                 </div>
@@ -310,6 +381,7 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
               <Question 
                 editQuestion={editQuestion}
                 setEditQuestion={setEditQuestion}
+                openChangeTypePopup={openChangeTypePopup}
               />
             }
             {
@@ -361,9 +433,20 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
         <KnowledgeItem
         knowledges={knowledges}
         chooseKnowledge={chooseKnowledge}
+        dppDescription={dppDescription}
         />
       } 
       </div>
+    }
+    {
+      isChangeQuestionTypePopupOpen &&
+      <ChangeQuestionTypePopup
+      isOpen={isChangeQuestionTypePopupOpen}
+      onClose={closeKnowledgeMaterialPopups}
+      onChangeType={handleChangeQuestionType}
+      editQuestion={editQuestion}
+      isLoadingRequest={isSaveLoading}
+      />
     }
     </div>
   );

@@ -1,3 +1,6 @@
+html, body {
+  user-select: auto !important;
+}
 .page {
   --title-color: #404040;
   --subtitle-color: #4F5665;
@@ -77,6 +80,21 @@
 .btn_type_save::after {
   content: '';
   background-image: url('../../images/save-white.png');
+  background-size: 20px;
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  right: 12px;
+  top: 13px;
+  z-index: 5;
+}
+.btn_type_copy {
+  background-color: var(--fourth-light-color);
+}
+.btn_type_copy::after {
+  content: '';
+  background-image: url('../../images/copy.png');
   background-size: 20px;
   background-repeat: no-repeat;
   width: 20px;

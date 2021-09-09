@@ -302,6 +302,8 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
     }
   })
 
+  setZoonChart(zoon);
+
   return () => {
     setZoonChart({});
     setCurrentNode({});

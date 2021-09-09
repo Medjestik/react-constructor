@@ -35,7 +35,9 @@ function MultiAnswer({ onDelete, answer, onChangeAnswer, onChangeAnswerText }) {
         required
       >
       </TextareaAutosize>
+
       <button className="questions__btn_type_delete" type="button" onClick={handleClickDelete}></button>
+      
     </li>
   );
 }

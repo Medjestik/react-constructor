@@ -14,8 +14,7 @@ function BuildCompetence({ isOpen, onClose, onBuild, onEdit, nodes, zoonChart, i
   const [competenceWhereError, setCompetenceWhereError] = React.useState(false);
   const [formErrorCompetence, setFormErrorCompetence] = React.useState(true);
   const [currentCompetence, setCurrentCompetence] = React.useState({});
-  
-  console.log(currentNode);
+
 
   function handleSubmit(e) {
     e.preventDefault();
