@@ -70,6 +70,10 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
     }
   }
 
+  function onChangeOrder(ids) {
+    console.log(ids);
+  }
+
   function handleDownTheme(id) {
     const token = localStorage.getItem("token");
     if (loggedIn) {
@@ -133,9 +137,8 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
             <h3 className="program-structure__hours">Распределено часов: {defineHours()}</h3>  
             <LearningPlan 
             programStructure={programStructure} 
-            onEdit={openEditLearningPlan} 
-            moveUp={handleUpTheme} 
-            moveDown={handleDownTheme}
+            onEdit={openEditLearningPlan}
+            onChangeOrder={onChangeOrder}
             isEditRights={isEditRights}
             />
           </TabPanel>

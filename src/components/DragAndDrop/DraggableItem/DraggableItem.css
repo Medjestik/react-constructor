@@ -44,21 +44,23 @@
 .draggable-item__buttons {
   position: absolute;
   top: 0px;
-  right: -242px;
+  right: 0px;
   display: flex;
   align-items: center;
   margin: 0px 0px 0px auto;
   padding: 0px 20px 0px;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-top-right-radius: 7px;
+  border-bottom-right-radius: 7px;
   height: 100%;
   overflow-x: hidden;
   background-color: var(--main-color);
   transition: .7s ease-in-out;
   z-index: 100;
   cursor: auto;
+  width: 30px;
 }
 .draggable-item__buttons_type_show {
+  width: 280px;
   position: absolute;
   top: 0px;
   right: 0px;
@@ -106,6 +108,7 @@
   background-color: inherit;
   width: 30px;
   height: 30px;
+  flex-shrink: 0;
 }
 .draggable-item__btn-menu:hover {
   opacity: .7;

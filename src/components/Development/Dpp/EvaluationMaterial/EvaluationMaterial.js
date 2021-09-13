@@ -10,10 +10,12 @@ function EvaluationMaterial({ dppDescription, loggedIn, isEditRights }) {
     <div className="evaluation-material">
       <h1 className="main__title">Проектирование оценочных материалов</h1>
       <Tabs className="tabs">
+
         <TabList className="tab-list">
           <Tab className="tab">Проектирование оценочных материалов к знаниям</Tab>
           <Tab className="tab">Проектирование оценочных материалов к умениям и навыкам</Tab>
         </TabList>
+
         <TabPanel>
         <KnowledgeMaterial
           dppDescription={dppDescription}
@@ -21,6 +23,7 @@ function EvaluationMaterial({ dppDescription, loggedIn, isEditRights }) {
           isEditRights={isEditRights}
         />
         </TabPanel>
+        
         <TabPanel>
           <Tasks 
           loggedIn={loggedIn} 
@@ -28,6 +31,7 @@ function EvaluationMaterial({ dppDescription, loggedIn, isEditRights }) {
           isEditRights={isEditRights} 
           />
         </TabPanel>
+
       </Tabs>
 
     </div>

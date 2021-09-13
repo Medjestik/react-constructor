@@ -26,12 +26,21 @@
 .learning-plan__table-head-column-caption_font_weight {
   font-weight: bold;
 }
+.learning-plan__table-head-column-caption_type_dragging {
+  color: var(--white-color);
+}
 .learning-plan__table-body-row-name {
   font-size: 16px;
   line-height: 1.3;
   font-weight: normal;
   margin: 0px 20px 0px 0px;
   color: var(--subtitle-color);
+}
+.learning-plan__table-body-row-name_type_themes {
+  padding-left: 20px;
+}
+.learning-plan__table-body-row-name_type_dragging {
+  color: var(--white-color);
 }
 .table-head-column_type_name {
   width: 100%;
@@ -57,6 +66,9 @@
 }
 .learning-plan__table-body-row:last-of-type {
   border-right: none;
+}
+.learning-plan__table-body-row_type_dragging {
+  border-right: 1px solid var(--white-color);
 }
 .table-body-row_type_hours {
   flex-basis: 420px;
@@ -99,15 +111,15 @@
   box-sizing: border-box;
   border: none;
   outline: none;
-  transition: .7s ease-in-out;
   position: relative;
-  background-image: url('../../../../images/edit-theme.png');
+  border-radius: 5px;
+  background-image: url('../../../../images/edit-plan.png');
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 20px;
-  background-color: inherit;
-  width: 20px;
-  height: 20px;
+  background-size: 15px;
+  background-color: var(--main-color);
+  width: 25px;
+  height: 25px;
   flex-shrink: 0;
 }
 .learning-plan__btn-edit:hover {
@@ -116,4 +128,7 @@
 }
 .learning-plan__button_type_hide {
   display: none;
+}
+.learning-plan__btn-edit_type_dragging {
+  background-color: var(--third-light-color);
 }

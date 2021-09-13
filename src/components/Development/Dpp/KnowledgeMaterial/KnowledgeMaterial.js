@@ -193,10 +193,10 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
     const token = localStorage.getItem("token");
     if (loggedIn) {
       evaluationMaterialApi.changeQuestionType({ 
-        token: token, 
-        omId: dppDescription.om_version_id, 
-        questionId: currentQuestion.id, 
-        questionType: type 
+        token: token,
+        omId: dppDescription.om_version_id,
+        questionId: currentQuestion.id,
+        questionType: type
       })
         .then((res) => {
           const indexKnowledge = knowledges.indexOf(knowledges.find((elem) => (elem.id === currentKnowledge.id)));
