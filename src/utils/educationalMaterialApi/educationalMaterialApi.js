@@ -31,3 +31,16 @@ export const getContent = ({ token, ctId, themeId, type }) => {
   })
   .then(res => handleResponse(res));
 };
+
+export const uploadContent = ({ token, ctId, themeId, type, file }) => {
+  return fetch(`${API_URL}/content/${ctId}/${themeId}/${type}/upload`, {
+    method: 'POST', 
+    headers: {
+      "Accept": "application/json",
+      //"Content-Type": "multipart/form-data",
+      'Authorization': `Bearer ${token}`,
+    },
+    body: file,
+  })
+  .then(res => handleResponse(res));
+};

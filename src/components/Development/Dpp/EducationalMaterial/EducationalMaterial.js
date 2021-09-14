@@ -53,6 +53,29 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
     }
   }
 
+  function uploadContent(currentType, themeId, file) {
+    const token = localStorage.getItem("token");
+    console.log(file);
+    if (loggedIn) {
+      const formData = new FormData();
+      formData.append('file', file);
+      console.log(formData.get('file'))
+      //setIsLoadingContent(true);
+      educationalMaterialApi.uploadContent({ token: token, ctId: dppDescription.ct_version_id, themeId: themeId, type: currentType, file: formData })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          //setIsShowProgramStructure(true);
+          //setIsShowItem(false);
+          //setCurrentThemeId("");
+        })
+        .finally(() => {
+          //setIsLoadingContent(false); 
+        });
+    }
+  }
+
   function showItem(type, id) {
     setCurrentThemeId(id);
     getContent(type, id);
@@ -83,6 +106,7 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
   return (
     <div className="educational-material">
       <h1 className="main__title">Проектирование учебно-методических материалов</h1>
+      <p className="main__subtitle">Этап работает в тестовом режиме</p>
         {
           isShowProgramStructure &&
           <>
@@ -103,6 +127,8 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
           isShowItem &&
           <EducationalMaterialItem
           content={content}
+          currentThemeId={currentThemeId}
+          onUpload={uploadContent}
           isLoadingContent={isLoadingContent}
           backToStructure={backToStructure}
           />
