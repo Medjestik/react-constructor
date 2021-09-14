@@ -82,9 +82,6 @@ function LearningPlan({ programStructure, onEdit, onChangeOrder, isEditRights })
                 onEdit={onEdit}
                 isEditRights={isEditRights}
                 />
-                {
-
-                }
               </div>
             </li>
           )

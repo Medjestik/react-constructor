@@ -8,7 +8,7 @@ function LearningPlanItem ({ theme, partIndex, themeIndex, onEdit, isEditRights 
     <>
     <Draggable draggableId={theme.stringIds} index={themeIndex}>
       {(provided, snapshot) => (
-        <li key={`${theme.id}t ${themeIndex}`} 
+        <div key={`${theme.id}t ${themeIndex}`} 
         className={`learning-plan__table-row ${snapshot.isDragging ? "draggable-item_type_dragging" : ""}`}
         {...provided.draggableProps}
         {...provided.dragHandleProps}
@@ -45,7 +45,7 @@ function LearningPlanItem ({ theme, partIndex, themeIndex, onEdit, isEditRights 
               </ul>
             </li>
           </ul> 
-        </li>
+        </div>
       )}
     </Draggable>
     </>

@@ -104,7 +104,11 @@ function Dpp({ loggedIn, history, pathname, }) {
 
         <Switch>    
           <Route path="/main/development/dpp/educational-material" exact>
-            <EducationalMaterial />
+            <EducationalMaterial
+            dppDescription={dppDescription}
+            loggedIn={loggedIn}
+            isEditRights={isEditRights} 
+            />
           </Route>
         </Switch>
 
