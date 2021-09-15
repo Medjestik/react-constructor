@@ -9,6 +9,7 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
 
   const [programStructure, setProgramStructure] = React.useState([]);
   const [content, setContent] = React.useState({});
+  const [currentChapterId, setCurrentChapterId] = React.useState("");
   const [currentThemeId, setCurrentThemeId] = React.useState("");
   const [isLoadingProgramStructure, setIsLoadingProgramStructure] = React.useState(true);
   const [isLoadingContent, setIsLoadingContent] = React.useState(false);
@@ -44,7 +45,7 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
         .then((res) => {
           setContent(res);
         })
-        .catch((err) => {
+        .catch(() => {
           setIsShowProgramStructure(true);
           setIsShowItem(false);
           setCurrentThemeId("");
@@ -56,20 +57,31 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
   }
 
   function uploadContent(currentType, themeId, file) {
-    //setIsShowRequestMessage({ isShow: false, text: "", type: "" });
     setIsLoadingRequest(true);
     const token = localStorage.getItem("token");
-    console.log(file);
     if (loggedIn) {
       const formData = new FormData();
       formData.append('file', file);
       educationalMaterialApi.uploadContent({ token: token, ctId: dppDescription.ct_version_id, themeId: themeId, type: currentType, file: formData })
-        .then((res) => {
-          console.log(res);
-          setIsShowRequestMessage({ isShow: true, text: "Данные успешно сохранены!", type: "success" })
+        .then(() => {
+          const chapter = programStructure.find((ch) => (ch.id === currentChapterId));
+          const chapterIndex = programStructure.indexOf(programStructure.find((ch) => (ch.id === currentChapterId)));
+          const theme = chapter.themes.find((th) => (th.id === currentThemeId));
+          const themeIndex = chapter.themes.indexOf(chapter.themes.find((th) => (th.id === currentThemeId)));
+          const contentIndex = theme.contents.indexOf(theme.contents.find((ct) => (ct.id === content.id)));
+          const newContents = [...theme.contents.slice(0, contentIndex), {...content, is_loaded: 1}, ...theme.contents.slice(contentIndex + 1)];
+          const newThemes = [...chapter.themes.slice(0, themeIndex), {...theme, contents: newContents}, ...chapter.themes.slice(themeIndex + 1)];
+          const newChapters = [...programStructure.slice(0, chapterIndex), {...chapter, themes: newThemes}, ...programStructure.slice(chapterIndex + 1)];
+          setProgramStructure(newChapters);
+          setContent({...content, is_loaded: 1});
+          setIsShowRequestMessage({ isShow: true, text: "Данные успешно сохранены!", type: "success" });
         })
         .catch((err) => {
-          setIsShowRequestMessage({ isShow: true, text: err.message, type: "error" })
+          if(err.status === 403) {
+            setIsShowRequestMessage({ isShow: true, text: "Документ не прошел проверку и не может быть загружен, следуйте инструкции в шаблоне!", type: "error" });
+          } else {
+            setIsShowRequestMessage({ isShow: true, text: "К сожалению, на сервере произошла ошибка!", type: "error" });
+          }
         })
         .finally(() => {
           setIsLoadingRequest(false);
@@ -81,11 +93,14 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
     setIsShowRequestMessage({ isShow: false, text: "", type: "" });
   }
 
-  function showItem(type, id) {
-    setCurrentThemeId(id);
-    getContent(type, id);
-    setIsShowItem(true);
-    setIsShowProgramStructure(false);
+  function showItem(type, chapterId, themeId) {
+    if (isEditRights) {
+      setCurrentChapterId(chapterId);
+      setCurrentThemeId(themeId);
+      getContent(type, themeId);
+      setIsShowItem(true);
+      setIsShowProgramStructure(false);
+    }
   }
 
   function backToStructure() {
@@ -98,6 +113,7 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
     getStructure();
     setIsShowProgramStructure(true);
     setIsShowItem(false);
+    setCurrentChapterId("");
     setCurrentThemeId("");
     setIsLoadingRequest(false);
     setIsShowRequestMessage({ isShow: false, text: "", type: "" });
@@ -105,6 +121,7 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
       setProgramStructure([]);
       setIsShowProgramStructure(true);
       setIsShowItem(false);
+      setCurrentChapterId("");
       setCurrentThemeId("");
       setIsLoadingRequest(false);
       setIsShowRequestMessage({ isShow: false, text: "", type: "" });
@@ -126,7 +143,6 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
             <EducationalMaterialTable 
             programStructure={programStructure}
             onShowItem={showItem}
-            isEditRights={isEditRights}
             />
           }
           </>
@@ -134,6 +150,7 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
         {
           isShowItem &&
           <EducationalMaterialItem
+          isShowItem={isShowItem}
           content={content}
           currentThemeId={currentThemeId}
           onUpload={uploadContent}

@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-function EducationalMaterialTable({ programStructure, onShowItem, isEditRights }) {
+function EducationalMaterialTable({ programStructure, onShowItem }) {
 
   return (
 
@@ -46,9 +46,10 @@ function EducationalMaterialTable({ programStructure, onShowItem, isEditRights }
                             className={`
                             educational-material__item_btn 
                             ${theme.lection_hours > 0 ? "educational-material__item_btn_type_lection" : ""}
+                            ${theme.contents.find(el => el.type === "lec" && el.is_loaded === 1) ? "educational-material__item_btn_type_lec-active" : ""}
                             `}
                             type="button"
-                            onClick={() => onShowItem("lec", theme.id)}
+                            onClick={() => onShowItem("lec", elem.id, theme.id)}
                             >
                               Лекция
                             </button>
@@ -58,9 +59,10 @@ function EducationalMaterialTable({ programStructure, onShowItem, isEditRights }
                             className={`
                             educational-material__item_btn 
                             ${theme.practice_hours > 0 ? "educational-material__item_btn_type_practical" : ""}
+                            ${theme.contents.find(el => el.type === "pr" && el.is_loaded === 1) ? "educational-material__item_btn_type_pr-active" : ""}
                             `}
                             type="button"
-                            onClick={() => onShowItem("pr", theme.id)}
+                            onClick={() => onShowItem("pr", elem.id, theme.id)}
                             >
                               Практика
                             </button>
@@ -70,9 +72,10 @@ function EducationalMaterialTable({ programStructure, onShowItem, isEditRights }
                             className={`
                             educational-material__item_btn 
                             ${theme.lab_hours > 0 ? "educational-material__item_btn_type_lab" : ""}
+                            ${theme.contents.find(el => el.type === "lab" && el.is_loaded === 1) ? "educational-material__item_btn_type_lab-active" : ""}
                             `}
                             type="button"
-                            onClick={() => onShowItem("lab", theme.id)}
+                            onClick={() => onShowItem("lab", elem.id, theme.id)}
                             >
                               Лабораторная
                             </button>

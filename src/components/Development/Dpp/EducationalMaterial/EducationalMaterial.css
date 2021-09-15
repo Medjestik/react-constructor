@@ -49,7 +49,7 @@
 }
 .table-head-column_type_hours {
   padding: 5px 10px;
-  flex-basis: 317px;
+  flex-basis: 337px;
   flex-shrink: 0;
 }
 .educational-material__table-head-column-list {
@@ -72,6 +72,7 @@
 }
 .table-body-row_type_hours {
   flex-basis: 337px;
+  flex-shrink: 0;
 }
 .table-body-row_type_name {
   width: 100%;

@@ -2,16 +2,13 @@ import React from 'react';
 import Preloader from '../../../../Preloader/Preloader.js';
 import './EducationalMaterialItem.css';
 
-function EducationalMaterialItem({ content, onUpload, currentThemeId, isLoadingContent, backToStructure, isLoadingRequest, isShowRequestMessage, hideRequestMessage }) {
+function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId, isLoadingContent, backToStructure, isLoadingRequest, isShowRequestMessage, hideRequestMessage }) {
 
-  const [fileName, setFileName] = React.useState({
-    isShow: false,
-    name: "",
-  });
+  const [fileName, setFileName] = React.useState({ isShow: false, name: "", });
   const [isShowWrongType, setIsShowWrongType] = React.useState(false)
-  const [contentFile, setContentFile] = React.useState({
-    file: null,
-  })
+  const [contentFile, setContentFile] = React.useState({ file: null, })
+
+  console.log(content)
 
   function defineItemTypeTitle(itemType) {
     switch (itemType) {
@@ -53,11 +50,11 @@ function EducationalMaterialItem({ content, onUpload, currentThemeId, isLoadingC
     setContentFile({ file: null, })
     setFileName({ isShow: false, name: "" });
     setIsShowWrongType(false);
-  }, [content]);
+    hideRequestMessage();
+    // eslint-disable-next-line
+  }, [isShowItem]);
 
-  const docsEmpty = [];
-
-  const docs = [{ name: "Инструкция по установке  новой версии 3D тренинга.docx", }];
+  const docs = [{ name: "Загруженный файл", }];
  
   return (
     <div className="educational-material-item">
@@ -66,6 +63,23 @@ function EducationalMaterialItem({ content, onUpload, currentThemeId, isLoadingC
         isLoadingContent ?
         <Preloader />
         :
+        <>
+        <div className="educational-material-item__theme">
+          {
+            content.type === "lec" &&
+            <span className="educational-material-item__theme-type educational-material-item__theme-type_type_lec">Лекция</span>
+          }
+          {
+            content.type === "pr" &&
+            <span className="educational-material-item__theme-type educational-material-item__theme-type_type_pr">Практика</span>
+          }
+          {
+            content.type === "lab" &&
+            <span className="educational-material-item__theme-type educational-material-item__theme-type_type_lab">Лабораторная</span>
+          }
+          <p className="educational-material-item__theme-name">{content.name}</p>
+        </div>
+        
         <div className="educational-material-item__sections">
           <div className="educational-material-item__section-steps">
             <h3 className="educational-material-item__title">Этапы проектирования контента:</h3>
@@ -133,14 +147,14 @@ function EducationalMaterialItem({ content, onUpload, currentThemeId, isLoadingC
             <h3 className="educational-material-item__title">Загруженные документы:</h3>
             <div className="educational-material-item__documents-container">
               {
-                docsEmpty.length > 0 
+                content.is_loaded === 1
                 ?
                 <ul className="educational-material-item__documents-list">
                   {
-                    docsEmpty.map((docx, i) => (
-                      <li className="educational-material-item__documents-item">
+                    docs.map((docx, i) => (
+                      <li key={`docx-${i}`} className="educational-material-item__documents-item">
                         <span className="educational-material-item__documents-item-count">{i + 1}.</span>
-                        <a className="educational-material-item__documents-link" href="https://constructor.emiit.ru/main/development/dpp/educational-material" target="_blank" rel="noreferrer">{docx.name}</a>
+                        <a className="educational-material-item__documents-link" href={`https://constructor.emiit.ru:8887/content/${content.id}/download`} target="_blank" rel="noreferrer">{docx.name}</a>
                       </li>
                     ))
                   }
@@ -151,6 +165,7 @@ function EducationalMaterialItem({ content, onUpload, currentThemeId, isLoadingC
             </div>
           </div>
         </div>
+        </>
       }
       
     </div>

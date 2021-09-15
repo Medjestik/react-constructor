@@ -51,6 +51,7 @@
 }
 .typical-structure__btn-type-add {
   margin: 15px 0px 0px 0px;
+  max-width: max-content;
 }
 .typical-structure__btn-add_type_hide::after {
   transform: rotate(0deg);
