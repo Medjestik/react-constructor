@@ -7,16 +7,14 @@ function SPPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLoading 
   const [addNameError, setAddNameError] = React.useState(false);
   const [addCode, setAddCode] = React.useState('');
   const [addCodeError, setAddCodeError] = React.useState(false);
-  const [addBasis, setAddBasis] = React.useState('');
   const [addProtocolNumber, setAddProtocolNumber] = React.useState('');
   const [addProtocolDate, setAddProtocolDate] = React.useState('');
   const [addFullName, setAddFullName] = React.useState('');
-
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
 
   function handleSubmit(e) {
     e.preventDefault();
-    const newNsi = { ...nsi, nsiName: addName, nsiBasis: addBasis, nsiProtocolNumber: addProtocolNumber, nsiProtocolDate: addProtocolDate, nsiCode: addCode, type_id: id, nsiFullName: addFullName };
+    const newNsi = { ...nsi, nsiName: addName, nsiBasis: "", nsiProtocolNumber: addProtocolNumber, nsiProtocolDate: addProtocolDate, nsiCode: addCode, type_id: id, nsiFullName: addFullName };
     onSave(newNsi, onClose);
   }
 
@@ -38,10 +36,6 @@ function SPPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLoading 
     }
   }
 
-  function handleAddBasis(e) {
-    setAddBasis(e.target.value);
-  }
-
   function handleAddProtocolNumber(e) {
     setAddProtocolNumber(e.target.value);
   }
@@ -53,7 +47,6 @@ function SPPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLoading 
   React.useEffect(() => {
     setAddName(nsi.nsiName);
     setAddCode(nsi.nsiCode);
-    setAddBasis(nsi.nsiBasis || "");
     setAddProtocolNumber(nsi.nsiProtocolNumber || "");
     setAddProtocolDate(nsi.nsiProtocolDate || "");
     setAddFullName('');
@@ -77,16 +70,15 @@ function SPPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLoading 
   }, [addName, addCode])
 
   React.useEffect(() => { 
-    let code = addCode.length > 0 ? addCode : "<шифр>" 
-    let name = addName.length > 0 ? addName : "<название>"
-    let basis = addBasis.length > 0 ? addBasis : ""
+    let code = addCode.length > 0 ? addCode : "<шифр>"
+    let name = addName.length > 0 ? addName : "<название>";
     let number = addProtocolNumber.length > 0 ? addProtocolNumber : ""
-    let date = addProtocolDate.length > 0 ? addProtocolDate : ""
-    let res = addBasis.length > 0 ? "Издан на основании "+ basis + " от " + date + " г. № " + number : ""
+    let date = addProtocolDate.length > 0 ? printDate(addProtocolDate) : ""
+    let res = addProtocolNumber.length > 0 ? "Утвержден приказом Минстроя России от " + date + " г. № " + number : ""
     setAddFullName("СП "+ code + ". «" + name + "». " + res);
 
   // eslint-disable-next-line
-  }, [addCode,addName,addBasis,addProtocolNumber,addProtocolDate])
+  }, [addCode, addName, addProtocolNumber, addProtocolDate])
 
 
   return (
@@ -130,21 +122,7 @@ function SPPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLoading 
             <span className={`nsi-popup__input-error ${addCodeError ? "nsi-popup__input-error_type_show" : ""}`}>Заполните шифр</span>
           </li>
           <li className="nsi-popup__item-input">
-            <h5 className="nsi-popup__input-name">Издан на основании (если есть)</h5>
-            <input 
-            className="nsi-popup__input"
-            placeholder="введите на основание чего издан"
-            type="text"
-            id={`${type}-nsi-input-basis-${id}`}
-            name={`${type}-nsi-input-basis-${id}`}
-            autoComplete="off"
-            value={addBasis}
-            onChange={handleAddBasis}
-            >
-            </input>
-          </li>
-          <li className="nsi-popup__item-input">
-            <h5 className="nsi-popup__input-name">Протокол № (если есть)</h5>
+            <h5 className="nsi-popup__input-name">Номер приказа (если есть)</h5>
             <input 
             className="nsi-popup__input"
             placeholder="введите номер"
@@ -158,7 +136,7 @@ function SPPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLoading 
             </input>
           </li>
           <li className="nsi-popup__item-input">
-            <h5 className="nsi-popup__input-name">Протокол от (если есть)</h5>
+            <h5 className="nsi-popup__input-name">Дата приказа (если есть)</h5>
             <input  
             className="nsi-popup__input"
             placeholder="введите редакцию"

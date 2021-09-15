@@ -17,6 +17,7 @@ import OrderRussiaSciencePopup from '../NsiPopup/OrderRussiaSciencePopup/OrderRu
 import OrderRussiaTransportPopup from '../NsiPopup/OrderRussiaTransportPopup/OrderRussiaTransportPopup.js';
 import OrderRussiaGosConstructionPopup from '../NsiPopup/OrderRussiaGosConstructionPopup/OrderRussiaGosConstructionPopup.js'; 
 import OrderRussiaMinConstructionPopup from '../NsiPopup/OrderRussiaMinConstructionPopup/OrderRussiaMinConstructionPopup.js';
+import OrderRosStatPopup from '../NsiPopup/OrderRosStatPopup/OrderRosStatPopup.js';
 import DispositionRussiaSciencePopup from '../NsiPopup/DispositionRussiaSciencePopup/DispositionRussiaSciencePopup.js';
 import DispositionRussiaTransportPopup from '../NsiPopup/DispositionRussiaTransportPopup/DispositionRussiaTransportPopup.js'; 
 import DispositionRussiaMinConstructionPopup from '../NsiPopup/DispositionRussiaMinConstructionPopup/DispositionRussiaMinConstructionPopup.js';
@@ -602,7 +603,20 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
             type={"edit"}
             isLoading={isLoading}
           />
-        )    
+        )
+      case 51: /* Приказ Росстата */ 
+        return (
+          <OrderRosStatPopup
+            isOpen={isOpen}
+            onClose={onClose}
+            nsi={nsi}
+            onSave={onEdit}
+            id={nsi.id}
+            printDate={printDate}
+            type={"edit"}
+            isLoading={isLoading}
+          />
+        )       
       default:
         return (<div>Тип не загрузился</div>)
     }

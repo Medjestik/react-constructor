@@ -14,6 +14,8 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
   const [isLoadingContent, setIsLoadingContent] = React.useState(false);
   const [isShowProgramStructure, setIsShowProgramStructure] = React.useState(true);
   const [isShowItem, setIsShowItem] = React.useState(false);
+  const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
+  const [isShowRequestMessage, setIsShowRequestMessage] = React.useState({ isShow: false, text: "", type: "" })
 
   console.log(programStructure)
 
@@ -54,26 +56,29 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
   }
 
   function uploadContent(currentType, themeId, file) {
+    //setIsShowRequestMessage({ isShow: false, text: "", type: "" });
+    setIsLoadingRequest(true);
     const token = localStorage.getItem("token");
     console.log(file);
     if (loggedIn) {
       const formData = new FormData();
       formData.append('file', file);
-      console.log(formData.get('file'))
-      //setIsLoadingContent(true);
       educationalMaterialApi.uploadContent({ token: token, ctId: dppDescription.ct_version_id, themeId: themeId, type: currentType, file: formData })
         .then((res) => {
           console.log(res);
+          setIsShowRequestMessage({ isShow: true, text: "Данные успешно сохранены!", type: "success" })
         })
         .catch((err) => {
-          //setIsShowProgramStructure(true);
-          //setIsShowItem(false);
-          //setCurrentThemeId("");
+          setIsShowRequestMessage({ isShow: true, text: err.message, type: "error" })
         })
         .finally(() => {
-          //setIsLoadingContent(false); 
+          setIsLoadingRequest(false);
         });
     }
+  }
+
+  function hideRequestMessage() {
+    setIsShowRequestMessage({ isShow: false, text: "", type: "" });
   }
 
   function showItem(type, id) {
@@ -94,11 +99,15 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
     setIsShowProgramStructure(true);
     setIsShowItem(false);
     setCurrentThemeId("");
+    setIsLoadingRequest(false);
+    setIsShowRequestMessage({ isShow: false, text: "", type: "" });
     return () => {
       setProgramStructure([]);
       setIsShowProgramStructure(true);
       setIsShowItem(false);
       setCurrentThemeId("");
+      setIsLoadingRequest(false);
+      setIsShowRequestMessage({ isShow: false, text: "", type: "" });
     };
     // eslint-disable-next-line
   }, [loggedIn, dppDescription])
@@ -106,7 +115,6 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
   return (
     <div className="educational-material">
       <h1 className="main__title">Проектирование учебно-методических материалов</h1>
-      <p className="main__subtitle">Этап работает в тестовом режиме</p>
         {
           isShowProgramStructure &&
           <>
@@ -131,6 +139,9 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
           onUpload={uploadContent}
           isLoadingContent={isLoadingContent}
           backToStructure={backToStructure}
+          isLoadingRequest={isLoadingRequest}
+          isShowRequestMessage={isShowRequestMessage}
+          hideRequestMessage={hideRequestMessage}
           />
         }
     </div>

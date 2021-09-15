@@ -19,6 +19,7 @@ import OrderRussiaSciencePopup from './OrderRussiaSciencePopup/OrderRussiaScienc
 import OrderRussiaTransportPopup from './OrderRussiaTransportPopup/OrderRussiaTransportPopup.js';
 import OrderRussiaGosConstructionPopup from './OrderRussiaGosConstructionPopup/OrderRussiaGosConstructionPopup.js'; 
 import OrderRussiaMinConstructionPopup from './OrderRussiaMinConstructionPopup/OrderRussiaMinConstructionPopup.js';
+import OrderRosStatPopup from './OrderRosStatPopup/OrderRosStatPopup.js';
 import DispositionRussiaSciencePopup from './DispositionRussiaSciencePopup/DispositionRussiaSciencePopup.js';
 import DispositionRussiaTransportPopup from './DispositionRussiaTransportPopup/DispositionRussiaTransportPopup.js'; 
 import DispositionRussiaMinConstructionPopup from './DispositionRussiaMinConstructionPopup/DispositionRussiaMinConstructionPopup.js';
@@ -63,6 +64,7 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {
   const [isOrderRussiaTransportPopupOpen, setIsOrderRussiaTransportPopupOpen] = React.useState(false);
   const [isOrderRussiaGosConstructionPopupOpen, setIsOrderRussiaGosConstructionPopupOpen] = React.useState(false);
   const [isOrderRussiaMinConstructionPopupOpen, setIsOrderRussiaMinConstructionPopupOpen] = React.useState(false);
+  const [isOrderRosStatPopupOpen, setIsOrderRosStatPopupOpen] = React.useState(false);
   const [isDispositionRussiaSciencePopupOpen, setIsDispositionRussiaSciencePopupOpen] = React.useState(false);
   const [isDispositionRussiaTransportPopupOpen, setIsDispositionRussiaTransportPopupOpen] = React.useState(false);
   const [isDispositionRussiaMinConstructionPopupOpen, setIsDispositionRussiaMinConstructionPopupOpen] = React.useState(false);  
@@ -247,6 +249,11 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {
     setCurrentElemId(id);
   }
 
+  function orderRosStatPopupOpen(id) {
+    setIsOrderRosStatPopupOpen(true);
+    setCurrentElemId(id);
+  }
+
   function dispositionRussiaSciencePopupOpen(id) {
     setIsDispositionRussiaSciencePopupOpen(true);
     setCurrentElemId(id);
@@ -381,6 +388,7 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {
     setIsOrderRussiaTransportPopupOpen(false);
     setIsOrderRussiaGosConstructionPopupOpen(false);
     setIsOrderRussiaMinConstructionPopupOpen(false);
+    setIsOrderRosStatPopupOpen(false);
     setIsDispositionRussiaSciencePopupOpen(false);
     setIsDispositionRussiaTransportPopupOpen(false);
     setIsDispositionRussiaMinConstructionPopupOpen(false);
@@ -571,6 +579,10 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {
       case 50: /* Официальный сайт */ 
         return (
           <button className="nsi-popup__item-btn" type="button" onClick={() => officialSitePopupOpen(type.id)}>Выбрать</button>
+        )
+      case 51: /* Приказ Росстата */ 
+        return (
+          <button className="nsi-popup__item-btn" type="button" onClick={() => orderRosStatPopupOpen(type.id)}>Выбрать</button>
         )    
       default:
         return (<div>Тип не загрузился</div>)
@@ -862,6 +874,20 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {
       isOrderRussiaMinConstructionPopupOpen &&
       <OrderRussiaMinConstructionPopup
         isOpen={isOrderRussiaMinConstructionPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
+
+    {
+      isOrderRosStatPopupOpen &&
+      <OrderRosStatPopup
+        isOpen={isOrderRosStatPopupOpen}
         onClose={closeAllNsiPopup}
         nsi={emptyNsi}
         onSave={onAdd}

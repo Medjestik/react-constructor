@@ -293,6 +293,20 @@ html, body {
 .request-message_type_success {
   color: var(--secondary-color);
 }
+.request-node {
+  margin: 20px 0px 0px 0px;
+  padding: 10px 20px;
+  border-radius: 3px;
+  width: max-content;
+}
+.request-node_type_error {
+  background-color: rgba(250, 117, 101, .1);
+  color: var(--third-light-color);
+}
+.request-node_type_success {
+  background-color: rgba(58, 189, 152, 0.1);
+  color: var(--secondary-light-color);
+}
 .radio {
   margin: 24px 0;
   display: block;

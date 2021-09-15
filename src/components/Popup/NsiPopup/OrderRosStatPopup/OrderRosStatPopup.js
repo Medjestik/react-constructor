@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from '../../Popup.js';
 
-function OrderRussiaTransportPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLoading }) {
+function OrderRosStatPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLoading }) {
 
   const [addName, setAddName] = React.useState('');
   const [addNameError, setAddNameError] = React.useState(false);
@@ -84,7 +84,7 @@ function OrderRussiaTransportPopup({ isOpen, onClose, nsi, onSave, id, printDate
 	let date = addProtocolDate.length > 0 ? printDate(addProtocolDate) : "xx.xx.xxxx"
 	let number = addProtocolNumber.length > 0 ? addProtocolNumber : "XX"  
   let name = addName.length > 0 ? addName: "<название>"
-  setAddFullName("Приказ Минтранса России от " + date + " г. № " + number + "" + edition + " «" + name + "»");
+  setAddFullName("Приказ Росстата от " + date + " г. № " + number + "" + edition + " «" + name + "»");
 
  // eslint-disable-next-line
   }, [addEdition, addProtocolDate, addProtocolNumber, addName])
@@ -95,7 +95,7 @@ function OrderRussiaTransportPopup({ isOpen, onClose, nsi, onSave, id, printDate
       onClose={onClose}
     >
       <form className="popup__form popup__form_type_large" name={`${type}-nsi-form-${id}`} action="#" noValidate onSubmit={handleSubmit}>
-          <h3 className="nsi-popup__title">{`${type === "edit" ? "Редактирование " : "Добавление "}`}Приказа Минтранса России</h3>
+          <h3 className="nsi-popup__title">{`${type === "edit" ? "Редактирование " : "Добавление "}`}Приказа Росстата</h3>
           <ul className="nsi-popup__list-input">
           <li className="nsi-popup__item-input">
             <h5 className="nsi-popup__input-name">Название</h5>
@@ -188,4 +188,4 @@ function OrderRussiaTransportPopup({ isOpen, onClose, nsi, onSave, id, printDate
     )
 }
 
-export default OrderRussiaTransportPopup;
+export default OrderRosStatPopup;
