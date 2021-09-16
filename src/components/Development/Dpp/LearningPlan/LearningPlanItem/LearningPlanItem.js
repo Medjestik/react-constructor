@@ -2,7 +2,7 @@ import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 
 
-function LearningPlanItem ({ theme, partIndex, themeIndex, onEdit, isEditRights }) {
+function LearningPlanItem ({ theme, partIndex, themeIndex, onEdit, isEditRights, isCurrentTypeChoose }) {
 
   return (
     <>
@@ -28,19 +28,16 @@ function LearningPlanItem ({ theme, partIndex, themeIndex, onEdit, isEditRights 
                   <span className={`learning-plan__table-head-column-caption learning-plan__table-head-column-caption_font_weight ${snapshot.isDragging ? "learning-plan__table-head-column-caption_type_dragging" : ""}`}>{theme.total_hours}</span>
                 </li>
                 <li className="learning-plan__table-head-column-item">
-                  <span className={`learning-plan__table-head-column-caption ${snapshot.isDragging ? "learning-plan__table-head-column-caption_type_dragging" : ""}`}>{theme.lection_hours}</span>
+                  <span className={`learning-plan__table-head-column-caption ${((isCurrentTypeChoose === "lec") && (theme.lection_hours !== 0))  ? "learning-plan__table-head-column-caption_type_active" : ""} ${snapshot.isDragging ? "learning-plan__table-head-column-caption_type_dragging" : ""}`}>{theme.lection_hours}</span>
                 </li>
                 <li className="learning-plan__table-head-column-item">
-                  <span className={`learning-plan__table-head-column-caption ${snapshot.isDragging ? "learning-plan__table-head-column-caption_type_dragging" : ""}`}>{theme.practice_hours}</span>
+                  <span className={`learning-plan__table-head-column-caption ${((isCurrentTypeChoose === "prak") && (theme.practice_hours !== 0)) ? "learning-plan__table-head-column-caption_type_active" : ""} ${snapshot.isDragging ? "learning-plan__table-head-column-caption_type_dragging" : ""}`}>{theme.practice_hours}</span>
                 </li>
                 <li className="learning-plan__table-head-column-item">
-                  <span className={`learning-plan__table-head-column-caption ${snapshot.isDragging ? "learning-plan__table-head-column-caption_type_dragging" : ""}`}>{theme.lab_hours}</span>
+                  <span className={`learning-plan__table-head-column-caption ${((isCurrentTypeChoose === "lab") && (theme.lab_hours !== 0)) ? "learning-plan__table-head-column-caption_type_active" : ""} ${snapshot.isDragging ? "learning-plan__table-head-column-caption_type_dragging" : ""}`}>{theme.lab_hours}</span>
                 </li>
                 <li className="learning-plan__table-head-column-item">
-                  <span className={`learning-plan__table-head-column-caption ${snapshot.isDragging ? "learning-plan__table-head-column-caption_type_dragging" : ""}`}>{theme.self_hours}</span>
-                </li>
-                <li className="learning-plan__table-head-column-item">
-                  <span className={`learning-plan__table-head-column-caption ${snapshot.isDragging ? "learning-plan__table-head-column-caption_type_dragging" : ""}`}>{theme.attestation_hours}</span>
+                  <span className={`learning-plan__table-head-column-caption ${((isCurrentTypeChoose === "self") && (theme.self_hours !== 0)) ? "learning-plan__table-head-column-caption_type_active" : ""} ${snapshot.isDragging ? "learning-plan__table-head-column-caption_type_dragging" : ""}`}>{theme.self_hours}</span>
                 </li>
               </ul>
             </li>

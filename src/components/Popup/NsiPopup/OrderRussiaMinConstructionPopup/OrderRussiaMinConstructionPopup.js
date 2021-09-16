@@ -114,7 +114,7 @@ function OrderRussiaMinConstructionPopup({ isOpen, onClose, nsi, onSave, id, pri
             <span className={`nsi-popup__input-error ${addNameError ? "nsi-popup__input-error_type_show" : ""}`}>Заполните название</span>
           </li>
           <li className="nsi-popup__item-input">
-            <h5 className="nsi-popup__input-name">Протокол №</h5>
+            <h5 className="nsi-popup__input-name">Номер</h5>
             <input 
             className="nsi-popup__input"
             placeholder="введите номер"

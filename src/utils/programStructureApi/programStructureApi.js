@@ -33,28 +33,15 @@ export const editProgramStructure = ({ token, stId, sectionsId, section }) => {
   .then(res => handleResponse(res));
 };
 
-export const moveThemeUp = ({ token, stId, themeId }) => { 
-  return fetch(`${API_URL}/structure/${stId}/sections/${themeId}/move_up`, {
+export const changeThemeOrder = ({ token, stId, sectionId, themes }) => {
+  return fetch(`${API_URL}/structure/${stId}/sections/${sectionId}/reorder`, {
     method: 'POST', 
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     },
-    body: JSON.stringify()
-  })
-  .then(res => handleResponse(res));
-};
-
-export const moveThemeDown = ({ token, stId, themeId }) => { 
-  return fetch(`${API_URL}/structure/${stId}/sections/${themeId}/move_down`, {
-    method: 'POST', 
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-    body: JSON.stringify()
+    body: JSON.stringify({ themes })
   })
   .then(res => handleResponse(res));
 };

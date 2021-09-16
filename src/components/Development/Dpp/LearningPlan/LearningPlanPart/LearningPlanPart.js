@@ -2,7 +2,7 @@ import React from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import LearningPlanColumn from '../LearningPlanColumn/LearningPlanColumn';
 
-function LearningPlanPart({ data, onChangeOrder, partIndex, onEdit, isEditRights }) {
+function LearningPlanPart({ data, sectionId, onChangeOrder, partIndex, onEdit, isEditRights, isCurrentTypeChoose }) {
 
   const [dataPart, setDataPart] = React.useState([]);
 
@@ -57,7 +57,7 @@ function LearningPlanPart({ data, onChangeOrder, partIndex, onEdit, isEditRights
     setDataPart(newState);
 
     if (isEditRights) {
-      onChangeOrder(newState.column.partIds);
+      onChangeOrder(sectionId, newState.column.partIds);
     }
   }
  
@@ -81,6 +81,7 @@ function LearningPlanPart({ data, onChangeOrder, partIndex, onEdit, isEditRights
         partIndex={partIndex}
         onEdit={onEdit}
         isEditRights={isEditRights}
+        isCurrentTypeChoose={isCurrentTypeChoose}
       />
     </DragDropContext>
   )

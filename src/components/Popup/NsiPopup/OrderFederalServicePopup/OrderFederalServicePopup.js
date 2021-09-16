@@ -146,7 +146,7 @@ function OrderFederalServicePopup({ isOpen, onClose, nsi, onSave, id, printDate,
             <span className={`nsi-popup__input-error ${addApproveNameError ? "nsi-popup__input-error_type_show" : ""}`}>Заполните кем утвержден</span>
           </li>
           <li className="nsi-popup__item-input">
-            <h5 className="nsi-popup__input-name">Протокол №</h5>
+            <h5 className="nsi-popup__input-name">Номер</h5>
             <input 
             className="nsi-popup__input"
             placeholder="введите номер"

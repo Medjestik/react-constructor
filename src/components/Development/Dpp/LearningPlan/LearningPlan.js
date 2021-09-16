@@ -2,7 +2,7 @@ import React from 'react';
 import './LearningPlan.css';
 import LearningPlanPart from './LearningPlanPart/LearningPlanPart.js';
 
-function LearningPlan({ programStructure, onEdit, onChangeOrder, isEditRights }) {
+function LearningPlan({ programStructure, onEdit, onChangeOrder, isEditRights, isCurrentTypeChoose }) {
 
   return (
     <div className="learning-plan">
@@ -29,9 +29,6 @@ function LearningPlan({ programStructure, onEdit, onChangeOrder, isEditRights })
               <li className="learning-plan__table-head-column-item">
                 <span className="learning-plan__table-head-column-caption">Сам.</span>
               </li>
-              <li className="learning-plan__table-head-column-item">
-                <span className="learning-plan__table-head-column-caption">Атт.</span>
-              </li>
             </ul>
           </li>
         </ul> 
@@ -54,33 +51,34 @@ function LearningPlan({ programStructure, onEdit, onChangeOrder, isEditRights })
                     <li className="learning-plan__table-body-row table-body-row_type_hours">
                       <ul className="learning-plan__table-head-column-list">
                         <li className="learning-plan__table-head-column-item">
-                          <span className="learning-plan__table-head-column-caption learning-plan__table-head-column-caption_font_weight">{elem.total_hours}</span>
+                          <span className={`learning-plan__table-head-column-caption learning-plan__table-head-column-caption_font_weight 
+                          ${((isCurrentTypeChoose === "att") && (elem.name === "Итоговая аттестация")) ? "learning-plan__table-head-column-caption_type_total" : ""}`}>{elem.total_hours}</span>
                         </li>
                         <li className="learning-plan__table-head-column-item">
-                          <span className="learning-plan__table-head-column-caption">{elem.lection_hours}</span>
+                          <span className="learning-plan__table-head-column-caption">{elem.name === "Итоговая аттестация" ? "" : elem.lection_hours}</span>
                         </li>
                         <li className="learning-plan__table-head-column-item">
-                          <span className="learning-plan__table-head-column-caption">{elem.practice_hours}</span>
+                          <span className="learning-plan__table-head-column-caption">{elem.name === "Итоговая аттестация" ? "" : elem.practice_hours}</span>
                         </li>
                         <li className="learning-plan__table-head-column-item">
-                          <span className="learning-plan__table-head-column-caption">{elem.lab_hours}</span>
+                          <span className="learning-plan__table-head-column-caption">{elem.name === "Итоговая аттестация" ? "" : elem.lab_hours}</span>
                         </li>
                         <li className="learning-plan__table-head-column-item">
-                          <span className="learning-plan__table-head-column-caption">{elem.self_hours}</span>
+                          <span className="learning-plan__table-head-column-caption">{elem.name === "Итоговая аттестация" ? "" : elem.self_hours}</span>
                         </li>
-                        <li className="learning-plan__table-head-column-item">
-                          <span className="learning-plan__table-head-column-caption">{elem.attestation_hours}</span>
-                        </li>
+
                       </ul>
                     </li>
                   </ul> 
                 </div>
                 <LearningPlanPart
                 data={elem.themes}
+                sectionId={elem.id}
                 onChangeOrder={onChangeOrder}
                 partIndex={elemIndex}
                 onEdit={onEdit}
                 isEditRights={isEditRights}
+                isCurrentTypeChoose={isCurrentTypeChoose}
                 />
               </div>
             </li>

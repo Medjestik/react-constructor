@@ -14,6 +14,7 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
   const [currentLearningPlanElem, setCurrentLearningPlanElem] = React.useState({});
   const [isOpenEditLearningPopup, setIsOpenEditLearningPopup] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isCurrentTypeChoose, setIsCurrentTypeChoose] = React.useState("");
 
   function openEditLearningPlan(elem) {
     setCurrentLearningPlanElem(elem);
@@ -24,12 +25,65 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
     setIsOpenEditLearningPopup(false);
   }
 
-  function defineHours() {
-     let hours = programStructure.reduce(function(accumulator, currentValue) {
-      return accumulator + currentValue.total_hours;
+  function chooseType(type) {
+    if (isCurrentTypeChoose === type) {
+      setIsCurrentTypeChoose(!isCurrentTypeChoose);
+    } else {
+      setIsCurrentTypeChoose(type);
+    }
+  }
+
+  function defineHoursTotal() {
+    let hours = programStructure.reduce(function(accumulator, currentValue) {
+      return accumulator + parseInt(currentValue.total_hours);
     },0);
     return (
       <span className={`program-structure__hours ${dppDescription.total_hours === hours ? "program-structure__hours_type_success" : "program-structure__hours_type_error"}`}>{hours}</span>
+    )
+  }
+
+  function defineHoursLec() {
+    let hours = programStructure.reduce(function(accumulator, currentValue) {
+      return accumulator + parseInt(currentValue.lection_hours);
+    },0);
+    return (
+      <span className="program-structure__hours">{hours}</span>
+    )
+  }
+
+  function defineHoursPrac() {
+    let hours = programStructure.reduce(function(accumulator, currentValue) {
+      return accumulator + parseInt(currentValue.practice_hours);
+    },0);
+    return (
+      <span className="program-structure__hours">{hours}</span>
+    )
+  } 
+
+  function defineHoursLab() {
+    let hours = programStructure.reduce(function(accumulator, currentValue) {
+      return accumulator + parseInt(currentValue.lab_hours);
+    },0);
+    return (
+      <span className="program-structure__hours">{hours}</span>
+    )
+  }
+
+  function defineHoursSelf() {
+    let hours = programStructure.reduce(function(accumulator, currentValue) {
+      return accumulator + parseInt(currentValue.self_hours);
+    },0);
+    return (
+      <span className="program-structure__hours">{hours}</span>
+    )
+  }
+
+  function defineHoursAtt() {
+    let hours = programStructure.reduce(function(accumulator, currentValue) {
+      return accumulator + parseInt(currentValue.attestation_hours);
+    },0);
+    return (
+      <span className="program-structure__hours">{hours}</span>
     )
   }
 
@@ -52,42 +106,17 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
     }
   }
 
-  function handleUpTheme(id) {
+  function onChangeOrder(sectionId, ids) {
     const token = localStorage.getItem("token");
     if (loggedIn) {
-      setIsLoading(true);
-      programStructureApi.moveThemeUp({ token: token, stId: dppDescription.st_version_id, themeId: id, })
-        .then((res) => {
-          const index = programStructure.indexOf(programStructure.find((elem) => (elem.id === res.id)));
-          setProgramStructure([...programStructure.slice(0, index), res, ...programStructure.slice(index + 1)]);
+      programStructureApi.changeThemeOrder({ token: token, stId: dppDescription.st_version_id, sectionId: sectionId, themes: ids, })
+        .then(() => {
         })
         .catch((err) => {
             console.error(err);
         })
         .finally(() => {
-          setIsLoading(false);
-        });
-    }
-  }
 
-  function onChangeOrder(ids) {
-    console.log(ids);
-  }
-
-  function handleDownTheme(id) {
-    const token = localStorage.getItem("token");
-    if (loggedIn) {
-      setIsLoading(true);
-      programStructureApi.moveThemeDown({ token: token, stId: dppDescription.st_version_id, themeId: id, })
-        .then((res) => {
-          const index = programStructure.indexOf(programStructure.find((elem) => (elem.id === res.id)));
-          setProgramStructure([...programStructure.slice(0, index), res, ...programStructure.slice(index + 1)]);
-        })
-        .catch((err) => {
-            console.error(err);
-        })
-        .finally(() => {
-          setIsLoading(false);
         });
     }
   }
@@ -113,6 +142,7 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
     getStructure();
     return () => {
       setProgramStructure([]);
+      setIsCurrentTypeChoose("");
     };
     // eslint-disable-next-line
   }, [loggedIn, dppDescription])
@@ -121,7 +151,6 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
     <>
     <div className="program-structure">
       <h2 className="main__title">Проектирование структуры ДПП</h2>
-
       {
         isLoadingProgramStructure 
         ?
@@ -133,13 +162,64 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
             <Tab className="tab">Результаты обучения</Tab>
           </TabList>
           <TabPanel>
-            <h3 className="program-structure__hours">Планируется часов: <span className="program-structure__hours program-structure__hours_type_main">{dppDescription.total_hours}</span></h3>
-            <h3 className="program-structure__hours">Распределено часов: {defineHours()}</h3>  
+            <ul className="program-structure__hours-list">
+              <li className="program-structure__hours-item">
+                <p className="program-structure__hours-name">Планируется часов: <span className="program-structure__hours program-structure__hours_type_main">{dppDescription.total_hours}</span></p>
+              </li>
+              <li className="program-structure__hours-item">
+                <p className="program-structure__hours-name">Распределено часов: {defineHoursTotal()}</p>
+              </li>
+            </ul>
+
+            <ul className="program-structure__hours-list">
+              <li 
+              className={`program-structure__hours-item program-structure__hours-item_type_choose
+              ${isCurrentTypeChoose === "lec" ? "program-structure__hours-item_type_active" : ""}
+              `} 
+              onClick={() => chooseType("lec")}
+              >
+                <p className={`program-structure__hours-name ${isCurrentTypeChoose === "lec" ? "program-structure__hours-name_type_active" : ""}`}>Часы на лекции: {defineHoursLec()}</p>
+              </li>
+              <li 
+              className={`program-structure__hours-item program-structure__hours-item_type_choose
+              ${isCurrentTypeChoose === "prak" ? "program-structure__hours-item_type_active" : ""}
+              `} 
+              onClick={() => chooseType("prak")}
+              >
+                <p className={`program-structure__hours-name ${isCurrentTypeChoose === "prak" ? "program-structure__hours-name_type_active" : ""}`}>Часы на практики: {defineHoursPrac()}</p>
+              </li>
+              <li 
+              className={`program-structure__hours-item program-structure__hours-item_type_choose
+              ${isCurrentTypeChoose === "lab" ? "program-structure__hours-item_type_active" : ""}
+              `}
+              onClick={() => chooseType("lab")}
+              >
+                <p className={`program-structure__hours-name ${isCurrentTypeChoose === "lab" ? "program-structure__hours-name_type_active" : ""}`}>Часы на лабораторные: {defineHoursLab()}</p>
+              </li>
+              <li 
+              className={`program-structure__hours-item program-structure__hours-item_type_choose
+              ${isCurrentTypeChoose === "self" ? "program-structure__hours-item_type_active" : ""}
+              `} 
+              onClick={() => chooseType("self")}
+              >
+                <p className={`program-structure__hours-name ${isCurrentTypeChoose === "self" ? "program-structure__hours-name_type_active" : ""}`}>Часы на самостоятельные: {defineHoursSelf()}</p>
+              </li>
+              <li 
+              className={`program-structure__hours-item program-structure__hours-item_type_choose
+              ${isCurrentTypeChoose === "att" ? "program-structure__hours-item_type_active" : ""}
+              `}
+              onClick={() => chooseType("att")}
+              >
+                <p className={`program-structure__hours-name ${isCurrentTypeChoose === "att" ? "program-structure__hours-name_type_active" : ""}`}>Часы на аттестацию: {defineHoursAtt()}</p>
+              </li>
+            </ul>
+            
             <LearningPlan 
             programStructure={programStructure} 
             onEdit={openEditLearningPlan}
             onChangeOrder={onChangeOrder}
             isEditRights={isEditRights}
+            isCurrentTypeChoose={isCurrentTypeChoose}
             />
           </TabPanel>
           <TabPanel>

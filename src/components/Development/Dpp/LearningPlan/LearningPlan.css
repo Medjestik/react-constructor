@@ -29,6 +29,16 @@
 .learning-plan__table-head-column-caption_type_dragging {
   color: var(--white-color);
 }
+.learning-plan__table-head-column-caption_type_active {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--main-color);
+}
+.learning-plan__table-head-column-caption_type_total {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--main-color);
+}
 .learning-plan__table-body-row-name {
   font-size: 16px;
   line-height: 1.3;

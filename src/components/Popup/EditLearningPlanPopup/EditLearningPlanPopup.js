@@ -235,7 +235,7 @@ function EditLearningPlanPopup({ isOpen, currentLearningPlanElem, onClose, onEdi
             </>
           }
           {
-            currentLearningPlanElem.parent_id === null && currentLearningPlanElem.name !== "Итоговая аттестация" 
+            currentLearningPlanElem.name !== "Итоговая аттестация" 
             ?
             <div></div>
             :

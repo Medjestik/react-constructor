@@ -2,7 +2,7 @@ import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import ZoonTypologyItem from '../LearningPlanItem/LearningPlanItem.js';
 
-function LearningPlanColumn({ parts, partIndex, onEdit, isEditRights }) {
+function LearningPlanColumn({ parts, partIndex, onEdit, isEditRights, isCurrentTypeChoose }) {
 
   return (
     <div className="droppable-column__container">
@@ -21,6 +21,7 @@ function LearningPlanColumn({ parts, partIndex, onEdit, isEditRights }) {
                 themeIndex={ themeIndex}
                 onEdit={onEdit}
                 isEditRights={isEditRights}
+                isCurrentTypeChoose={isCurrentTypeChoose}
                 />
               ))}
                 {provided.placeholder} 
