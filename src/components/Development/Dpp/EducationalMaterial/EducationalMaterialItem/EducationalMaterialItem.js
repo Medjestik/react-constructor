@@ -28,7 +28,7 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
     setIsShowWrongType(false);
     setFileName({ isShow: false, name: "" });
     if (e.target.files.length > 0) {
-      if (e.target.files[0].name.match(/.(docm||docx)$/i)) {
+      if (e.target.files[0].name.match(/.(docm)$/i)) {
         setContentFile({ file: e.target.files[0] });
         setFileName({ isShow: true, name: e.target.files[0].name });
       } else {
