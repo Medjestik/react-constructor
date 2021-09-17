@@ -8,6 +8,8 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
   const [isShowWrongType, setIsShowWrongType] = React.useState(false);
   const [contentFile, setContentFile] = React.useState({ file: null, });
 
+  const formRef = React.createRef();
+
   console.log(content)
 
   function defineItemTypeTitle(itemType) {
@@ -37,7 +39,7 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
         setIsShowWrongType(true);
         setContentFile({ file: null, });
       }
-      document.getElementById("test").reset();
+      formRef.reset();
     } else {
       setContentFile({ file: null, });
     }
@@ -106,7 +108,7 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
                 <div className="educational-material-item__step-description">
                   <p className="educational-material-item__name">Загрузите отформатированный документ.</p>
                   <div className="educational-material-item__choose-file">
-                    <form id="test">
+                    <form ref={formRef}>
                       <label htmlFor="file-upload" className="btn btn_type_upload">Загрузить файл</label>
                       <input onChange={handleChangeFile} id="file-upload" className="popup__file-input" type="file" />
                     </form>

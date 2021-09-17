@@ -178,7 +178,7 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
               `} 
               onClick={() => chooseType("lec")}
               >
-                <p className={`program-structure__hours-name ${isCurrentTypeChoose === "lec" ? "program-structure__hours-name_type_active" : ""}`}>Часы на лекции: {defineHoursLec()}</p>
+                <p className={`program-structure__hours-name ${isCurrentTypeChoose === "lec" ? "program-structure__hours-name_type_active" : ""}`}>Лекции: {defineHoursLec()}</p>
               </li>
               <li 
               className={`program-structure__hours-item program-structure__hours-item_type_choose
@@ -186,7 +186,7 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
               `} 
               onClick={() => chooseType("prak")}
               >
-                <p className={`program-structure__hours-name ${isCurrentTypeChoose === "prak" ? "program-structure__hours-name_type_active" : ""}`}>Часы на практики: {defineHoursPrac()}</p>
+                <p className={`program-structure__hours-name ${isCurrentTypeChoose === "prak" ? "program-structure__hours-name_type_active" : ""}`}>Практика: {defineHoursPrac()}</p>
               </li>
               <li 
               className={`program-structure__hours-item program-structure__hours-item_type_choose
@@ -194,7 +194,7 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
               `}
               onClick={() => chooseType("lab")}
               >
-                <p className={`program-structure__hours-name ${isCurrentTypeChoose === "lab" ? "program-structure__hours-name_type_active" : ""}`}>Часы на лабораторные: {defineHoursLab()}</p>
+                <p className={`program-structure__hours-name ${isCurrentTypeChoose === "lab" ? "program-structure__hours-name_type_active" : ""}`}>Лабораторные: {defineHoursLab()}</p>
               </li>
               <li 
               className={`program-structure__hours-item program-structure__hours-item_type_choose
@@ -202,7 +202,7 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
               `} 
               onClick={() => chooseType("self")}
               >
-                <p className={`program-structure__hours-name ${isCurrentTypeChoose === "self" ? "program-structure__hours-name_type_active" : ""}`}>Часы на самостоятельные: {defineHoursSelf()}</p>
+                <p className={`program-structure__hours-name ${isCurrentTypeChoose === "self" ? "program-structure__hours-name_type_active" : ""}`}>Самостоятельные: {defineHoursSelf()}</p>
               </li>
               <li 
               className={`program-structure__hours-item program-structure__hours-item_type_choose
@@ -210,7 +210,7 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
               `}
               onClick={() => chooseType("att")}
               >
-                <p className={`program-structure__hours-name ${isCurrentTypeChoose === "att" ? "program-structure__hours-name_type_active" : ""}`}>Часы на аттестацию: {defineHoursAtt()}</p>
+                <p className={`program-structure__hours-name ${isCurrentTypeChoose === "att" ? "program-structure__hours-name_type_active" : ""}`}>Аттестация: {defineHoursAtt()}</p>
               </li>
             </ul>
             
