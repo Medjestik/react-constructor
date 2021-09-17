@@ -5,8 +5,8 @@ import './EducationalMaterialItem.css';
 function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId, isLoadingContent, backToStructure, isLoadingRequest, isShowRequestMessage, hideRequestMessage }) {
 
   const [fileName, setFileName] = React.useState({ isShow: false, name: "", });
-  const [isShowWrongType, setIsShowWrongType] = React.useState(false)
-  const [contentFile, setContentFile] = React.useState({ file: null, })
+  const [isShowWrongType, setIsShowWrongType] = React.useState(false);
+  const [contentFile, setContentFile] = React.useState({ file: null, });
 
   console.log(content)
 
@@ -24,6 +24,7 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
   }
 
   function handleChangeFile(e) {
+    console.log(e);
     hideRequestMessage();
     setIsShowWrongType(false);
     setFileName({ isShow: false, name: "" });
@@ -34,20 +35,22 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
       } else {
         setFileName({ isShow: false, name: e.target.files[0].name });
         setIsShowWrongType(true);
-        setContentFile({ file: null, })
+        setContentFile({ file: null, });
       }
+      document.getElementById("test").reset();
     } else {
-      setContentFile({ file: null, })
+      setContentFile({ file: null, });
     }
   }
 
   function onSave() {
+    setContentFile({ file: null, });
     hideRequestMessage();
     onUpload(content.type, currentThemeId, contentFile.file);
   }
 
   React.useEffect(() => {
-    setContentFile({ file: null, })
+    setContentFile({ file: null, });
     setFileName({ isShow: false, name: "" });
     setIsShowWrongType(false);
     hideRequestMessage();
@@ -95,21 +98,18 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
 
               <li className="educational-material-item__step">
                 <span className="educational-material-item__step-number">2</span>
-                <p className="educational-material-item__name">Вставьте ваш контент в скачанный шаблон.</p>
+                <p className="educational-material-item__name">Вставьте ваш контент в скачанный шаблон, следуя инструкции в нём.</p>
               </li>
 
               <li className="educational-material-item__step">
                 <span className="educational-material-item__step-number">3</span>
-                <p className="educational-material-item__name">На последней странице шаблона запустите проверку текста, исправьте все орфографические и пунктуационные ошибки, которые MS Word предложит исправить.</p>
-              </li>
-
-              <li className="educational-material-item__step">
-                <span className="educational-material-item__step-number">4</span>
                 <div className="educational-material-item__step-description">
                   <p className="educational-material-item__name">Загрузите отформатированный документ.</p>
                   <div className="educational-material-item__choose-file">
-                    <label htmlFor="file-upload" className="btn btn_type_upload">Загрузить файл</label>
-                    <input onChange={handleChangeFile} id="file-upload" className="popup__file-input" type="file" />
+                    <form id="test">
+                      <label htmlFor="file-upload" className="btn btn_type_upload">Загрузить файл</label>
+                      <input onChange={handleChangeFile} id="file-upload" className="popup__file-input" type="file" />
+                    </form>
                   </div>
                   {
                     fileName.isShow &&
