@@ -35,8 +35,8 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
 
   function defineHoursTotal() {
     let hours = programStructure.reduce(function(accumulator, currentValue) {
-      return accumulator + parseInt(currentValue.total_hours);
-    },0);
+      return accumulator + parseFloat(currentValue.total_hours);
+    }, 0);
     return (
       <span className={`program-structure__hours ${dppDescription.total_hours === hours ? "program-structure__hours_type_success" : "program-structure__hours_type_error"}`}>{hours}</span>
     )
@@ -44,7 +44,7 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
 
   function defineHoursLec() {
     let hours = programStructure.reduce(function(accumulator, currentValue) {
-      return accumulator + parseInt(currentValue.lection_hours);
+      return accumulator + parseFloat(currentValue.lection_hours);
     },0);
     return (
       <span className="program-structure__hours">{hours}</span>
@@ -53,7 +53,7 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
 
   function defineHoursPrac() {
     let hours = programStructure.reduce(function(accumulator, currentValue) {
-      return accumulator + parseInt(currentValue.practice_hours);
+      return accumulator + parseFloat(currentValue.practice_hours);
     },0);
     return (
       <span className="program-structure__hours">{hours}</span>
@@ -62,7 +62,7 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
 
   function defineHoursLab() {
     let hours = programStructure.reduce(function(accumulator, currentValue) {
-      return accumulator + parseInt(currentValue.lab_hours);
+      return accumulator + parseFloat(currentValue.lab_hours);
     },0);
     return (
       <span className="program-structure__hours">{hours}</span>
@@ -71,7 +71,7 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
 
   function defineHoursSelf() {
     let hours = programStructure.reduce(function(accumulator, currentValue) {
-      return accumulator + parseInt(currentValue.self_hours);
+      return accumulator + parseFloat(currentValue.self_hours);
     },0);
     return (
       <span className="program-structure__hours">{hours}</span>
@@ -80,7 +80,7 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
 
   function defineHoursAtt() {
     let hours = programStructure.reduce(function(accumulator, currentValue) {
-      return accumulator + parseInt(currentValue.attestation_hours);
+      return accumulator + parseFloat(currentValue.attestation_hours);
     },0);
     return (
       <span className="program-structure__hours">{hours}</span>
