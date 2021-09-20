@@ -38,7 +38,7 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
       return accumulator + parseFloat(currentValue.total_hours);
     }, 0);
     return (
-      <span className={`program-structure__hours ${dppDescription.total_hours === hours ? "program-structure__hours_type_success" : "program-structure__hours_type_error"}`}>{hours}</span>
+      <span className={`program-structure__hours ${dppDescription.total_hours === hours ? "program-structure__hours_type_success" : "program-structure__hours_type_error"}`}>{Math.round(hours * 100)/100}</span>
     )
   }
 
@@ -47,7 +47,7 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
       return accumulator + parseFloat(currentValue.lection_hours);
     },0);
     return (
-      <span className="program-structure__hours">{hours}</span>
+      <span className="program-structure__hours">{Math.round(hours * 100)/100}</span>
     )
   }
 
@@ -56,7 +56,7 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
       return accumulator + parseFloat(currentValue.practice_hours);
     },0);
     return (
-      <span className="program-structure__hours">{hours}</span>
+      <span className="program-structure__hours">{Math.round(hours * 100)/100}</span>
     )
   } 
 
@@ -65,7 +65,7 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
       return accumulator + parseFloat(currentValue.lab_hours);
     },0);
     return (
-      <span className="program-structure__hours">{hours}</span>
+      <span className="program-structure__hours">{Math.round(hours * 100)/100}</span>
     )
   }
 
@@ -74,7 +74,7 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
       return accumulator + parseFloat(currentValue.self_hours);
     },0);
     return (
-      <span className="program-structure__hours">{hours}</span>
+      <span className="program-structure__hours">{Math.round(hours * 100)/100}</span>
     )
   }
 
@@ -83,7 +83,7 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
       return accumulator + parseFloat(currentValue.attestation_hours);
     },0);
     return (
-      <span className="program-structure__hours">{hours}</span>
+      <span className="program-structure__hours">{Math.round(hours * 100)/100}</span>
     )
   }
 
