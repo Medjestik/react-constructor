@@ -106,7 +106,7 @@
   color: var(--subtitle-color);
 }
 .educational-material-item__documents-link {
-  margin: 0px;
+  margin: 0px 10px 0px 0px;
   font-style: normal;
   font-weight: normal;
   font-size: 16px;
@@ -322,4 +322,24 @@
 .educational-material-item__btn-save {
   margin: 20px 0px 0px 0px;
   max-width: max-content;
+}
+.educational-material-item__btn-remove {
+  margin: 0px 0px 0px auto;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  transition: .7s ease-in-out;
+  position: relative;
+  background-image: url('../../../../../images/cancel.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 25px;
+  background-color: inherit;
+  width: 25px;
+  height: 25px;
+  flex-shrink: 0;
+}
+.educational-material-item__btn-remove:hover {
+  opacity: .7;
+  cursor: pointer;
 }

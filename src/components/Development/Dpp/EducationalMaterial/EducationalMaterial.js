@@ -4,6 +4,7 @@ import * as educationalMaterialApi from '../../../../utils/educationalMaterialAp
 import Preloader from '../../../Preloader/Preloader.js';
 import EducationalMaterialTable from './EducationalMaterialTable/EducationalMaterialTable.js';
 import EducationalMaterialItem from './EducationalMaterialItem/EducationalMaterialItem.js';
+import EducationalMaterialItemRemoveFilePopup from './EducationalMaterialItemRemoveFilePopup/EducationalMaterialItemRemoveFilePopup.js';
 
 function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
 
@@ -11,14 +12,14 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
   const [content, setContent] = React.useState({});
   const [currentChapterId, setCurrentChapterId] = React.useState("");
   const [currentThemeId, setCurrentThemeId] = React.useState("");
+  const [currentType, setCurrentType] = React.useState("");
   const [isLoadingProgramStructure, setIsLoadingProgramStructure] = React.useState(true);
   const [isLoadingContent, setIsLoadingContent] = React.useState(false);
   const [isShowProgramStructure, setIsShowProgramStructure] = React.useState(true);
   const [isShowItem, setIsShowItem] = React.useState(false);
   const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
-  const [isShowRequestMessage, setIsShowRequestMessage] = React.useState({ isShow: false, text: "", type: "" })
-
-  console.log(programStructure)
+  const [isShowRequestMessage, setIsShowRequestMessage] = React.useState({ isShow: false, text: "", type: "" });
+  const [isRemoveFilePopupOpen, setIsRemoveFilePopupOpen] = React.useState(false);
 
   function getStructure() {
     const token = localStorage.getItem("token");
@@ -109,6 +110,43 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
     setCurrentThemeId("");
   }
 
+  function removeFile(themeId, type) {
+    setIsLoadingRequest(true);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      educationalMaterialApi.removeFile({ token: token, ctId: dppDescription.ct_version_id, themeId: themeId, type: type })
+        .then(() => {
+          const chapter = programStructure.find((ch) => (ch.id === currentChapterId));
+          const chapterIndex = programStructure.indexOf(programStructure.find((ch) => (ch.id === currentChapterId)));
+          const theme = chapter.themes.find((th) => (th.id === currentThemeId));
+          const themeIndex = chapter.themes.indexOf(chapter.themes.find((th) => (th.id === currentThemeId)));
+          const contentIndex = theme.contents.indexOf(theme.contents.find((ct) => (ct.id === content.id)));
+          const newContents = [...theme.contents.slice(0, contentIndex), {...content, is_loaded: 0}, ...theme.contents.slice(contentIndex + 1)];
+          const newThemes = [...chapter.themes.slice(0, themeIndex), {...theme, contents: newContents}, ...chapter.themes.slice(themeIndex + 1)];
+          const newChapters = [...programStructure.slice(0, chapterIndex), {...chapter, themes: newThemes}, ...programStructure.slice(chapterIndex + 1)];
+          setProgramStructure(newChapters);
+          setContent({...content, is_loaded: 0});
+          closeAllEducationalMaterialPopup();
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
+          setIsLoadingRequest(false);
+        });
+      }
+  }
+
+  function openRemoveFilePopup(themeId, type) {
+    setCurrentThemeId(themeId);
+    setCurrentType(type);
+    setIsRemoveFilePopupOpen(true);
+  }
+
+  function closeAllEducationalMaterialPopup() {
+    setIsRemoveFilePopupOpen(false);
+  }
+
   React.useEffect(() => {
     getStructure();
     setIsShowProgramStructure(true);
@@ -159,6 +197,18 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
           isLoadingRequest={isLoadingRequest}
           isShowRequestMessage={isShowRequestMessage}
           hideRequestMessage={hideRequestMessage}
+          onRemoveFile={openRemoveFilePopup}
+          />
+        }
+        {
+          isRemoveFilePopupOpen &&
+          <EducationalMaterialItemRemoveFilePopup
+          isOpen={isRemoveFilePopupOpen}
+          onClose={closeAllEducationalMaterialPopup}
+          onRemove={removeFile}
+          themeId={currentThemeId}
+          type={currentType}
+          isLoading={isLoadingRequest}
           />
         }
     </div>

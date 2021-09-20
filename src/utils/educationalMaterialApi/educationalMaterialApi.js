@@ -44,3 +44,16 @@ export const uploadContent = ({ token, ctId, themeId, type, file }) => {
   })
   .then(res => handleResponse(res));
 };
+
+export const removeFile = ({ token, ctId, themeId, type, file }) => {
+  return fetch(`${API_URL}/content/${ctId}/${themeId}/${type}/unlink`, {
+    method: 'POST', 
+    headers: {
+      "Accept": "application/json",
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: file,
+  })
+  .then(res => handleResponse(res));
+};

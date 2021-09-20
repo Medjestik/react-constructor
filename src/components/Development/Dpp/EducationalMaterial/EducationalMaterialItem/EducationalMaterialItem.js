@@ -2,15 +2,13 @@ import React from 'react';
 import Preloader from '../../../../Preloader/Preloader.js';
 import './EducationalMaterialItem.css';
 
-function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId, isLoadingContent, backToStructure, isLoadingRequest, isShowRequestMessage, hideRequestMessage }) {
+function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId, isLoadingContent, backToStructure, isLoadingRequest, isShowRequestMessage, hideRequestMessage, onRemoveFile }) {
 
   const [fileName, setFileName] = React.useState({ isShow: false, name: "", });
   const [isShowWrongType, setIsShowWrongType] = React.useState(false);
   const [contentFile, setContentFile] = React.useState({ file: null, });
 
   const formRef = React.createRef();
-
-  console.log(content)
 
   function defineItemTypeTitle(itemType) {
     switch (itemType) {
@@ -21,12 +19,11 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
       case "lab":
         return ("Скачайте шаблон для заполнения контента лабораторной работы.");
       default:
-        return ("Скачайте шаблон для заполнения контента.")
+        return ("Скачайте шаблон для заполнения контента.");
     }
   }
 
   function handleChangeFile(e) {
-    console.log(e);
     hideRequestMessage();
     setIsShowWrongType(false);
     setFileName({ isShow: false, name: "" });
@@ -39,7 +36,7 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
         setIsShowWrongType(true);
         setContentFile({ file: null, });
       }
-      formRef.reset();
+      formRef.current.reset();
     } else {
       setContentFile({ file: null, });
     }
@@ -51,6 +48,13 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
     onUpload(content.type, currentThemeId, contentFile.file);
   }
 
+  function onRemove(id, type) {
+    onRemoveFile(id, type);
+    setContentFile({ file: null, });
+    setFileName({ isShow: false, name: "" });
+    hideRequestMessage();
+  }
+
   React.useEffect(() => {
     setContentFile({ file: null, });
     setFileName({ isShow: false, name: "" });
@@ -59,7 +63,7 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
     // eslint-disable-next-line
   }, [isShowItem]);
 
-  const docs = [{ name: "Загруженный файл", }];
+  const docs = [{ name: "Скачать загруженный файл", }];
  
   return (
     <div className="educational-material-item">
@@ -157,6 +161,7 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
                       <li key={`docx-${i}`} className="educational-material-item__documents-item">
                         <span className="educational-material-item__documents-item-count">{i + 1}.</span>
                         <a className="educational-material-item__documents-link" href={`https://constructor.emiit.ru:8887/content/${content.id}/download`} target="_blank" rel="noreferrer">{docx.name}</a>
+                        <button className="educational-material-item__btn-remove" type="button" onClick={() => onRemove(currentThemeId, content.type)}></button>
                       </li>
                     ))
                   }
