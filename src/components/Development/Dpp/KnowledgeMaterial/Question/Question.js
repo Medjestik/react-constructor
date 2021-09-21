@@ -5,6 +5,7 @@ import MultiAnswer from './MultiAnswer/MultiAnswer.js';
 import OpenAnswer from './OpenAnswer/OpenAnswer.js';
 import SequenceAnswer from './SequenceAnswer/SequenceAnswer.js';
 import ConformityAnswer from './ConformityAnswer/ConformityAnswer.js';
+import TextareaAutosize from 'react-textarea-autosize';
 
 
 function Question({ editQuestion, setEditQuestion, openChangeTypePopup }) {
@@ -139,7 +140,16 @@ function Question({ editQuestion, setEditQuestion, openChangeTypePopup }) {
         <div className="questions__type-info">
           <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса: </span>Вопрос с открытым ответом</p>
         </div>
-        <textarea value={questionText || ""} onChange={handleChangeQuestionText} className="question__text" name="question__text" placeholder="Введите текст вопроса"></textarea>
+        <TextareaAutosize
+          className="question__text"
+          id="question__text"
+          name="question__text"
+          placeholder="Введите вопрос..."
+          defaultValue={questionText || ""}
+          onChange={handleChangeQuestionText}
+          required
+        >
+        </TextareaAutosize>
         <ul className="questions__answers">
           {
             questionAnswers.map((answer, i) => (

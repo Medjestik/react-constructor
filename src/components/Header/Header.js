@@ -49,9 +49,12 @@ function Header({ onLogout, showHeaderMenu, setShowHeaderMenu, onOpenAvatarPopup
           <NavLink className="header__menu-link" activeClassName="header__menu-link_type_active" to="/main/discussion" exact>
             <img className="header__menu-img" alt="иконка" src={discussion}></img>
           </NavLink>
-          <NavLink className="header__menu-link" activeClassName="header__menu-link_type_active" to="/main/control" exact>
-            <img className="header__menu-img" alt="иконка" src={control}></img>
-          </NavLink>
+          {
+            ((user.rights === "superadmin") || (user.rights === "admin")) &&
+            <NavLink className="header__menu-link" activeClassName="header__menu-link_type_active" to="/main/control" exact>
+              <img className="header__menu-img" alt="иконка" src={control}></img>
+            </NavLink>
+          }
         </nav>
         <button className="header__menu-logout" type="button" onClick={onLogout}></button>
       </div>

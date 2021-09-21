@@ -8,7 +8,7 @@
   border-bottom-right-radius: 10px;
   position: fixed;
   transition: all 0.5s ease-in-out;
-  z-index: 15;
+  z-index: 65;
 }
 .header_type_show {
   left: 0px;
@@ -226,4 +226,10 @@
 .header__menu-logout:hover {
   cursor: pointer;
   background-color: rgba(255, 255, 255, .3);
+}
+
+@media all and (max-width: 760px) {
+  .header__menu {
+    display: none;
+  }
 }

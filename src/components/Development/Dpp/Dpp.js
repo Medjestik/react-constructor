@@ -11,7 +11,7 @@ import EducationalMaterial from './EducationalMaterial/EducationalMaterial.js';
 import Approval from './Approval/Approval.js';
 import Preloader from '../../Preloader/Preloader.js';
 
-function Dpp({ loggedIn, history, pathname, }) {
+function Dpp({ loggedIn, history, pathname, windowWidth }) {
 
   const [dppDescription, setDppDescription] = React.useState({});
   const [isLoadingProgram, setIsLoadingProgram] = React.useState({});

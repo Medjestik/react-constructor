@@ -78,7 +78,6 @@
   background-color: var(--third-light-color);
   border: 2px solid var(--third-light-color);
 }
-
 .steps__number::after {
   content: '';
   position: absolute;
@@ -101,4 +100,103 @@
   font-size: 16px;
   line-height: 22px;
   text-align: center;
+}
+
+@media all and (max-width: 1367px) {
+  .steps__caption {
+    font-size: 14px;
+    line-height: 19px;
+    max-width: 150px;
+  }
+}
+
+@media all and (max-width: 967px) {
+  .steps__list {
+    margin: 25px 0px;
+  }
+  .steps__caption {
+    margin: 5px auto 0px;
+    font-size: 12px;
+    line-height: 16px;
+    max-width: 150px;
+    z-index: 55;
+  }
+  .steps__number {
+    margin: 0px auto;
+    width: 50px;
+    height: 50px;
+    font-size: 16px;
+    line-height: 20px;
+  }
+  .steps__number::after {
+    left: -15px;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    border: 20px solid var(--background-secondary-color);
+  }
+}
+
+@media all and (max-width: 760px) {
+  .steps__list {
+    margin: 20px 0px;
+  }
+  .steps__list .steps__item::before {
+    top: 15px;
+    left: -70%;
+    height: 2px;
+  }
+  .steps__list .steps__item::after {
+    top: 15px;
+    left: -70%;
+    height: 2px;
+  }
+  .steps__caption {
+    display: none;
+  }
+  .steps__number {
+    margin: 0px auto;
+    width: 25px;
+    height: 25px;
+    font-size: 12px;
+    line-height: 16px;
+  }
+  .steps__number::after {
+    left: -7px;
+    right: 0;
+    width: 25px;
+    height: 25px;
+    border: 7px solid var(--background-secondary-color);
+  }
+}
+
+@media all and (max-width: 360px) {
+  .steps__list {
+    margin: 15px 0px;
+  }
+  .steps__list .steps__item::before {
+    top: 10px;
+    left: -80%;
+  }
+  .steps__list .steps__item::after {
+    top: 10px;
+    left: -80%;
+  }
+  .steps__caption {
+    display: none;
+  }
+  .steps__number {
+    margin: 0px auto;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    line-height: 16px;
+  }
+  .steps__number::after {
+    left: -5px;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    border: 5px solid var(--background-secondary-color);
+  }
 }

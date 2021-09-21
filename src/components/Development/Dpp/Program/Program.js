@@ -7,9 +7,11 @@ import status from '../../../../images/status.png';
 import stage from '../../../../images/stage.png';
 import role from '../../../../images/role.png';
 
-function Program({ program, history, }) {
+function Program({ program, history, windowWidth }) {
 
   const [isShowPerformers, setIsShowPerformers] = React.useState(false);
+  
+  console.log(windowWidth);
 
   function getDppDescription (id) {
     const token = localStorage.getItem("token");
@@ -120,7 +122,7 @@ function Program({ program, history, }) {
         </ul>
       </div>
       <div className="development__item-control">
-        <button className={`development__item-button-performer ${isShowPerformers ? "button-performer_type_show" : "button-performer_type_hide"}`} type="button" onClick={toggleProgramPerformers}>Показать список всех исполнителей</button>
+        <button className={`development__item-button-performer ${isShowPerformers ? "button-performer_type_show" : "button-performer_type_hide"}`} type="button" onClick={toggleProgramPerformers}>{windowWidth > 760 ? "Показать список всех исполнителей" : "Cписок исполнителей" }</button>
         <button className="btn btn_type_next" type="button" onClick={handleClickProgram}>Продолжить работу</button>
       </div>
 
@@ -137,7 +139,11 @@ function Program({ program, history, }) {
                 </div>
                 <div className="development__performers-contacts">
                   <p className="development__performers-mail">{performer.email}</p>
-                  <p className="development__performers-phone">{performer.phone}</p>
+                  {
+                    performer.phone &&
+                    <p className="development__performers-phone">{performer.phone}</p>
+                  }
+                  
                 </div>
               </li>
             ))

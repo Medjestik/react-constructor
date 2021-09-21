@@ -1,10 +1,15 @@
+.questions {
+  overflow-y: auto;
+  max-height: 80vh;
+  margin: 5px 0px 0px 0px;
+}
 .questions__type-info {
-  margin: 20px 0px 0px 0px;
+  margin: 40px 0px 0px 0px;
   display: flex;
   align-items: center;
 }
 .questions__type {
-  margin: 0px;
+  margin: 0px 5px 0px 0px;
   font-style: normal;
   font-weight: normal;
   font-size: 18px;
@@ -38,8 +43,9 @@
   cursor: pointer;
 }
 .question__text {
+  margin: 0px 5px 0px 0px;
   resize: none;
-  width: calc(100% - 20px);
+  width: calc(100% - 30px);
   min-height: 100px;
   padding: 10px;
   margin: 20px 0px 20px 0px;
@@ -65,7 +71,7 @@
 }
 .questions__answers {
   display: flex;
-  margin: 0px;
+  margin: 0px 5px 0px 5px;
   padding: 0px;
   flex-direction: column;
   list-style-type: none;

@@ -636,8 +636,27 @@ input[type=number] {
   }
 }
 
-@media all and (max-width: 768px) {
+@media all and (max-width: 967px) {
+  .btn {
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 1.2px;
+    padding: 10px 35px 10px 10px;
+  }
+  .btn_type_next::after {
+    background-size: 15px;
+    width: 15px;
+    height: 15px;
+    right: 12px;
+    top: 13px;
+  }
+}
+
+@media all and (max-width: 760px) {
   .container {
     padding: 0px 16px;
+  }
+  .form {
+    width: 100%;
   }
 }

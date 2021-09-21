@@ -17,6 +17,7 @@ function Main({ loggedIn, pathname, onLogout, history, onUpdateUser, isLoadingRe
 
   const [showHeaderMenu, setShowHeaderMenu] = React.useState(false);
   const [isAvatarPopupOpen, setIsAvatarPopupOpen] = React.useState(false);
+  const [windowWidth, setWindowWidth] = React.useState(window.screen.width);
   
   function closeMainPopups() {
     setIsAvatarPopupOpen(false);
@@ -29,6 +30,18 @@ function Main({ loggedIn, pathname, onLogout, history, onUpdateUser, isLoadingRe
     closeMainPopups();
     setIsAvatarPopupOpen(true);
   }
+
+  React.useEffect(() => {
+    function resizeWindow(evt) {
+      setWindowWidth(evt.target.innerWidth);
+    }
+
+    window.addEventListener('resize', resizeWindow);
+
+    return () => {
+      window.removeEventListener('resize', resizeWindow);
+    }
+  }, []);
 
   return (
     <div className="main">
@@ -56,10 +69,10 @@ function Main({ loggedIn, pathname, onLogout, history, onUpdateUser, isLoadingRe
             />
           </Route>
           <Route path="/main/development" exact >
-            <Development history={history} />
+            <Development history={history} windowWidth={windowWidth} />
           </Route>
           <Route path="/main/development/dpp" >
-            <Dpp loggedIn={loggedIn} history={history} pathname={pathname} />
+            <Dpp loggedIn={loggedIn} history={history} pathname={pathname} windowWidth={windowWidth} />
           </Route>
           <Route path="/main/method" exact>
             <Method />
