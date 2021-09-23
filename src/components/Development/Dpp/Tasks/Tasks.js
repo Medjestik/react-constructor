@@ -445,7 +445,6 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
         .then((res) => {
           const index = tasks.indexOf(tasks.find((elem) => (elem.id === res.id)));
           setTasks([...tasks.slice(0, index), res, ...tasks.slice(index + 1)]);
-          setCurrentTaskType(res);
         })
         .catch((err) => {
             console.error(err);

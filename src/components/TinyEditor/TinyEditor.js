@@ -6,6 +6,8 @@ function TinyEditor({ onChange, currentTask, currentTaskType }) {
   const editorRef = useRef(null);
   const [value, setValue] = React.useState();
 
+  console.log(currentTask);
+
   React.useEffect(() => {
     onChange(value);
     // eslint-disable-next-line
@@ -23,15 +25,14 @@ function TinyEditor({ onChange, currentTask, currentTaskType }) {
           height: 500,
           menubar: false,
           plugins: [
-            'advlist autolink lists link image charmap print preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table paste code help wordcount'
+            "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+            "searchreplace wordcount visualblocks visualchars code fullscreen",
+            "insertdatetime media nonbreaking save table contextmenu directionality",
+            "emoticons template paste textcolor colorpicker textpattern"
           ],
-          toolbar: 'undo redo | formatselect | ' +
-          'bold italic backcolor | alignleft aligncenter ' +
-          'alignright alignjustify | bullist numlist outdent indent | ' +
-          'removeformat | help',
-          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+          toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview",
+          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+          paste_data_images: true,
         }}
       />
     </>

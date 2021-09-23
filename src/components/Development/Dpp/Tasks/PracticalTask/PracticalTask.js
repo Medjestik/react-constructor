@@ -65,8 +65,6 @@ function PracticalTask({
   const [isOpenRemoveMTOPopup, setIsOpenRemoveMTOPopup] = React.useState(false);
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
 
-  console.log(currentTask);
-
   function unSelectNsi(elem) {
     onUnSelectNsi(currentTask.id, elem.id);
   }
