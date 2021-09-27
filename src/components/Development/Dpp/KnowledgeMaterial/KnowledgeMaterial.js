@@ -33,6 +33,8 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
   });
   const [isCreateNewQuestion, setIsCreateNewQuestion] = React.useState(false);
 
+  console.log(currentQuestions);
+
   function getKnowledges() {
     const token = localStorage.getItem("token");
     if (loggedIn) {

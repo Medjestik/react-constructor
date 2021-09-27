@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.1e87e9ca.chunk.css",
-    "main.js": "/static/js/main.43ca398a.chunk.js",
-    "main.js.map": "/static/js/main.43ca398a.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.faa8775f.js",
-    "runtime-main.js.map": "/static/js/runtime-main.faa8775f.js.map",
+    "main.css": "/static/css/main.73cbd16a.chunk.css",
+    "main.js": "/static/js/main.001c3549.chunk.js",
+    "main.js.map": "/static/js/main.001c3549.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.05b7634a.js",
+    "runtime-main.js.map": "/static/js/runtime-main.05b7634a.js.map",
     "static/css/2.ae36708e.chunk.css": "/static/css/2.ae36708e.chunk.css",
-    "static/js/2.5a39996b.chunk.js": "/static/js/2.5a39996b.chunk.js",
-    "static/js/2.5a39996b.chunk.js.map": "/static/js/2.5a39996b.chunk.js.map",
-    "static/js/3.f8f073ae.chunk.js": "/static/js/3.f8f073ae.chunk.js",
-    "static/js/3.f8f073ae.chunk.js.map": "/static/js/3.f8f073ae.chunk.js.map",
+    "static/js/2.3d5a326a.chunk.js": "/static/js/2.3d5a326a.chunk.js",
+    "static/js/2.3d5a326a.chunk.js.map": "/static/js/2.3d5a326a.chunk.js.map",
+    "static/js/3.572047f8.chunk.js": "/static/js/3.572047f8.chunk.js",
+    "static/js/3.572047f8.chunk.js.map": "/static/js/3.572047f8.chunk.js.map",
     "index.html": "/index.html",
     "static/css/2.ae36708e.chunk.css.map": "/static/css/2.ae36708e.chunk.css.map",
-    "static/css/main.1e87e9ca.chunk.css.map": "/static/css/main.1e87e9ca.chunk.css.map",
-    "static/js/2.5a39996b.chunk.js.LICENSE.txt": "/static/js/2.5a39996b.chunk.js.LICENSE.txt",
+    "static/css/main.73cbd16a.chunk.css.map": "/static/css/main.73cbd16a.chunk.css.map",
+    "static/js/2.3d5a326a.chunk.js.LICENSE.txt": "/static/js/2.3d5a326a.chunk.js.LICENSE.txt",
     "static/media/index.css": "/static/media/Raleway-Thin.48c8c234.eot",
     "static/media/avatar-default.249de024.png": "/static/media/avatar-default.249de024.png",
     "static/media/ZoonChart.css": "/static/media/delete-color.38111e2a.png",
@@ -26,10 +26,10 @@
     "static/media/sequence-answer-icon.75a3aea8.png": "/static/media/sequence-answer-icon.75a3aea8.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.faa8775f.js",
+    "static/js/runtime-main.05b7634a.js",
     "static/css/2.ae36708e.chunk.css",
-    "static/js/2.5a39996b.chunk.js",
-    "static/css/main.1e87e9ca.chunk.css",
-    "static/js/main.43ca398a.chunk.js"
+    "static/js/2.3d5a326a.chunk.js",
+    "static/css/main.73cbd16a.chunk.css",
+    "static/js/main.001c3549.chunk.js"
   ]
 }

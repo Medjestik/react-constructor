@@ -5,6 +5,7 @@ import Preloader from '../../../Preloader/Preloader.js';
 import EducationalMaterialTable from './EducationalMaterialTable/EducationalMaterialTable.js';
 import EducationalMaterialItem from './EducationalMaterialItem/EducationalMaterialItem.js';
 import EducationalMaterialItemRemoveFilePopup from './EducationalMaterialItemRemoveFilePopup/EducationalMaterialItemRemoveFilePopup.js';
+import EducationalMaterialItemAddMaterialPopup from './EducationalMaterialItemAddMaterialPopup/EducationalMaterialItemAddMaterialPopup.js';
 
 function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
 
@@ -20,6 +21,7 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
   const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
   const [isShowRequestMessage, setIsShowRequestMessage] = React.useState({ isShow: false, text: "", type: "" });
   const [isRemoveFilePopupOpen, setIsRemoveFilePopupOpen] = React.useState(false);
+  const [isAddMaterialPopupOpen, setIsAddMaterialPopupOpen] = React.useState(false);
 
   function getStructure() {
     const token = localStorage.getItem("token");
@@ -143,8 +145,15 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
     setIsRemoveFilePopupOpen(true);
   }
 
+  function openAddMaterialPopup(themeId, type) {
+    setCurrentThemeId(themeId);
+    setCurrentType(type);
+    setIsAddMaterialPopupOpen(true);
+  }
+
   function closeAllEducationalMaterialPopup() {
     setIsRemoveFilePopupOpen(false);
+    setIsAddMaterialPopupOpen(false);
   }
 
   React.useEffect(() => {
@@ -198,6 +207,7 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
           isShowRequestMessage={isShowRequestMessage}
           hideRequestMessage={hideRequestMessage}
           onRemoveFile={openRemoveFilePopup}
+          onAddMaterial={openAddMaterialPopup}
           />
         }
         {
@@ -208,6 +218,14 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
           onRemove={removeFile}
           themeId={currentThemeId}
           type={currentType}
+          isLoading={isLoadingRequest}
+          />
+        }
+        {
+          isAddMaterialPopupOpen &&
+          <EducationalMaterialItemAddMaterialPopup
+          isOpen={isAddMaterialPopupOpen}
+          onClose={closeAllEducationalMaterialPopup}
           isLoading={isLoadingRequest}
           />
         }

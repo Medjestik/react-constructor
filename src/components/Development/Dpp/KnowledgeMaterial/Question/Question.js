@@ -12,6 +12,8 @@ function Question({ editQuestion, setEditQuestion, openChangeTypePopup }) {
 
   const [questionText, setQuestionText] = React.useState(editQuestion.text);
   const [questionAnswers, setQuestionAnswers] = React.useState(editQuestion.answers);
+
+  console.log(editQuestion);
  
   function handleChangeQuestionText(e) {
     setQuestionText(e.target.value);
@@ -117,7 +119,16 @@ function Question({ editQuestion, setEditQuestion, openChangeTypePopup }) {
           }
           <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса: </span>Вопрос с множественным выбором</p>
         </div>
-        <textarea value={questionText || ""} onChange={handleChangeQuestionText} className="question__text" name="question__text" placeholder="Введите текст вопроса"></textarea>
+        <TextareaAutosize
+          className="question__text"
+          id="question__text"
+          name="question__text"
+          placeholder="Введите вопрос..."
+          value={questionText || ""}
+          onChange={handleChangeQuestionText}
+          required
+        >
+        </TextareaAutosize>
         <ul className="questions__answers">
           {
             questionAnswers.map((answer) => (
@@ -145,7 +156,7 @@ function Question({ editQuestion, setEditQuestion, openChangeTypePopup }) {
           id="question__text"
           name="question__text"
           placeholder="Введите вопрос..."
-          defaultValue={questionText || ""}
+          value={questionText || ""}
           onChange={handleChangeQuestionText}
           required
         >
@@ -172,7 +183,16 @@ function Question({ editQuestion, setEditQuestion, openChangeTypePopup }) {
         <div className="questions__type-info">
           <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса: </span>Вопрос с установлением последовательности</p>
         </div>
-        <textarea value={questionText || ""} onChange={handleChangeQuestionText} className="question__text" name="question__text" placeholder="Введите текст вопроса"></textarea>
+        <TextareaAutosize
+          className="question__text"
+          id="question__text"
+          name="question__text"
+          placeholder="Введите вопрос..."
+          value={questionText || ""}
+          onChange={handleChangeQuestionText}
+          required
+        >
+        </TextareaAutosize>
         <ul className="questions__answers">
           {
             questionAnswers.map((answer, i) => (
@@ -199,7 +219,16 @@ function Question({ editQuestion, setEditQuestion, openChangeTypePopup }) {
           }
           <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса: </span>Вопрос с установлением соответствия</p>
         </div>
-        <textarea value={questionText || ""} onChange={handleChangeQuestionText} className="question__text" name="question__text" placeholder="Введите текст вопроса"></textarea>
+        <TextareaAutosize
+          className="question__text"
+          id="question__text"
+          name="question__text"
+          placeholder="Введите вопрос..."
+          value={questionText || ""}
+          onChange={handleChangeQuestionText}
+          required
+        >
+        </TextareaAutosize>
         <ul className="questions__answers">
           {
             questionAnswers.map((answer, i) => (
@@ -226,7 +255,16 @@ function Question({ editQuestion, setEditQuestion, openChangeTypePopup }) {
         }
         <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса: </span>Вопрос с одним вариантом ответа</p>
       </div>
-      <textarea value={questionText || ""} onChange={handleChangeQuestionText} className="question__text" name="question__text" placeholder="Введите текст вопроса"></textarea>
+      <TextareaAutosize
+          className="question__text"
+          id="question__text"
+          name="question__text"
+          placeholder="Введите вопрос..."
+          value={questionText || ""}
+          onChange={handleChangeQuestionText}
+          required
+        >
+        </TextareaAutosize>
       <ul className="questions__answers">
         {
           questionAnswers.map((answer) => (
