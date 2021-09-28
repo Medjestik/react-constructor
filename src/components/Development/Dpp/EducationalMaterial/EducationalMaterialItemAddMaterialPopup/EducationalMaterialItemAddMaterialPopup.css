@@ -35,9 +35,10 @@
   position: relative;
 }
 .add-material__input-file {
+  width: calc(100% - 60px);  
   display: inline-block;
   justify-content: space-between;
-  padding: 12px 22px;
+  padding: 12px 42px 12px 22px;
   border-radius: 100px;
   border: none;
   outline: none;

@@ -2,7 +2,7 @@ import React from 'react';
 import Preloader from '../../../../Preloader/Preloader.js';
 import './EducationalMaterialItem.css';
 
-function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId, isLoadingContent, backToStructure, isLoadingRequest, isShowRequestMessage, hideRequestMessage, onRemoveFile, onAddMaterial }) {
+function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId, isLoadingContent, backToStructure, isLoadingRequest, isShowRequestMessage, hideRequestMessage, onRemoveFile, onAddMaterial, onRemoveMaterial }) {
 
   const [fileName, setFileName] = React.useState({ isShow: false, name: "", });
   const [isShowWrongType, setIsShowWrongType] = React.useState(false);
@@ -71,7 +71,6 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
   }, [isShowItem]);
 
   const contentArr = [{ name: "Скачать контент", }];
-  const docsArr = [];
  
   return (
     <div className="educational-material-item">
@@ -188,15 +187,15 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
               <div className="educational-material-item__upload-document">
                   <h3 className="educational-material-item__document-title">Дополнительные материалы:</h3>
                     {
-                      docsArr > 1
+                     content.additional_files.length > 0
                       ?
                       <ul className="educational-material-item__documents-list">
                         {
-                          docsArr.map((docx, i) => (
+                          content.additional_files.map((material, i) => (
                             <li key={`docx-${i}`} className="educational-material-item__documents-item">
                               <span className="educational-material-item__documents-item-count">{i + 1}.</span>
-                              <a className="educational-material-item__documents-link" href={`https://constructor.emiit.ru:8887/content/${content.id}/download`} target="_blank" rel="noreferrer">{docx.name}</a>
-                              <button className="educational-material-item__btn-remove" type="button" onClick={() => onRemove(currentThemeId, content.type)}></button>
+                              <a className="educational-material-item__documents-link" href={`https://constructor.emiit.ru:8887/content/${content.id}/additional_files/${material.id}/download`} target="_blank" rel="noreferrer">{material.name}</a>
+                              <button className="educational-material-item__btn-remove" type="button" onClick={() => onRemoveMaterial(currentThemeId, content.type, material.id)}></button>
                             </li>
                           ))
                         }

@@ -6,6 +6,7 @@ import EducationalMaterialTable from './EducationalMaterialTable/EducationalMate
 import EducationalMaterialItem from './EducationalMaterialItem/EducationalMaterialItem.js';
 import EducationalMaterialItemRemoveFilePopup from './EducationalMaterialItemRemoveFilePopup/EducationalMaterialItemRemoveFilePopup.js';
 import EducationalMaterialItemAddMaterialPopup from './EducationalMaterialItemAddMaterialPopup/EducationalMaterialItemAddMaterialPopup.js';
+import EducationalMaterialItemRemoveMaterialPopup from './EducationalMaterialItemRemoveMaterialPopup/EducationalMaterialItemRemoveMaterialPopup.js';
 
 function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
 
@@ -22,6 +23,8 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
   const [isShowRequestMessage, setIsShowRequestMessage] = React.useState({ isShow: false, text: "", type: "" });
   const [isRemoveFilePopupOpen, setIsRemoveFilePopupOpen] = React.useState(false);
   const [isAddMaterialPopupOpen, setIsAddMaterialPopupOpen] = React.useState(false);
+  const [isRemoveMaterialPopupOpen, setIsRemoveMaterialPopupOpen] = React.useState(false);
+  const [currentMaterialId, setCurrentMaterialId] = React.useState("");
 
   function getStructure() {
     const token = localStorage.getItem("token");
@@ -56,6 +59,27 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
         .finally(() => {
           setIsLoadingContent(false); 
         });
+    }
+  }
+
+  function uploadMaterial(currentType, themeId, material) {
+    setIsLoadingRequest(true);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      const formData = new FormData();
+      formData.append('file', material.file);
+      formData.append('name', material.name);
+      educationalMaterialApi.uploadMaterial({ token: token, ctId: dppDescription.ct_version_id, themeId: themeId, type: currentType, material: formData })
+      .then((res) => {
+        setContent({...content, additional_files: [...content.additional_files, res]});
+        closeAllEducationalMaterialPopup();
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsLoadingRequest(false);
+      });
     }
   }
 
@@ -139,10 +163,36 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
       }
   }
 
+  function removeMaterial(themeId, type, materialId) {
+    setIsLoadingRequest(true);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      educationalMaterialApi.removeMaterial({ token: token, ctId: dppDescription.ct_version_id, themeId: themeId, type: type, materialId: materialId })
+        .then((res) => {
+          const newMaterial = content.additional_files.filter((elem) => elem.id !== res);
+          setContent({...content, additional_files: newMaterial});
+          closeAllEducationalMaterialPopup();
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
+          setIsLoadingRequest(false);
+        });
+      }
+  }
+
   function openRemoveFilePopup(themeId, type) {
     setCurrentThemeId(themeId);
     setCurrentType(type);
     setIsRemoveFilePopupOpen(true);
+  }
+
+  function openRemoveMaterialPopup(themeId, type, materialId) {
+    setCurrentThemeId(themeId);
+    setCurrentType(type);
+    setCurrentMaterialId(materialId);
+    setIsRemoveMaterialPopupOpen(true);
   }
 
   function openAddMaterialPopup(themeId, type) {
@@ -154,6 +204,7 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
   function closeAllEducationalMaterialPopup() {
     setIsRemoveFilePopupOpen(false);
     setIsAddMaterialPopupOpen(false);
+    setIsRemoveMaterialPopupOpen(false);
   }
 
   React.useEffect(() => {
@@ -162,6 +213,7 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
     setIsShowItem(false);
     setCurrentChapterId("");
     setCurrentThemeId("");
+    setCurrentMaterialId("");
     setIsLoadingRequest(false);
     setIsShowRequestMessage({ isShow: false, text: "", type: "" });
     return () => {
@@ -170,6 +222,7 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
       setIsShowItem(false);
       setCurrentChapterId("");
       setCurrentThemeId("");
+      setCurrentMaterialId("");
       setIsLoadingRequest(false);
       setIsShowRequestMessage({ isShow: false, text: "", type: "" });
     };
@@ -208,6 +261,7 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
           hideRequestMessage={hideRequestMessage}
           onRemoveFile={openRemoveFilePopup}
           onAddMaterial={openAddMaterialPopup}
+          onRemoveMaterial={openRemoveMaterialPopup}
           />
         }
         {
@@ -222,10 +276,25 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
           />
         }
         {
+          isRemoveMaterialPopupOpen &&
+          <EducationalMaterialItemRemoveMaterialPopup
+          isOpen={isRemoveMaterialPopupOpen}
+          onClose={closeAllEducationalMaterialPopup}
+          onRemove={removeMaterial}
+          themeId={currentThemeId}
+          currentMaterialId={currentMaterialId}
+          type={currentType}
+          isLoading={isLoadingRequest}
+          />
+        }
+        {
           isAddMaterialPopupOpen &&
           <EducationalMaterialItemAddMaterialPopup
           isOpen={isAddMaterialPopupOpen}
           onClose={closeAllEducationalMaterialPopup}
+          content={content}
+          currentThemeId={currentThemeId}
+          onUpload={uploadMaterial}
           isLoading={isLoadingRequest}
           />
         }

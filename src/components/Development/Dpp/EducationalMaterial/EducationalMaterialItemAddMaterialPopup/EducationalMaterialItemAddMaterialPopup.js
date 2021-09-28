@@ -2,7 +2,7 @@ import React from 'react';
 import Popup from '../../../../Popup/Popup.js';
 import "./EducationalMaterialItemAddMaterialPopup.css";
 
-function EducationalMaterialItemAddMaterialPopup({ isOpen, onClose, isLoading }) {
+function EducationalMaterialItemAddMaterialPopup({ isOpen, onClose, content, currentThemeId, onUpload, isLoading }) {
 
   const [name, setName] = React.useState("");
   const [materialName, setMaterialName] = React.useState({ isShow: false, name: "", });
@@ -25,7 +25,11 @@ function EducationalMaterialItemAddMaterialPopup({ isOpen, onClose, isLoading })
 
   function handleSubmit(e) {
     e.preventDefault();
-    //onRemove(themeId, type);
+    const material = {
+      name: name,
+      file: materialFile.file
+    }
+    onUpload(content.type, currentThemeId, material);
   }
 
   React.useEffect(() => {
@@ -48,7 +52,6 @@ function EducationalMaterialItemAddMaterialPopup({ isOpen, onClose, isLoading })
     >
       <form className="popup__form popup__form_type_small" name="add-content-material-file" action="#" noValidate onSubmit={handleSubmit}>
         <h3 className="popup__title">Загрузка дополнительного материала</h3>
-        <p className="educational-material-item__documents-caption">Функция находится в разработке!</p>
         <ul className="add-material__list">
           <li className="add-material__item-input">
             <h5 className="add-material__input-name">Название материала</h5>
