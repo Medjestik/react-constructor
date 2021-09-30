@@ -1,0 +1,14 @@
+.export-program {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0px 0px 0px;
+}
+.export-program__title {
+  margin: 0px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 1.3;
+  text-align: left;
+  color: var(--title-color);
+}
