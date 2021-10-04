@@ -114,7 +114,7 @@ function Dpp({ loggedIn, history, pathname, windowWidth }) {
 
         <Switch>    
           <Route path="/main/development/dpp/approval" exact>
-            <Approval />
+            <Approval dppDescription={dppDescription} loggedIn={loggedIn} />
           </Route>
         </Switch>
 

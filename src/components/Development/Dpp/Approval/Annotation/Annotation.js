@@ -2,14 +2,12 @@ import React from 'react';
 import './Annotation.css';
 import TextareaAutosize from 'react-textarea-autosize';
 
-function Annotation() {
+function Annotation({ programData, onSave, isLoading, isShowRequestMessage }) {
 
   const [description, setDescription] = React.useState("");
   const [requirement, setRequirement] = React.useState("");
   const [objective, setObjective] = React.useState("");
   const [result, setResult] = React.useState("");
-
-  const isLoading = false;
 
   function handleChangeDescription(e) {
     setDescription(e.target.value);
@@ -30,13 +28,21 @@ function Annotation() {
   function handleSubmit(e) {
     e.preventDefault();
     const annotationData = {
-      description: description,
-      requirement: requirement,
-      objective: objective,
-      result: result,
+      annotationDescription: description,
+      annotationRequirements: requirement,
+      annotationTargets: objective,
+      annotationResults: result,
     }
+    onSave(annotationData);
     console.log(annotationData);
   }
+
+  React.useEffect(() => {
+    setDescription(programData.ishVersion.annotationDescription);
+    setRequirement(programData.ishVersion.annotationRequirements);
+    setObjective(programData.ishVersion.annotationTargets);
+    setResult(programData.ishVersion.annotationResults);
+  }, [programData]);
 
   return (
     <form className="annotation" onSubmit={handleSubmit}>
@@ -50,7 +56,7 @@ function Annotation() {
             id={`annotation__textarea-description`}
             name={`annotation__textarea-description`}
             placeholder="Введите описание программы..."
-            value={description}
+            value={description || ""}
             onChange={handleChangeDescription}
           >
           </TextareaAutosize>
@@ -62,7 +68,7 @@ function Annotation() {
             id={`annotation__textarea-requirement`}
             name={`annotation__textarea-requirement`}
             placeholder="Эта программа для вас, если вы..."
-            value={requirement}
+            value={requirement || ""}
             onChange={handleChangeRequirement}
           >
           </TextareaAutosize>
@@ -74,7 +80,7 @@ function Annotation() {
             id={`annotation__textarea-objective`}
             name={`annotation__textarea-objective`}
             placeholder="Введите цели и задачи освоения программы..."
-            value={objective}
+            value={objective || ""}
             onChange={handleChangeObjective}
           >
           </TextareaAutosize>
@@ -86,7 +92,7 @@ function Annotation() {
             id={`annotation__textarea-result`}
             name={`annotation__textarea-result`}
             placeholder="Введите результаты и перспективы освоения программы..."
-            value={result}
+            value={result || ""}
             onChange={handleChangeResult}
           >
           </TextareaAutosize>
@@ -94,6 +100,15 @@ function Annotation() {
       </ul>
 
       <button className={`btn btn_type_save annotation__btn-save ${isLoading ? "btn_type_loading" : ""}`} type="submit">{isLoading ? "Сохранение.." : "Сохранить"}</button>
+
+      {
+        isShowRequestMessage.isShow && isShowRequestMessage.type === "success" &&
+        <span className="request-node request-node_type_success">{isShowRequestMessage.text}</span>
+      }
+      {
+        isShowRequestMessage.isShow && isShowRequestMessage.type === "error" &&
+        <span className="request-node request-node_type_error">{isShowRequestMessage.text}</span>
+      }
 
     </form>
   );

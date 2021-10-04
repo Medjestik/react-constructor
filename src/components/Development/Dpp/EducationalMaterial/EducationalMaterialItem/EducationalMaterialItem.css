@@ -85,6 +85,8 @@
   border-radius: 10px;
   box-shadow: 0 2px 4px rgb(0 0 0 / 20%);
   padding: 20px;
+  display: flex;
+  align-items: center;
 }
 .educational-material-item__grid-item_type_one {
   grid-row-start: 1;
@@ -151,7 +153,7 @@
   color: var(--subtitle-color);
 }
 .educational-material-item__documents-link {
-  margin: 0px;
+  margin: 0px 10px 0px 0px;
   font-style: normal;
   font-weight: normal;
   font-size: 16px;
