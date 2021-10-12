@@ -199,7 +199,11 @@ function DefineNsiImg({ nsiId }) {
       case 51: /* Приказ Росстата */ 
         return (
           <img className="nsi-img" src={order} alt="иконка"></img>
-        )       
+        )
+      case 52: /* Локальный акт организации */ 
+        return (
+          <img className="nsi-img" src={organization} alt="иконка"></img>
+        )      
         default:
         return (<div>Тип не загрузился</div>)
     }

@@ -83,6 +83,46 @@
   top: -2px;
   z-index: 10000;
 }
+.chart-menu div[data-item ="sort"] span::before {
+  content: '';
+  background-image: url('../../../../../images/sort.png');
+  position: absolute;
+  left: 0px;
+  top: -2px;
+  z-index: 10000;
+}
+.chart-menu div[data-item ="pdf"] span::before {
+  content: '';
+  background-image: url('../../../../../images/export-pdf.png');
+  position: absolute;
+  left: 0px;
+  top: -2px;
+  z-index: 10000;
+}
+.chart-menu div[data-item ="png"] span::before {
+  content: '';
+  background-image: url('../../../../../images/export-png.png');
+  position: absolute;
+  left: 0px;
+  top: -2px;
+  z-index: 10000;
+}
+.chart-menu div[data-item ="word"] span::before {
+  content: '';
+  background-image: url('../../../../../images/export-word.png');
+  position: absolute;
+  left: 0px;
+  top: -2px;
+  z-index: 10000;
+}
+.chart-menu div[data-item ="justification"] span::before {
+  content: '';
+  background-image: url('../../../../../images/export-archive.png');
+  position: absolute;
+  left: 0px;
+  top: -2px;
+  z-index: 10000;
+}
 .chart-menu div[data-item ="addAbility"] span::before {
   content: '';
   background-image: url('../../../../../images/add-color.png');
@@ -154,6 +194,10 @@
   left: 0px;
   top: -2px;
   z-index: 10000;
+}
+.zoon-chart__btn-sort:hover {
+  opacity: .7;
+  cursor: pointer;
 }
 .zoon-chart__btn-control {
   margin: 30px 0px 0px 0px;

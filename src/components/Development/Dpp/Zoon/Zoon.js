@@ -6,7 +6,6 @@ import * as api from '../../../../utils/api.js';
 import ZoonChart from './ZoonChart/ZoonChart.js';
 import ZoonList from './ZoonList/ZoonList.js';
 import ZoonTypology from './ZoonTypology/ZoonTypology.js';
-import ZoonExport from './ZoonExport/ZoonExport.js';
 import Preloader from '../../../Preloader/Preloader.js';
 import EditNsiPopup from '../../../Popup/EditNsiPopup/EditNsiPopup.js';
 import RemoveNsiPopup from '../../../Popup/RemoveNsiPopup/RemoveNsiPopup.js';
@@ -140,7 +139,6 @@ function Zoon({ dppDescription, loggedIn, isEditRights }) {
             <Tab className="tab">В виде графа</Tab>
             <Tab className="tab">В виде списка</Tab>
             <Tab className="tab">Типология ДПП</Tab>
-            <Tab className="tab">Экспорт</Tab>
           </TabList>
           <TabPanel>
             <div className="zoon__container">
@@ -163,9 +161,6 @@ function Zoon({ dppDescription, loggedIn, isEditRights }) {
           </TabPanel>
           <TabPanel>
             <ZoonTypology dppDescription={dppDescription} loggedIn={loggedIn} isEditRights={isEditRights} />
-          </TabPanel>
-          <TabPanel>
-            <ZoonExport dppDescription={dppDescription} /> 
           </TabPanel>
         </Tabs>
       }

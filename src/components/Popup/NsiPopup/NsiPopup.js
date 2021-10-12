@@ -43,6 +43,7 @@ import ISOPopup from './ISOPopup/ISOPopup.js';
 import PNSTPopup from './PNSTPopup/PNSTPopup.js';
 import OfficialSitePopup from './OfficialSitePopup/OfficialSitePopup.js';
 import TextbookPopup from './TextbookPopup/TextbookPopup.js';
+import LocalOrganizationAct from './LocalOrganizationAct/LocalOrganizationAct.js';
 import DefineNsiImg from '../../Define/DefineNsiImg/DefineNsiImg.js';
 
 function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {       
@@ -88,6 +89,7 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {
   const [isPNSTPopupOpen, setIsPNSTPopupOpen] = React.useState(false);
   const [isOfficialSitePopupOpen, setIsOfficialSitePopupOpen] = React.useState(false);
   const [isTextbookPopupPopupOpen, setIsTextbookPopupPopupOpen] = React.useState(false);
+  const [isLocalOrganizationActPopupOpen, setIsLocalOrganizationActPopupOpen] = React.useState(false);
   const [currentElemId, setCurrentElemId] = React.useState(0);
   const [searchText, setSearchText] = React.useState('');
   const [filteredNsiTypes, setFilteredNsiTypes] = React.useState([]);
@@ -369,6 +371,12 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {
     setCurrentElemId(id);
   }
 
+  function localOrganizationActPopupOpen(id) {
+    setIsLocalOrganizationActPopupOpen(true);
+    setCurrentElemId(id);
+  }
+
+
   function closeAllNsiPopup() {
     setIsFederalLawPopupOpen(false);
     setIsRussiaLawPopupOpen(false);
@@ -412,6 +420,7 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {
     setIsPNSTPopupOpen(false);
     setIsOfficialSitePopupOpen(false);
     setIsTextbookPopupPopupOpen(false);
+    setIsLocalOrganizationActPopupOpen(false);
   }
 
   function defineNsiPopup(type) {  
@@ -583,9 +592,13 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {
       case 51: /* Приказ Росстата */ 
         return (
           <button className="nsi-popup__item-btn" type="button" onClick={() => orderRosStatPopupOpen(type.id)}>Выбрать</button>
-        )    
+        )
+      case 52: /* Локальный акт организации */ 
+        return (
+          <button className="nsi-popup__item-btn" type="button" onClick={() => localOrganizationActPopupOpen(type.id)}>Выбрать</button>
+        )   
       default:
-        return (<div>Тип не загрузился</div>)
+        return (<div>Тип не загрузился</div>) 
     }
   }
 
@@ -1211,6 +1224,20 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {
       isTextbookPopupPopupOpen &&
       <TextbookPopup
         isOpen={isTextbookPopupPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
+
+    {
+      isLocalOrganizationActPopupOpen &&
+      <LocalOrganizationAct
+        isOpen={isLocalOrganizationActPopupOpen}
         onClose={closeAllNsiPopup}
         nsi={emptyNsi}
         onSave={onAdd}

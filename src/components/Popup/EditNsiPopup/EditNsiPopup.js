@@ -41,6 +41,7 @@ import ISOPopup from '../NsiPopup/ISOPopup/ISOPopup.js';
 import PNSTPopup from '../NsiPopup/PNSTPopup/PNSTPopup.js';
 import OfficialSitePopup from '../NsiPopup/OfficialSitePopup/OfficialSitePopup.js';
 import TextbookPopup from '../NsiPopup/TextbookPopup/TextbookPopup.js';
+import LocalOrganizationAct from '../NsiPopup/LocalOrganizationAct/LocalOrganizationAct.js';
 
 function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
 
@@ -616,7 +617,20 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
             type={"edit"}
             isLoading={isLoading}
           />
-        )       
+        )
+      case 52: /* Локальный акт организации */ 
+        return (
+          <LocalOrganizationAct
+            isOpen={isOpen}
+            onClose={onClose}
+            nsi={nsi}
+            onSave={onEdit}
+            id={nsi.id}
+            printDate={printDate}
+            type={"edit"}
+            isLoading={isLoading}
+          />
+        )         
       default:
         return (<div>Тип не загрузился</div>)
     }

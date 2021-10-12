@@ -1,20 +1,25 @@
 import React from 'react';
-import './SwapChildrenPopup.css';
+import './SortElementPopup.css';
 import Popup from '../../../../Popup/Popup.js';
 import { DragDropContext } from 'react-beautiful-dnd';
-import SwapChildrenColumn from './SwapChildrenColumn/SwapChildrenColumn.js';
+import SortElementColumn from './SortElementColumn/SortElementColumn.js';
 
-function SwapChildrenPopup({ isOpen, onClose, nodeChildren, onSave, isLoadingRequest }) { 
+function SortElementPopup({ isOpen, onClose, nodes, onSave, isLoadingRequest }) {
 
   const [data, setData] = React.useState([]);
 
   React.useEffect(() => {
+    let elements = nodes.filter((elem) => ((elem.pid === null) || (elem.pid.length < 2)));
+    let elementsWithoutThrough = elements.filter((elem) => (elem.id !== "th"));
+    elementsWithoutThrough.sort(function(a, b) {
+      return parseInt(a.position) - parseInt(b.position);
+    });
 
-    const newColumnIds = nodeChildren.map((elem) => {
+    const newColumnIds = elementsWithoutThrough.map((elem) => {
       return elem.id.toString();
     })
 
-    const dataWithStringIds = nodeChildren.map((elem) => {
+    const dataWithStringIds = nodes.map((elem) => {
       return { ...elem, stringIds: elem.id.toString() } ;
     })
 
@@ -27,7 +32,7 @@ function SwapChildrenPopup({ isOpen, onClose, nodeChildren, onSave, isLoadingReq
 
     setData(newData);
     
-  }, [nodeChildren]);
+  }, [nodes]);
 
   function onDragEnd(result) {
     const { destination, source, draggableId } = result;
@@ -76,14 +81,14 @@ function SwapChildrenPopup({ isOpen, onClose, nodeChildren, onSave, isLoadingReq
       onClose={onClose}
     >
       <form className="popup__form popup__form_type_large" name="new-link-zoon-form" action="#" noValidate onSubmit={handleSubmit}>
-        <h3 className="popup__title">Упорядочивание дочерних элементов</h3>
+        <h3 className="popup__title">Сортировка элементов верхнего уровня</h3>
         <p className="popup__subtitle">Расставьте элементы в правильном порядке, перетаскивая их с помощью мыши.</p>
         {
           data.length === 0 ?
           <div></div>
           :
           <DragDropContext onDragEnd={onDragEnd} >
-            <SwapChildrenColumn 
+            <SortElementColumn 
               parts={data.column.partIds.map((partId) => { 
                 let part = {};
                 data.parts.find(element => {
@@ -98,11 +103,11 @@ function SwapChildrenPopup({ isOpen, onClose, nodeChildren, onSave, isLoadingReq
           </DragDropContext>
         }
 
-        <button className={`btn btn_type_save sort-element__btn-save ${isLoadingRequest ? "btn_type_loading" : ""}`} type="submit">{isLoadingRequest ? "Сохранение.." : "Сохранить"}</button>
+        <button className={`btn btn_type_save swap-children__btn-save ${isLoadingRequest ? "btn_type_loading" : ""}`} type="submit">{isLoadingRequest ? "Сохранение.." : "Сохранить"}</button>
               
       </form>
     </Popup>
   )
 }
 
-export default SwapChildrenPopup;
+export default SortElementPopup;

@@ -854,6 +854,19 @@ export const swapChildren = ({ token, zoonVersion, nodeId, children }) => {
   .then(res => handleResponse(res))
 };
 
+export const sortElement = ({ token, zoonVersion, nodeId, elements }) => {
+  return fetch(`${API_URL}/zuns/${zoonVersion}/reorder_upper_level`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ elements })
+  })
+  .then(res => handleResponse(res))
+};
+
 export const changeTypologyKnowledgeOrder = ({ token, zoonVersion, dtpId, order }) => {
   return fetch(`${API_URL}/zuns/${zoonVersion}/dtps/${dtpId}/reorder`, {
     method: 'POST',

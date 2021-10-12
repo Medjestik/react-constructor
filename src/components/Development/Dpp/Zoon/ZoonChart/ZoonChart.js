@@ -11,6 +11,7 @@ import NsiPopup from '../../../../Popup/NsiPopup/NsiPopup.js';
 import * as api from '../../../../../utils/api.js';
 import ErrorDragAndDropPopup from '../ErrorDragAndDropPopup/ErrorDragAndDropPopup.js';
 import SwapChildrenPopup from '../SwapChildrenPopup/SwapChildrenPopup.js';
+import SortElementPopup from '../SortElementPopup/SortElementPopup.js';
 
 function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, onRemoveNsi, zoonLinks, typologyParts, isEditRights }) {
 
@@ -32,6 +33,7 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
   const [isSwapChildrenPopupOpen, setIsSwapChildrenPopupOpen] = React.useState(false);
   const [nodeChildren, setNodeChildren] = React.useState([]);
   const [currentActionType, setCurrentActionType] = React.useState("");
+  const [isSortElementPopupOpen, setIsSortElementPopupOpen] = React.useState(false);
 
   const divRef = React.createRef();
   OrgChart.templates.myTemplate = Object.assign({}, OrgChart.templates.ana);
@@ -45,7 +47,7 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
   OrgChart.templates.myTemplate.field_name = '<foreignObject x="10" y="34" width="365" height="80"><p class="field__name" style="margin: 0px;">{val}</p></foreignObject>';
   OrgChart.templates.myTemplate.field_title = '<foreignObject x="10" y="10" width="365" height="24"><p class="field__title" style="margin: 0px;">{val}</p></foreignObject>';
 
-  OrgChart.templates.myTemplate.tooltip = '<foreignObject x="10" y="-35" width="365" height="80"><p class="field__tooltip">{val}</p></foreignObject>';
+  //OrgChart.templates.myTemplate.tooltip = '<foreignObject x="10" y="-35" width="365" height="80"><p class="field__tooltip">{val}</p></foreignObject>';
 
   OrgChart.templates.myTemplate.valid = '<foreignObject x="330" y="8" width="22" height="22"><img class="field__warning" style="opacity: {val}" src="https://edu.emiit.ru/warning.png" alt="кнопка меню" control-node-menu-id="{id}"></img></foreignObject>';
 
@@ -104,6 +106,17 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
         edit: { text: "Edit" },
         add: { text: "Add" },
         remove: { text: "Remove" }
+      },
+      menu: {
+        sort: { text: "Сортировка", icon: "", onClick: sortElementPopupOpen },
+        pdf: { text: "Экспорт PDF", icon: "" },
+        png: { text: "Экспорт PNG", icon: "" },
+        word: { text: "Экспорт Word", icon: "", onClick: function () {
+          window.open(`https://constructor.emiit.ru:8887/dpps/${dppDescription.id}/export_zun/${dppDescription.zun_version_id}/word`, '_blank');
+        } },
+        justification: { text: "Экспорт обоснования", icon: "", onClick: function () {
+          window.open(`https://constructor.emiit.ru:8887/dpps/${dppDescription.id}/export_zun_justification`, '_blank');
+        } }
       },
       tags: {
         "competence": {
@@ -609,13 +622,37 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
       }
   }
 
+  function sortElementPopupOpen() {
+    setIsErrorRequest(false);
+    setIsSortElementPopupOpen(true);
+  }
+
+  function handleSortElement(elements) {
+    setIsLoadingRequest(true);
+    const token = localStorage.getItem("token");
+    api.sortElement({ token: token, zoonVersion: dppDescription.zun_version_id, nodeId: currentNodeId, elements: elements })
+    .then(() => {
+      elements.forEach((childId, i) => {
+        nodes.find((node) => (node.id === childId ? node.position = i + 1 : false));
+      })
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => {
+      closeZoonPopups();
+      zoonChart.draw(OrgChart.action.init);
+      setIsLoadingRequest(false);
+    });
+  }
+
   function handleSwapChildren(children) {
     setIsLoadingRequest(true);
     const token = localStorage.getItem("token");
     api.swapChildren({ token: token, zoonVersion: dppDescription.zun_version_id, nodeId: currentNodeId, children: children })
     .then(() => {
       children.forEach((childId, i) => {
-         nodes.find((node) => (node.id === childId ? node.position = i + 1 : false));
+        nodes.find((node) => (node.id === childId ? node.position = i + 1 : false));
       })
     })
     .catch((err) => {
@@ -634,7 +671,6 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
     setCurrentActionType("add");
   }
 
-  
   function handleBuildCompetence(zoon, competence, nodesId) {
     const token = localStorage.getItem("token");
     setIsLoadingRequest(true);
@@ -695,6 +731,7 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
     setIsRemoveLinkPopupOpen(false);
     setIsBuildCompetencePopupOpen(false);
     setIsSwapChildrenPopupOpen(false);
+    setIsSortElementPopupOpen(false);
   }
 
   return (
@@ -709,7 +746,7 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
           <button className="btn btn_type_add zoon-chart__btn_type_build-competence" onClick={buildCompetencePopupOpen}>Сформировать компетенцию</button>
         </div>
       }
-      <div id="tree" className="zoon-chart" ref={divRef}></div>
+      <div id="tree" className="zoon-chart" ref={divRef}></div> 
     </div>
 
     {
@@ -829,6 +866,18 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
       onClose={closeZoonPopups}
       nodeChildren={nodeChildren}
       onSave={handleSwapChildren}
+      isLoadingRequest={isLoadingRequest}
+      />
+    }
+
+    {
+      isSortElementPopupOpen
+      &&
+      <SortElementPopup
+      isOpen={isSortElementPopupOpen}
+      onClose={closeZoonPopups}
+      nodes={nodes}
+      onSave={handleSortElement}
       isLoadingRequest={isLoadingRequest}
       />
     }
