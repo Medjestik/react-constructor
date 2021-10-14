@@ -2,7 +2,7 @@ import React from 'react';
 import './Justification.css';
 import JustificationItem from '../JustificationItem/JustificationItem.js';
 
-function Justification({ nsi, onChooseJustificationType, onChangeExpertOpinion, onChangeNsiNote, onChooseNsi, onSwapType, addNsiPopupOpen, onEditNsi, onRemoveNsi, currentActionType, currentNode, isEditRights }) {
+function Justification({ nsi, type, onChooseJustificationType, onChangeExpertOpinion, onChangeNsiNote, onChooseNsi, onSwapType, addNsiPopupOpen, onEditNsi, onRemoveNsi, currentActionType, currentNode, isEditRights }) {
 
   const [isJustificationType, setIsJustificationType] = React.useState("");
   const [isExpertOpinion, setIsExpertOpinion] = React.useState("");
@@ -104,7 +104,7 @@ function Justification({ nsi, onChooseJustificationType, onChangeExpertOpinion, 
   return (
     <div className="popup__justification">
       <h5 className="popup__title add-node__title">Обоснование</h5>
-      <p className="popup__subtitle add-node__subtitle">Выберите на основе какой информации формируется навык</p>
+      <p className="popup__subtitle add-node__subtitle">Выберите на основе какой информации формируется {type || ""}</p>
       <ul className="justification-choose">
         <li key="nsi" className="justification-radio">
           <label className="radio">

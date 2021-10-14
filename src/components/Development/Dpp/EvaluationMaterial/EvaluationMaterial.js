@@ -12,8 +12,8 @@ function EvaluationMaterial({ dppDescription, loggedIn, isEditRights }) {
       <Tabs className="tabs">
 
         <TabList className="tab-list">
-          <Tab className="tab">Проектирование оценочных материалов к знаниям</Tab>
-          <Tab className="tab">Проектирование оценочных материалов к умениям и навыкам</Tab>
+          <Tab className="tab">Набор тестов</Tab>
+          <Tab className="tab">Практические задания</Tab>
         </TabList>
 
         <TabPanel>

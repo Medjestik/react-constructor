@@ -24,7 +24,7 @@
   text-align: center;
   letter-spacing: 1.2px;
   padding: 15px;
-  min-width: 228px;
+  width: 228px;
   outline: none;
   transition: .3s ease-in-out;
 }

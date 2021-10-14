@@ -5,15 +5,17 @@ import TinyEditor from '../../../../TinyEditor/TinyEditor.js';
 import AddAssessmentItemPopup from '../AddAssessmentItemPopup/AddAssessmentItemPopup.js';
 import AddAssessmentObjectPopup from '../AddAssessmentObjectPopup/AddAssessmentObjectPopup.js';
 import PracticalTaskSubjectItem from './PracticalTaskSubjectItem/PracticalTaskSubjectItem.js';
+import EditAssessmentObjectPopup from '../EditAssessmentObjectPopup/EditAssessmentObjectPopup.js';
 import RemoveAssessmentObjectPopup from '../RemoveAssessmentObjectPopup/RemoveAssessmentObjectPopup.js';
 import RemoveAssessmentItemPopup from '../RemoveAssessmentItemPopup/RemoveAssessmentItemPopup.js';
 import ChooseNsiTaskPopup from '../ChooseNsiTaskPopup/ChooseNsiTaskPopup.js';
 import NsiPopup from '../../../../Popup/NsiPopup/NsiPopup.js';
-import NsiTaskItem from '../NsiTaskItem/NsiTaskItem.js';
+//import NsiTaskItem from '../NsiTaskItem/NsiTaskItem.js';
 import TechnicalProvisionTaskPopup from '../TechnicalProvisionTaskPopup/TechnicalProvisionTaskPopup.js';
 import ChooseMTOPopup from '../../../../Popup/ChooseMTOPopup/ChooseMTOPopup.js';
 import MTOTaskItem from '../MTOTaskItem/MTOTaskItem.js';
 import RemoveMTOPopup from '../../../../Popup/RemoveMTOPopup/RemoveMTOPopup.js';
+import AdditionalMaterial from '../AdditionalMaterial/AdditionalMaterial.js';
 
 function PracticalTask({ 
   currentTask, 
@@ -25,7 +27,8 @@ function PracticalTask({
   onEdit, 
   onAddSubject, 
   onAddObject, 
-  onRemoveSubject, 
+  onRemoveSubject,
+  onEditObject,
   onRemoveObject,
   nsi,
   nsiTypes,
@@ -40,6 +43,8 @@ function PracticalTask({
   onRemoveMTO,
   onSelectMTO,
   onUnSelectMTO,
+  onAddAdditionalMaterial,
+  onRemoveAdditionalMaterial,
   isLoadingRequest 
 }) {
 
@@ -50,9 +55,10 @@ function PracticalTask({
   const [timeError, setTimeError] = React.useState(false);
   const [isOpenAddAssessmentItemPopup, setIsOpenAddAssessmentItemPopup] = React.useState(false);
   const [isOpenAddAssessmentObjectPopup, setIsOpenAddAssessmentObjectPopup] = React.useState(false);
+  const [isOpenEditAssessmentObjectPopup, setIsOpenEditAssessmentObjectPopup] = React.useState(false);
   const [isOpenRemoveAssessmentObjectPopup, setIsOpenRemoveAssessmentObjectPopup] = React.useState(false);
   const [isOpenRemoveAssessmentItemPopup, setIsOpenRemoveAssessmentItemPopup] = React.useState(false);
-  const [nsiTask, setNsiTask] = React.useState([]);
+  //const [nsiTask, setNsiTask] = React.useState([]);
   const [currentSubject, setCurrentSubject] = React.useState({});
   const [currentObject, setCurrentObject] = React.useState({});
   const [isOpenChooseNsiTaskPopup, setIsOpenChooseNsiTaskPopup] = React.useState(false);
@@ -64,10 +70,11 @@ function PracticalTask({
   const [currentActionType, setCurrentActionType] = React.useState("");
   const [isOpenRemoveMTOPopup, setIsOpenRemoveMTOPopup] = React.useState(false);
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
+  const [currentAdditionalMaterial, setCurrentAdditionalMaterial] = React.useState([]);
 
-  function unSelectNsi(elem) {
+  /*function unSelectNsi(elem) {
     onUnSelectNsi(currentTask.id, elem.id);
-  }
+  }*/
 
   function openEditMTOPopup(elem) {
     setCurrentMTO(elem);
@@ -93,9 +100,9 @@ function PracticalTask({
     setIsOpenAddNsiPopup(true);
   }
 
-  function openChooseNsiTaskPopup() { 
+  /*function openChooseNsiTaskPopup() { 
     setIsOpenChooseNsiTaskPopup(true);
-  }
+  }*/
 
   function openAddAssessmentItemPopup() { 
     setIsOpenAddAssessmentItemPopup(true);
@@ -106,10 +113,16 @@ function PracticalTask({
     setIsOpenRemoveAssessmentItemPopup(true);
   }
 
+  function openEditAssessmentObjectPopup(subject, object) {
+    setCurrentSubject(subject);
+    setCurrentObject(object);
+    setIsOpenEditAssessmentObjectPopup(true);
+  }
+
   function openRemoveAssessmentObjectPopup(subject, object) {
     setCurrentSubject(subject);
     setCurrentObject(object);
-    setIsOpenRemoveAssessmentObjectPopup(true);
+    setIsOpenRemoveAssessmentObjectPopup(true); 
   }
 
   function openAddAssessmentObjectPopup(subject) {
@@ -120,6 +133,7 @@ function PracticalTask({
   function closeAddAddAssessmentItemPopups() {
     setIsOpenAddAssessmentItemPopup(false);
     setIsOpenAddAssessmentObjectPopup(false);
+    setIsOpenEditAssessmentObjectPopup(false);
     setIsOpenRemoveAssessmentObjectPopup(false);
     setIsOpenRemoveAssessmentItemPopup(false);
     setIsOpenChooseNsiTaskPopup(false);
@@ -188,8 +202,9 @@ function PracticalTask({
     setDescription(currentTask.description || "");
     setPlace(currentTask.place || "");
     setTime(currentTask.time || "");
-    setNsiTask(currentTask.nsis);
+    //setNsiTask(currentTask.nsis);
     setMTOTask(currentTask.mtos);
+    setCurrentAdditionalMaterial(currentTask.additional_files);
     return () => {
       setDescription("");
       setPlace("");
@@ -197,9 +212,10 @@ function PracticalTask({
       setIsBlockSubmitButton(false);
       setCurrentSubject({});
       setCurrentObject({});
-      setNsiTask([]);
+      //setNsiTask([]);
       setMTOTask([]);
       setCurrentMTO({});
+      setCurrentAdditionalMaterial([]);
     };
   // eslint-disable-next-line
   }, [currentTask]);
@@ -213,8 +229,9 @@ function PracticalTask({
         <TabList className="tab-list">
           <Tab className="tab">Описание</Tab>
           <Tab disabled={currentTaskType === "add" ? true : false} className="tab">Критерии оценки</Tab>
-          <Tab disabled={currentTaskType === "add" ? true : false} className="tab">Источники информации для выполнения</Tab>
-          <Tab disabled={currentTaskType === "add" ? true : false} className="tab">Материально-техническое обеспечение</Tab>
+          { /*<Tab disabled={currentTaskType === "add" ? true : false} className="tab">Источники информации</Tab> */}
+          <Tab disabled={currentTaskType === "add" ? true : false} className="tab">Дополнительные материалы</Tab>
+          <Tab disabled={currentTaskType === "add" ? true : false} className="tab">МТО</Tab>
         </TabList>
         <TabPanel>
           <p className="main__subtitle">Добавление задания на применение навыков в реальных или модельных условиях (Практическое задание).</p>
@@ -273,12 +290,16 @@ function PracticalTask({
               item={item}
               onAddObject={openAddAssessmentObjectPopup}
               onRemoveSubject={openRemoveAssessmentItemPopup}
+              onEditObject={openEditAssessmentObjectPopup}
               onRemoveObject={openRemoveAssessmentObjectPopup}
               />
             ))
           }
           </ul>
-        </TabPanel> 
+        </TabPanel>
+        {
+          /*
+        
         <TabPanel>
           <button className="btn btn_type_choose practical-task__btn-add" type="button" onClick={openChooseNsiTaskPopup}>Выбрать источники НСИ</button>
           <h3 className="practical-task__subtitle-count">{`Источников добавлено: ${nsiTask.length}`}</h3>
@@ -293,6 +314,17 @@ function PracticalTask({
               ))
             }
           </ul>
+        </TabPanel>
+        */
+        }
+        <TabPanel> 
+          <AdditionalMaterial
+            additionalMaterial={currentAdditionalMaterial}
+            onAddAdditionalMaterial={onAddAdditionalMaterial}
+            onRemoveAdditionalMaterial={onRemoveAdditionalMaterial}
+            currentTask={currentTask}
+            isLoadingRequest={isLoadingRequest}
+          />
         </TabPanel>
         <TabPanel>
           <button className="btn btn_type_choose practical-task__btn-add" type="button" onClick={openChooseMTOPopup}>Выбрать МТО</button>
@@ -336,6 +368,19 @@ function PracticalTask({
       currentTask={currentTask}
       currentSubject={currentSubject}
       onAddObject={onAddObject}
+      isLoadingRequest={isLoadingRequest}
+      />
+    }
+
+    {
+      isOpenEditAssessmentObjectPopup &&
+      <EditAssessmentObjectPopup
+      isOpen={isOpenEditAssessmentObjectPopup} 
+      onClose={closeAddAddAssessmentItemPopups}
+      currentTask={currentTask}
+      currentSubject={currentSubject}
+      currentObject={currentObject}
+      onConfirm={onEditObject}
       isLoadingRequest={isLoadingRequest}
       />
     }

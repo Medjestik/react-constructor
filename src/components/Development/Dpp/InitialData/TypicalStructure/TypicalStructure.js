@@ -8,6 +8,7 @@ function TypicalStructure({ typologyParts, initialDataVersion, loggedIn, onEdit,
   const [currentTypologiesParts, setCurrentTypologiesParts] = React.useState(typologyParts);
   const [addStructurePartName, setAddStructurePartName] = React.useState('');
   const [showAddFormStructurePart, setShowAddFormStructurePart] = React.useState(false);
+  const [isBlockSaveButton, setIsBlockSaveButton] = React.useState(false);
 
 
   function handleChangeStructurePartName(e) {
@@ -19,7 +20,7 @@ function TypicalStructure({ typologyParts, initialDataVersion, loggedIn, onEdit,
   }
 
   function handleAddStructurePart() {
-    
+    setIsBlockSaveButton(true);
     const token = localStorage.getItem("token");
     if (loggedIn) {
       api.createStructurePart({ 
@@ -29,12 +30,15 @@ function TypicalStructure({ typologyParts, initialDataVersion, loggedIn, onEdit,
       })
       .then((res) => {
         setAddStructurePartName('');
-        handleShowAddFormStructurePart();
         setCurrentTypologiesParts([...currentTypologiesParts, res]);
+        handleShowAddFormStructurePart();
       })
       .catch((err) =>{
         console.log(err);
       })
+      .finally(() => {
+        setIsBlockSaveButton(false);
+      });
     }
   }
 
@@ -70,7 +74,7 @@ function TypicalStructure({ typologyParts, initialDataVersion, loggedIn, onEdit,
           onChange={handleChangeStructurePartName}
           >
           </input>
-          <button className={`btn btn_type_save typical-structure__btn-type-add ${addStructurePartName.length < 1 ? "btn_type_block" : ""}`} type="button" onClick={handleAddStructurePart}>Добавить</button>
+          <button className={`btn btn_type_save typical-structure__btn-type-add ${((addStructurePartName.length < 1) || (isBlockSaveButton)) ? "btn_type_block" : ""}`} type="button" onClick={handleAddStructurePart}>{isBlockSaveButton ? "Добавление.." : "Добавить"}</button>
         </div>
       </div>
 

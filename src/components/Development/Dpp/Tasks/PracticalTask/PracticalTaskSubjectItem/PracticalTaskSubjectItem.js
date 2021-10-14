@@ -1,7 +1,7 @@
 import React from 'react';
 import { Collapse } from 'react-collapse';
 
-function PracticalTaskSubjectItem({ item, onAddObject, onRemoveSubject, onRemoveObject }) {
+function PracticalTaskSubjectItem({ item, onAddObject, onRemoveSubject, onEditObject, onRemoveObject }) {
   
   const [isShowObjects, setIsShowObjects] = React.useState(false);
 
@@ -23,6 +23,7 @@ function PracticalTaskSubjectItem({ item, onAddObject, onRemoveSubject, onRemove
           {
             item.objects.map((object) => (
               <li key={`${object.id}o`} className="practical-task__object-item">
+                <button className="practical-task__btn-edit" type="button" onClick={() => onEditObject(item, object)}></button>
                 <button className="practical-task__btn-delete" type="button" onClick={() => onRemoveObject(item, object)}></button>
                 <h5 className="practical-task__object-name">{object.name}</h5>
                 <p className="practical-task__object-description">{object.modelAnswer}</p>

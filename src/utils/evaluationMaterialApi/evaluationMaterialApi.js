@@ -171,6 +171,20 @@ export const addAssessmentObject = ({ token, omId, taskId, subjectId, object }) 
   .then(res => handleResponse(res));
 };
 
+
+export const editObject = ({ token, omId, taskId, subjectId, object }) => {
+  return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/subjects/${subjectId}/object/${object.id}/update`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ object })
+  })
+  .then(res => handleResponse(res));
+};
+
 export const removeObject = ({ token, omId, taskId, subjectId, objectId }) => {
   return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/subjects/${subjectId}/object/${objectId}/destroy`, {
     method: 'POST', 
@@ -182,7 +196,6 @@ export const removeObject = ({ token, omId, taskId, subjectId, objectId }) => {
   })
   .then(res => handleResponse(res));
 };
-
 
 export const selectTaskNsi = ({ token, omId, taskId, nsis }) => {
   return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/nsis/select`, {
@@ -264,6 +277,31 @@ export const selectTaskMTO = ({ token, omId, taskId, mtos }) => {
 
 export const unSelectTaskMTO = ({ token, omId, taskId, mtoId }) => {
   return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/mtos/${mtoId}/unselect`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+  .then(res => handleResponse(res));
+};
+
+export const uploadAdditionalMaterial = ({ token, omId, taskId, material }) => {
+  return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/additional_files`, {
+    method: 'POST', 
+    headers: {
+      "Accept": "application/json",
+      //"Content-Type": "multipart/form-data",
+      'Authorization': `Bearer ${token}`,
+    },
+    body: material,
+  })
+  .then(res => handleResponse(res));
+};
+
+export const removeAdditionalMaterial = ({ token, omId, taskId, materialId }) => {
+  return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/additional_files/${materialId}/destroy`, {
     method: 'POST', 
     headers: {
       'Accept': 'application/json',

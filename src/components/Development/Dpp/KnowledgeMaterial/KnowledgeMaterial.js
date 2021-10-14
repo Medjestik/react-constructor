@@ -33,7 +33,6 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
   });
   const [isCreateNewQuestion, setIsCreateNewQuestion] = React.useState(false);
 
-  console.log(currentQuestions);
 
   function getKnowledges() {
     const token = localStorage.getItem("token");
@@ -41,7 +40,6 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
       setIsLoadingKnowledges(true);
       evaluationMaterialApi.getKnowledges({ token: token, dppId: dppDescription.id, omId: dppDescription.om_version_id })
         .then((res) => {
-          console.log(res);
           setKnowledges(res.knowledges);
           setQuestionTypes(res.questionTypes);
         })

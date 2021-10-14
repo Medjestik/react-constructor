@@ -87,6 +87,54 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
     setIsEditNsiPopupOpen(true);
   }
 
+  function handleUploadAdditionalMaterial(material, closePopup) {
+    setIsLoadingRequest(true);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      const formData = new FormData();
+      formData.append('file', material.file);
+      formData.append('name', material.name);
+      evaluationMaterialApi.uploadAdditionalMaterial({ token: token, omId: dppDescription.om_version_id, taskId: currentTask.id, material: formData })
+        .then((res) => {
+          const indexTask = tasks.indexOf(tasks.find((elem) => (elem.id === currentTask.id)));
+          const findTask = tasks[indexTask];
+          const newTask = {...findTask, additional_files: [...findTask.additional_files, res]};
+          setTasks([...tasks.slice(0, indexTask), newTask, ...tasks.slice(indexTask + 1)]);
+          setCurrentTask(newTask);
+          closePopup();
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setIsLoadingRequest(false);
+        });
+    }
+  }
+
+  function handleRemoveAdditionalMaterial(materialId, closePopup) {
+    setIsLoadingRequest(true);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      evaluationMaterialApi.removeAdditionalMaterial({ token: token, omId: dppDescription.om_version_id, taskId: currentTask.id, materialId: materialId})
+        .then((res) => {
+          const indexTask = tasks.indexOf(tasks.find((elem) => (elem.id === currentTask.id)));
+          const findTask = tasks[indexTask];
+          const newFiles = findTask.additional_files.filter((file) => file.id !== res);
+          const newTask = {...findTask, additional_files: newFiles};
+          setTasks([...tasks.slice(0, indexTask), newTask, ...tasks.slice(indexTask + 1)]);
+          setCurrentTask(newTask);
+          closePopup();
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setIsLoadingRequest(false);
+        });
+    }
+  }
+
   function handleAddMTO(mto, closePopup) {
     const token = localStorage.getItem("token");
     setIsLoadingRequest(true);
@@ -107,7 +155,7 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
     }
   }
 
-    function handleEditMTO(mto, mtoId, closePopup) {
+  function handleEditMTO(mto, mtoId, closePopup) {
     setIsLoadingRequest(true);
     const token = localStorage.getItem("token");
     if (loggedIn) {
@@ -305,6 +353,40 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
       }
   }
 
+  function handleEditAssessmentObject(taskId, subjectId, object, closePopup) {
+    setIsLoadingRequest(true);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      evaluationMaterialApi.editObject({ 
+        token: token, 
+        omId: dppDescription.om_version_id, 
+        taskId: taskId, 
+        subjectId: subjectId, 
+        object: object
+      })
+        .then((res) => {
+          const indexTask = tasks.indexOf(tasks.find((elem) => (elem.id === taskId)));
+          const findTask = tasks[indexTask];
+          const indexSubject = findTask.subjects.indexOf(findTask.subjects.find((elem) => (elem.id === subjectId)));
+          const findSubject = findTask.subjects[indexSubject];
+          const indexObject = findSubject.objects.indexOf(findSubject.objects.find((elem) => (elem.id === object.id)));
+          const newObjects = [...findSubject.objects.slice(0, indexObject), res, ...findSubject.objects.slice(indexObject + 1)];
+          const newSubject = {...findSubject, objects: newObjects};
+          const newSubjects = ([...tasks[indexTask].subjects.slice(0, indexSubject), newSubject, ...tasks[indexTask].subjects.slice(indexSubject + 1)]);
+          const newTask = { ...findTask, subjects: newSubjects };
+          setTasks([...tasks.slice(0, indexTask), newTask, ...tasks.slice(indexTask + 1)]);
+          setCurrentTask(newTask);
+          closePopup();
+        })
+        .catch((err) => {
+            console.error(err);
+        })
+        .finally(() => {
+          setIsLoadingRequest(false);
+        });
+      }
+  }
+
   function handleRemoveAssessmentObject(taskId, subjectId, objectId, closePopup) {
     setIsLoadingRequest(true);
     const token = localStorage.getItem("token");
@@ -480,7 +562,6 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
       setIsLoadingTasks(true);
       evaluationMaterialApi.getTask({ token: token, dppId: dppDescription.id, omId: dppDescription.om_version_id })
         .then((res) => {
-          console.log(res);
           setTasks(res.tasks);
           setSkills(res.skills);
           setAbilities(res.abilities);
@@ -575,6 +656,7 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
       onAddSubject={handleAddAssessmentItem}
       onAddObject={handleAddAssessmentObject}
       onRemoveSubject={handleRemoveAssessmentItem}
+      onEditObject={handleEditAssessmentObject}
       onRemoveObject={handleRemoveAssessmentObject}
       nsi={nsi}
       nsiTypes={nsiTypes}
@@ -589,6 +671,8 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
       onRemoveMTO={handleRemoveMTO}
       onSelectMTO={handleSelectTaskMTO}
       onUnSelectMTO={handleUnSelectTaskMTO}
+      onAddAdditionalMaterial={handleUploadAdditionalMaterial}
+      onRemoveAdditionalMaterial={handleRemoveAdditionalMaterial}
       isLoadingRequest={isLoadingRequest}
       />
     }

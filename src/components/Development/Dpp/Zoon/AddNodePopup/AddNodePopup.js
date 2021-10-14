@@ -248,7 +248,8 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
           
           <Justification 
           openAddJustificationPopup={openAddJustificationPopup} 
-          nsi={nsi} 
+          nsi={nsi}
+          type="знание"
           onChooseJustificationType={handleChooseJustificationType}
           onChangeExpertOpinion={handleChangeExpertOpinion}
           onChangeNsiNote={handleChangeNsiNote}
@@ -330,7 +331,8 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
 
           <Justification 
           openAddJustificationPopup={openAddJustificationPopup} 
-          nsi={nsi} 
+          nsi={nsi}
+          type="умение"
           onChooseJustificationType={handleChooseJustificationType}
           onChangeExpertOpinion={handleChangeExpertOpinion}
           onChangeNsiNote={handleChangeNsiNote}
@@ -411,7 +413,8 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
             <span className="popup__subtitle add-node__caption">{`Итоговое название: Владеть навыком ${skillWhat || ""} ${skillWith || ""} ${skillWhere || ""}`}</span>
 
             <Justification 
-            nsi={nsi} 
+            nsi={nsi}
+            type="навык"
             onChooseJustificationType={handleChooseJustificationType}
             onChangeExpertOpinion={handleChangeExpertOpinion}
             onChangeNsiNote={handleChangeNsiNote}
