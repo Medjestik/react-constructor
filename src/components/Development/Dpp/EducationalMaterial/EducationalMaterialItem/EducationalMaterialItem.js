@@ -144,7 +144,7 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
               <li className="educational-material-item__grid-item educational-material-item__grid-item_type_four">
                 <div className="educational-material-item__step">
                   <span className="educational-material-item__step-number">4</span>
-                  <p className="educational-material-item__name">Вы можете загрузить дополнительные материалы для выполнения практического задания в&nbsp;окне «Дополнительные материалы».</p>
+                  <p className="educational-material-item__name">Вы можете загрузить дополнительные материалы в&nbsp;окне «Дополнительные материалы».</p>
                 </div>
               </li>
 

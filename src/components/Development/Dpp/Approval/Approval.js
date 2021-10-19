@@ -69,13 +69,9 @@ function Approval({ dppDescription, loggedIn }) {
         :
         <Tabs className="tabs">
           <TabList className="tab-list">
-            <Tab className="tab">Аннотация</Tab>
             <Tab className="tab">Список исполнителей</Tab>
             <Tab className="tab">Экспорт программы</Tab>
           </TabList>
-          <TabPanel>
-            <Annotation programData={programData} onSave={handleEditAnnotation} isLoading={isLoading} isShowRequestMessage={isShowRequestMessage} />
-          </TabPanel>
           <TabPanel>
             <PerformersList />
           </TabPanel>

@@ -1,10 +1,12 @@
 import React from 'react';
 import './KnowledgeItem.css';
 
-function KnowledgeItem({ knowledges, chooseKnowledge, dppDescription }) {
+function KnowledgeItem({ knowledges, chooseKnowledge, dppDescription, onDown, onUp }) {
 
   const [searchName, setSearchName] = React.useState('');
   const [currentKnowledges, setCurrentKnowledges] = React.useState([]);
+
+  console.log(knowledges);
 
   function handleSearchByName(e) {
     setSearchName(e.target.value);
@@ -32,7 +34,17 @@ function KnowledgeItem({ knowledges, chooseKnowledge, dppDescription }) {
   
   return (
     <>
-    <a className="btn btn_type_export-word" href={`https://constructor.emiit.ru:8887/dpps/${dppDescription.id}/export_om_questions/${dppDescription.om_version_id}`} target="_blank" rel="noreferrer">Экспорт в Word</a>
+    <ul className="knowledge-item__btn_list">
+      <li className="knowledge-item__btn_item">  
+        <a className="btn knowledge-item__btn knowledge-item__btn_export" href={`https://constructor.emiit.ru:8887/dpps/${dppDescription.id}/export_om_questions/${dppDescription.om_version_id}`} target="_blank" rel="noreferrer">Экспорт в Word</a>
+      </li>
+      <li className="knowledge-item__btn_item">  
+        <button className="btn knowledge-item__btn knowledge-item__btn_down" onClick={onDown}>По убыванию</button>
+      </li>
+      <li className="knowledge-item__btn_item">  
+        <button className="btn knowledge-item__btn knowledge-item__btn_up" onClick={onUp}>По возрастанию</button>
+      </li>
+    </ul>
     <p className="main__subtitle knowledge-item__subtitle">Для работы с оценочными материалами выберите знание</p>
     <div className="search">
       <input
@@ -63,7 +75,7 @@ function KnowledgeItem({ knowledges, chooseKnowledge, dppDescription }) {
             {knowledge.questions.length}
           </span>
           <h3 className="knowledge-item__name">{knowledge.name}</h3>
-          <button className="knowledge-item__btn" onClick={() => handleChooseKnowledge(knowledge)}>Выбрать</button>
+          <button className="knowledge-item__btn-choose" onClick={() => handleChooseKnowledge(knowledge)}>Выбрать</button>
         </li>
       ))
     }

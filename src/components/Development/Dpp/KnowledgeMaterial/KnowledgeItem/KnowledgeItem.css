@@ -1,3 +1,69 @@
+.knowledge-item__btn_list {
+  list-style-type: none;
+  margin: 10px 0px 0px 0px;
+  padding: 0px;
+  display: flex;
+  align-items: center;
+}
+.knowledge-item__btn_item {
+  margin: 0px 15px 0px 0px;
+}
+.knowledge-item__btn_item:last-of-type {
+  margin: 0px;
+}
+.knowledge-item__btn {
+  background-color: var(--main-color);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.3;
+  margin: 0px;
+  padding: 10px 40px 10px 10px;
+  text-transform: none;
+  text-decoration: none;
+  max-width: max-content;
+}
+.knowledge-item__btn_export::after {
+  content: '';
+  background-image: url('../../../../../images/word-white.png');
+  background-size: 25px;
+  background-repeat: no-repeat;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  right: 7px;
+  top: 8px;
+  z-index: 5;
+}
+.knowledge-item__btn_down {
+  background-color: var(--secondary-color);
+}
+.knowledge-item__btn_down::after {
+  content: '';
+  background-image: url('../../../../../images/sort-down.png');
+  background-size: 25px;
+  background-repeat: no-repeat;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  right: 7px;
+  top: 8px;
+  z-index: 5;
+}
+.knowledge-item__btn_up {
+  background-color: var(--third-light-color);
+}
+.knowledge-item__btn_up::after {
+  content: '';
+  background-image: url('../../../../../images/sort-up.png');
+  background-size: 25px;
+  background-repeat: no-repeat;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  right: 7px;
+  top: 8px;
+  z-index: 5;
+}
 .knowledge-item__subtitle {
   margin: 30px 0px 0px 0px;
 }
@@ -59,7 +125,7 @@
   text-align: center;
   color: var(--title-color);
 }
-.knowledge-item__btn {
+.knowledge-item__btn-choose {
   margin: auto 0px 0px 0px;
   background-color: rgba(250, 117, 101, .1);
   color: var(--third-light-color);
@@ -75,13 +141,13 @@
   transition: .3s ease-in-out;
   position: relative;
 }
-.knowledge-item__item:hover .knowledge-item__btn {
+.knowledge-item__item:hover .knowledge-item__btn-choose {
   cursor: pointer;
   background-color: var(--main-color);
   color: var(--white-color);
   box-shadow: 0 2px 4px rgb(0 0 0 / 20%);
 }
-.knowledge-item__btn:hover {
+.knowledge-item__btn-choose:hover {
   transform: scale(1.05);
 }
 

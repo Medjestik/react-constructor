@@ -33,6 +33,21 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
   });
   const [isCreateNewQuestion, setIsCreateNewQuestion] = React.useState(false);
 
+  function sortKnowledgesDown() {
+    let newKnowledges = knowledges.sort(function(a, b) {
+      return b.questions.length - a.questions.length;
+    });
+    setKnowledges([...newKnowledges]);
+    console.log(newKnowledges);
+  }
+
+  function sortKnowledgesUp() {
+    let newKnowledges = knowledges.sort(function(a, b) {
+      return a.questions.length - b.questions.length;
+    });
+    setKnowledges([...newKnowledges]);
+  }
+
 
   function getKnowledges() {
     const token = localStorage.getItem("token");
@@ -434,6 +449,8 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
         knowledges={knowledges}
         chooseKnowledge={chooseKnowledge}
         dppDescription={dppDescription}
+        onDown={sortKnowledgesDown}
+        onUp={sortKnowledgesUp}
         />
       } 
       </div>
