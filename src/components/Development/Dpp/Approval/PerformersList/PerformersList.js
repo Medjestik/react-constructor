@@ -20,7 +20,6 @@ function PerformersList() {
   return (
     <div className="performers-list">
       <h2 className="performers-list__title">Список исполнителей по программе</h2>
-      <p className="main__subtitle">Раздел находится в разработке.</p>
       <button className="btn btn_type_add performers-list__btn-add">Добавить исполнителя</button>
       <ul className="performers-list__list">
         {

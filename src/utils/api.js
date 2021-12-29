@@ -477,6 +477,19 @@ export const saveRequirements = ({ token, initialDataVersion, profLevels, userQu
   .then(res => handleResponse(res))
 };
 
+export const saveDescription = ({ token, initialDataVersion, programDescription }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/description`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ programDescription })
+  })
+  .then(res => handleResponse(res))
+};
+
 export const saveCompetence = ({ token, initialDataVersion, countHours }) => {
   return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/results`, {
     method: 'POST',

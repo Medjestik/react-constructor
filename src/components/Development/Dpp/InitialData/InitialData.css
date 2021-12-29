@@ -3,7 +3,6 @@
   list-style-type: none;
   padding: 0px;
   display: grid;
-  
   grid-column-gap: 20px;
   grid-row-gap: 20px;
   grid-auto-rows: min-content;
@@ -45,18 +44,25 @@
   grid-row-end: 3;
   grid-column-end: 6;
 }
-.initial-data__item_type_structure {
+.initial-data__item_type_description {
   grid-row-start: 3;
   grid-column-start: 1;
 
   grid-row-end: 4;
   grid-column-end: 6;
 }
-.initial-data__item_type_info {
+.initial-data__item_type_structure {
   grid-row-start: 4;
   grid-column-start: 1;
 
   grid-row-end: 5;
+  grid-column-end: 6;
+}
+.initial-data__item_type_info {
+  grid-row-start: 5;
+  grid-column-start: 1;
+
+  grid-row-end: 6;
   grid-column-end: 6;
 }
 

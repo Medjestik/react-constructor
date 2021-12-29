@@ -69,14 +69,14 @@ function Approval({ dppDescription, loggedIn }) {
         :
         <Tabs className="tabs">
           <TabList className="tab-list">
-            <Tab className="tab">Список исполнителей</Tab>
             <Tab className="tab">Экспорт программы</Tab>
+            <Tab className="tab">Список исполнителей</Tab>
           </TabList>
           <TabPanel>
-            <PerformersList />
+            <ExportProgram dppDescription={dppDescription} programData={programData} />
           </TabPanel>
           <TabPanel>
-            <ExportProgram dppDescription={dppDescription} programData={programData} />
+            <PerformersList />
           </TabPanel>
         </Tabs>
       }

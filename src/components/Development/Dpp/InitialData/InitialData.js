@@ -75,6 +75,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
   const [typologiesParts, setTypologiesParts] = React.useState([]);
   const [requestMessageRequirements, setRequestMessageRequirements] = React.useState({ text: '', isShow: false, type: '' });
   const [requestMessageCompetence, setRequestMessageCompetence] = React.useState({ text: '', isShow: false, type: '' });
+  const [requestMessageDescription, setRequestMessageDescription] = React.useState({ text: '', isShow: false, type: '' });
 
   const [isOpenEditPartPopup, setIsOpenEditPartPopup] = React.useState(false);
   const [isOpenRemovePartPopup, setIsOpenRemovePartPopup] = React.useState(false);
@@ -88,6 +89,8 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
   const [isRemoveNsiPopupOpen, setIsRemoveNsiPopupOpen] = React.useState(false);
   const [isEditNsiPopupOpen, setIsEditNsiPopupOpen] = React.useState(false);
   const [currentNsiItem, setCurrentNsiItem] = React.useState({});
+
+  const [programDescription, setProgramDescription] = React.useState('');
 
   function handleChangeProfLevels(id) {
     const newLevels = selectedProfLevels;
@@ -104,6 +107,11 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
   function handleChangeUserQualification(e) {
     setUserQualification(e.target.value);
     setRequestMessageRequirements({ text: '', isShow: false, type: '',});
+  }
+
+  function handleChangeProgramDescription(e) {
+    setProgramDescription(e.target.value);
+    setRequestMessageDescription({ text: '', isShow: false, type: '',});
   }
 
   function handleSaveRequirements() {
@@ -124,6 +132,32 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
       })
       .catch((err) =>{
         setRequestMessageRequirements({ 
+          text: 'К сожалению произошла ошибка, ваши данные не сохранены!',
+          isShow: true,
+          type: 'error',
+        })
+        console.log(err);
+      })
+    }
+  }
+
+  function handleSaveDescription() {
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.saveDescription({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id, 
+        programDescription: programDescription,
+      })
+      .then(() => {
+        setRequestMessageDescription({ 
+          text: 'Данные успешно сохранены!',
+          isShow: true,
+          type: 'success',
+        })
+      })
+      .catch((err) =>{
+        setRequestMessageDescription({ 
           text: 'К сожалению произошла ошибка, ваши данные не сохранены!',
           isShow: true,
           type: 'error',
@@ -968,6 +1002,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
           setSelectedProfLevels(initialData.prof_levels);
           setTypologies(initialData.typologies);
           setTypologiesParts(initialData.typology_parts);
+          setProgramDescription(initialData.annotationDescription);
           initialData.nsis.sort(function(a,b) {
             return parseInt(a.type.position) - parseInt(b.type.position)
           })
@@ -994,6 +1029,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
       setTypologiesParts([]);
       setNsiProgram([]);
       setOrganizationRulesProgram([]);
+      setProgramDescription("");
   }
   }, [loggedIn, dppDescription]);
   
@@ -1006,7 +1042,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
       <div>
 
         <h1 className="main__title">Ввод исходных данных</h1>
-        <p className="main__subtitle">Заполните предолженные поля форм. Для сохранения данных, нажмите кнопку "Сохранить данные". Для перехода к следующему этапу нажмите кнопку "Перейти к следующему этапу".</p>
+        <p className="main__subtitle">Заполните предложенные поля форм. Для сохранения данных, нажмите кнопку "Сохранить данные".</p>
 
         <ul className="initial-data__list">
 
@@ -1242,6 +1278,26 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
               <div className="initial-data__buttons initial-data__buttons_type_requirements">
                 <button className={`btn btn_type_save ${countHours > 15 ? "" : "btn_type_block" }`} type="button" onClick={handleSaveNewCompetence}>Сохранить данные</button>
                 <span className={`initial-data__buttons-message ${requestMessageCompetence.isShow ? "initial-data__buttons-message_type_show" : "initial-data__buttons-message_type_hide"} ${requestMessageCompetence.type === 'error' ? "initial-data__buttons-message_type_error" : "initial-data__buttons-message_type_success"}`}>{requestMessageCompetence.text}</span>
+              </div>
+            }
+          </li>
+
+          <li className="initial-data__item initial-data__item_type_description">
+            <h3 className="initial-data__item-name">Аннотация программы</h3>
+            <p className="initial-data__item-subtitle initial-data__item-subtitle_type_structure">Укажите информацию о программе (актуальность, новизна, теоритическая и практическая значимость).</p>
+            <textarea 
+              className="initial-data__item-qualification-text" 
+              name="description-text" 
+              placeholder="Введите описание программы.."
+              defaultValue={programDescription}
+              onChange={handleChangeProgramDescription}
+            >
+            </textarea>
+            {
+              isEditRights &&
+              <div className="initial-data__buttons initial-data__buttons_type_requirements">
+                <button className="btn btn_type_save" type="button" onClick={handleSaveDescription}>Сохранить данные</button>
+                <span className={`initial-data__buttons-message ${requestMessageDescription.isShow ? "initial-data__buttons-message_type_show" : "initial-data__buttons-message_type_hide"} ${requestMessageDescription.type === 'error' ? "initial-data__buttons-message_type_error" : "initial-data__buttons-message_type_success"}`}>{requestMessageDescription.text}</span>
               </div>
             }
           </li>

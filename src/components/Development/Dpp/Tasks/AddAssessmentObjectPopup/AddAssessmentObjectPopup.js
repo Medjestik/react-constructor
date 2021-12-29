@@ -71,7 +71,7 @@ function AddAssessmentObjectPopup({ isOpen, onClose, currentTask, currentSubject
             </textarea>
             </li>
             <li className="practical-task__item">
-              <h5 className="practical-task__item-name">Введите модельный объект</h5>
+              <h5 className="practical-task__item-name">Введите модельный ответ</h5>
               <textarea 
               className="practical-task__textarea" 
               id="add-model-answer"
