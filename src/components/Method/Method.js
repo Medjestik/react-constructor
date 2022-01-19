@@ -1,6 +1,6 @@
 import React from 'react';
 import './Method.css';
-import { CHAPTER_ONE } from '../../utils/course.js';
+import { CHAPTER_ONE, CHAPTER_TWO, CHAPTER_THREE, CHAPTER_FOUR, CHAPTER_FIVE, CHAPTER_SIX } from '../../utils/course.js';
 import MethodItem from './MethodItem/MethodItem';
 
 function Method() {
@@ -15,10 +15,22 @@ function Method() {
         <MethodItem
           chapter={CHAPTER_ONE}
         />
-       
+        <MethodItem
+          chapter={CHAPTER_TWO}
+        />
+        <MethodItem
+          chapter={CHAPTER_THREE}
+        />
+        <MethodItem
+          chapter={CHAPTER_FOUR}
+        />
+        <MethodItem
+          chapter={CHAPTER_FIVE}
+        />
+        <MethodItem
+          chapter={CHAPTER_SIX}
+        />
       </ul>
-
-      
     </div>
   );
 }
