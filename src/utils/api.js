@@ -45,6 +45,19 @@ export const updateUserInfo = (userInfoUpdate, token) => {
   .then(res => handleResponse(res))
 };
 
+export const sendFeedback = (idea, token) => {
+  return fetch(`${API_URL}/ideas`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ idea })
+  })
+  .then(res => handleResponse(res))
+};
+
 export const changePassword = (password, user, token) => {
   return fetch(`${API_URL}/users/${user.id}/change_password`, {
     method: 'PATCH',

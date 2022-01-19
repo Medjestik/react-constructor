@@ -13,7 +13,7 @@ import ChangeAvatarPopup  from '../Popup/ChangeAvatarPopup/ChangeAvatarPopup.js'
 import useOnClickOverlay from "../../hooks/useOnClickOverlay.js";
 import useOnPushEsc from '../../hooks/useOnPushEsc.js';
 
-function Main({ loggedIn, pathname, onLogout, history, onUpdateUser, onChangePassword, isLoadingRequest, isSavedPassword, requestMessage, setRequestMessage }) {
+function Main({ loggedIn, pathname, onLogout, history, onUpdateUser, onChangePassword, onFeedback, isLoadingRequest, isSavedPassword, requestMessage, setRequestMessage, feedbackMessage, setFeedbackMessage }) {
 
   const [showHeaderMenu, setShowHeaderMenu] = React.useState(false);
   const [isAvatarPopupOpen, setIsAvatarPopupOpen] = React.useState(false);
@@ -58,7 +58,7 @@ function Main({ loggedIn, pathname, onLogout, history, onUpdateUser, onChangePas
 
         <Switch>    
           <Route path="/main" exact>
-            <MainPage />
+            <MainPage onFeedback={onFeedback} isLoading={isLoadingRequest} feedbackMessage={feedbackMessage} setFeedbackMessage={setFeedbackMessage} />
           </Route>
           <Route path="/main/person">
             <Person 
@@ -67,7 +67,7 @@ function Main({ loggedIn, pathname, onLogout, history, onUpdateUser, onChangePas
             isLoadingRequest={isLoadingRequest}
             isSavedPassword={isSavedPassword}
             requestMessage={requestMessage} 
-            setRequestMessage={setRequestMessage} 
+            setRequestMessage={setRequestMessage}
             />
           </Route>
           <Route path="/main/development" exact >

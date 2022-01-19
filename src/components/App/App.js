@@ -17,6 +17,7 @@ function App() {
   const [isLoadingPage, setIsLoadingPage] = React.useState(false);
   const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
   const [requestMessage, setRequestMessage] = React.useState({ text: '', isShow: false, type: '' });
+  const [feedbackMessage, setFeedbackMessage] = React.useState({ text: '', isShow: false, });
 
   const { pathname } = useLocation();
   const history = useHistory();
@@ -72,12 +73,29 @@ function App() {
     history.push('/');
   }
 
+  function handleFeedback(feedback) {
+    setFeedbackMessage({text: '', isShow: false,});
+    setIsLoadingRequest(true);
+    if (loggedIn) {
+      api.sendFeedback(feedback, localStorage.token)
+      .then(() => {
+        setFeedbackMessage({text: 'Сообщение успешно отправлено!', isShow: true,});
+      })
+      .catch((err) => {
+        console.error(err);
+        setFeedbackMessage({text: 'К сожалению, произошла ошибка!', isShow: true,});
+      })
+      .finally(() => {
+        setIsLoadingRequest(false);
+      });
+    }
+  }
+
   function handleChangePassword(password, user, onClose) {
     if (loggedIn) {
       setIsSavedPassword(true);
       api.changePassword(password, user, localStorage.token)
       .then((res) => {
-        console.log(res);
         onClose();
         setRequestMessage({ 
           text: 'Данные успешно сохранены!',
@@ -113,7 +131,6 @@ function App() {
       api.updateUserInfo(userInfoUpdate, localStorage.token)
       .then((res) => {
         setCurrentUser({ ...currentUser, firstname, lastname, middlename, phone, email });
-        console.log(res);
         setRequestMessage({ 
           text: 'Данные успешно сохранены!',
           isShow: true,
@@ -162,11 +179,14 @@ function App() {
               onLogout={handleLogout}
               onUpdateUser={handleUpdateUser}
               onChangePassword={handleChangePassword}
+              onFeedback={handleFeedback}
               history={history}
               isLoadingRequest={isLoadingRequest}
               isSavedPassword={isSavedPassword}
               requestMessage={requestMessage}
+              feedbackMessage={feedbackMessage}
               setRequestMessage={setRequestMessage}
+              setFeedbackMessage={setFeedbackMessage}
             />
           </Switch> 
         }
