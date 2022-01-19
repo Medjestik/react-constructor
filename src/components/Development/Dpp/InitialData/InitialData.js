@@ -801,13 +801,14 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
     }
   }
 
-  function changeTypologyPartsOrder(newOrder) {
+  function changeTypologyPartsOrder(order) {
+    
     const token = localStorage.getItem("token");
     if (loggedIn) {
       api.changeStructurePartsOrder({ 
         token: token, 
         initialDataVersion: dppDescription.ish_version_id, 
-        order: newOrder
+        order: order,
       })
       .then(() => {
 

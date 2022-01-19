@@ -45,6 +45,19 @@ export const updateUserInfo = (userInfoUpdate, token) => {
   .then(res => handleResponse(res))
 };
 
+export const changePassword = (password, user, token) => {
+  return fetch(`${API_URL}/users/${user.id}/change_password`, {
+    method: 'PATCH',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ password })
+  })
+  .then(res => handleResponse(res))
+};
+
 export const getPrograms = ({ token }) => {
   return fetch(`${API_URL}/my_dpps`, {
     method: 'GET',

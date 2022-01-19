@@ -3,7 +3,6 @@ import './DragAndDrop.css';
 import { DragDropContext } from 'react-beautiful-dnd';
 import DroppableColumn from './DroppableColumn/DroppableColumn.js';
 
-
 function DragAndDrop({ data, onEdit, onRemove, onChangeOrder, isEditRights }) {
 
   const [dataQuestion, setDataQuestion] = React.useState([]);

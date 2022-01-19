@@ -13,6 +13,7 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [loginError, setLoginError] = React.useState(false);
+  const [isSavedPassword, setIsSavedPassword] = React.useState(false);
   const [isLoadingPage, setIsLoadingPage] = React.useState(false);
   const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
   const [requestMessage, setRequestMessage] = React.useState({ text: '', isShow: false, type: '' });
@@ -69,6 +70,33 @@ function App() {
     setLoggedIn(false);
     setCurrentUser({});
     history.push('/');
+  }
+
+  function handleChangePassword(password, user, onClose) {
+    if (loggedIn) {
+      setIsSavedPassword(true);
+      api.changePassword(password, user, localStorage.token)
+      .then((res) => {
+        console.log(res);
+        onClose();
+        setRequestMessage({ 
+          text: 'Данные успешно сохранены!',
+          isShow: true,
+          type: 'success',
+        })
+      })
+      .catch((err) => {
+        setRequestMessage({ 
+          text: 'К сожалению произошла ошибка, ваши данные не сохранены!',
+          isShow: true,
+          type: 'error',
+        })
+        console.log(err);
+      })
+      .finally(() => {
+        setIsSavedPassword(false);
+      });
+    }
   }
 
   function handleUpdateUser ({ firstname, lastname, middlename, phone, email, }) {
@@ -133,8 +161,10 @@ function App() {
               pathname={pathname}
               onLogout={handleLogout}
               onUpdateUser={handleUpdateUser}
+              onChangePassword={handleChangePassword}
               history={history}
               isLoadingRequest={isLoadingRequest}
+              isSavedPassword={isSavedPassword}
               requestMessage={requestMessage}
               setRequestMessage={setRequestMessage}
             />

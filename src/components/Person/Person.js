@@ -1,10 +1,13 @@
 import React from 'react';
 import './Person.css';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
+import ChangePasswordPopup from '../Popup/ChangePasswordPopup/ChangePasswordPopup.js';
 
-function Person({ onUpdateUser, isLoadingRequest, requestMessage, setRequestMessage }) {
+function Person({ onUpdateUser, onChangePassword, isLoadingRequest, isSavedPassword, requestMessage, setRequestMessage }) {
 
   const user = React.useContext(CurrentUserContext);
+
+  const [isChangePasswordPopupOpen, setIsChangePasswordPopupOpen] = React.useState(false);
 
   const [firstname, setFirstname] = React.useState(user.firstname);
   const [errorFirstname, setErrorFirstname] = React.useState({});
@@ -23,6 +26,11 @@ function Person({ onUpdateUser, isLoadingRequest, requestMessage, setRequestMess
     e.preventDefault();
     onUpdateUser({ firstname, lastname, middlename, phone, email })
   }
+
+  React.useEffect(() => {
+    setRequestMessage({ text: '', isShow: false, type: '',});
+    // eslint-disable-next-line
+  }, []);
   
 
   function handleChangeFirstname(e) {
@@ -115,7 +123,16 @@ function Person({ onUpdateUser, isLoadingRequest, requestMessage, setRequestMess
     }
   }
 
+  function openChangePasswordPopup() {
+    setIsChangePasswordPopupOpen(true);
+  }
+
+  function closeChangePasswordPopup() {
+    setIsChangePasswordPopupOpen(false);
+  }
+
   return (
+    <>
     <div className="person">
       <h1 className="main__title">Личный кабинет</h1>
       <form className="form" name="person-form" action="#" noValidate onSubmit={handleSubmit}>
@@ -224,12 +241,26 @@ function Person({ onUpdateUser, isLoadingRequest, requestMessage, setRequestMess
 
         <div className="person__button">
           <button className={`btn btn_type_save ${errorForm ? "btn_type_block" : ""}`} type="submit">{isLoadingRequest ? "Сохранение.." : "Сохранить данные"}</button>
+          <button className="btn btn_type_password" type="button" onClick={openChangePasswordPopup}>Изменить пароль</button>
           <span className={`request-message ${requestMessage.isShow ? "request-message_type_show" : "request-message_type_hide"} ${requestMessage.type === 'error' ? "request-message_type_error" : "request-message_type_success"}`}>{requestMessage.text}</span>
         </div>
 
-      </form>
+      </form> 
       
     </div>
+
+    {
+      isChangePasswordPopupOpen &&
+      <ChangePasswordPopup 
+        isOpen={isChangePasswordPopupOpen}
+        onClose={closeChangePasswordPopup}
+        onChangePassword={onChangePassword}
+        user={user}
+        isLoading={isSavedPassword}
+        isShowError={requestMessage}
+      />
+      }
+    </>
   );
 }
 

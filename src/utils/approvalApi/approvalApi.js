@@ -32,3 +32,67 @@ export const editAnnotation = ({ token, ivId, annotation }) => {
   })
   .then(res => handleResponse(res));
 };
+
+export const getPerformers = ({ token, dppId }) => { 
+  return fetch(`${API_URL}/dpps/${dppId}/designers`, {
+    method: 'GET', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+  .then(res => handleResponse(res));
+};
+
+export const addPerformer = ({ token, dppId, performer }) => { 
+  return fetch(`${API_URL}/dpps/${dppId}/designers`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ performer })
+  })
+  .then(res => handleResponse(res));
+};
+
+export const editPerformer = ({ token, dppId, performer }) => { 
+  return fetch(`${API_URL}/dpps/${dppId}/designers/${performer.id}`, {
+    method: 'PATCH', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ performer })
+  })
+  .then(res => handleResponse(res));
+};
+
+export const removePerformer = ({ token, dppId, performer }) => { 
+  return fetch(`${API_URL}/dpps/${dppId}/designers/${performer.id}`, {
+    method: 'DELETE', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ performer })
+  })
+  .then(res => handleResponse(res));
+};
+
+export const reorderPerformer = ({ token, dppId, ids }) => { 
+  return fetch(`${API_URL}/dpps/${dppId}/designers/reorder`, {
+    method: 'PATCH', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ ids })
+  })
+  .then(res => handleResponse(res));
+};
