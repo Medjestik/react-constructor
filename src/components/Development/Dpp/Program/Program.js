@@ -11,8 +11,6 @@ function Program({ program, history, windowWidth }) {
 
   const [isShowPerformers, setIsShowPerformers] = React.useState(false);
   
-  console.log(windowWidth);
-
   function getDppDescription (id) {
     const token = localStorage.getItem("token");
     if (token) {

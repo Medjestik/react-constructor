@@ -34,7 +34,7 @@ function Feedback({ onFeedback, isLoading, feedbackMessage, setFeedbackMessage }
     <>
     <textarea 
       className="initial-data__item-qualification-text" 
-      name="control-structure-part-name" 
+      name="feedback-text" 
       placeholder="Введите текст"
       value={feedbackText}
       onChange={handleChangeFeedback}

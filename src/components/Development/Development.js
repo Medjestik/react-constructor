@@ -11,6 +11,8 @@ function Development({ history, windowWidth }) {
 
   const [isLoadingProgram, setIsLoadingProgram] = React.useState(false);
   const [assignedPrograms, setAssignedPrograms] = React.useState([]);
+  const [filteredPrograms, setFilteredPrograms] = React.useState([]);
+  const [searchProgramName, setSearchProgramName] = React.useState("");
 
   function getDpps () {
     const token = localStorage.getItem("token");
@@ -27,6 +29,7 @@ function Development({ history, windowWidth }) {
             })
           })
           setAssignedPrograms(res);
+          setFilteredPrograms(res);
         })
         .catch((err) => {
             console.error(err);
@@ -45,17 +48,41 @@ function Development({ history, windowWidth }) {
     // eslint-disable-next-line
   }, []);
 
+  function handleSearchProgramByName(e) {
+    setSearchProgramName(e.target.value);
+  }
+
+  React.useEffect(() => {
+    const changePrograms = assignedPrograms.filter((item) => {
+      return item.name.toLowerCase().includes(searchProgramName.toLowerCase());
+    })
+    setFilteredPrograms(changePrograms);
+  }, [assignedPrograms, searchProgramName]);
+
   return (
     <div className="development">
       <h1 className="main__title">Разработка ДПП</h1>
       <p className="main__subtitle">Ниже отображаются все ДПП, где Вы назначены как исполнитель</p>
+      <div className="search">
+        <input
+        className="input-search"
+        placeholder="поиск по названию программы"
+        type="text"
+        id="search-assigned-program-input-name"
+        name="search-assigned-program-input-name"
+        autoComplete="off"
+        onChange={handleSearchProgramByName}
+        value={searchProgramName}
+        >
+        </input>
+      </div>
       <ul className="development__list">
         {
           isLoadingProgram 
           ?
             <Preloader />
           :
-          assignedPrograms.map((program, i) => (
+          filteredPrograms.map((program, i) => (
             <Program
               program={program}
               history={history}

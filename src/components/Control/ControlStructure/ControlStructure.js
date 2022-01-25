@@ -2,10 +2,10 @@ import React from 'react';
 import './ControlStructure.css';
 import * as controlApi from '../../../utils/controlApi/controlApi.js';
 import Preloader from '../../Preloader/Preloader.js';
-import ControlStructureItem from '../ControlStructureItem/ControlStructureItem.js';
-import ControlStructureAddPopup from '../ControlStructureAddPopup/ControlStructureAddPopup.js';
-import ControlStructureEditPopup from '../ControlStructureEditPopup/ControlStructureEditPopup';
-import ControlStructureRemovePopup from '../ControlStructureRemovePopup/ControlStructureRemovePopup.js';
+import ControlStructureItem from './ControlStructureItem/ControlStructureItem.js';
+import ControlStructureAddPopup from './ControlStructureAddPopup/ControlStructureAddPopup.js';
+import ControlStructureEditPopup from './ControlStructureEditPopup/ControlStructureEditPopup';
+import ControlStructureRemovePopup from './ControlStructureRemovePopup/ControlStructureRemovePopup.js';
 
 function ControlStructure({ loggedIn }) {
 

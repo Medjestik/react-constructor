@@ -181,3 +181,15 @@ export const deleteControlTypology = ({ token, structure }) => {
   })
   .then(res => handleResponse(res));
 };
+
+export const getFeedback = ({ token }) => { 
+  return fetch(`${API_URL}/ideas`, {
+    method: 'GET', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+  .then(res => handleResponse(res));
+};

@@ -2,10 +2,10 @@ import React from 'react';
 import './ControlProgram.css';
 import * as controlApi from '../../../utils/controlApi/controlApi.js';
 import Preloader from '../../Preloader/Preloader.js';
-import ControlProgramItem from '../ControlProgramItem/ControlProgramItem.js';
-import ControlProgramAddPopup from '../ControlProgramAddPopup/ControlProgramAddPopup.js';
-import ControlProgramEditPopup from '../ControlProgramEditPopup/ControlProgramEditPopup.js';
-import ControlProgramRemovePopup from '../ControlProgramRemovePopup/ControlProgramRemovePopup.js';
+import ControlProgramItem from './ControlProgramItem/ControlProgramItem.js';
+import ControlProgramAddPopup from './ControlProgramAddPopup/ControlProgramAddPopup.js';
+import ControlProgramEditPopup from './ControlProgramEditPopup/ControlProgramEditPopup.js';
+import ControlProgramRemovePopup from './ControlProgramRemovePopup/ControlProgramRemovePopup.js';
 
 function ControlProgram({ loggedIn }) {
 
@@ -94,7 +94,7 @@ function ControlProgram({ loggedIn }) {
     setIsRemoveProgramPopupOpen(false);
   }
 
-  function handleSearchUserByName(e) {
+  function handleSearchProgramByName(e) {
     setSearchProgramName(e.target.value);
   }
 
@@ -178,7 +178,7 @@ function ControlProgram({ loggedIn }) {
             id="search-program-input-name"
             name="search-program-input-name"
             autoComplete="off"
-            onChange={handleSearchUserByName}
+            onChange={handleSearchProgramByName}
             value={searchProgramName}
             >
             </input>

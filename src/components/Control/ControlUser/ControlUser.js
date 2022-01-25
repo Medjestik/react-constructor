@@ -2,10 +2,10 @@ import React from 'react';
 import './ControlUser.css';
 import * as controlApi from '../../../utils/controlApi/controlApi.js';
 import Preloader from '../../Preloader/Preloader.js';
-import ControlUserItem from '../ControlUserItem/ControlUserItem.js';
-import ControlUserAddPopup from '../ControlUserAddPopup/ControlUserAddPopup.js';
-import ControlUserEditPopup from '../ControlUserEditPopup/ControlUserEditPopup.js';
-import ControlUserRemovePopup from '../ControlUserRemovePopup/ControlUserRemovePopup.js';
+import ControlUserItem from './ControlUserItem/ControlUserItem.js';
+import ControlUserAddPopup from './ControlUserAddPopup/ControlUserAddPopup.js';
+import ControlUserEditPopup from './ControlUserEditPopup/ControlUserEditPopup.js';
+import ControlUserRemovePopup from './ControlUserRemovePopup/ControlUserRemovePopup.js';
 
 function ControlUser({ loggedIn }) {
 
@@ -31,6 +31,7 @@ function ControlUser({ loggedIn }) {
     const token = localStorage.getItem("token");
     controlApi.addControlUser({ token: token, user: user })
     .then((res) => {
+      console.log(res);
       setUsers([...users, res.data]);
       closeControlUsersPopups();
     })

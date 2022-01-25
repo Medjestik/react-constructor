@@ -1,6 +1,7 @@
 import React from 'react';
 import './Control.css';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import ControlFeedback from './ControlFeedback/ControlFeedback.js';
 import ControlUser from './ControlUser/ControlUser.js';
 import ControlProgram from './ControlProgram/ControlProgram.js';
 import ControlStructure from './ControlStructure/ControlStructure.js';
@@ -15,21 +16,26 @@ function Control({ loggedIn }) {
       <Tabs className="tabs">
 
         <TabList className="tab-list">
-          <Tab className="tab">Программы</Tab> 
           <Tab className="tab">Пользователи</Tab>
+          <Tab className="tab">Программы</Tab> 
           <Tab className="tab">Типовые структуры</Tab>
+          <Tab className="tab">Обратная связь</Tab>
         </TabList>
 
         <TabPanel>
-          <ControlProgram loggedIn={loggedIn} />
+          <ControlUser loggedIn={loggedIn} /> 
         </TabPanel>
         
         <TabPanel>
-          <ControlUser loggedIn={loggedIn} /> 
+          <ControlProgram loggedIn={loggedIn} />
         </TabPanel>
 
         <TabPanel>
           <ControlStructure loggedIn={loggedIn} /> 
+        </TabPanel>
+
+        <TabPanel>
+          <ControlFeedback loggedIn={loggedIn} /> 
         </TabPanel>
 
       </Tabs>

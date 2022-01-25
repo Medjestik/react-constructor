@@ -7,8 +7,6 @@ function MainPage({ onFeedback, isLoading, feedbackMessage, setFeedbackMessage }
 
   const user = React.useContext(CurrentUserContext);
 
-  console.log(user);
-
   return (
     <div className="main-page">
       <h1 className="main__title">Добро пожаловать, {user.fullname}</h1>
@@ -30,7 +28,7 @@ function MainPage({ onFeedback, isLoading, feedbackMessage, setFeedbackMessage }
           <Feedback onFeedback={onFeedback} isLoading={isLoading} feedbackMessage={feedbackMessage} setFeedbackMessage={setFeedbackMessage} />
         </section>
       </div>
-      <p className="main-page__version">Версия программы v19.01.2022</p>
+      <p className="main-page__version">Версия программы v25.01.2022</p>
     </div>
   );
 }

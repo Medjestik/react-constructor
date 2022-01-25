@@ -127,10 +127,36 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
               editCompetencePopupOpen(nodeId, zoon);
             } },
             addSkill: isEditRights ? { text: "Добавить навык", icon: "", onClick: function (nodeId) {
-              addNode(nodeId, zoon, "skill");
+              let children = nodes.filter((elem) => (nodeId === elem.pid));
+              if (children.length > 0) {
+                children.forEach((elem) => {
+                  if (elem.id.includes("a")) {
+                    setErrorDragAndDrop("Невозможно присоединить навык к компетенции, так как она уже содержит умения.");
+                    setIsErrorDragAndDropPopupOpen(true);
+                  } else {
+                    addNode(nodeId, zoon, "skill");
+                  }
+                })
+              } else {
+                addNode(nodeId, zoon, "skill");
+              }
+              
             } } : null,
             addAbility: { text: "Добавить умение", icon: "", onClick: function (nodeId) {
-              addNode(nodeId, zoon, "ability");
+              let children = nodes.filter((elem) => (nodeId === elem.pid));
+              if (children.length > 0) {
+                children.forEach((elem) => {
+                  if (elem.id.includes("s")) {
+                    setErrorDragAndDrop("Невозможно присоединить умение к компетенции, так как она уже содержит навыки.");
+                    setIsErrorDragAndDropPopupOpen(true);
+                  } else {
+                    addNode(nodeId, zoon, "ability");
+                  }
+                })
+              } else {
+                addNode(nodeId, zoon, "ability");
+              }
+              
             } },
             remove: { text: "Удалить", icon: "", onClick: function (nodeId) {
               removeNode(nodeId, zoon, "competence");
@@ -158,7 +184,14 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
               removeNode(nodeId, zoon, "skill");
             } },
             disconnect: { text: "Отсоединить", icon: "", onClick: function (nodeId) {
-              disconnectNode(nodeId, zoon);
+              const elem = nodes.find((node) => (node.id === nodeId));
+              if (elem.pid.length > 1) {
+                disconnectNode(nodeId, zoon);
+              } else {
+                setErrorDragAndDrop("Данный элемент не присоединен к другому.");
+                setIsErrorDragAndDropPopupOpen(true);
+              }
+              
             } },
             order: { text: "Упорядочить", icon: "", onClick: function (nodeId) {
               openSwapChildrenPopup(nodeId, zoon);
@@ -182,7 +215,13 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
               removeNode(nodeId, zoon, "ability");
             } },
             disconnect: { text: "Отсоединить", icon: "", onClick: function (nodeId) {
-              disconnectNode(nodeId, zoon);
+              const elem = nodes.find((node) => (node.id === nodeId));
+              if (elem.pid.length > 1) {
+                disconnectNode(nodeId, zoon);
+              } else {
+                setErrorDragAndDrop("Данный элемент не присоединен к другому.");
+                setIsErrorDragAndDropPopupOpen(true);
+              }
             } },
             order: { text: "Упорядочить", icon: "", onClick: function (nodeId) {
               openSwapChildrenPopup(nodeId, zoon);
@@ -203,7 +242,13 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
               removeNode(nodeId, zoon, "knowledge");
             } },
             disconnect: { text: "Отсоединить", icon: "", onClick: function (nodeId) {
-              disconnectNode(nodeId, zoon);
+              const elem = nodes.find((node) => (node.id === nodeId));
+              if (elem.pid.length > 1) {
+                disconnectNode(nodeId, zoon);
+              } else {
+                setErrorDragAndDrop("Данный элемент не присоединен к другому.");
+                setIsErrorDragAndDropPopupOpen(true);
+              }
             } },
             addLink: { text: "Добавить связь", icon: "", onClick: function (nodeId) {
               addLinkPopupOpen(nodeId, zoon);
@@ -300,22 +345,26 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
       const token = localStorage.getItem("token");
       api.moveNode(({ 
         token: token, 
-        dppId: dppDescription.id, 
-        elem_type: draggedNode.type, 
-        elem_id: draggedNodeId, 
-        to_type: droppedNode.type, 
-        to_id: droppedNodeId 
+        dppId: dppDescription.id,
+        elem_type: draggedNode.type,
+        elem_id: draggedNodeId,
+        to_type: droppedNode.type,
+        to_id: droppedNodeId
       }))
         .then(() => {
+
         })
         .catch((err) => {
           console.error(err);
         })
 
+      let children = nodes.filter((elem) => (droppedNodeId === elem.pid));
+      nodes.find((node) => (node.id === draggedNodeId ? node.position = children.length + 1 : false));
+      setZoonChart(zoon);
     }
   })
 
-  setZoonChart(zoon);
+  
 
   return () => {
     setZoonChart({});
