@@ -56,26 +56,54 @@
   padding: 0px 0px 0px 20px;
   list-style-type: none;
   margin: 0px;
+  width: 100%;
 }
-.zoon-list__item{
+.zoon-list__initial {
+  padding: 0px;
+}
+.zoon-list__item {
   margin: 15px 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  width: 100%;
 }
 .zoon-list__name {
   margin: 0px;
   font-style: normal;
-  font-weight: normal;
+  font-weight: bold;
   font-size: 16px;
   line-height: 1.3;
   text-align: left;
   color: var(--title-color);
   padding-left: 25px;
   position: relative;
+  transition: .3s ease-in-out;
+}
+.zoon-list__name:hover {
+  cursor: pointer;
 }
 .name_type_competence {
   font-weight: bold;
   font-size: 24px;
   line-height: 1.3;
   padding-left: 30px;
+}
+.name_type_competence:hover {
+  color: var(--five-light-color);
+}
+.name_type_skill:hover {
+  color: var(--secondary-light-color);
+}
+.name_type_ability:hover {
+  color: var(--main-color);
+}
+.name_type_knowledge:hover {
+  color: var(--third-light-color);
+}
+.name_type_cross-knowledge:hover {
+  color: var(--fourth-light-color);
 }
 .name_type_competence::before {
   content: "";
@@ -99,7 +127,6 @@
   margin: 0px 7px 0px 0px;
   background-color: var(--secondary-light-color);
 }
-
 .name_type_ability::before {
   content: "";
   position: absolute;
