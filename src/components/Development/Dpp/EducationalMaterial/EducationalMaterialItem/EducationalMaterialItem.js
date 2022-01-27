@@ -106,7 +106,7 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
                   <span className="educational-material-item__step-number">1</span>
                   <div className="educational-material-item__step-description">
                     <p className="educational-material-item__name">{defineItemTypeTitle(content.type)}</p>
-                    <a className="btn btn_type_export-word educational-material-item__btn-export" href={`https://constructor.emiit.ru:8887/content/${content.id}/template`} target="_blank" rel="noreferrer">Скачать шаблон</a>
+                    <a className="btn btn_type_export-word educational-material-item__btn-export" href={`https://constructor-api.emiit.ru/content/${content.id}/template`} target="_blank" rel="noreferrer">Скачать шаблон</a>
                   </div>
                 </div>
               </li>
@@ -170,7 +170,7 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
                         contentArr.map((docx, i) => (
                           <li key={`docx-${i}`} className="educational-material-item__documents-item">
                             <span className="educational-material-item__documents-item-count">{i + 1}.</span>
-                            <a className="educational-material-item__documents-link" href={`https://constructor.emiit.ru:8887/content/${content.id}/download`} target="_blank" rel="noreferrer">{docx.name}</a>
+                            <a className="educational-material-item__documents-link" href={`https://constructor-api.emiit.ru/content/${content.id}/download`} target="_blank" rel="noreferrer">{docx.name}</a>
                             <button className="educational-material-item__btn-remove" type="button" onClick={() => onRemove(currentThemeId, content.type)}></button>
                           </li>
                         ))
@@ -194,7 +194,7 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
                           content.additional_files.map((material, i) => (
                             <li key={`docx-${i}`} className="educational-material-item__documents-item">
                               <span className="educational-material-item__documents-item-count">{i + 1}.</span>
-                              <a className="educational-material-item__documents-link" href={`https://constructor.emiit.ru:8887/content/${content.id}/additional_files/${material.id}/download`} target="_blank" rel="noreferrer">{material.name}</a>
+                              <a className="educational-material-item__documents-link" href={`https://constructor-api.emiit.ru/content/${content.id}/additional_files/${material.id}/download`} target="_blank" rel="noreferrer">{material.name}</a>
                               <button className="educational-material-item__btn-remove" type="button" onClick={() => onRemoveMaterial(currentThemeId, content.type, material.id)}></button>
                             </li>
                           ))
