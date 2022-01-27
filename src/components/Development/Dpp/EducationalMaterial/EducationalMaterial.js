@@ -247,7 +247,7 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
             />
             <ul className="educational-material__export-list">
               <li className="educational-material__export-item">
-                <a className="btn btn_type_export-word" href={`https://constructor.emiit.ru:8887/dpps/${dppDescription.id}/export_lection_text`} target="_blank" rel="noreferrer">Экспорт лекций в Word</a>
+                <a className="btn btn_type_export-word" href={`https://constructor-api.emiit.ru/dpps/${dppDescription.id}/export_lection_text`} target="_blank" rel="noreferrer">Экспорт лекций в Word</a>
               </li>
             </ul>
             </>

@@ -20,3 +20,95 @@
   color: var(--title-color);
   position: relative;
 }
+.zoon-option__list {
+  list-style-type: none;
+  margin: 15px 0px 0px 0px;
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.zoon-option__btn {
+  margin: 0px 0px 10px 0px;
+  color: var(--title-color);
+  box-sizing: border-box;
+  border: 2px solid var(--border-card-color);
+  border-radius: 5px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 25px;
+  text-align: left;
+  letter-spacing: 1.2px;
+  padding: 10px 15px 10px 55px;
+  outline: none;
+  transition: .3s ease-in-out;
+  position: relative;
+}
+.zoon-option__btn:hover {
+  background-color: var(--border-card-color);
+  cursor: pointer;
+}
+.zoon-option__btn:last-of-type {
+  margin: 0px;
+}
+.zoon-option__btn_type_add::before {
+  content: '';
+  background-image: url('../../../../../images/add-color.png');
+  background-size: 25px;
+  background-repeat: no-repeat;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  left: 15px;
+  top: 9px;
+  z-index: 5;
+}
+.zoon-option__btn_type_edit::before {
+  content: '';
+  background-image: url('../../../../../images/edit-color.png');
+  background-size: 25px;
+  background-repeat: no-repeat;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  left: 15px;
+  top: 9px;
+  z-index: 5;
+}
+.zoon-option__btn_type_unlink::before {
+  content: '';
+  background-image: url('../../../../../images/disconnect-color.png');
+  background-size: 25px;
+  background-repeat: no-repeat;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  left: 15px;
+  top: 9px;
+  z-index: 5;
+}
+.zoon-option__btn_type_sort::before {
+  content: '';
+  background-image: url('../../../../../images/sort.png');
+  background-size: 25px;
+  background-repeat: no-repeat;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  left: 15px;
+  top: 9px;
+  z-index: 5;
+}
+.zoon-option__btn_type_remove::before {
+  content: '';
+  background-image: url('../../../../../images/delete-color.png');
+  background-size: 25px;
+  background-repeat: no-repeat;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  left: 15px;
+  top: 9px;
+  z-index: 5;
+}

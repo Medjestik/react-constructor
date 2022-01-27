@@ -112,10 +112,10 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
         pdf: { text: "Экспорт PDF", icon: "" },
         png: { text: "Экспорт PNG", icon: "" },
         word: { text: "Экспорт Word", icon: "", onClick: function () {
-          window.open(`https://constructor.emiit.ru:8887/dpps/${dppDescription.id}/export_zun/${dppDescription.zun_version_id}/word`, '_blank');
+          window.open(`https://constructor-api.emiit.ru/dpps/${dppDescription.id}/export_zun/${dppDescription.zun_version_id}/word`, '_blank');
         } },
         justification: { text: "Экспорт обоснования", icon: "", onClick: function () {
-          window.open(`https://constructor.emiit.ru:8887/dpps/${dppDescription.id}/export_zun_justification`, '_blank');
+          window.open(`https://constructor-api.emiit.ru/dpps/${dppDescription.id}/export_zun_justification`, '_blank');
         } }
       },
       tags: {
@@ -933,7 +933,7 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
       isLoadingRequest={isLoadingRequest}
       />
     }
-
+    
     </>
   );
 }

@@ -21,7 +21,7 @@ function Zoon({ dppDescription, loggedIn, isEditRights }) {
           <ZoonGraph dppDescription={dppDescription} loggedIn={loggedIn} isEditRights={isEditRights} /> 
         </TabPanel>
         <TabPanel>
-          <ZoonList dppDescription={dppDescription} loggedIn={loggedIn} />
+          <ZoonList dppDescription={dppDescription} loggedIn={loggedIn} isEditRights={isEditRights} />
         </TabPanel>
         <TabPanel>
           <ZoonTypology dppDescription={dppDescription} loggedIn={loggedIn} isEditRights={isEditRights} />

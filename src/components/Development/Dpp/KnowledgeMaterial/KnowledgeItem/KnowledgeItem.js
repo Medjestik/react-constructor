@@ -36,7 +36,7 @@ function KnowledgeItem({ knowledges, chooseKnowledge, dppDescription, onDown, on
     <>
     <ul className="knowledge-item__btn_list">
       <li className="knowledge-item__btn_item">  
-        <a className="btn knowledge-item__btn knowledge-item__btn_export" href={`https://constructor.emiit.ru:8887/dpps/${dppDescription.id}/export_om_questions/${dppDescription.om_version_id}`} target="_blank" rel="noreferrer">Экспорт в Word</a>
+        <a className="btn knowledge-item__btn knowledge-item__btn_export" href={`https://constructor-api.emiit.ru/dpps/${dppDescription.id}/export_om_questions/${dppDescription.om_version_id}`} target="_blank" rel="noreferrer">Экспорт в Word</a>
       </li>
       <li className="knowledge-item__btn_item">  
         <button className="btn knowledge-item__btn knowledge-item__btn_down" onClick={onDown}>По убыванию</button>

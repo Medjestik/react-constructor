@@ -42,7 +42,6 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
   function handleChooseNsi(id) {
     let index = nsiArray.indexOf(id);
     let newArray = nsiArray;
-    console.log(newArray);
     if (index === -1) {
       newArray.push(id);
     } else {
