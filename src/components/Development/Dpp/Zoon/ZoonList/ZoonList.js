@@ -3,14 +3,17 @@ import './ZoonList.css';
 import * as api from '../../../../../utils/api.js';
 import Preloader from '../../../../Preloader/Preloader.js';
 import DefineZoonOptionPopup from '../DefineZoonOptionPopup/DefineZoonOptionPopup.js';
+import BuildCompetence from '../BuildCompetence/BuildCompetence.js';
 import AddNodePopup from '../AddNodePopup/AddNodePopup.js';
 import ConfirmRemovePopup from '../ConfirmRemovePopup/ConfirmRemovePopup.js';
 import SortElementPopup from '../SortElementPopup/SortElementPopup.js';
 import SwapChildrenPopup from '../SwapChildrenPopup/SwapChildrenPopup.js';
 import ErrorRemovePopup from '../ErrorRemovePopup/ErrorRemovePopup.js';
+import ErrorDragAndDropPopup from '../ErrorDragAndDropPopup/ErrorDragAndDropPopup.js';
 import NsiPopup from '../../../../Popup/NsiPopup/NsiPopup.js';
 import EditNsiPopup from '../../../../Popup/EditNsiPopup/EditNsiPopup.js';
 import RemoveNsiPopup from '../../../../Popup/RemoveNsiPopup/RemoveNsiPopup.js';
+import MoveElementPopup from '../MoveElementPopup/MoveElementPopup.js';
 
 function ZoonList({ dppDescription, loggedIn, isEditRights }) {
 
@@ -33,10 +36,16 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
   const [isSwapChildrenPopupOpen, setIsSwapChildrenPopupOpen] = React.useState(false);
   const [isConfirmRemovePopupOpen, setIsConfirmRemovePopupOpen] = React.useState(false);
   const [isErrorRemovePopupOpen, setIsErrorRemovePopupOpen] = React.useState(false);
+  const [isMoveElementPopupOpen, setIsMoveElementPopupOpen] = React.useState(false);
 
-  const [isAddNsiPopupOpen , setIsAddNsiPopupOpen] = React.useState(false);
-  const [isEditNsiPopupOpen , setIsEditNsiPopupOpen] = React.useState(false);  
+  const [errorDragAndDrop, setErrorDragAndDrop] = React.useState('');
+  const [isErrorDragAndDropPopupOpen, setIsErrorDragAndDropPopupOpen] = React.useState(false);
+
+  const [isAddNsiPopupOpen, setIsAddNsiPopupOpen] = React.useState(false);
+  const [isEditNsiPopupOpen, setIsEditNsiPopupOpen] = React.useState(false);  
   const [isRemoveNsiPopupOpen, setIsRemoveNsiPopupOpen] = React.useState(false);
+
+  const [isBuildCompetencePopupOpen, setIsBuildCompetencePopupOpen] = React.useState(false);
 
   const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
   const [isErrorRequest, setIsErrorRequest] = React.useState(false);
@@ -46,6 +55,92 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
     setCurrentNode(elem);
     setCurrentNodeType(type);
     setOpenZoonOptionPopup(true);
+  }
+
+  function openMoveNodePopup(node) {
+    setCurrentNode(node);
+    setIsErrorRequest(false);
+    setIsMoveElementPopupOpen(true);
+  }
+
+  function handleMoveNode(draggedNode, droppedNode) {
+    const token = localStorage.getItem("token");
+      api.moveNode(({ 
+        token: token, 
+        dppId: dppDescription.id,
+        elem_type: draggedNode.type,
+        elem_id: draggedNode.id,
+        to_type: droppedNode.type,
+        to_id: droppedNode.id
+      }))
+        .then(() => {
+          const newNode = {...draggedNode, pid: droppedNode.id};
+          const index = data.zoons.indexOf(data.zoons.find((elem) => (elem.id === draggedNode.id)));
+          setData({...data, zoons: [...data.zoons.slice(0, index), newNode, ...data.zoons.slice(index + 1)]});
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
+          closeZoonListPopups();
+        })
+  }
+
+  function openBuildCompetencePopup() {
+    setIsErrorRequest(false);
+    setIsBuildCompetencePopupOpen(true);
+    setCurrentActionType("add");
+  }
+
+  function handleBuildCompetence(zoon, competence, nodesId) {
+    const token = localStorage.getItem("token");
+    setIsLoadingRequest(true);
+    api.buildCompetence(({ token: token, zoonVersion: dppDescription.zun_version_id, node: competence, nodesId: nodesId }))
+    .then((res) => {
+      const newNodes = data.zoons.map((elem) => {
+        if (nodesId.includes(elem.id)) {
+          elem.pid = res.id;
+        }
+        return elem;
+      });
+      setData({...data, zoons: [...newNodes, res]});
+      setIsErrorRequest(false);
+      closeZoonListPopups();
+    })
+    .catch((err) => {
+      setIsErrorRequest(true);
+      console.error(err);
+    })
+    .finally(() => {
+      setIsLoadingRequest(false);
+    });
+  }
+
+  function openEditCompetencePopup(nodeId, zoon) {
+    setIsErrorRequest(false);
+    setCurrentActionType("edit");
+    const node = data.zoons.find(elem => elem.id === nodeId);
+    setCurrentNode(node);
+    setIsBuildCompetencePopupOpen(true);
+  }
+
+  function handleEditCompetence(zoon, competence, competenceId) {
+    const token = localStorage.getItem("token");
+    setIsLoadingRequest(true);
+    api.editCompetence(({ token: token, zoonVersion: dppDescription.zun_version_id, node: competence, competenceId: competenceId }))
+    .then((res) => {
+      const index = data.zoons.indexOf(data.zoons.find((elem) => (elem.id === competenceId)));
+      setData({...data, zoons: [...data.zoons.slice(0, index), res, ...data.zoons.slice(index + 1)]});
+      closeZoonListPopups();
+      setIsErrorRequest(false);
+    })
+    .catch((err) => {
+      setIsErrorRequest(true);
+      console.error(err);
+    })
+    .finally(() => {
+      setIsLoadingRequest(false);
+    });
   }
 
   function handleCreateNewSkill() {
@@ -63,11 +158,29 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
   }
 
   function handleAddNodeWithParent(nodeId, zoon, type) {
+    const node = data.zoons.find(elem => elem.id === nodeId);
+    let children = data.zoons.filter((elem) => (nodeId === elem.pid)); 
     setIsErrorRequest(false);
     setCurrentActionType("add");
-    const node = { id: parseInt(new Date().getTime()), pid: nodeId, tags: [type], };
-    setCurrentNode(node);
-    setIsAddNodePopupOpen(true);
+    if (node.tags[0] === "competence" && children.length > 0) {
+      children.forEach((elem) => {
+        if (elem.id.includes("a") && type === "skill") {
+          setErrorDragAndDrop("Невозможно присоединить навык к компетенции, так как она уже содержит умения.");
+          setIsErrorDragAndDropPopupOpen(true);
+        } else if (elem.id.includes("s") && type === "ability") {
+          setErrorDragAndDrop("Невозможно присоединить умение к компетенции, так как она уже содержит навыки.");
+          setIsErrorDragAndDropPopupOpen(true);
+        } else {
+          const newNode = { id: parseInt(new Date().getTime()), pid: nodeId, tags: [type], };
+          setCurrentNode(newNode);
+          setIsAddNodePopupOpen(true);
+        }
+      })
+    } else {
+      const newNode = { id: parseInt(new Date().getTime()), pid: nodeId, tags: [type], };
+      setCurrentNode(newNode);
+      setIsAddNodePopupOpen(true);
+    }
   }
 
   function handleAddNode(zoon, node) {
@@ -78,7 +191,6 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
       case 'knowledge':
         api.addKnowledge(({ token: token, zoonVersion: dppDescription.zun_version_id, node: node }))
         .then((res) => {
-          closeZoonListPopups();
           closeZoonListPopups();
           setData({...data, zoons: [...data.zoons, res]});
         })
@@ -278,9 +390,7 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
         api.removeKnowledge(({ token: token, zoonVersion: dppDescription.zun_version_id, nodeId: nodeId }))
         .then((res) => {
           const newNodes = data.zoons.filter((elem) => elem.id !== res);
-          console.log(newNodes);
           setData({...data, zoons: newNodes});
-          console.log(data);
           closeZoonListPopups();
         })
         .catch((err) => {
@@ -423,10 +533,17 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
     setIsSortElementPopupOpen(false);
     setIsSwapChildrenPopupOpen(false);
     setIsConfirmRemovePopupOpen(false);
+    setIsBuildCompetencePopupOpen(false);
+    setIsMoveElementPopupOpen(false);
   }
 
   function closeErrorRemovePopup() {
     setIsErrorRemovePopupOpen(false);
+  }
+
+  function closeErrorAddPopup() {
+    setErrorDragAndDrop('');
+    setIsErrorDragAndDropPopupOpen(false);
   }
 
   function closeNsiPopup() {
@@ -443,7 +560,7 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
         <li className="zoon-list__item" key={elem.id}>
           {
             elem.tags[0] === "skill" &&
-            <p className="zoon-list__name name_type_skill" onClick={() => onClickNode(elem, "Навык")}>
+            <p className={`zoon-list__name name_type_skill ${elem.valid ? "name_type_invalid" : ""}`} onClick={() => onClickNode(elem, "Навык")}>
               <span className="zoon-list__caption">Н</span>
               <span className="zoon-list__count">({firstIndex + 1}).</span>
               {elem.name}
@@ -451,7 +568,7 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
           }
           {
             elem.tags[0] === "ability" &&
-            <p className="zoon-list__name name_type_ability" onClick={() => onClickNode(elem, "Умение")}>
+            <p className={`zoon-list__name name_type_ability ${elem.valid ? "name_type_invalid" : ""}`} onClick={() => onClickNode(elem, "Умение")}>
               <span className="zoon-list__caption">У</span>
               <span className="zoon-list__count">({firstIndex + 1}).</span>
               {elem.name}
@@ -459,7 +576,7 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
           }
           {
             elem.tags[0] === "knowledge" &&
-            <p className="zoon-list__name name_type_knowledge" onClick={() => onClickNode(elem, "Знание")}>
+            <p className={`zoon-list__name name_type_knowledge ${elem.valid ? "name_type_invalid" : ""}`} onClick={() => onClickNode(elem, "Знание")}>
               <span className="zoon-list__caption">З</span>
               <span className="zoon-list__count">({firstIndex + 1}).</span>
               {elem.name}
@@ -473,7 +590,7 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
                   <li className="zoon-list__item" key={elem.id}>
                     {
                       elem.tags[0] === "skill" &&
-                      <p className="zoon-list__name name_type_skill" onClick={() => onClickNode(elem, "Навык")}>
+                      <p className={`zoon-list__name name_type_skill ${elem.valid ? "name_type_invalid" : ""}`} onClick={() => onClickNode(elem, "Навык")}>
                         <span className="zoon-list__caption">Н</span>
                         <span className="zoon-list__count">{`(${firstIndex + 1}${secondIndex + 1}).`}</span>
                         {elem.name}
@@ -481,7 +598,7 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
                     }
                     {
                       elem.tags[0] === "ability" &&
-                      <p className="zoon-list__name name_type_ability" onClick={() => onClickNode(elem, "Умение")}>
+                      <p className={`zoon-list__name name_type_ability ${elem.valid ? "name_type_invalid" : ""}`} onClick={() => onClickNode(elem, "Умение")}>
                         <span className="zoon-list__caption">У</span>
                         <span className="zoon-list__count">{`(${firstIndex + 1}${secondIndex + 1}).`}</span>
                         {elem.name}
@@ -489,7 +606,7 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
                     }
                     {
                       elem.tags[0] === "knowledge" &&
-                      <p className="zoon-list__name name_type_knowledge" onClick={() => onClickNode(elem, "Знание")}>
+                      <p className={`zoon-list__name name_type_knowledge ${elem.valid ? "name_type_invalid" : ""}`} onClick={() => onClickNode(elem, "Знание")}>
                         <span className="zoon-list__caption">З</span>
                         <span className="zoon-list__count">{`(${firstIndex + 1}-${secondIndex + 1}).`}</span>
                         {elem.name}
@@ -499,7 +616,7 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
                       {
                         childrenThird.map((elem, thirdIndex) => (
                           <li className="zoon-list__item" key={elem.id}>
-                            <p className="zoon-list__name name_type_knowledge" onClick={() => onClickNode(elem, "Знание")}>
+                            <p className={`zoon-list__name name_type_knowledge ${elem.valid ? "name_type_invalid" : ""}`} onClick={() => onClickNode(elem, "Знание")}>
                             <span className="zoon-list__caption">З</span>
                             <span className="zoon-list__count">{`(${firstIndex + 1}${secondIndex + 1}-${thirdIndex + 1}).`}</span>
                             {elem.name}
@@ -587,6 +704,7 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
         <div className="zoon-chart__btn-control">
           <button className="btn btn_type_add zoon-chart__btn_type_add-skill" onClick={handleCreateNewSkill}>Создать новый навык</button>
           <button className="btn btn_type_add zoon-chart__btn_type_add-ability" onClick={handleCreateNewAbility}>Создать новое умение</button>
+          <button className="btn btn_type_add zoon-chart__btn_type_build-competence" onClick={openBuildCompetencePopup}>Сформировать компетенцию</button>
         </div>
         }
 
@@ -595,7 +713,7 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
           {
             data.zoons.filter((elem) => (elem.type === "Компетенция")).map((elem) => (
               <li className="zoon-list__item" key={elem.id}>
-                <p className="zoon-list__name name_type_competence" onClick={() => onClickNode(elem, "Компетенция")}>{elem.name}</p>
+                <p className={`zoon-list__name name_type_competence ${elem.valid ? "name_type_invalid" : ""}`} onClick={() => onClickNode(elem, "Компетенция")}>{elem.name}</p>
                 <ul className="zoon-list__list">
                   {defineChildren(elem.id)}
                 </ul>
@@ -609,7 +727,7 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
           {
             data.zoons.filter((elem) => (elem.pid === "th")).map((elem, indexCrossKnowledge) => (
               <li key={elem.id} className="zoon-list__item">
-                <p className="zoon-list__name name_type_cross-knowledge" onClick={() => onClickNode(elem, "Знание")}>
+                <p className={`zoon-list__name name_type_cross-knowledge ${elem.valid ? "name_type_invalid" : ""}`} onClick={() => onClickNode(elem, "Знание")}>
                   <span className="zoon-list__caption">СЗ</span>
                   <span className="zoon-list__count">({indexCrossKnowledge + 1}).</span>
                   {elem.name}
@@ -628,6 +746,7 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
                 ${elem.tags[0] === "skill" ? "name_type_skill" : ""}
                 ${elem.tags[0] === "ability" ? "name_type_ability" : ""}
                 ${elem.tags[0] === "knowledge" ? "name_type_knowledge" : ""}
+                ${elem.valid ? "name_type_invalid" : ""}
                 `}
                 >{elem.name}</p>
                 <ul className="zoon-list__list">
@@ -639,7 +758,8 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
         </ul>
 
         {
-          isOpenZoonOptionPopup &&
+          isOpenZoonOptionPopup 
+          &&
           <DefineZoonOptionPopup
           isOpen={isOpenZoonOptionPopup}
           onClose={closeZoonListPopups}
@@ -648,9 +768,28 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
           nodes={data.zoons}
           onAddNode={handleAddNodeWithParent}
           onEditNode={openEditNodePopup}
+          onEditCompetence={openEditCompetencePopup}
           onDisconnectNode={handleDisconnectNode}
           onRemoveNode={openRemoveNodePopup}
           onSortChildren={openSwapChildrenPopup}
+          onMoveNode={openMoveNodePopup}
+          />
+        }
+
+        {
+          isBuildCompetencePopupOpen
+          &&
+          <BuildCompetence
+          isOpen={isBuildCompetencePopupOpen}
+          onClose={closeZoonListPopups}
+          onBuild={handleBuildCompetence}
+          onEdit={handleEditCompetence}
+          nodes={data.zoons}
+          zoonChart={{}}
+          isLoadingRequest={isLoadingRequest}
+          isErrorRequest={isErrorRequest}
+          currentNode={currentNode}
+          currentActionType={currentActionType}
           />
         }
 
@@ -724,6 +863,29 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
           />
         }
 
+        {
+          isMoveElementPopupOpen
+          &&
+          <MoveElementPopup
+          isOpen={isMoveElementPopupOpen}
+          onClose={closeZoonListPopups}
+          nodes={data.zoons}
+          currentNode={currentNode}
+          onMove={handleMoveNode}
+          />
+        }
+
+        {
+          isErrorDragAndDropPopupOpen
+          &&
+          <ErrorDragAndDropPopup
+          isOpen={isErrorDragAndDropPopupOpen}
+          onClose={closeErrorAddPopup}
+          onConfirm={closeErrorAddPopup}
+          errorDragAndDrop={errorDragAndDrop}
+          />
+        }
+
         { 
           isAddNsiPopupOpen
           &&
@@ -736,7 +898,8 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
         }
 
         {
-          isEditNsiPopupOpen &&
+          isEditNsiPopupOpen 
+          &&
           <EditNsiPopup
             isOpen={isEditNsiPopupOpen}
             onClose={closeNsiPopup}  
@@ -747,7 +910,8 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
         }
 
         {
-          isRemoveNsiPopupOpen &&
+          isRemoveNsiPopupOpen 
+          &&
           <RemoveNsiPopup
             isOpen={isRemoveNsiPopupOpen}
             onClose={closeNsiPopup}  

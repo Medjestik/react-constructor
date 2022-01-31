@@ -1,0 +1,58 @@
+.export-program__export-list {
+  padding: 0px;
+  margin: 20px 0px 0px 0px;
+  list-style-type: none;
+}
+.export-program__export-item {
+  margin: 0px 0px 30px 0px;
+  display: flex;
+  flex-direction: column;
+}
+.export-program__export-info {
+  display: flex;
+  align-items: center;
+}
+.export-program__export-count {
+  margin: 0px 10px 0px 10px;
+  color: var(--title-color);
+  font-weight: 700;
+  font-size: 24px;
+}
+.export-program__export-name {
+  margin: 0px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.3;
+  text-align: left;
+  color: var(--title-color);
+}
+.export-program__btn {
+  background-color: var(--main-color);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.3;
+  margin: 10px 0px 0px 0px;
+  padding: 10px 40px 10px 10px;
+  text-transform: none;
+  text-decoration: none;
+  max-width: max-content;
+}
+.export-program__btn::after {
+  content: '';
+  background-image: url('../../../../../images/word-white.png');
+  background-size: 25px;
+  background-repeat: no-repeat;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  right: 7px;
+  top: 8px;
+  z-index: 5;
+}
+.export-program__btn_type_block {
+  pointer-events: none;
+  user-select: none;
+  background-color: var(--background-main-color);
+  color: var(--background-third-color);
+}

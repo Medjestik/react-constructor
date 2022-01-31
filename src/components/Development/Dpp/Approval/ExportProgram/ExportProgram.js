@@ -1,50 +1,45 @@
 import React from 'react';
 import './ExportProgram.css';
+import ExportProgramList from '../ExportProgramList/ExportProgramList.js';
 
 function ExportProgram({ dppDescription, programData }) {
 
-
   return (
     <div className="export-program">
-      <h2 className="export-program__title">Экспорт программы</h2>
-      <p className="export-program__subtitle">Вы можете экспортировать материалы программы в Word.</p>
-      <ul className="export-program__export-list">
-        <li className="export-program__export-item">
-          <div className="export-program__export-info">
-            <span className="export-program__export-count">1.</span>
-            <p className="export-program__export-name">Экспорт общей характеристики программы</p>
-          </div>
-          <a className="btn export-program__btn" href={`https://constructor-api.emiit.ru/dpps/${dppDescription.id}/export_dpp`} target="_blank" rel="noreferrer">Экспорт в Word</a>
-        </li>
-        <li className="export-program__export-item">
-          <div className="export-program__export-info">
-            <span className="export-program__export-count">2.</span>
-            <p className="export-program__export-name">Экспорт оценочных материалов</p>
-          </div>
-          <a className="btn export-program__btn" href={`https://constructor-api.emiit.ru/dpps/${dppDescription.id}/export_om`} target="_blank" rel="noreferrer">Экспорт в Word</a>
-        </li>
-        <li className="export-program__export-item">
-          <div className="export-program__export-info">
-            <span className="export-program__export-count">3.</span>
-            <p className="export-program__export-name">Экспорт конспекта лекций</p>
-          </div>
-          <a className={`btn export-program__btn ${programData.hours.lec > 0 ? "" : "export-program__btn_type_block"}`} href={`https://constructor-api.emiit.ru/dpps/${dppDescription.id}/export_lection`} target="_blank" rel="noreferrer">Экспорт в Word</a>
-        </li>
-        <li className="export-program__export-item">
-          <div className="export-program__export-info">
-            <span className="export-program__export-count">4.</span>
-            <p className="export-program__export-name">Экспорт методических указаний к практическим заданиям</p>
-          </div>
-          <a className={`btn export-program__btn ${programData.hours.pr > 0 ? "" : "export-program__btn_type_block"}`} href={`https://constructor-api.emiit.ru/dpps/${dppDescription.id}/export_practice`} target="_blank" rel="noreferrer">Экспорт в Word</a>
-        </li>
-        <li className="export-program__export-item">
-          <div className="export-program__export-info">
-            <span className="export-program__export-count">5.</span>
-            <p className="export-program__export-name">Экспорт методических указаний к лабораторным работам</p>
-          </div>
-          <a className={`btn export-program__btn ${programData.hours.lab > 0 ? "" : "export-program__btn_type_block"}`} href={`https://constructor-api.emiit.ru/dpps/${dppDescription.id}/export_lab`} target="_blank" rel="noreferrer">Экспорт в Word</a>
-        </li>
+
+      <h2 className="export-program__title">Анализ этапов на ошибки</h2>
+      <p className="export-program__subtitle">Мы рекомендуем вам исправить ошибки найденные системой перед экспортом программы.</p>
+      <ul className="export-program__errors-list">
+        {
+          programData.stages.map((elem, i) => (
+            <li className="export-program__errors-item" key={i}>
+              <h4>Этап №{i + 1}. {elem.name}</h4>
+              {
+                elem.errors.length === 0 && elem.warnings.length === 0 &&
+                <div className="export-program__errors-alert alert_type_success">Ошибки не обнаружены</div>
+              }
+              {
+                elem.errors.length > 0 &&
+                elem.errors.map((error, i) => (
+                  <div className="export-program__errors-alert alert_type_errors" key={i}>{error}</div>
+                ))
+              }
+              {
+                elem.warnings.length > 0 &&
+                elem.warnings.map((warning, i) => (
+                  <div className="export-program__errors-alert alert_type_warnings" key={i}>{warning}</div>
+                ))
+              }
+            </li>
+          ))
+        }
       </ul>
+
+      <ExportProgramList 
+      dppDescription={dppDescription}
+      programData={programData}
+      />
+
     </div>
   );
 }

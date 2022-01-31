@@ -112,3 +112,15 @@
   top: 9px;
   z-index: 5;
 }
+.zoon-option__btn_type_move::before {
+  content: '';
+  background-image: url('../../../../../images/swap.png');
+  background-size: 25px;
+  background-repeat: no-repeat;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  left: 15px;
+  top: 9px;
+  z-index: 5;
+}

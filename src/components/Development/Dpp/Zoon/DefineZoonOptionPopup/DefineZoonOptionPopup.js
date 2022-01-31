@@ -2,9 +2,7 @@ import React from 'react';
 import Popup from '../../../../Popup/Popup.js';
 import './DefineZoonOptionPopup.css';
 
-function DefineZoonOption({ isOpen, onClose, currentNode, currentNodeType, nodes, onAddNode, onEditNode, onDisconnectNode, onRemoveNode, onSortChildren }) {
-
-  console.log(currentNodeType);
+function DefineZoonOption({ isOpen, onClose, currentNode, currentNodeType, nodes, onAddNode, onEditNode, onEditCompetence, onDisconnectNode, onRemoveNode, onSortChildren, onMoveNode }) {
 
   function defineAddType(type) {
     switch(type) {
@@ -38,10 +36,14 @@ function DefineZoonOption({ isOpen, onClose, currentNode, currentNodeType, nodes
     }
   }
 
-  React.useEffect(() => {
-
-    // eslint-disable-next-line
-  }, [isOpen]);
+  function defineSortChildren(node) {
+    let children = nodes.filter((elem) => (node.id === elem.pid));
+    if (children.length > 1) {
+      return (
+        <li className="zoon-option__btn zoon-option__btn_type_sort" onClick={() => onSortChildren(currentNode.id, {})}>Отсортировать дочерние элементы</li>
+      )
+    }
+  }
 
   return (
     <Popup 
@@ -52,15 +54,33 @@ function DefineZoonOption({ isOpen, onClose, currentNode, currentNodeType, nodes
         <h3 className="popup__title">Выберите, что вы хотите сделать с данным элементом</h3>
         <h5 className="zoon-option-popup__title">{currentNodeType}</h5>
         <p className="zoon-option-popup__subtitle">{currentNode.name}</p>
+
         <ul className="zoon-option__list">
           {
             defineAddType(currentNodeType)
           }
-          <li className="zoon-option__btn zoon-option__btn_type_edit" onClick={() => onEditNode(currentNode.id, {})}>Редактировать элемент</li>
+
+          {
+            currentNodeType !== "Компетенция" 
+            ?
+            <li className="zoon-option__btn zoon-option__btn_type_edit" onClick={() => onEditNode(currentNode.id, {})}>Редактировать элемент</li>
+            :
+            <li className="zoon-option__btn zoon-option__btn_type_edit" onClick={() => onEditCompetence(currentNode.id, {})}>Редактировать элемент</li>
+          }
+
+          {
+            currentNodeType !== "Компетенция" &&
+            <li className="zoon-option__btn zoon-option__btn_type_move" onClick={() => onMoveNode(currentNode)}>Переместить элемент</li>
+          }
+
           {
             defineUnlinkElement(currentNode)
           }
-          <li className="zoon-option__btn zoon-option__btn_type_sort" onClick={() => onSortChildren(currentNode.id, {})}>Отсортировать дочерние элементы</li>
+
+          {
+            defineSortChildren(currentNode)
+          }
+
           <li className="zoon-option__btn zoon-option__btn_type_remove" onClick={() => onRemoveNode(currentNode.id, {}, "")}>Удалить элемент</li>
         </ul>
       </div>

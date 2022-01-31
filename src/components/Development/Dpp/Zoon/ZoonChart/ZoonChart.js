@@ -714,7 +714,6 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
   }
 
   function buildCompetencePopupOpen() {
-    console.log(divRef.current)
     setIsErrorRequest(false);
     setIsBuildCompetencePopupOpen(true);
     setCurrentActionType("add");
@@ -725,8 +724,6 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
     setIsLoadingRequest(true);
     api.buildCompetence(({ token: token, zoonVersion: dppDescription.zun_version_id, node: competence, nodesId: nodesId }))
     .then((res) => {
-      console.log(zoon);
-      console.log(res);
       zoon.addNode(res);
       zoon.center(res.id);
       nodesId.forEach((id) => {
@@ -737,7 +734,6 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
       closeZoonPopups();
     })
     .catch((err) => {
-      console.log(err);
       setIsErrorRequest(true);
       console.error(err);
     })

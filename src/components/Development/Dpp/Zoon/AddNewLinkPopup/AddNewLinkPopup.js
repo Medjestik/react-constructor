@@ -36,7 +36,7 @@ function AddNewLinkPopup({ isOpen, onClose, currentNode, nodes, onConfirm, zoonL
       <form className="popup__form popup__form_type_large" name="new-link-zoon-form" action="#" noValidate onSubmit={handleSubmit}>
         <h3 className="popup__title">Добавление дополнительной связи</h3>
         <p>{currentNode.name}</p>
-        <p>Выберите умение, к которому добавить дополнительную связь от знания.</p>
+        <p>Выберите умение, к которому необходимо добавить дополнительную связь от знания.</p>
         <ul className="initial-data__item-target-list">
           {
             abilities.map((elem, i) => (
