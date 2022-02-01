@@ -39,6 +39,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
   })
 
   const [countHours, setCountHours] = React.useState(0);
+  const [currentProgramType, setCurrentProgramType] = React.useState({ class: "", text: "", type: "", })
 
   const [profLevels, setProfLevels] = React.useState([]);
   const [selectedProfLevels, setSelectedProfLevels] = React.useState([]);
@@ -183,6 +184,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
         token: token, 
         initialDataVersion: dppDescription.ish_version_id, 
         countHours: countHours,
+        type: currentProgramType.type,
       })
       .then(() => {
         setRequestMessageCompetence({ 
@@ -982,6 +984,22 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
   useOnClickOverlay(closeOverlayPopups);
   useOnPushEsc(closeOverlayPopups);
 
+  function changeProgramType() {
+    if (currentProgramType.type === "1") {
+      setCurrentProgramType({ class: "second", text: "Профессиональная переподготовка", type: "2" });
+    } else {
+      setCurrentProgramType({ class: "first", text: "Повышение квалификации", type: "1" });
+    }
+  }
+
+  React.useEffect(() => {
+    if (countHours > 256) {
+      setCurrentProgramType({ class: "second", text: "Профессиональная переподготовка", type: "2" });
+    } else {
+      setCurrentProgramType({ class: "first", text: "Повышение квалификации", type: "1" });
+    }
+  }, [countHours]);
+
   React.useEffect(() => {
     if (loggedIn) {
         const token = localStorage.getItem("token");
@@ -1009,6 +1027,11 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
           })
           setNsiProgram(initialData.nsis);
           setOrganizationRulesProgram(initialData.corporate_requirements);
+          if (initialData.type === 2) {
+            setCurrentProgramType({ class: "second", text: "Профессиональная переподготовка", type: "2" });
+          } else {
+            setCurrentProgramType({ class: "first", text: "Повышение квалификации", type: "1" });
+          }
         })
         .catch((err) => {
           console.error(err);
@@ -1031,6 +1054,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
       setNsiProgram([]);
       setOrganizationRulesProgram([]);
       setProgramDescription("");
+      setCurrentProgramType({ class: "", text: "", type: "" });
   }
   }, [loggedIn, dppDescription]);
   
@@ -1225,11 +1249,11 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
           </li>
 
           <li className="initial-data__item initial-data__item_type_target">
-            <h3 className="initial-data__item-name">Цель и задачи освоения</h3>
+            <h3 className="initial-data__item-name">Цель и задачи</h3>
             <p className="initial-data__item-subtitle">Укажите, формирует ли ДПП новую компетенцию или совершенствует имеющуюся. Цель и задачи ДПП.</p>
-            <h5 className="initial-data__item-title">Цель освоения</h5>
-            <p className="initial-data__item-subtitle">Целью освоения программы являются совершенствование и (или) получение новой компетенции, необходимой для профессиональной деятельности, и (или) повышение профессионального уровня в рамках имеющейся квалификации в области профессиональной деятельности.</p>
-            <h5 className="initial-data__item-title">Задачи освоения</h5>
+            <h5 className="initial-data__item-title">Цель</h5>
+            <p className="initial-data__item-subtitle">Целью программы являются совершенствование и (или) получение новой компетенции, необходимой для профессиональной деятельности, и (или) повышение профессионального уровня в рамках имеющейся квалификации в области профессиональной деятельности.</p>
+            <h5 className="initial-data__item-title">Задачи</h5>
             <ul className="initial-data__item-target-tasks">
               <li className="initial-data__item-target-task target-task_type_first">приобретение обучающимися знаний, умений и навыков в соответствии с учебным планом и календарным графиком учебного процесса</li>
               <li className="initial-data__item-target-task target-task_type_second">оценка достижений обучающимися планируемых результатов обучения</li>
@@ -1239,7 +1263,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
 
             <input 
               className="initial-popup__input initial-data__target-input"
-              placeholder="введите количество часов трудоемкости освоения"
+              placeholder="введите количество часов трудоемкости"
               type="number"
               id="initial-data-target-input-hours"
               name="initial-data-target-input-hours"
@@ -1252,26 +1276,17 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
             >
             </input>
 
-
             {
-              countHours > 15 ?
+              countHours > 15 &&
               <>
-              {
-                countHours < 250 
-                ?
-                <div className="initial-data__target-info target-info_type_first">
-                  <h6 className="initial-data__target-title">Повышение квалификации</h6>
-                  <p className="initial-data__target-subtitle">программа направлена на совершенствование компетенции, необходимой для профессиональной деятельности и (или) повышение профессионального уровня в рамках имеющейся квалификации</p>
+                <div className={`initial-data__target-info target-info_type_${currentProgramType.class}`}>
+                  <h6 className="initial-data__target-title">{currentProgramType.text}</h6>
+                  {
+                    countHours > 256 &&
+                    <button className=" btn initial-data__btn-change" onClick={changeProgramType}>Изменить тип</button>
+                  }
                 </div>
-                :
-                <div className="initial-data__target-info target-info_type_second">
-                  <h6 className="initial-data__target-title">Профессиональная переподготовка</h6>
-                  <p className="initial-data__target-subtitle">программа направлена на получение у обучающихся новой компетенции, необходимой для профессиональной деятельности</p>
-                </div>
-              }
               </>
-              :
-              ""
             }
             
             {

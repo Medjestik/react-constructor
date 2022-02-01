@@ -13,7 +13,7 @@ function MainPage({ onFeedback, isLoading, feedbackMessage, setFeedbackMessage }
       <div className="main-page__container">
         <section className="main-page__section main-page__news">
           <h3 className="main-page__section-title main-page__title-news">Объявления</h3>
-          <p className="main-page__section-subtitle">Ниже представлен список всех обяъявлений.</p>
+          <p className="main-page__section-subtitle">Ниже представлен список всех объявлений.</p>
           <p className="main-page__section-news-caption">Список объявлений пока пуст!</p>
         </section>
         <section className="main-page__section main-page__support">

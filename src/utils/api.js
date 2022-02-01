@@ -516,7 +516,7 @@ export const saveDescription = ({ token, initialDataVersion, programDescription 
   .then(res => handleResponse(res))
 };
 
-export const saveCompetence = ({ token, initialDataVersion, countHours }) => {
+export const saveCompetence = ({ token, initialDataVersion, countHours, type }) => {
   return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/results`, {
     method: 'POST',
     headers: {
@@ -524,7 +524,7 @@ export const saveCompetence = ({ token, initialDataVersion, countHours }) => {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     },
-    body: JSON.stringify({ countHours })
+    body: JSON.stringify({ countHours, type })
   })
   .then(res => handleResponse(res))
 };
