@@ -10,7 +10,7 @@ function KnowledgeTypology({ typologyParts, currentNode, currentActionType, onCh
   return (
     <div className="knowledge-typology">
       <h5 className="popup__title add-node__title">Соответствие разделу типовой структуры</h5>
-      <p className="popup__subtitle add-node__subtitle knowledge-typology__subtitle">Выберите раздел типовой структуры, которому соответсвует данное знание</p>
+      <p className="popup__subtitle add-node__subtitle knowledge-typology__subtitle">Выберите раздел типовой структуры, которому соответствует данное знание</p>
 
       <ul className="initial-data__item-target-list">
         {

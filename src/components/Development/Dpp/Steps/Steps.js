@@ -4,31 +4,31 @@ import { NavLink } from 'react-router-dom';
 
 const steps = [
   {
-    name: 'Ввод исходных данных',
+    name: 'Исходные данные',
     count: 1,
     link: '/main/development/dpp/initial-data',
     approved: false,
   },
   {
-    name: 'Проектирование ПК и\xa0ЗУН',
+    name: 'Компетентностный профиль',
     count: 2,
     link: '/main/development/dpp/zoon',
     approved: false,
   },
   {
-    name: 'Проектирование ОМ',
+    name: 'Оценочные материалы',
     count: 3,
     link: '/main/development/dpp/evaluation-material',
     approved: false,
   }, 
   {
-    name: 'Проектирование структуры ДПП',
+    name: 'Структура',
     count: 4,
     link: '/main/development/dpp/program-structure',
     approved: false,
   },
   {
-    name: 'Проектирование УММ',
+    name: 'Учебно-методические материалы',
     count: 5,
     link: '/main/development/dpp/educational-material',
     approved: false,

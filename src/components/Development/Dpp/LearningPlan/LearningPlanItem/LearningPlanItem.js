@@ -20,7 +20,10 @@ function LearningPlanItem ({ theme, partIndex, themeIndex, onEdit, isEditRights,
               className={`learning-plan__table-body-row-name learning-plan__table-body-row-name_type_themes ${snapshot.isDragging ? "learning-plan__table-body-row-name_type_dragging" : ""}`}>
                 {`${partIndex + 1}.${themeIndex + 1} ${theme.name}`}
               </span>
-              <button className={`learning-plan__btn-edit ${snapshot.isDragging ? "learning-plan__btn-edit_type_dragging" : ""}`} onClick={() => onEdit(theme)}></button>
+              {
+                isEditRights &&
+                <button className={`learning-plan__btn-edit ${snapshot.isDragging ? "learning-plan__btn-edit_type_dragging" : ""}`} onClick={() => onEdit(theme)}></button>
+              }
             </li>
             <li className="learning-plan__table-body-row table-body-row_type_hours">
               <ul className="learning-plan__table-head-column-list">

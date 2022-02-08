@@ -1300,7 +1300,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
 
           <li className="initial-data__item initial-data__item_type_description">
             <h3 className="initial-data__item-name">Аннотация программы</h3>
-            <p className="initial-data__item-subtitle initial-data__item-subtitle_type_structure">Укажите информацию о программе (актуальность, новизна, теоритическая и практическая значимость).</p>
+            <p className="initial-data__item-subtitle initial-data__item-subtitle_type_structure">Укажите информацию о программе (актуальность, новизна, теоретическая и практическая значимость).</p>
             <textarea 
               className="initial-data__item-qualification-text" 
               name="description-text" 

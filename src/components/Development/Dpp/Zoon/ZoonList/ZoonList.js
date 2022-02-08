@@ -52,9 +52,11 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
   const [isLoadingZoonRequest, setIsLoadingZoonRequest] = React.useState(false);
 
   function onClickNode(elem, type) {
-    setCurrentNode(elem);
-    setCurrentNodeType(type);
-    setOpenZoonOptionPopup(true);
+    if (isEditRights) {
+      setCurrentNode(elem);
+      setCurrentNodeType(type);
+      setOpenZoonOptionPopup(true);
+    }
   }
 
   function openMoveNodePopup(node) {

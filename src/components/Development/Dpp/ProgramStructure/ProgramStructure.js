@@ -150,7 +150,7 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
   return (
     <>
     <div className="program-structure">
-      <h2 className="main__title">Проектирование структуры ДПП</h2>
+      <h2 className="main__title">Проектирование структуры программы</h2>
       {
         isLoadingProgramStructure 
         ?

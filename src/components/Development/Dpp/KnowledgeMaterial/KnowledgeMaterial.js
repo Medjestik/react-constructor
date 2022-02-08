@@ -463,6 +463,7 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
       onChangeType={handleChangeQuestionType}
       editQuestion={editQuestion}
       isLoadingRequest={isSaveLoading}
+      isEditRights={isEditRights}
       />
     }
     </div>

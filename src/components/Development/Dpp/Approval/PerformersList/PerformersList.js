@@ -181,7 +181,11 @@ function PerformersList({ dppDescription, loggedIn, isEditRights }) {
     <>
     <div className="performers-list">
       <h2 className="performers-list__title">Список исполнителей по программе</h2>
-      <button className="btn btn_type_add performers-list__btn-add" onClick={openAddPerformersPopup}>Добавить исполнителя</button>
+      {
+        isEditRights && 
+        <button className="btn btn_type_add performers-list__btn-add" onClick={openAddPerformersPopup}>Добавить исполнителя</button>
+      }
+      
       {
         dataQuestion.length === 0 ?
         <div></div>

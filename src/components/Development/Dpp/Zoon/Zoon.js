@@ -10,7 +10,7 @@ function Zoon({ dppDescription, loggedIn, isEditRights }) {
 
   return (
     <div className="zoon">
-      <h1 className="main__title">Проектирование ПК и ЗУН</h1>
+      <h1 className="main__title">Проектирование компетентностного профиля</h1>
       <Tabs className="tabs">
         <TabList className="tab-list">
           <Tab className="tab">В виде графа</Tab>

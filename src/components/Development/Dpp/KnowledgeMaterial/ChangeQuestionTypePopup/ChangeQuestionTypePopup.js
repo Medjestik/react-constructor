@@ -9,7 +9,7 @@ import oneAnswerColor from '../../../../../images/quiz/one-answer-color.png';
 import multiAnswerColor from '../../../../../images/quiz/multi-answer-color.png';
 import conformityAnswerColor from '../../../../../images/quiz/conformity-answer-color.png';
 
-function ChangeQuestionTypePopup({ isOpen, onClose, onChangeType, editQuestion, isLoadingRequest }) {
+function ChangeQuestionTypePopup({ isOpen, onClose, onChangeType, editQuestion, isLoadingRequest, isEditRights }) {
   
   const [currentType, setCurrentType] = React.useState("");
 
@@ -75,7 +75,10 @@ function ChangeQuestionTypePopup({ isOpen, onClose, onChangeType, editQuestion, 
             <p className={`question-type-popup__item-text ${currentType === "conformity-answer" ? "question-type-popup__item-text_type_active" : "" }`}>Вопрос с установлением соответствия</p>
           </li>
         </ul>
-        <button className={`btn btn_type_save ${isLoadingRequest ? "btn_type_loading" : ""}`} type="submit">{isLoadingRequest ? "Удаление.." : "Сохранить"}</button>
+        {
+          isEditRights &&
+          <button className={`btn btn_type_save ${isLoadingRequest ? "btn_type_loading" : ""}`} type="submit">{isLoadingRequest ? "Удаление.." : "Сохранить"}</button>
+        }
         <div>
           <span></span>
         </div>

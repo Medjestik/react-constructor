@@ -103,13 +103,16 @@ function Program({ program, history, windowWidth }) {
               <span className="development__item-caption-subtitle">{program.status_name}</span>
             </div> 
           </li>
-          <li className="development__item-caption">
+          {
+          /*<li className="development__item-caption">
             <img className="development__item-caption-img" src={stage} alt="этап"></img>
             <div className="development__item-caption-container">
               <h4 className="development__item-caption-title">Текущий этап</h4>
               <span className="development__item-caption-subtitle">{program.current_stage_name}</span>
             </div> 
-          </li>
+          </li>*/
+          }
+          
           <li className="development__item-caption">
             <img className="development__item-caption-img" src={role} alt="роль"></img>
             <div className="development__item-caption-container">
