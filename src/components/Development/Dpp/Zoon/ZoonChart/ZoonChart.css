@@ -208,7 +208,11 @@
   background-color: var(--secondary-color);
 }
 .zoon-chart__btn_type_add-ability {
+  margin-right: 20px;
   background-color: var(--main-color);
+}
+.zoon-chart__btn_type_import-knowledge {
+  background-color: var(--third-light-color);
 }
 .zoon-chart__btn_type_build-competence {
   margin: 0px 0px 0px auto;

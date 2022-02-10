@@ -227,6 +227,7 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
           </TabPanel>
         </Tabs>
       }
+      <a className="btn knowledge-item__btn knowledge-item__btn_export" href={`https://constructor-api.emiit.ru/dpps/${dppDescription.id}/export_plan`} target="_blank" rel="noreferrer">Экспорт в Word</a>
     </div>
 
     {

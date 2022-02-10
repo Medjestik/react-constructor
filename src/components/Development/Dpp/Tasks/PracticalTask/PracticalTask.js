@@ -190,13 +190,13 @@ function PracticalTask({
   }
 
   React.useEffect(() => {
-    if (placeError || timeError) {
+    if (placeError || place.length < 1 || timeError || time.length < 1) {
       setIsBlockSubmitButton(true);
     } else {
       setIsBlockSubmitButton(false);
     }
 
-  }, [placeError, timeError]);
+  }, [place, placeError, time, timeError]);
 
   React.useEffect(() => {
     setDescription(currentTask.description || "");

@@ -993,7 +993,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
   }
 
   React.useEffect(() => {
-    if (countHours > 256) {
+    if (countHours > 249) {
       setCurrentProgramType({ class: "second", text: "Профессиональная переподготовка", type: "2" });
     } else {
       setCurrentProgramType({ class: "first", text: "Повышение квалификации", type: "1" });
@@ -1282,7 +1282,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
                 <div className={`initial-data__target-info target-info_type_${currentProgramType.class}`}>
                   <h6 className="initial-data__target-title">{currentProgramType.text}</h6>
                   {
-                    countHours > 256 &&
+                    countHours > 249 &&
                     <button className=" btn initial-data__btn-change" onClick={changeProgramType}>Изменить тип</button>
                   }
                 </div>

@@ -613,14 +613,18 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
         isShowAddMenu &&
         <>
           <p className="main__subtitle">Для работы с оценочными материалами выберите или создайте новое задание.</p>
-          <div className="task__add">
-            {
-              isEditRights &&
-              <button className={`btn btn_type_add task__add-btn ${isShowAddTaskType ? "task__add-btn_type_show" : "task__add-btn_type_hide"}`}type="button" onClick={toggleShowAddMenu}>Добавить задание</button>
-            }
-            <div className={`task__add-menu ${isShowAddTaskType ? "task__add-menu_type_show" : "task__add-menu_type_hide"}`}>
-              <button className="btn task__menu-btn" type="button" onClick={openAddPracticalTask}>Практическое задание</button>
+
+          <div className="task__add-container">
+            <div className="task__add">
+              {
+                isEditRights &&
+                <button className={`btn btn_type_add task__add-btn ${isShowAddTaskType ? "task__add-btn_type_show" : "task__add-btn_type_hide"}`}type="button" onClick={toggleShowAddMenu}>Добавить задание</button>
+              }
+              <div className={`task__add-menu ${isShowAddTaskType ? "task__add-menu_type_show" : "task__add-menu_type_hide"}`}>
+                <button className="btn task__menu-btn" type="button" onClick={openAddPracticalTask}>Практическое задание</button>
+              </div>
             </div>
+            <a className="btn knowledge-item__btn knowledge-item__btn_export" href={`https://constructor-api.emiit.ru/dpps/${dppDescription.id}/export_tasks`} target="_blank" rel="noreferrer">Экспорт в Word</a>
           </div>
           <h5 className="practical-task__item-name">Добавленные задания</h5>
           <ul className="task__list">

@@ -4,9 +4,13 @@ import JustificationItem from '../JustificationItem/JustificationItem.js';
 
 function Justification({ nsi, type, onChooseJustificationType, onChangeExpertOpinion, onChangeNsiNote, onChooseNsi, onSwapType, addNsiPopupOpen, onEditNsi, onRemoveNsi, currentActionType, currentNode, isEditRights }) {
 
+  console.log(nsi);
+
   const [isJustificationType, setIsJustificationType] = React.useState("");
   const [isExpertOpinion, setIsExpertOpinion] = React.useState("");
   const [isNsiNote, setIsNsiNote] = React.useState("");
+  const [searchName, setSearchName] = React.useState('');
+  const [filteredNsi, setFilteredNsi] = React.useState([]);
  
   function handleJustificationType(e) {
     onSwapType();
@@ -28,6 +32,11 @@ function Justification({ nsi, type, onChooseJustificationType, onChangeExpertOpi
     onChangeNsiNote(e.target.value);
   }
 
+  function handleSearchByName(e) {
+    setSearchName(e.target.value);
+  }
+
+
   function defineJustification(type) {
     switch(type) {
       case 'nsi':
@@ -39,9 +48,22 @@ function Justification({ nsi, type, onChooseJustificationType, onChangeExpertOpi
             isEditRights &&
             <button className="btn btn_type_add justification__btn_type_add" type="button" onClick={addNsiPopupOpen}>Добавить новый источник</button>
           }
+          <div className="search">
+            <input
+            className="input-search"
+            placeholder="поиск по названию"
+            type="text"
+            id="search-nsi-input-name"
+            name="search-nsi-input-name"
+            autoComplete="off"
+            value={searchName}
+            onChange={handleSearchByName}
+            >
+            </input>
+          </div>
           <ul className="justification-source__list">
             {
-              nsi.map((elem, i) => (
+              filteredNsi.map((elem, i) => (
                 <JustificationItem 
                 elem={elem}
                 i={i}
@@ -100,6 +122,16 @@ function Justification({ nsi, type, onChooseJustificationType, onChangeExpertOpi
     }
     setIsExpertOpinion(currentActionType === "edit" ? currentNode.expertOpinion || "" : "");
   }, [currentNode, currentActionType]);
+
+  React.useEffect(() => {
+    const isFilteredNsi = nsi.filter((item) => {
+      return item.nsiFullName.toLowerCase().includes(searchName.toLowerCase());
+    })
+    setFilteredNsi(isFilteredNsi);
+    return(() => {
+      setFilteredNsi([]);
+    })
+  }, [nsi, searchName]);
 
   return (
     <div className="popup__justification">
