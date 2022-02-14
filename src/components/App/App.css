@@ -210,6 +210,21 @@ html, body {
   z-index: 5;
   transition: .3s ease-in-out;
 }
+.btn_type_import {
+  background-color: var(--main-color);
+}
+.btn_type_import::after {
+  content: '';
+  background-image: url('../../images/import.png');
+  background-size: 22px;
+  width: 22px;
+  height: 22px;
+  position: absolute;
+  right: 12px;
+  top: 10px;
+  z-index: 5;
+  transition: .3s ease-in-out;
+}
 .btn_type_password {
   background-color: var(--main-color);
 }

@@ -12,8 +12,9 @@ import * as api from '../../../../../utils/api.js';
 import ErrorDragAndDropPopup from '../ErrorDragAndDropPopup/ErrorDragAndDropPopup.js';
 import SwapChildrenPopup from '../SwapChildrenPopup/SwapChildrenPopup.js';
 import SortElementPopup from '../SortElementPopup/SortElementPopup.js';
+import ImportKnowledgePopup from '../ImportKnowledgePopup/ImportKnowledgePopup.js';
 
-function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, onRemoveNsi, zoonLinks, typologyParts, isEditRights }) {
+function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, onRemoveNsi, onImportNsi, zoonLinks, typologyParts, isEditRights }) {
 
   const [zoonChart, setZoonChart] = React.useState({});
   const [currentNode, setCurrentNode] = React.useState({});
@@ -34,6 +35,10 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
   const [nodeChildren, setNodeChildren] = React.useState([]);
   const [currentActionType, setCurrentActionType] = React.useState("");
   const [isSortElementPopupOpen, setIsSortElementPopupOpen] = React.useState(false);
+  const [isImportKnowledgePopupOpen, setIsImportKnowledgePopupOpen] = React.useState(false);
+  const [foundKnowledge, setFoundKnowledge] = React.useState([]);
+  const [isFoundKnowledge, setIsFoundKnowledge] = React.useState(false);
+  const [isFindingKnowledge, setIsFindingKnowledge] = React.useState(false);
 
   const divRef = React.createRef();
   OrgChart.templates.myTemplate = Object.assign({}, OrgChart.templates.ana);
@@ -770,6 +775,46 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
     });
   }
 
+  function importKnowledgePopup() {
+    setIsImportKnowledgePopupOpen(true);
+  }
+
+  function handleSearchKnowledge(text) {
+    const token = localStorage.getItem("token");
+    setIsFoundKnowledge(true);
+    setIsFindingKnowledge(true);
+    api.searchKnowledge(({ token: token, zoonVersion: dppDescription.zun_version_id, text: text }))
+    .then((res) => {
+      setFoundKnowledge(res.data);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => {
+      setIsFindingKnowledge(false);
+    });
+  }
+
+  function handleAddFindKnowledge(zoon, id) {
+    const token = localStorage.getItem("token");
+    setIsLoadingRequest(true);
+      api.addFindKnowledge(({ token: token, zoonVersion: dppDescription.zun_version_id, knowledge_id: id }))
+      .then((res) => {
+        zoon.addNode(res.data.node);
+        zoon.center(res.data.node.id);
+        onImportNsi(res.data.allNsis);
+        setIsErrorRequest(false);
+        closeZoonPopups();
+      })
+      .catch((err) => {
+        setIsErrorRequest(true);
+        console.error(err);
+      })
+      .finally(() => {
+        setIsLoadingRequest(false);
+      });
+    }
+
   function closeZoonPopups() {
     setIsAddNodePopupOpen(false);
     setIsConfirmRemovePopupOpen(false);
@@ -780,7 +825,16 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
     setIsBuildCompetencePopupOpen(false);
     setIsSwapChildrenPopupOpen(false);
     setIsSortElementPopupOpen(false);
+    setIsImportKnowledgePopupOpen(false);
+    setIsFoundKnowledge(false);
   }
+
+  React.useEffect(() => {
+    return(() => {
+      setFoundKnowledge([]);
+      setIsFoundKnowledge(false);
+    })
+  }, []);
 
   return (
     <>
@@ -791,9 +845,7 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
         <div className="zoon-chart__btn-control">
           <button className="btn btn_type_add zoon-chart__btn_type_add-skill" onClick={handleCreateNewSkill}>Создать новый навык</button>
           <button className="btn btn_type_add zoon-chart__btn_type_add-ability" onClick={handleCreateNewAbility}>Создать новое умение</button>
-          {
-            //<button className="btn btn_type_add zoon-chart__btn_type_import-knowledge">Импортировать знание</button>
-          }
+          <button className="btn btn_type_import zoon-chart__btn_type_import-knowledge" onClick={importKnowledgePopup}>Импортировать знание</button>
           <button className="btn btn_type_add zoon-chart__btn_type_build-competence" onClick={buildCompetencePopupOpen}>Сформировать компетенцию</button>
         </div>
       }
@@ -932,6 +984,24 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
       isLoadingRequest={isLoadingRequest}
       />
     }
+
+    {
+      isImportKnowledgePopupOpen
+      &&
+      <ImportKnowledgePopup
+      isOpen={isImportKnowledgePopupOpen}
+      onClose={closeZoonPopups}
+      zoon={zoonChart}
+      onSearch={handleSearchKnowledge}
+      onAdd={handleAddFindKnowledge}
+      foundKnowledge={foundKnowledge}
+      isFoundKnowledge={isFoundKnowledge}
+      isFindingKnowledge={isFindingKnowledge}
+      isLoadingRequest={isLoadingRequest}
+      />
+    }
+
+    
     
     </>
   );

@@ -14,6 +14,7 @@ import NsiPopup from '../../../../Popup/NsiPopup/NsiPopup.js';
 import EditNsiPopup from '../../../../Popup/EditNsiPopup/EditNsiPopup.js';
 import RemoveNsiPopup from '../../../../Popup/RemoveNsiPopup/RemoveNsiPopup.js';
 import MoveElementPopup from '../MoveElementPopup/MoveElementPopup.js';
+import ImportKnowledgePopup from '../ImportKnowledgePopup/ImportKnowledgePopup.js';
 
 function ZoonList({ dppDescription, loggedIn, isEditRights }) {
 
@@ -50,6 +51,11 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
   const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
   const [isErrorRequest, setIsErrorRequest] = React.useState(false);
   const [isLoadingZoonRequest, setIsLoadingZoonRequest] = React.useState(false);
+
+  const [isImportKnowledgePopupOpen, setIsImportKnowledgePopupOpen] = React.useState(false);
+  const [foundKnowledge, setFoundKnowledge] = React.useState([]);
+  const [isFoundKnowledge, setIsFoundKnowledge] = React.useState(false);
+  const [isFindingKnowledge, setIsFindingKnowledge] = React.useState(false);
 
   function onClickNode(elem, type) {
     if (isEditRights) {
@@ -529,6 +535,45 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
     })
   }
 
+  function importKnowledgePopup() {
+    setIsImportKnowledgePopupOpen(true);
+  }
+
+  function handleSearchKnowledge(text) {
+    const token = localStorage.getItem("token");
+    setIsFoundKnowledge(true);
+    setIsFindingKnowledge(true);
+    api.searchKnowledge(({ token: token, zoonVersion: dppDescription.zun_version_id, text: text }))
+    .then((res) => {
+      setFoundKnowledge(res.data);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => {
+      setIsFindingKnowledge(false);
+    });
+  }
+
+  function handleAddFindKnowledge(zoon, id) {
+    const token = localStorage.getItem("token");
+    setIsLoadingRequest(true);
+      api.addFindKnowledge(({ token: token, zoonVersion: dppDescription.zun_version_id, knowledge_id: id }))
+      .then((res) => {
+        setData({...data, zoons: [...data.zoons, res.data.node]});
+        setNsiProgram(res.data.allNsis);
+        setIsErrorRequest(false);
+        closeZoonListPopups();
+      })
+      .catch((err) => {
+        setIsErrorRequest(true);
+        console.error(err);
+      })
+      .finally(() => {
+        setIsLoadingRequest(false);
+      });
+    }
+
   function closeZoonListPopups() {
     setOpenZoonOptionPopup(false);
     setIsAddNodePopupOpen(false);
@@ -537,6 +582,8 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
     setIsConfirmRemovePopupOpen(false);
     setIsBuildCompetencePopupOpen(false);
     setIsMoveElementPopupOpen(false);
+    setIsImportKnowledgePopupOpen(false);
+    setIsFoundKnowledge(false);
   }
 
   function closeErrorRemovePopup() {
@@ -706,6 +753,7 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
         <div className="zoon-chart__btn-control">
           <button className="btn btn_type_add zoon-chart__btn_type_add-skill" onClick={handleCreateNewSkill}>Создать новый навык</button>
           <button className="btn btn_type_add zoon-chart__btn_type_add-ability" onClick={handleCreateNewAbility}>Создать новое умение</button>
+          <button className="btn btn_type_import zoon-chart__btn_type_import-knowledge" onClick={importKnowledgePopup}>Импортировать знание</button>
           <button className="btn btn_type_add zoon-chart__btn_type_build-competence" onClick={openBuildCompetencePopup}>Сформировать компетенцию</button>
         </div>
         }
@@ -920,6 +968,22 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
             nsi={currentNsiItem}
             onRemove={handleRemoveNsi}
             isLoading={isLoadingZoonRequest}
+          />
+        }
+
+        {
+          isImportKnowledgePopupOpen
+          &&
+          <ImportKnowledgePopup
+          isOpen={isImportKnowledgePopupOpen}
+          onClose={closeZoonListPopups}
+          zoon={{}}
+          onSearch={handleSearchKnowledge}
+          onAdd={handleAddFindKnowledge}
+          foundKnowledge={foundKnowledge}
+          isFoundKnowledge={isFoundKnowledge}
+          isFindingKnowledge={isFindingKnowledge}
+          isLoadingRequest={isLoadingRequest}
           />
         }
         </>

@@ -919,5 +919,31 @@ export const changeTypologyKnowledgeOrder = ({ token, zoonVersion, dtpId, order 
   .then(res => handleResponse(res))
 };
 
+export const searchKnowledge = ({ token, zoonVersion, text }) => {
+  return fetch(`${API_URL}/zuns/${zoonVersion}/knowledges/search`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ text })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const addFindKnowledge = ({ token, zoonVersion, knowledge_id }) => {
+  return fetch(`${API_URL}/zuns/${zoonVersion}/knowledges/import`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ knowledge_id })
+  })
+  .then(res => handleResponse(res))
+};
+
 
 

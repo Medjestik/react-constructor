@@ -118,6 +118,10 @@ function ZoonGraph({ dppDescription, loggedIn, isEditRights }) {
     .finally(() => setIsLoading(false));
   }
 
+  function handleImportNsi(nsi) {
+    setNsiProgram(nsi);
+  }
+
   function closeZoonPopups() {
     setIsRemoveNsiPopupOpen(false);
     setIsEditNsiPopupOpen(false);
@@ -137,6 +141,7 @@ function ZoonGraph({ dppDescription, loggedIn, isEditRights }) {
           onAddNsi={handleAddNsi}
           onEditNsi={openEditNsiPopup}
           onRemoveNsi={openRemoveNsiPopup}
+          onImportNsi={handleImportNsi}
           zoonLinks={zoonLinks} 
           typologyParts={typologyParts}
           isEditRights={isEditRights}
