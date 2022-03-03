@@ -60,11 +60,10 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(currentActionType)
     switch(currentNode.tags[0]) {
       case 'knowledge':
-        const newKnowledge = "Знать " + knowledgeWhat;
-        const newKnowledgeNode = { ...newNode, name: newKnowledge, what: knowledgeWhat, nsis: nsiArray };
+        const newKnowledge = "Знать " + knowledgeWhat[0].toLowerCase() + knowledgeWhat.slice(1);
+        const newKnowledgeNode = { ...newNode, name: newKnowledge, what: knowledgeWhat[0].toLowerCase() + knowledgeWhat.slice(1), nsis: nsiArray };
         if (currentActionType === "edit") {
           onEdit(zoonChart, newKnowledgeNode);
         } else {
@@ -74,8 +73,8 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
         break;
       
       case 'ability': 
-        const newAbility = "Уметь " + abilityWhat + " " + abilityWith + " " + abilityWhere;
-        const newAbilityNode = { ...newNode, name: newAbility, what: abilityWhat, with: abilityWith, where: abilityWhere, nsis: nsiArray };
+        const newAbility = "Уметь " + abilityWhat[0].toLowerCase() + abilityWhat.slice(1) + " " + abilityWith + " " + abilityWhere;
+        const newAbilityNode = { ...newNode, name: newAbility, what: abilityWhat[0].toLowerCase() + abilityWhat.slice(1), with: abilityWith, where: abilityWhere, nsis: nsiArray };
         if (currentActionType === "edit") {
           onEdit(zoonChart, newAbilityNode);
         } else {
@@ -84,8 +83,8 @@ function AddNodePopup({ isOpen, onClose, zoonChart, currentNode, onAdd, onEdit, 
         break;
 
         case 'skill': 
-        const newSkill = "Владеть навыком " + skillWhat + " " + skillWith + " " + skillWhere;
-        const newSkillNode = { ...newNode, name: newSkill, what: skillWhat, with: skillWith, where: skillWhere, nsis: nsiArray };
+        const newSkill = "Владеть навыком " + skillWhat[0].toLowerCase() + skillWhat.slice(1) + " " + skillWith + " " + skillWhere;
+        const newSkillNode = { ...newNode, name: newSkill, what: skillWhat[0].toLowerCase() + skillWhat.slice(1), with: skillWith, where: skillWhere, nsis: nsiArray };
         if (currentActionType === "edit") {
           console.log(newSkillNode);
           onEdit(zoonChart, newSkillNode);

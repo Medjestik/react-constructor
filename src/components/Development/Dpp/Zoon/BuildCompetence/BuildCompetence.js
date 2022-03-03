@@ -18,12 +18,10 @@ function BuildCompetence({ isOpen, onClose, onBuild, onEdit, nodes, zoonChart, i
 
   function handleSubmit(e) {
     e.preventDefault();
-    const newCompetence = "Способен " + competenceWhat + " " + competenceWith + " " + competenceWhere;
-    const newCompetenceNode = { name: newCompetence, what: competenceWhat, with: competenceWith, where: competenceWhere };
+    const newCompetence = "Способен " + competenceWhat[0].toLowerCase() + competenceWhat.slice(1) + " " + competenceWith + " " + competenceWhere;
+    const newCompetenceNode = { name: newCompetence, what: competenceWhat[0].toLowerCase() + competenceWhat.slice(1), with: competenceWith, where: competenceWhere };
     if (currentActionType === "edit") {
-      //console.log(newSkillNode);
-      //onEdit(zoonChart, newSkillNode);
-      onEdit(zoonChart, { ...currentCompetence, name: newCompetence, what: competenceWhat, with: competenceWith, where: competenceWhere }, currentCompetence.id);
+      onEdit(zoonChart, { ...currentCompetence, name: newCompetence, what: competenceWhat[0].toLowerCase() + competenceWhat.slice(1), with: competenceWith, where: competenceWhere }, currentCompetence.id);
     } else {
       onBuild(zoonChart, newCompetenceNode, chooseNodesId);
     }
