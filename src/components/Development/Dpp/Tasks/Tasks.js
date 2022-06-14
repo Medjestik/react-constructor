@@ -3,6 +3,7 @@ import './Tasks.css';
 import * as evaluationMaterialApi from '../../../../utils/evaluationMaterialApi/evaluationMaterialApi.js';
 import * as api from '../../../../utils/api.js';
 import PracticalTask from './PracticalTask/PracticalTask.js';
+import ProjectTask from './ProjectTask/ProjectTask.js';
 import TaskItem from './TaskItem/TaskItem.js';
 import Preloader from '../../../Preloader/Preloader.js';
 import EditNsiPopup from '../../../Popup/EditNsiPopup/EditNsiPopup.js';
@@ -14,6 +15,7 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
   const [isShowAddTaskType, setIsShowAddTaskType] = React.useState(false);
   const [isShowRemoveTaskPopup, setIsShowRemoveTaskPopup] = React.useState(false);
   const [isShowAddPracticalTask, setIsShowAddPracticalTask] = React.useState(false);
+  const [isShowAddProjectTask, setIsShowAddProjectTask] = React.useState(false);
   const [isShowAddMenu, setIsShowAddMenu] = React.useState(true);
   const [tasks, setTasks] = React.useState([]);
   const [skills, setSkills] = React.useState([]);
@@ -48,9 +50,34 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
     setIsShowAddTaskType(false);
   }
 
-  function openEditPracticalTask(task) {
-    setIsShowAddPracticalTask(true);
+  function openAddProjectTask() {
+    setIsShowAddProjectTask(true);
     setIsShowAddMenu(false);
+    setCurrentTaskType("add");
+    setCurrentTask({
+      description: "",
+      instruction: "",
+      control: "",
+      type: "",
+      portfolioStructureReq: "",
+      portfolioPresentationReq: "",
+      portfolioProcedure: "",
+      subjects: [],
+      nsis: [],
+      mtos: [],
+    });
+    setIsShowAddTaskType(false);
+  }
+
+  function openEditPracticalTask(task) {
+    console.log(task);
+    if (task.task_type_id === 1) {
+      setIsShowAddPracticalTask(true);
+      setIsShowAddMenu(false);
+    } else {
+      setIsShowAddProjectTask(true);
+      setIsShowAddMenu(false);
+    }
     setCurrentTaskType("edit");
     setCurrentTask(task);
     setIsShowAddTaskType(false);
@@ -68,6 +95,7 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
 
   function backToTaskList() {
     setIsShowAddPracticalTask(false);
+    setIsShowAddProjectTask(false);
     setIsShowAddMenu(true);
     setCurrentTaskType("");
     setCurrentTask({});
@@ -500,12 +528,13 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
       }
   }
 
-  function handleAddPracticalTask(task) {
+  function handleAddTask(task) {
     setIsLoadingRequest(true);
     const token = localStorage.getItem("token");
     if (loggedIn) {
       evaluationMaterialApi.createTask({ token: token, omId: dppDescription.om_version_id, task: task })
         .then((res) => {
+          console.log(res);
           setTasks([...tasks, res]);
           setCurrentTask(res);
           setCurrentTaskType("edit");
@@ -622,6 +651,7 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
               }
               <div className={`task__add-menu ${isShowAddTaskType ? "task__add-menu_type_show" : "task__add-menu_type_hide"}`}>
                 <button className="btn task__menu-btn" type="button" onClick={openAddPracticalTask}>Практическое задание</button>
+                <button className="btn task__menu-btn" type="button" onClick={openAddProjectTask}>Проектное задание</button>
               </div>
             </div>
             <a className="btn knowledge-item__btn knowledge-item__btn_export" href={`https://constructor-api.emiit.ru/dpps/${dppDescription.id}/export_tasks`} target="_blank" rel="noreferrer">Экспорт в Word</a>
@@ -649,13 +679,13 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
     </div>
     {
       isShowAddPracticalTask &&
-      <PracticalTask 
+      <PracticalTask
       currentTask={currentTask} 
       currentTaskType={currentTaskType}
       skills={skills}
       abilities={abilities}
       onBack={backToTaskList}
-      onAdd={handleAddPracticalTask}
+      onAdd={handleAddTask}
       onEdit={handleEditPracticalTask}
       onAddSubject={handleAddAssessmentItem}
       onAddObject={handleAddAssessmentObject}
@@ -669,6 +699,32 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
       onAddNsi={handleAddNsi}
       onEditNsi={openEditNsiPopup}
       onRemoveNsi={openRemoveNsiPopup}
+      MTO={MTO}
+      onAddMTO={handleAddMTO}
+      onEditMTO={handleEditMTO}
+      onRemoveMTO={handleRemoveMTO}
+      onSelectMTO={handleSelectTaskMTO}
+      onUnSelectMTO={handleUnSelectTaskMTO}
+      onAddAdditionalMaterial={handleUploadAdditionalMaterial}
+      onRemoveAdditionalMaterial={handleRemoveAdditionalMaterial}
+      isLoadingRequest={isLoadingRequest}
+      />
+    }
+    {
+      isShowAddProjectTask &&
+      <ProjectTask 
+      currentTask={currentTask} 
+      currentTaskType={currentTaskType}
+      skills={skills}
+      abilities={abilities}
+      onBack={backToTaskList}
+      onAdd={handleAddTask}
+      onEdit={handleEditPracticalTask}
+      onAddSubject={handleAddAssessmentItem}
+      onAddObject={handleAddAssessmentObject}
+      onRemoveSubject={handleRemoveAssessmentItem}
+      onEditObject={handleEditAssessmentObject}
+      onRemoveObject={handleRemoveAssessmentObject}
       MTO={MTO}
       onAddMTO={handleAddMTO}
       onEditMTO={handleEditMTO}

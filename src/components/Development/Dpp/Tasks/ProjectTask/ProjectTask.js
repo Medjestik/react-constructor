@@ -1,23 +1,20 @@
 import React from 'react';
-import './PracticalTask.css';
+import './ProjectTask.css';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import TinyEditor from '../../../../TinyEditor/TinyEditor.js';
 import AddAssessmentItemPopup from '../AddAssessmentItemPopup/AddAssessmentItemPopup.js';
 import AddAssessmentObjectPopup from '../AddAssessmentObjectPopup/AddAssessmentObjectPopup.js';
-import PracticalTaskSubjectItem from './PracticalTaskSubjectItem/PracticalTaskSubjectItem.js';
+import PracticalTaskSubjectItem from '../PracticalTask/PracticalTaskSubjectItem/PracticalTaskSubjectItem.js';
 import EditAssessmentObjectPopup from '../EditAssessmentObjectPopup/EditAssessmentObjectPopup.js';
 import RemoveAssessmentObjectPopup from '../RemoveAssessmentObjectPopup/RemoveAssessmentObjectPopup.js';
 import RemoveAssessmentItemPopup from '../RemoveAssessmentItemPopup/RemoveAssessmentItemPopup.js';
-import ChooseNsiTaskPopup from '../ChooseNsiTaskPopup/ChooseNsiTaskPopup.js';
-import NsiPopup from '../../../../Popup/NsiPopup/NsiPopup.js';
-//import NsiTaskItem from '../NsiTaskItem/NsiTaskItem.js';
 import TechnicalProvisionTaskPopup from '../TechnicalProvisionTaskPopup/TechnicalProvisionTaskPopup.js';
 import ChooseMTOPopup from '../../../../Popup/ChooseMTOPopup/ChooseMTOPopup.js';
 import MTOTaskItem from '../MTOTaskItem/MTOTaskItem.js';
 import RemoveMTOPopup from '../../../../Popup/RemoveMTOPopup/RemoveMTOPopup.js';
 import AdditionalMaterial from '../AdditionalMaterial/AdditionalMaterial.js';
 
-function PracticalTask({ 
+function ProjectTask({ 
   currentTask, 
   currentTaskType,
   skills, 
@@ -30,13 +27,6 @@ function PracticalTask({
   onRemoveSubject,
   onEditObject,
   onRemoveObject,
-  nsi,
-  nsiTypes,
-  onSelectNsi,
-  onUnSelectNsi,
-  onAddNsi,
-  onEditNsi,
-  onRemoveNsi,
   MTO, 
   onAddMTO,
   onEditMTO,
@@ -49,27 +39,22 @@ function PracticalTask({
 }) {
 
   const [description, setDescription] = React.useState("");
-  const [place, setPlace] = React.useState("");
-  const [placeError, setPlaceError] = React.useState(false);
-  const [time, setTime] = React.useState("");
-  const [timeError, setTimeError] = React.useState(false);
+  const [instruction, setInstruction] = React.useState("");
+  const [control, setControl] = React.useState("");
   const [isOpenAddAssessmentItemPopup, setIsOpenAddAssessmentItemPopup] = React.useState(false);
   const [isOpenAddAssessmentObjectPopup, setIsOpenAddAssessmentObjectPopup] = React.useState(false);
   const [isOpenEditAssessmentObjectPopup, setIsOpenEditAssessmentObjectPopup] = React.useState(false);
   const [isOpenRemoveAssessmentObjectPopup, setIsOpenRemoveAssessmentObjectPopup] = React.useState(false);
   const [isOpenRemoveAssessmentItemPopup, setIsOpenRemoveAssessmentItemPopup] = React.useState(false);
-  //const [nsiTask, setNsiTask] = React.useState([]);
   const [currentSubject, setCurrentSubject] = React.useState({});
   const [currentObject, setCurrentObject] = React.useState({});
-  const [isOpenChooseNsiTaskPopup, setIsOpenChooseNsiTaskPopup] = React.useState(false);
-  const [isOpenAddNsiPopup, setIsOpenAddNsiPopup] = React.useState(false);
   const [isOpenTechnicalProvisionTaskPopup, setIsOpenTechnicalProvisionTaskPopup] = React.useState(false);
   const [mtoTask, setMTOTask] = React.useState([]);
   const [isOpenChooseMTOPopup, setIsOpenChooseMTOPopup] = React.useState(false);
   const [currentMTO, setCurrentMTO] = React.useState({});
   const [currentActionType, setCurrentActionType] = React.useState("");
   const [isOpenRemoveMTOPopup, setIsOpenRemoveMTOPopup] = React.useState(false);
-  const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
+  const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(false);
   const [currentAdditionalMaterial, setCurrentAdditionalMaterial] = React.useState([]);
 
   /*function unSelectNsi(elem) {
@@ -95,14 +80,6 @@ function PracticalTask({
     setIsOpenTechnicalProvisionTaskPopup(true);
     setCurrentActionType("add");
   }
-
-  function openAddNsiPopup() { 
-    setIsOpenAddNsiPopup(true);
-  }
-
-  /*function openChooseNsiTaskPopup() { 
-    setIsOpenChooseNsiTaskPopup(true);
-  }*/
 
   function openAddAssessmentItemPopup() { 
     setIsOpenAddAssessmentItemPopup(true);
@@ -136,12 +113,7 @@ function PracticalTask({
     setIsOpenEditAssessmentObjectPopup(false);
     setIsOpenRemoveAssessmentObjectPopup(false);
     setIsOpenRemoveAssessmentItemPopup(false);
-    setIsOpenChooseNsiTaskPopup(false);
     setIsOpenChooseMTOPopup(false);
-  }
-
-  function closeAddNsiPopup() {
-    setIsOpenAddNsiPopup(false);
   }
 
   function closeMTOPopup() {
@@ -153,9 +125,9 @@ function PracticalTask({
   function onAddTask() {
     const newTask = {
       description: description,
-      place: place,
-      time: time,
-      type: 1,
+      instruction: instruction,
+      control: control,
+      type: 2,
       portfolioStructureReq: "",
       portfolioPresentationReq: "",
       portfolioProcedure: "",
@@ -167,52 +139,31 @@ function PracticalTask({
     }
   }
 
-  function handleChangePlace(e) {
-    setPlace(e.target.value);
-    if (e.target.checkValidity()) {
-      setPlaceError(false);
-    } else {
-      setPlaceError(true);
-    }
-  }
-
-  function handleChangeTime(e) {
-    setTime(e.target.value);
-    if (e.target.checkValidity()) {
-      setTimeError(false);
-    } else {
-      setTimeError(true);
-    }
-  }
-
   function handleChangeDescription(content) {
     setDescription(content);
   }
 
-  React.useEffect(() => {
-    if (placeError || place.length < 1 || timeError || time.length < 1) {
-      setIsBlockSubmitButton(true);
-    } else {
-      setIsBlockSubmitButton(false);
-    }
+  function handleChangeInstruction(content) {
+    setInstruction(content);
+  }
 
-  }, [place, placeError, time, timeError]);
+  function handleChangeControl(content) {
+    setControl(content);
+  }
 
   React.useEffect(() => {
     setDescription(currentTask.description || "");
-    setPlace(currentTask.place || "");
-    setTime(currentTask.time || "");
-    //setNsiTask(currentTask.nsis);
+    setInstruction(currentTask.instruction || "");
+    setControl(currentTask.control || "");
     setMTOTask(currentTask.mtos);
     setCurrentAdditionalMaterial(currentTask.additional_files);
     return () => {
       setDescription("");
-      setPlace("");
-      setTime("");
+      setInstruction("");
+      setControl("");
       setIsBlockSubmitButton(false);
       setCurrentSubject({});
       setCurrentObject({});
-      //setNsiTask([]);
       setMTOTask([]);
       setCurrentMTO({});
       setCurrentAdditionalMaterial([]);
@@ -229,53 +180,38 @@ function PracticalTask({
         <TabList className="tab-list">
           <Tab className="tab">Описание</Tab>
           <Tab disabled={currentTaskType === "add" ? true : false} className="tab">Критерии оценки</Tab>
-          { /*<Tab disabled={currentTaskType === "add" ? true : false} className="tab">Источники информации</Tab> */}
           <Tab disabled={currentTaskType === "add" ? true : false} className="tab">Дополнительные материалы</Tab>
           <Tab disabled={currentTaskType === "add" ? true : false} className="tab">МТО</Tab>
         </TabList>
         <TabPanel>
-          <p className="main__subtitle">Добавление задания на применение навыков в реальных или модельных условиях (Практическое задание).</p>
+          <p className="main__subtitle">Добавление задания на оформление и защиту проекта (Портфолио).</p>
           <ul className="practical-task__list">
             <li className="practical-task__item">
-              <h5 className="practical-task__item-name">Описание ситуации и постановка задачи</h5>
+              <h5 className="practical-task__item-name">Описание проекта и исходные данные</h5>
               <TinyEditor 
-              onChange={handleChangeDescription}
-              currentTask={currentTask}
-              currentTaskType={currentTaskType}
+              onChange={handleChangeDescription} 
+              currentTask={currentTask} 
+              currentTaskType={currentTaskType} 
               currentTaskValue={currentTask.description} 
               />
             </li>
             <li className="practical-task__item">
-              <h5 className="practical-task__item-name">Место выполнения</h5>
-              <input 
-              className="practical-task__item-input"
-              placeholder="введите место выполнения"
-              type="text"
-              id="add-or-input-name"
-              name="add-or-input-name"
-              autoComplete="off"
-              value={place}
-              onChange={handleChangePlace}
-              required
-              >
-              </input>
+              <h5 className="practical-task__item-name">Инструкция по выполнению проекта</h5>
+              <TinyEditor 
+              onChange={handleChangeInstruction}
+              currentTask={currentTask}
+              currentTaskType={currentTaskType}
+              currentTaskValue={currentTask.instruction} 
+              />
             </li>
             <li className="practical-task__item">
-              <h5 className="practical-task__item-name">Максимальное время выполнения (в минутах)</h5>
-              <input 
-              className="practical-task__item-input"
-              placeholder="введите время выполнения в минутах"
-              type="number"
-              id="add-pf-input-registration-number"
-              name="add-pf-input-registration-number"
-              autoComplete="off"
-              pattern="[0-9]*"
-              value={time}
-              onChange={handleChangeTime}
-              required
-              onWheel={(e) => e.target.blur()}
-              >
-              </input>
+              <h5 className="practical-task__item-name">Как будет оцениваться проект</h5>
+              <TinyEditor 
+              onChange={handleChangeControl}
+              currentTask={currentTask}
+              currentTaskType={currentTaskType}
+              currentTaskValue={currentTask.control} 
+              />
             </li>
           </ul>
           <button className={`btn btn_type_save practical-task__save-btn ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoadingRequest ? "btn_type_loading" : ""}`} type="submit" onClick={onAddTask}>{isLoadingRequest ? "Сохранение.." : "Сохранить"}</button>
@@ -303,26 +239,7 @@ function PracticalTask({
           }
           </ul>
         </TabPanel>
-        {
-          /*
-        
-        <TabPanel>
-          <button className="btn btn_type_choose practical-task__btn-add" type="button" onClick={openChooseNsiTaskPopup}>Выбрать источники НСИ</button>
-          <h3 className="practical-task__subtitle-count">{`Источников добавлено: ${nsiTask.length}`}</h3>
-          <ul className="reference-information__list">
-            {
-              nsiTask.map((elem, i) => (
-                <NsiTaskItem             
-                elem={elem}
-                key={i}
-                unSelectNsi={unSelectNsi}
-                />
-              ))
-            }
-          </ul>
-        </TabPanel>
-        */
-        }
+
         <TabPanel> 
           <AdditionalMaterial
             additionalMaterial={currentAdditionalMaterial}
@@ -417,31 +334,6 @@ function PracticalTask({
     }
 
     {
-      isOpenChooseNsiTaskPopup &&
-      <ChooseNsiTaskPopup
-      isOpen={isOpenChooseNsiTaskPopup} 
-      onClose={closeAddAddAssessmentItemPopups}
-      nsi={nsi}
-      currentTask={currentTask}
-      onSelectNsi={onSelectNsi}
-      openAddNsiPopup={openAddNsiPopup}
-      onEditNsi={onEditNsi}
-      onRemoveNsi={onRemoveNsi}
-      isLoadingRequest={isLoadingRequest} 
-      />
-    }
-
-    { 
-      isOpenAddNsiPopup &&
-      <NsiPopup
-      isOpen={isOpenAddNsiPopup}
-      onClose={closeAddNsiPopup}
-      nsiTypes={nsiTypes}
-      onAdd={onAddNsi}
-      />
-    }
-
-    {
       isOpenChooseMTOPopup &&
       <ChooseMTOPopup
       isOpen={isOpenChooseMTOPopup}
@@ -484,5 +376,4 @@ function PracticalTask({
   );
 }
 
-export default PracticalTask;
-
+export default ProjectTask;

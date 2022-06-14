@@ -1,12 +1,10 @@
 import React, { useRef } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 
-function TinyEditor({ onChange, currentTask, currentTaskType }) {
+function TinyEditor({ onChange, currentTask, currentTaskValue, currentTaskType }) {
 
   const editorRef = useRef(null);
   const [value, setValue] = React.useState();
-
-  console.log(currentTask);
 
   React.useEffect(() => {
     onChange(value);
@@ -18,11 +16,11 @@ function TinyEditor({ onChange, currentTask, currentTaskType }) {
       <Editor
         apiKey='fuegeebfi4wbyx35ou0prw31rof6p1sadgeids1lmfkz3r6c'
         onInit={(evt, editor) => editorRef.current = editor}
-        initialValue={currentTaskType === "edit" ? currentTask.description : "<p>Введите ваш контент...</p>"}
+        initialValue={currentTaskType === "edit" ? currentTaskValue : "<p>Введите ваш контент...</p>"}
         value={value}
         onEditorChange={(newValue, editor) => setValue(newValue)}
         init={{
-          height: 500,
+          height: 300,
           menubar: false,
           plugins: [
             "advlist autolink lists link image charmap print preview hr anchor pagebreak",

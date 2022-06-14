@@ -46,7 +46,7 @@ function AdditionalMaterial({ additionalMaterial, onAddAdditionalMaterial, onRem
             :
             <p className="additional-material__documents-caption">Материалы пока не загружены!</p>
           }
-        <button className="btn btn_type_add additional-material_btn_add_material" type="button" onClick={() => showAddPopup()}>Добавить новый материал</button> 
+          <button className="btn btn_type_add additional-material_btn_add_material" type="button" onClick={() => showAddPopup()}>Добавить новый материал</button> 
       </div>
     </div>
 

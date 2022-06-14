@@ -24,7 +24,6 @@ function Dpp({ loggedIn, history, pathname, windowWidth }) {
       setIsLoadingProgram(true);
       api.getProgramDescription({ token: token, id: currentProgramId })
         .then((res) => {
-          console.log(res);
           setDppDescription(res);
           if (res.userRole === 5) {
             setIsEditRights(false);

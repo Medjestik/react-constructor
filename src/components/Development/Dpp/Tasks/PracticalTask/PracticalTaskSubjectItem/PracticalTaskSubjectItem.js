@@ -1,7 +1,7 @@
 import React from 'react';
 import { Collapse } from 'react-collapse';
 
-function PracticalTaskSubjectItem({ item, onAddObject, onRemoveSubject, onEditObject, onRemoveObject }) {
+function PracticalTaskSubjectItem({ item, currentTask, onAddObject, onRemoveSubject, onEditObject, onRemoveObject }) {
   
   const [isShowObjects, setIsShowObjects] = React.useState(false);
 
@@ -14,10 +14,13 @@ function PracticalTaskSubjectItem({ item, onAddObject, onRemoveSubject, onEditOb
       <button className="practical-task__btn-delete" type="button" onClick={() => onRemoveSubject(item)}></button>
       <span className={`practical-task__subject-type ${item.type === "Умение" ? "practical-task__subject-type_type_ability" : ""}`}>{item.type}</span>
       <h4 className="practical-task__subject-name">{item.name}</h4>
-      <div className="development__item-control">
-      <button className={`development__item-button-performer ${isShowObjects ? "button-performer_type_show" : "button-performer_type_hide"}`} type="button" onClick={toggleShowObjects}>Показать объекты оценки</button>
-        <button className="btn btn_type_add" type="button" onClick={() => onAddObject(item)}>Добавить объект оценки</button>
-      </div>
+        {
+          currentTask.task_type_id === 1 &&
+          <div className="development__item-control">
+            <button className={`development__item-button-performer ${isShowObjects ? "button-performer_type_show" : "button-performer_type_hide"}`} type="button" onClick={toggleShowObjects}>Показать объекты оценки</button>
+            <button className="btn btn_type_add" type="button" onClick={() => onAddObject(item)}>Добавить объект оценки</button>
+          </div>
+        } 
       <Collapse isOpened={isShowObjects}>
         <ul className="practical-task__object-list">
           {

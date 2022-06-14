@@ -6,8 +6,6 @@ function KnowledgeItem({ knowledges, chooseKnowledge, dppDescription, onDown, on
   const [searchName, setSearchName] = React.useState('');
   const [currentKnowledges, setCurrentKnowledges] = React.useState([]);
 
-  console.log(knowledges);
-
   function handleSearchByName(e) {
     setSearchName(e.target.value);
   }
