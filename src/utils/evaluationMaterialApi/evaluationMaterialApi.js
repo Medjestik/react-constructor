@@ -248,8 +248,6 @@ export const editTaskMTO = ({ token, dppId, mtoId, mto }) => {
   .then(res => handleResponse(res));
 };
 
-
-
 export const removeTaskMTO = ({ token, dppId, mtoId }) => {
   return fetch(`${API_URL}/dpps/${dppId}/mtos/${mtoId}/destroy`, {
     method: 'POST', 
@@ -311,3 +309,56 @@ export const removeAdditionalMaterial = ({ token, omId, taskId, materialId }) =>
   })
   .then(res => handleResponse(res));
 };
+
+export const createTaskStep = ({ token, omId, taskId, step }) => { 
+  return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/steps`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ step })
+  })
+  .then(res => handleResponse(res));
+};
+
+export const editTaskStep = ({ token, omId, taskId, step }) => { 
+  return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/steps/${step.id}/update`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ step })
+  })
+  .then(res => handleResponse(res));
+};
+
+export const changeOrderTaskStep = ({ token, omId, taskId, steps }) => { 
+  return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/steps/reorder`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ steps })
+  })
+  .then(res => handleResponse(res));
+};
+
+export const removeTaskStep = ({ token, omId, taskId, stepId }) => { 
+  return fetch(`${API_URL}/om/${omId}/tasks/${taskId}/steps/${stepId}/destroy`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+  .then(res => handleResponse(res));
+};
+
+

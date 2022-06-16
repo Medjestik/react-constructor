@@ -15,7 +15,7 @@
   transition: all .3s ease-in-out;
 }
 .task__add-menu_type_show {
-  height: 96px;
+  height: 144px;
 }
 .task__add-menu_type_hide {
   height: 0px;

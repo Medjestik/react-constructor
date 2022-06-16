@@ -1,13 +1,11 @@
 import React from 'react';
 import './Tasks.css';
 import * as evaluationMaterialApi from '../../../../utils/evaluationMaterialApi/evaluationMaterialApi.js';
-import * as api from '../../../../utils/api.js';
 import PracticalTask from './PracticalTask/PracticalTask.js';
 import ProjectTask from './ProjectTask/ProjectTask.js';
+import TaskBySteps from './TaskBySteps/TaskBySteps.js';
 import TaskItem from './TaskItem/TaskItem.js';
 import Preloader from '../../../Preloader/Preloader.js';
-import EditNsiPopup from '../../../Popup/EditNsiPopup/EditNsiPopup.js';
-import RemoveNsiPopup from '../../../Popup/RemoveNsiPopup/RemoveNsiPopup.js';
 import RemoveTaskPopup from './RemoveTaskPopup/RemoveTaskPopup.js';
 
 function Tasks({ loggedIn, dppDescription, isEditRights }) {
@@ -16,17 +14,13 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
   const [isShowRemoveTaskPopup, setIsShowRemoveTaskPopup] = React.useState(false);
   const [isShowAddPracticalTask, setIsShowAddPracticalTask] = React.useState(false);
   const [isShowAddProjectTask, setIsShowAddProjectTask] = React.useState(false);
+  const [isShowAddTaskBySteps, setIsShowAddTaskBySteps] = React.useState(false);
   const [isShowAddMenu, setIsShowAddMenu] = React.useState(true);
   const [tasks, setTasks] = React.useState([]);
   const [skills, setSkills] = React.useState([]);
   const [abilities, setAbilities] = React.useState([]);
   const [currentTask, setCurrentTask] = React.useState({});
   const [currentTaskType, setCurrentTaskType] = React.useState("");
-  const [nsi, setNsi] = React.useState([]);
-  const [nsiTypes, setNsiTypes] = React.useState([]);
-  const [currentNsiItem, setCurrentNsiItem] = React.useState({});
-  const [isRemoveNsiPopupOpen, setIsRemoveNsiPopupOpen] = React.useState(false);
-  const [isEditNsiPopupOpen , setIsEditNsiPopupOpen] = React.useState(false);
   const [MTO, setMTO] = React.useState([]);
   const [isLoadingTasks, setIsLoadingTasks] = React.useState(false);
   const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
@@ -46,6 +40,7 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
       subjects: [],
       nsis: [],
       mtos: [],
+      taskSteps: [],
     });
     setIsShowAddTaskType(false);
   }
@@ -65,17 +60,40 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
       subjects: [],
       nsis: [],
       mtos: [],
+      taskSteps: [],
+    });
+    setIsShowAddTaskType(false);
+  }
+
+  function openAddTaskBySteps() {
+    setIsShowAddTaskBySteps(true);
+    setIsShowAddMenu(false);
+    setCurrentTaskType("add");
+    setCurrentTask({
+      description: "",
+      place: "",
+      time: "",
+      type: "",
+      portfolioStructureReq: "",
+      portfolioPresentationReq: "",
+      portfolioProcedure: "",
+      subjects: [],
+      nsis: [],
+      mtos: [],
+      taskSteps: [],
     });
     setIsShowAddTaskType(false);
   }
 
   function openEditPracticalTask(task) {
-    console.log(task);
     if (task.task_type_id === 1) {
       setIsShowAddPracticalTask(true);
       setIsShowAddMenu(false);
-    } else {
+    } else if (task.task_type_id === 2) {
       setIsShowAddProjectTask(true);
+      setIsShowAddMenu(false);
+    } else {
+      setIsShowAddTaskBySteps(true);
       setIsShowAddMenu(false);
     }
     setCurrentTaskType("edit");
@@ -96,6 +114,7 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
   function backToTaskList() {
     setIsShowAddPracticalTask(false);
     setIsShowAddProjectTask(false);
+    setIsShowAddTaskBySteps(false);
     setIsShowAddMenu(true);
     setCurrentTaskType("");
     setCurrentTask({});
@@ -103,16 +122,6 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
 
   function toggleShowAddMenu() {
     setIsShowAddTaskType(!isShowAddTaskType);
-  }
-
-  function openRemoveNsiPopup(nsi) {
-    setCurrentNsiItem(nsi);
-    setIsRemoveNsiPopupOpen(true);
-  }
-
-  function openEditNsiPopup(nsi) {
-    setCurrentNsiItem(nsi);
-    setIsEditNsiPopupOpen(true);
   }
 
   function handleUploadAdditionalMaterial(material, closePopup) {
@@ -144,7 +153,7 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
     setIsLoadingRequest(true);
     const token = localStorage.getItem("token");
     if (loggedIn) {
-      evaluationMaterialApi.removeAdditionalMaterial({ token: token, omId: dppDescription.om_version_id, taskId: currentTask.id, materialId: materialId})
+      evaluationMaterialApi.removeAdditionalMaterial({ token: token, omId: dppDescription.om_version_id, taskId: currentTask.id, materialId: materialId })
         .then((res) => {
           const indexTask = tasks.indexOf(tasks.find((elem) => (elem.id === currentTask.id)));
           const findTask = tasks[indexTask];
@@ -153,6 +162,114 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
           setTasks([...tasks.slice(0, indexTask), newTask, ...tasks.slice(indexTask + 1)]);
           setCurrentTask(newTask);
           closePopup();
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setIsLoadingRequest(false);
+        });
+    }
+  }
+
+  function handleAddStep(step, closePopup) {
+    const token = localStorage.getItem("token");
+    setIsLoadingRequest(true);
+    if (loggedIn) {
+      evaluationMaterialApi.createTaskStep({ 
+        token: token, 
+        omId: dppDescription.om_version_id, 
+        taskId: currentTask.id, 
+        step: step
+      })
+      .then((res) => {
+        const indexTask = tasks.indexOf(tasks.find((elem) => (elem.id === currentTask.id)));
+        const findTask = tasks[indexTask];
+        const newTask = {...findTask, taskSteps: [...findTask.taskSteps, res.data]};
+        setTasks([...tasks.slice(0, indexTask), newTask, ...tasks.slice(indexTask + 1)]);
+        setCurrentTask(newTask);
+        closePopup();
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+      .finally(() => setIsLoadingRequest(false));
+    }
+  }
+
+  function handleEditTaskStep(step, closePopup) {
+    const token = localStorage.getItem("token");
+    setIsLoadingRequest(true);
+    if (loggedIn) {
+      evaluationMaterialApi.editTaskStep({ 
+        token: token, 
+        omId: dppDescription.om_version_id, 
+        taskId: currentTask.id, 
+        step: step
+      })
+        .then((res) => {
+          const indexTask = tasks.indexOf(tasks.find((elem) => (elem.id === currentTask.id)));
+          const findTask = tasks[indexTask];
+          const indexStep = findTask.taskSteps.indexOf(findTask.taskSteps.find((elem) => (elem.id === step.id)));
+          const newSteps = ([...tasks[indexTask].taskSteps.slice(0, indexStep), res.data, ...tasks[indexTask].taskSteps.slice(indexStep + 1)]);
+          const newTask = { ...findTask, taskSteps: newSteps };
+          setTasks([...tasks.slice(0, indexTask), newTask, ...tasks.slice(indexTask + 1)]);
+          setCurrentTask(newTask);
+          closePopup();
+        })
+        .catch((err) => {
+            console.error(err);
+        })
+        .finally(() => {
+          setIsLoadingRequest(false);
+        });
+      }
+  }
+
+  function handleChangeOrderTaskStep(steps) {
+    const token = localStorage.getItem("token");
+    setIsLoadingRequest(true);
+    console.log(steps)
+    if (loggedIn) {
+      evaluationMaterialApi.changeOrderTaskStep({ 
+        token: token, 
+        omId: dppDescription.om_version_id, 
+        taskId: currentTask.id, 
+        steps: steps
+      })
+        .then((res) => {
+          const indexTask = tasks.indexOf(tasks.find((elem) => (elem.id === currentTask.id)));
+          const findTask = tasks[indexTask];
+          const newTask = { ...findTask, taskSteps: res.data };
+          setTasks([...tasks.slice(0, indexTask), newTask, ...tasks.slice(indexTask + 1)]);
+          setCurrentTask(newTask);
+        })
+        .catch((err) => {
+            console.error(err);
+        })
+        .finally(() => {
+          setIsLoadingRequest(false);
+        });
+      }
+  }
+
+  function handleRemoveTaskStep(step) {
+    setIsLoadingRequest(true);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      evaluationMaterialApi.removeTaskStep({
+        token: token, 
+        omId: dppDescription.om_version_id, 
+        taskId: currentTask.id, 
+        stepId: step.id
+      })
+        .then((res) => {
+          const indexTask = tasks.indexOf(tasks.find((elem) => (elem.id === currentTask.id)));
+          const findTask = tasks[indexTask];
+          const newFiles = findTask.taskSteps.filter((file) => file.id !== res);
+          const newTask = {...findTask, taskSteps: newFiles};
+          setTasks([...tasks.slice(0, indexTask), newTask, ...tasks.slice(indexTask + 1)]);
+          setCurrentTask(newTask);
         })
         .catch((err) => {
           console.log(err);
@@ -263,114 +380,6 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
       })
         .then((res) => {
           setCurrentTask({...currentTask, mtos: currentTask.mtos.filter((elem) => elem.id !== res)});
-        })
-        .catch((err) => {
-            console.error(err);
-        })
-        .finally(() => {
-          setIsLoadingRequest(false);
-        });
-      }
-  }
-
-  function handleAddNsi(elem, closeAllNsiPopup) {
-    const token = localStorage.getItem("token");
-    setIsLoadingRequest(true);
-    if (loggedIn) {
-      api.createNsiElem({ 
-        token: token, 
-        initialDataVersion:dppDescription.ish_version_id, 
-        elem: elem
-      })
-      .then((res) => {
-        setNsi([...nsi, res]);
-        closeAllNsiPopup();
-      })
-      .catch((err) =>{
-        console.log(err);
-      })
-      .finally(() => setIsLoadingRequest(false));
-    }
-  }
-
-  function handleRemoveNsi(id) {
-    const token = localStorage.getItem("token");
-    setIsLoadingRequest(true);
-    api.removeNsiElem({ 
-      token: token, 
-      initialDataVersion: dppDescription.ish_version_id, 
-      id: id
-    })
-    .then((res) => {
-      const newNsi = nsi.filter(elem => elem.id !== res);
-      setNsi(newNsi);
-      setCurrentTask({...currentTask, nsis: currentTask.nsis.filter((elem) => elem.id !== res)});
-      console.log(currentTask);
-      closeNsiPopups();
-    })
-    .catch((err) => {
-      console.error(err);
-    })
-    .finally(() => setIsLoadingRequest(false));
-  }
-
-  function handleEditNsi(elem) {
-    setIsLoadingRequest(true);
-    const token = localStorage.getItem("token");
-    if (loggedIn) {
-      api.editNsiElem({ 
-        token: token, 
-        initialDataVersion:dppDescription.ish_version_id, 
-        elem: elem,
-        id: currentNsiItem.id
-      })
-      .then((res) => {
-        const index = nsi.indexOf(nsi.find((elem) => (elem.id === currentNsiItem.id)));
-        setNsi([...nsi.slice(0, index), res, ...nsi.slice(index + 1)]);
-        closeNsiPopups();
-      })
-      .catch((err) =>{
-        console.log(err);
-      })
-      .finally(() => setIsLoadingRequest(false));
-    }
-  }
-
-  function handleSelectTaskNsi(taskId, nsis, closePopup) {
-    setIsLoadingRequest(true);
-    const token = localStorage.getItem("token");
-    if (loggedIn) {
-      evaluationMaterialApi.selectTaskNsi({ 
-        token: token, 
-        omId: dppDescription.om_version_id, 
-        taskId: taskId,
-        nsis: nsis,
-      })
-        .then((res) => {
-          setCurrentTask({...currentTask, nsis: res});
-          closePopup();
-        })
-        .catch((err) => {
-            console.error(err);
-        })
-        .finally(() => {
-          setIsLoadingRequest(false);
-        });
-      }
-  }
-
-  function handleUnSelectTaskNsi(taskId, nsiId) {
-    setIsLoadingRequest(true);
-    const token = localStorage.getItem("token");
-    if (loggedIn) {
-      evaluationMaterialApi.unSelectTaskNsi({ 
-        token: token, 
-        omId: dppDescription.om_version_id, 
-        taskId: taskId,
-        nsiId: nsiId
-      })
-        .then((res) => {
-          setCurrentTask({...currentTask, nsis: currentTask.nsis.filter((elem) => elem.id !== res)});
         })
         .catch((err) => {
             console.error(err);
@@ -565,6 +574,7 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
         });
       }
   }
+  
 
   function handleRemovePracticalTask(task, closePopup) {
     setIsLoadingRequest(true);
@@ -594,11 +604,6 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
           setTasks(res.tasks);
           setSkills(res.skills);
           setAbilities(res.abilities);
-          res.nsis.sort(function(a,b) {
-            return parseInt(a.type.position) - parseInt(b.type.position);
-          })
-          setNsi(res.nsis);
-          setNsiTypes(res.nsi_types);
           setMTO(res.mtos);
         })
         .catch((err) => {
@@ -608,11 +613,6 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
           setIsLoadingTasks(false);
         });
     }
-  }
-
-  function closeNsiPopups() {
-    setIsRemoveNsiPopupOpen(false);
-    setIsEditNsiPopupOpen(false);
   }
 
   React.useEffect(() => {
@@ -641,7 +641,7 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
       {
         isShowAddMenu &&
         <>
-          <p className="main__subtitle">Для работы с оценочными материалами выберите или создайте новое задание.</p>
+          <p className="main__subtitle">Для работы с оценочными материалами выберите или создайте новое задание.</p> 
 
           <div className="task__add-container">
             <div className="task__add">
@@ -652,6 +652,7 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
               <div className={`task__add-menu ${isShowAddTaskType ? "task__add-menu_type_show" : "task__add-menu_type_hide"}`}>
                 <button className="btn task__menu-btn" type="button" onClick={openAddPracticalTask}>Практическое задание</button>
                 <button className="btn task__menu-btn" type="button" onClick={openAddProjectTask}>Проектное задание</button>
+                <button className="btn task__menu-btn" type="button" onClick={openAddTaskBySteps}>Задание по шагам</button>
               </div>
             </div>
             <a className="btn knowledge-item__btn knowledge-item__btn_export" href={`https://constructor-api.emiit.ru/dpps/${dppDescription.id}/export_tasks`} target="_blank" rel="noreferrer">Экспорт в Word</a>
@@ -692,13 +693,6 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
       onRemoveSubject={handleRemoveAssessmentItem}
       onEditObject={handleEditAssessmentObject}
       onRemoveObject={handleRemoveAssessmentObject}
-      nsi={nsi}
-      nsiTypes={nsiTypes}
-      onSelectNsi={handleSelectTaskNsi}
-      onUnSelectNsi={handleUnSelectTaskNsi}
-      onAddNsi={handleAddNsi}
-      onEditNsi={openEditNsiPopup}
-      onRemoveNsi={openRemoveNsiPopup}
       MTO={MTO}
       onAddMTO={handleAddMTO}
       onEditMTO={handleEditMTO}
@@ -737,36 +731,46 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
       />
     }
     {
-      isEditNsiPopupOpen &&
-      <EditNsiPopup
-        isOpen={isEditNsiPopupOpen}
-        onClose={closeNsiPopups}  
-        nsi={currentNsiItem}
-        onEdit={handleEditNsi}
+      isShowAddTaskBySteps &&
+      <TaskBySteps
+      currentTask={currentTask} 
+      currentTaskType={currentTaskType}
+      skills={skills}
+      abilities={abilities}
+      onBack={backToTaskList}
+      onAdd={handleAddTask}
+      onEdit={handleEditPracticalTask}
+      onAddSubject={handleAddAssessmentItem}
+      onAddObject={handleAddAssessmentObject}
+      onRemoveSubject={handleRemoveAssessmentItem}
+      onEditObject={handleEditAssessmentObject}
+      onRemoveObject={handleRemoveAssessmentObject}
+      onAddStep={handleAddStep}
+      onEditStep={handleEditTaskStep}
+      onChangeOrder={handleChangeOrderTaskStep}
+      onRemoveStep={handleRemoveTaskStep}
+      MTO={MTO}
+      onAddMTO={handleAddMTO}
+      onEditMTO={handleEditMTO}
+      onRemoveMTO={handleRemoveMTO}
+      onSelectMTO={handleSelectTaskMTO}
+      onUnSelectMTO={handleUnSelectTaskMTO}
+      onAddAdditionalMaterial={handleUploadAdditionalMaterial}
+      onRemoveAdditionalMaterial={handleRemoveAdditionalMaterial}
+      isLoadingRequest={isLoadingRequest}
+      />
+    }
+    {
+      isShowRemoveTaskPopup &&
+      <RemoveTaskPopup 
+        isOpen={isShowRemoveTaskPopup}
+        onClose={closeRemoveTaskPopup}  
+        currentTask={currentTask}
+        onConfirm={handleRemovePracticalTask}
         isLoading={isLoadingRequest}
       />
-      }
-      {
-        isRemoveNsiPopupOpen &&
-        <RemoveNsiPopup
-          isOpen={isRemoveNsiPopupOpen}
-          onClose={closeNsiPopups}  
-          nsi={currentNsiItem}
-          onRemove={handleRemoveNsi}
-          isLoading={isLoadingRequest}
-        />
-      }
-      {
-        isShowRemoveTaskPopup &&
-        <RemoveTaskPopup 
-          isOpen={isShowRemoveTaskPopup}
-          onClose={closeRemoveTaskPopup}  
-          currentTask={currentTask}
-          onConfirm={handleRemovePracticalTask}
-          isLoading={isLoadingRequest}
-        />
 
-      }
+    }
     </>
   );
 }

@@ -8,9 +8,6 @@ import PracticalTaskSubjectItem from './PracticalTaskSubjectItem/PracticalTaskSu
 import EditAssessmentObjectPopup from '../EditAssessmentObjectPopup/EditAssessmentObjectPopup.js';
 import RemoveAssessmentObjectPopup from '../RemoveAssessmentObjectPopup/RemoveAssessmentObjectPopup.js';
 import RemoveAssessmentItemPopup from '../RemoveAssessmentItemPopup/RemoveAssessmentItemPopup.js';
-import ChooseNsiTaskPopup from '../ChooseNsiTaskPopup/ChooseNsiTaskPopup.js';
-import NsiPopup from '../../../../Popup/NsiPopup/NsiPopup.js';
-//import NsiTaskItem from '../NsiTaskItem/NsiTaskItem.js';
 import TechnicalProvisionTaskPopup from '../TechnicalProvisionTaskPopup/TechnicalProvisionTaskPopup.js';
 import ChooseMTOPopup from '../../../../Popup/ChooseMTOPopup/ChooseMTOPopup.js';
 import MTOTaskItem from '../MTOTaskItem/MTOTaskItem.js';
@@ -30,13 +27,6 @@ function PracticalTask({
   onRemoveSubject,
   onEditObject,
   onRemoveObject,
-  nsi,
-  nsiTypes,
-  onSelectNsi,
-  onUnSelectNsi,
-  onAddNsi,
-  onEditNsi,
-  onRemoveNsi,
   MTO, 
   onAddMTO,
   onEditMTO,
@@ -58,11 +48,8 @@ function PracticalTask({
   const [isOpenEditAssessmentObjectPopup, setIsOpenEditAssessmentObjectPopup] = React.useState(false);
   const [isOpenRemoveAssessmentObjectPopup, setIsOpenRemoveAssessmentObjectPopup] = React.useState(false);
   const [isOpenRemoveAssessmentItemPopup, setIsOpenRemoveAssessmentItemPopup] = React.useState(false);
-  //const [nsiTask, setNsiTask] = React.useState([]);
   const [currentSubject, setCurrentSubject] = React.useState({});
   const [currentObject, setCurrentObject] = React.useState({});
-  const [isOpenChooseNsiTaskPopup, setIsOpenChooseNsiTaskPopup] = React.useState(false);
-  const [isOpenAddNsiPopup, setIsOpenAddNsiPopup] = React.useState(false);
   const [isOpenTechnicalProvisionTaskPopup, setIsOpenTechnicalProvisionTaskPopup] = React.useState(false);
   const [mtoTask, setMTOTask] = React.useState([]);
   const [isOpenChooseMTOPopup, setIsOpenChooseMTOPopup] = React.useState(false);
@@ -71,10 +58,6 @@ function PracticalTask({
   const [isOpenRemoveMTOPopup, setIsOpenRemoveMTOPopup] = React.useState(false);
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
   const [currentAdditionalMaterial, setCurrentAdditionalMaterial] = React.useState([]);
-
-  /*function unSelectNsi(elem) {
-    onUnSelectNsi(currentTask.id, elem.id);
-  }*/
 
   function openEditMTOPopup(elem) {
     setCurrentMTO(elem);
@@ -95,14 +78,6 @@ function PracticalTask({
     setIsOpenTechnicalProvisionTaskPopup(true);
     setCurrentActionType("add");
   }
-
-  function openAddNsiPopup() { 
-    setIsOpenAddNsiPopup(true);
-  }
-
-  /*function openChooseNsiTaskPopup() { 
-    setIsOpenChooseNsiTaskPopup(true);
-  }*/
 
   function openAddAssessmentItemPopup() { 
     setIsOpenAddAssessmentItemPopup(true);
@@ -136,12 +111,7 @@ function PracticalTask({
     setIsOpenEditAssessmentObjectPopup(false);
     setIsOpenRemoveAssessmentObjectPopup(false);
     setIsOpenRemoveAssessmentItemPopup(false);
-    setIsOpenChooseNsiTaskPopup(false);
     setIsOpenChooseMTOPopup(false);
-  }
-
-  function closeAddNsiPopup() {
-    setIsOpenAddNsiPopup(false);
   }
 
   function closeMTOPopup() {
@@ -202,7 +172,6 @@ function PracticalTask({
     setDescription(currentTask.description || "");
     setPlace(currentTask.place || "");
     setTime(currentTask.time || "");
-    //setNsiTask(currentTask.nsis);
     setMTOTask(currentTask.mtos);
     setCurrentAdditionalMaterial(currentTask.additional_files);
     return () => {
@@ -212,7 +181,6 @@ function PracticalTask({
       setIsBlockSubmitButton(false);
       setCurrentSubject({});
       setCurrentObject({});
-      //setNsiTask([]);
       setMTOTask([]);
       setCurrentMTO({});
       setCurrentAdditionalMaterial([]);
@@ -251,8 +219,8 @@ function PracticalTask({
               className="practical-task__item-input"
               placeholder="введите место выполнения"
               type="text"
-              id="add-or-input-name"
-              name="add-or-input-name"
+              id="practical-task-place"
+              name="practical-task-place"
               autoComplete="off"
               value={place}
               onChange={handleChangePlace}
@@ -266,8 +234,8 @@ function PracticalTask({
               className="practical-task__item-input"
               placeholder="введите время выполнения в минутах"
               type="number"
-              id="add-pf-input-registration-number"
-              name="add-pf-input-registration-number"
+              id="practical-task-time"
+              name="practical-task-time"
               autoComplete="off"
               pattern="[0-9]*"
               value={time}
@@ -303,26 +271,7 @@ function PracticalTask({
           }
           </ul>
         </TabPanel>
-        {
-          /*
-        
-        <TabPanel>
-          <button className="btn btn_type_choose practical-task__btn-add" type="button" onClick={openChooseNsiTaskPopup}>Выбрать источники НСИ</button>
-          <h3 className="practical-task__subtitle-count">{`Источников добавлено: ${nsiTask.length}`}</h3>
-          <ul className="reference-information__list">
-            {
-              nsiTask.map((elem, i) => (
-                <NsiTaskItem             
-                elem={elem}
-                key={i}
-                unSelectNsi={unSelectNsi}
-                />
-              ))
-            }
-          </ul>
-        </TabPanel>
-        */
-        }
+
         <TabPanel> 
           <AdditionalMaterial
             additionalMaterial={currentAdditionalMaterial}
@@ -413,31 +362,6 @@ function PracticalTask({
       currentSubject={currentSubject}
       onConfirm={onRemoveSubject}
       isLoadingRequest={isLoadingRequest}
-      />
-    }
-
-    {
-      isOpenChooseNsiTaskPopup &&
-      <ChooseNsiTaskPopup
-      isOpen={isOpenChooseNsiTaskPopup} 
-      onClose={closeAddAddAssessmentItemPopups}
-      nsi={nsi}
-      currentTask={currentTask}
-      onSelectNsi={onSelectNsi}
-      openAddNsiPopup={openAddNsiPopup}
-      onEditNsi={onEditNsi}
-      onRemoveNsi={onRemoveNsi}
-      isLoadingRequest={isLoadingRequest} 
-      />
-    }
-
-    { 
-      isOpenAddNsiPopup &&
-      <NsiPopup
-      isOpen={isOpenAddNsiPopup}
-      onClose={closeAddNsiPopup}
-      nsiTypes={nsiTypes}
-      onAdd={onAddNsi}
       />
     }
 

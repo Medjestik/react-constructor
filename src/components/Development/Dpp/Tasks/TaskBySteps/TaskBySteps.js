@@ -1,5 +1,4 @@
 import React from 'react';
-import './ProjectTask.css';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import TinyEditor from '../../../../TinyEditor/TinyEditor.js';
 import AddAssessmentItemPopup from '../AddAssessmentItemPopup/AddAssessmentItemPopup.js';
@@ -13,8 +12,10 @@ import ChooseMTOPopup from '../../../../Popup/ChooseMTOPopup/ChooseMTOPopup.js';
 import MTOTaskItem from '../MTOTaskItem/MTOTaskItem.js';
 import RemoveMTOPopup from '../../../../Popup/RemoveMTOPopup/RemoveMTOPopup.js';
 import AdditionalMaterial from '../AdditionalMaterial/AdditionalMaterial.js';
+import TaskSteps from '../TaskSteps/TaskSteps.js';
+import AddTaskStepPopup from '../AddTaskStepPopup/AddTaskStepPopup.js';
 
-function ProjectTask({ 
+function TaskBySteps({ 
   currentTask, 
   currentTaskType,
   skills, 
@@ -35,12 +36,18 @@ function ProjectTask({
   onUnSelectMTO,
   onAddAdditionalMaterial,
   onRemoveAdditionalMaterial,
+  onAddStep,
+  onEditStep,
+  onRemoveStep,
+  onChangeOrder,
   isLoadingRequest 
 }) {
 
   const [description, setDescription] = React.useState("");
-  const [instruction, setInstruction] = React.useState("");
-  const [control, setControl] = React.useState("");
+  const [place, setPlace] = React.useState("");
+  const [placeError, setPlaceError] = React.useState(false);
+  const [time, setTime] = React.useState("");
+  const [timeError, setTimeError] = React.useState(false);
   const [isOpenAddAssessmentItemPopup, setIsOpenAddAssessmentItemPopup] = React.useState(false);
   const [isOpenAddAssessmentObjectPopup, setIsOpenAddAssessmentObjectPopup] = React.useState(false);
   const [isOpenEditAssessmentObjectPopup, setIsOpenEditAssessmentObjectPopup] = React.useState(false);
@@ -50,9 +57,13 @@ function ProjectTask({
   const [currentObject, setCurrentObject] = React.useState({});
   const [isOpenTechnicalProvisionTaskPopup, setIsOpenTechnicalProvisionTaskPopup] = React.useState(false);
   const [mtoTask, setMTOTask] = React.useState([]);
+  const [stepsTask, setStepsTask] = React.useState([]);
+  const [currentStep, setCurrentStep] = React.useState({});
+  const [isOpenAddTaskStepOpen, setIsOpenAddTaskStepOpen] = React.useState(false);
   const [isOpenChooseMTOPopup, setIsOpenChooseMTOPopup] = React.useState(false);
   const [currentMTO, setCurrentMTO] = React.useState({});
   const [currentActionType, setCurrentActionType] = React.useState("");
+  const [currentStepType, setCurrentStepType] = React.useState("");
   const [isOpenRemoveMTOPopup, setIsOpenRemoveMTOPopup] = React.useState(false);
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(false);
   const [currentAdditionalMaterial, setCurrentAdditionalMaterial] = React.useState([]);
@@ -103,6 +114,21 @@ function ProjectTask({
     setIsOpenAddAssessmentObjectPopup(true);
   }
 
+  function openAddTaskStepPopup() {
+    setIsOpenAddTaskStepOpen(true);
+    setCurrentStepType("add");
+  }
+
+  function openEditTaskStepPopup(step) {
+    setIsOpenAddTaskStepOpen(true);
+    setCurrentStep(step);
+    setCurrentStepType("edit");
+  }
+
+  function closeTaskStepPopups() {
+    setIsOpenAddTaskStepOpen(false);
+  }
+
   function closeAddAddAssessmentItemPopups() {
     setIsOpenAddAssessmentItemPopup(false);
     setIsOpenAddAssessmentObjectPopup(false);
@@ -121,9 +147,9 @@ function ProjectTask({
   function onAddTask() {
     const newTask = {
       description: description,
-      instruction: instruction,
-      control: control,
-      type: 2,
+      place: place,
+      time: time,
+      type: 3,
       portfolioStructureReq: "",
       portfolioPresentationReq: "",
       portfolioProcedure: "",
@@ -135,34 +161,56 @@ function ProjectTask({
     }
   }
 
+  function handleChangePlace(e) {
+    setPlace(e.target.value);
+    if (e.target.checkValidity()) {
+      setPlaceError(false);
+    } else {
+      setPlaceError(true);
+    }
+  }
+
+  function handleChangeTime(e) {
+    setTime(e.target.value);
+    if (e.target.checkValidity()) {
+      setTimeError(false);
+    } else {
+      setTimeError(true);
+    }
+  }
+
   function handleChangeDescription(content) {
     setDescription(content);
   }
 
-  function handleChangeInstruction(content) {
-    setInstruction(content);
-  }
+  React.useEffect(() => {
+    if (placeError || place.length < 1 || timeError || time.length < 1) {
+      setIsBlockSubmitButton(true);
+    } else {
+      setIsBlockSubmitButton(false);
+    }
 
-  function handleChangeControl(content) {
-    setControl(content);
-  }
+  }, [place, placeError, time, timeError]);
 
   React.useEffect(() => {
     setDescription(currentTask.description || "");
-    setInstruction(currentTask.instruction || "");
-    setControl(currentTask.control || "");
+    setPlace(currentTask.place || "");
+    setTime(currentTask.time || "");
     setMTOTask(currentTask.mtos);
+    setStepsTask(currentTask.taskSteps);
     setCurrentAdditionalMaterial(currentTask.additional_files);
     return () => {
       setDescription("");
-      setInstruction("");
-      setControl("");
+      setPlace("");
+      setTime("");
       setIsBlockSubmitButton(false);
       setCurrentSubject({});
       setCurrentObject({});
       setMTOTask([]);
+      setStepsTask([]);
       setCurrentMTO({});
       setCurrentAdditionalMaterial([]);
+      setCurrentStep({});
     };
   // eslint-disable-next-line
   }, [currentTask]);
@@ -175,12 +223,13 @@ function ProjectTask({
       <Tabs className="tabs">
         <TabList className="tab-list">
           <Tab className="tab">Описание</Tab>
+          <Tab disabled={currentTaskType === "add" ? true : false} className="tab">Шаги</Tab>
           <Tab disabled={currentTaskType === "add" ? true : false} className="tab">Критерии оценки</Tab>
           <Tab disabled={currentTaskType === "add" ? true : false} className="tab">Дополнительные материалы</Tab>
           <Tab disabled={currentTaskType === "add" ? true : false} className="tab">МТО</Tab>
         </TabList>
         <TabPanel>
-          <p className="main__subtitle">Добавление задания на оформление и защиту проекта (Портфолио).</p>
+          <p className="main__subtitle">Добавление задания на применение навыков в реальных или модельных условиях (Задание по шагам).</p>
           <ul className="practical-task__list">
             <li className="practical-task__item">
               <h5 className="practical-task__item-name">Описание проекта и исходные данные</h5>
@@ -192,26 +241,51 @@ function ProjectTask({
               />
             </li>
             <li className="practical-task__item">
-              <h5 className="practical-task__item-name">Инструкция по выполнению проекта</h5>
-              <TinyEditor 
-              onChange={handleChangeInstruction}
-              currentTask={currentTask}
-              currentTaskType={currentTaskType}
-              currentTaskValue={currentTask.instruction} 
-              />
+              <h5 className="practical-task__item-name">Место выполнения</h5>
+              <input 
+              className="practical-task__item-input"
+              placeholder="введите место выполнения"
+              type="text"
+              id="add-task-by-step-place"
+              name="add-task-by-step-place"
+              autoComplete="off"
+              value={place}
+              onChange={handleChangePlace}
+              required
+              >
+              </input>
             </li>
             <li className="practical-task__item">
-              <h5 className="practical-task__item-name">Как будет оцениваться проект</h5>
-              <TinyEditor 
-              onChange={handleChangeControl}
-              currentTask={currentTask}
-              currentTaskType={currentTaskType}
-              currentTaskValue={currentTask.control} 
-              />
+              <h5 className="practical-task__item-name">Максимальное время выполнения (в минутах)</h5>
+              <input 
+              className="practical-task__item-input"
+              placeholder="введите время выполнения в минутах"
+              type="number"
+              id="add-task-by-step-time"
+              name="add-task-by-step-time"
+              autoComplete="off"
+              pattern="[0-9]*"
+              value={time}
+              onChange={handleChangeTime}
+              required
+              onWheel={(e) => e.target.blur()}
+              >
+              </input>
             </li>
           </ul>
           <button className={`btn btn_type_save practical-task__save-btn ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoadingRequest ? "btn_type_loading" : ""}`} type="submit" onClick={onAddTask}>{isLoadingRequest ? "Сохранение.." : "Сохранить"}</button>
-        </TabPanel> 
+        </TabPanel>
+
+        <TabPanel>
+          <TaskSteps 
+          stepsTask={stepsTask} 
+          onAddStep={openAddTaskStepPopup}
+          onEditStep={openEditTaskStepPopup}
+          onRemoveStep={onRemoveStep}
+          onChangeOrder={onChangeOrder}
+          />
+        </TabPanel>
+
         <TabPanel>
           <button className="btn btn_type_add practical-task__btn-add" type="button" onClick={openAddAssessmentItemPopup}>Добавить предмет оценки</button>
           {
@@ -330,6 +404,20 @@ function ProjectTask({
     }
 
     {
+      isOpenAddTaskStepOpen &&
+      <AddTaskStepPopup
+      isOpen={isOpenAddTaskStepOpen} 
+      onClose={closeTaskStepPopups}
+      currentTask={currentTask}
+      currentStep={currentStep}
+      currentStepType={currentStepType}
+      onAddStep={onAddStep}
+      onEditStep={onEditStep}
+      isLoadingRequest={isLoadingRequest}
+      />
+    }
+
+    {
       isOpenChooseMTOPopup &&
       <ChooseMTOPopup
       isOpen={isOpenChooseMTOPopup}
@@ -372,4 +460,4 @@ function ProjectTask({
   );
 }
 
-export default ProjectTask;
+export default TaskBySteps;
