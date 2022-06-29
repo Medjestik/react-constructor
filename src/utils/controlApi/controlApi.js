@@ -193,3 +193,53 @@ export const getFeedback = ({ token }) => {
   })
   .then(res => handleResponse(res));
 };
+
+export const getControlNotice = ({ token }) => { 
+  return fetch(`${API_URL}/announcements`, {
+    method: 'GET', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+  .then(res => handleResponse(res));
+};
+
+export const addControlNotice = ({ token, announcement }) => { 
+  return fetch(`${API_URL}/announcements`, {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ announcement })
+  })
+  .then(res => handleResponse(res));
+};
+
+export const editControlNotice = ({ token, announcement }) => { 
+  return fetch(`${API_URL}/announcements/${announcement.id}`, {
+    method: 'PATCH', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ announcement })
+  })
+  .then(res => handleResponse(res));
+};
+
+export const deleteControlNotice = ({ token, notice }) => { 
+  return fetch(`${API_URL}/announcements/${notice.id}`, {
+    method: 'DELETE', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+  .then(res => handleResponse(res));
+};

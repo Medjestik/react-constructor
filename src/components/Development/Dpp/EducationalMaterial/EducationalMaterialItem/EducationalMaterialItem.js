@@ -2,13 +2,17 @@ import React from 'react';
 import Preloader from '../../../../Preloader/Preloader.js';
 import './EducationalMaterialItem.css';
 
-function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId, isLoadingContent, backToStructure, isLoadingRequest, isShowRequestMessage, hideRequestMessage, onRemoveFile, onAddMaterial, onRemoveMaterial }) {
+function EducationalMaterialItem({ dppDescription, isShowItem, content, onUpload, currentThemeId, isLoadingContent, backToStructure, isLoadingRequest, isShowRequestMessage, hideRequestMessage, onRemoveFile, onAddMaterial, onRemoveMaterial, onApprove }) {
 
   const [fileName, setFileName] = React.useState({ isShow: false, name: "", });
   const [isShowWrongType, setIsShowWrongType] = React.useState(false);
   const [contentFile, setContentFile] = React.useState({ file: null, });
 
   const formRef = React.createRef();
+
+  function handleApproveContent(type) {
+    onApprove(content, type);
+  }
 
   function defineItemTypeTitle(itemType) {
     switch (itemType) {
@@ -43,7 +47,7 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
   }
 
   function onSave() {
-    setContentFile({ file: null, });
+    //setContentFile({ file: null, });
     hideRequestMessage();
     onUpload(content.type, currentThemeId, contentFile.file);
   }
@@ -98,10 +102,11 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
         
         <div className="educational-material-item__sections">
           <div className="educational-material-item__section-steps">
-            <h3 className="educational-material-item__title">Этапы проектирования контента:</h3>
+            
             <ul className="educational-material-item__grid">
 
               <li className="educational-material-item__grid-item educational-material-item__grid-item_type_one">
+                <h3 className="educational-material-item__document-title">Этапы проектирования контента:</h3>
                 <div className="educational-material-item__step">
                   <span className="educational-material-item__step-number">1</span>
                   <div className="educational-material-item__step-description">
@@ -109,16 +114,10 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
                     <a className="btn btn_type_export-word educational-material-item__btn-export" href={`https://constructor-api.emiit.ru/content/${content.id}/template`} target="_blank" rel="noreferrer">Скачать шаблон</a>
                   </div>
                 </div>
-              </li>
-
-              <li className="educational-material-item__grid-item educational-material-item__grid-item_type_two">
                 <div className="educational-material-item__step">
                   <span className="educational-material-item__step-number">2</span>
                   <p className="educational-material-item__name">Вставьте ваш контент в скачанный шаблон, следуя инструкции в нём.</p>
                 </div>
-              </li>
-
-              <li className="educational-material-item__grid-item educational-material-item__grid-item_type_three">
                 <div className="educational-material-item__step">
                   <span className="educational-material-item__step-number">3</span>
                   <div className="educational-material-item__step-description">
@@ -139,13 +138,102 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
                     }
                   </div>
                 </div>
+                <div className='educational-material-item__save'>
+                <button 
+                  className={`btn btn_type_save educational-material-item__btn-save 
+                  ${fileName.isShow ? "" : "btn_type_block"} 
+                  ${isLoadingRequest ? "btn_type_block" : ""}
+                  `} 
+                  onClick={onSave}
+                  type="button"
+                  >
+                    {isLoadingRequest ? "Сохранение..." : "Сохранить"}
+                  </button>
+                  {
+                    isShowRequestMessage.isShow && isShowRequestMessage.type === "success" &&
+                    <span className="request-node request-node_type_success educational-material-item__node">{isShowRequestMessage.text}</span>
+                  }
+                  {
+                    isShowRequestMessage.isShow && isShowRequestMessage.type === "error" &&
+                    <span className="request-node request-node_type_error educational-material-item__node">{isShowRequestMessage.text}</span>
+                  }
+                </div>
+                
               </li>
 
-              <li className="educational-material-item__grid-item educational-material-item__grid-item_type_four">
-                <div className="educational-material-item__step">
-                  <span className="educational-material-item__step-number">4</span>
-                  <p className="educational-material-item__name">Вы можете загрузить дополнительные материалы в&nbsp;окне «Дополнительные материалы».</p>
+              <li className="educational-material-item__grid-item educational-material-item__grid-item_type_two">
+                <h3 className="educational-material-item__document-title">Подтверждение:</h3>
+                <div className="educational-material-item__documents-approval">
+                  {
+                    content.superviser ?
+                    <>
+                    <p className="educational-material-item__documents-approval-text">Документ подтвержден супервайзером!</p>
+                    <p className="educational-material-item__documents-approval-name">Cупервайзер: ({content.superviserFullname})</p>
+                    </>
+                    :
+                    <p className="educational-material-item__documents-approval-name">Документ требует подтверждения супервайзера.</p>
+                  }
+                  {
+                    content.normocontroller ?
+                    <>
+                    <p className="educational-material-item__documents-approval-text">Документ подтвержден нормоконтролером!</p>
+                    <p className="educational-material-item__documents-approval-name">Нормоконтролер: ({content.normocontrollerFullname})</p>
+                    </>
+                    :
+                    <p className="educational-material-item__documents-approval-name">Документ требует подтверждения нормоконтролера.</p>
+                  }
                 </div>
+                {
+                  dppDescription.userRole === 4 
+                  ?
+                  <div className="educational-material-item__documents-approval">
+                    <p className="educational-material-item__documents-approval-name">Ваша роль: Супервайзер</p>
+                    {
+                      content.superviser ?
+                      <button 
+                      className="btn educational-material-item__documents-approval-btn" 
+                      type='button' 
+                      onClick={() => handleApproveContent('superviser')}>
+                        Отменить подтверждение
+                      </button>
+                      :
+                      <button 
+                      className="btn educational-material-item__documents-approval-btn" 
+                      type='button' 
+                      onClick={() => handleApproveContent('superviser')}>
+                        Подтвердить документ
+                      </button>
+                    }
+                  </div>
+                  :
+                  <div></div>
+                }
+                {
+                  dppDescription.userRole === 6 
+                  ?
+                  <div className="educational-material-item__documents-approval">
+                    <p className="educational-material-item__documents-approval-name">Ваша роль: Нормоконтролер</p>
+                    {
+                      content.normocontroller ?
+                      <button 
+                      className="btn educational-material-item__documents-approval-btn" 
+                      type='button' 
+                      onClick={() => handleApproveContent('normocontroller')}>
+                        Отменить подтверждение
+                      </button>
+                      :
+                      <button 
+                      className="btn educational-material-item__documents-approval-btn" 
+                      type='button' 
+                      onClick={() => handleApproveContent('normocontroller')}>
+                        Подтвердить документ
+                      </button>
+                    }
+                  </div>
+                  :
+                  <div></div>
+                }
+
               </li>
 
               <li className="educational-material-item__grid-item educational-material-item__grid-item_type_five">
@@ -209,24 +297,7 @@ function EducationalMaterialItem({ isShowItem, content, onUpload, currentThemeId
 
             </ul>
 
-            <button 
-            className={`btn btn_type_save educational-material-item__btn-save 
-            ${fileName.isShow ? "" : "btn_type_block"} 
-            ${isLoadingRequest ? "btn_type_block" : ""}
-            `} 
-            onClick={onSave}
-            type="button"
-            >
-              {isLoadingRequest ? "Сохранение..." : "Сохранить"}
-            </button>
-            {
-              isShowRequestMessage.isShow && isShowRequestMessage.type === "success" &&
-              <span className="request-node request-node_type_success">{isShowRequestMessage.text}</span>
-            }
-            {
-              isShowRequestMessage.isShow && isShowRequestMessage.type === "error" &&
-              <span className="request-node request-node_type_error">{isShowRequestMessage.text}</span>
-            }
+            
           </div>
           
         </div>

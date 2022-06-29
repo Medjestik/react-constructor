@@ -156,7 +156,6 @@ function ControlStructure({ loggedIn }) {
               />
             ))
           }
-
         </ul>
       </div>
 

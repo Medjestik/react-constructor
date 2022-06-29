@@ -83,3 +83,15 @@ export const removeMaterial = ({ token, ctId, themeId, type, materialId }) => {
   .then(res => handleResponse(res));
 };
 
+export const approveContent = ({ token, lection, type }) => {
+  return fetch(`${API_URL}/content/lections/${lection.id}/accept_toggle/${type}`, {
+    method: 'PATCH', 
+    headers: {
+      "Accept": "application/json",
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+  .then(res => handleResponse(res));
+};
+

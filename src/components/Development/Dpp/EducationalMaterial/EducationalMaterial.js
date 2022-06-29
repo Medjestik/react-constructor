@@ -49,7 +49,7 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
       setIsLoadingContent(true);
       educationalMaterialApi.getContent({ token: token, ctId: dppDescription.ct_version_id, themeId: themeId, type: currentType  })
         .then((res) => {
-          setContent(res);
+          setContent(res.data);
         })
         .catch(() => {
           setIsShowProgramStructure(true);
@@ -182,6 +182,23 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
       }
   }
 
+  function approveMaterial(lection, type) {
+    //setIsLoadingRequest(true);
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      educationalMaterialApi.approveContent({ token: token, lection: lection, type: type })
+        .then((res) => {
+          setContent(res.data);
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
+          //setIsLoadingRequest(false);
+        });
+      }
+  }
+
   function openRemoveFilePopup(themeId, type) {
     setCurrentThemeId(themeId);
     setCurrentType(type);
@@ -257,6 +274,7 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
         {
           isShowItem &&
           <EducationalMaterialItem
+          dppDescription={dppDescription}
           isShowItem={isShowItem}
           content={content}
           currentThemeId={currentThemeId}
@@ -269,6 +287,7 @@ function EducationalMaterial({ dppDescription, loggedIn, isEditRights }) {
           onRemoveFile={openRemoveFilePopup}
           onAddMaterial={openAddMaterialPopup}
           onRemoveMaterial={openRemoveMaterialPopup}
+          onApprove={approveMaterial}
           />
         }
         {

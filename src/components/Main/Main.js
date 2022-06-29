@@ -58,7 +58,12 @@ function Main({ loggedIn, pathname, onLogout, history, onUpdateUser, onChangePas
 
         <Switch>    
           <Route path="/main" exact>
-            <MainPage onFeedback={onFeedback} isLoading={isLoadingRequest} feedbackMessage={feedbackMessage} setFeedbackMessage={setFeedbackMessage} />
+            <MainPage
+            loggedIn={loggedIn} 
+            onFeedback={onFeedback} 
+            isLoading={isLoadingRequest} 
+            feedbackMessage={feedbackMessage} 
+            setFeedbackMessage={setFeedbackMessage} />
           </Route>
           <Route path="/main/person">
             <Person 

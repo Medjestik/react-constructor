@@ -1,0 +1,23 @@
+.control-notice__title {
+  margin: 20px 0px 0px 0px;
+  font-size: 24px;
+  line-height: 1.3;
+}
+.control-notice__subtitle {
+  margin: 10px 0px 0px 0px;
+  font-size: 18px;
+  line-height: 1.3;
+}
+.control-notice__btn-add {
+  margin: 20px 0px 0px 0px;
+}
+.control-notice__item-text {
+  margin: 0px;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 1.3;
+  color: var(--subtitle-color);
+}
+.control-notice__checkbox {
+  width: 100%;
+}
