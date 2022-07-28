@@ -100,6 +100,7 @@ function NsiPopup({ isOpen, onClose, nsiTypes, ministries, onAdd, isLoading }) {
   const [isArticleFromCollectionPopupOpen, setIsArticleFromCollectionPopupOpen] = React.useState(false);
   const [isOrderMinistryPopupOpen, setIsOrderMinistryPopupOpen] = React.useState(false);
   const [isDispositionMinistryPopupOpen, setIsDispositionMinistryPopupOpen] = React.useState(false);
+  const [isInternationalDocumentPopupOpen, setIsInternationalDocumentPopupPopupOpen] = React.useState(false);
   const [currentElemId, setCurrentElemId] = React.useState(0);
   const [searchText, setSearchText] = React.useState('');
   const [filteredNsiTypes, setFilteredNsiTypes] = React.useState([]);
@@ -406,6 +407,10 @@ function NsiPopup({ isOpen, onClose, nsiTypes, ministries, onAdd, isLoading }) {
     setCurrentElemId(id);
   }
 
+  function internationalDocumentPopupPopupOpen(id) {
+    setIsInternationalDocumentPopupPopupOpen(true);
+    setCurrentElemId(id);
+  }
 
   function closeAllNsiPopup() {
     setIsFederalLawPopupOpen(false);
@@ -455,6 +460,7 @@ function NsiPopup({ isOpen, onClose, nsiTypes, ministries, onAdd, isLoading }) {
     setIsArticleFromCollectionPopupOpen(false);
     setIsOrderMinistryPopupOpen(false);
     setIsDispositionMinistryPopupOpen(false);
+    setIsInternationalDocumentPopupPopupOpen(false);
   }
 
   function defineNsiPopup(type) {  
@@ -649,7 +655,7 @@ function NsiPopup({ isOpen, onClose, nsiTypes, ministries, onAdd, isLoading }) {
         )
       case 57: /* Международный документ */ 
         return (
-          <button className="nsi-popup__item-btn" type="button" onClick={() => dispositionMinistryPopupOpen(type.id)}>Выбрать</button>
+          <button className="nsi-popup__item-btn" type="button" onClick={() => internationalDocumentPopupPopupOpen(type.id)}>Выбрать</button>
         ) 
       default:
         return (<div>Тип не загрузился</div>) 
@@ -1360,9 +1366,9 @@ function NsiPopup({ isOpen, onClose, nsiTypes, ministries, onAdd, isLoading }) {
     }
 
     {
-      isDispositionMinistryPopupOpen &&
+      isInternationalDocumentPopupOpen &&
       <InternationalDocumentPopup
-        isOpen={isDispositionMinistryPopupOpen}
+        isOpen={isInternationalDocumentPopupOpen}
         onClose={closeAllNsiPopup}
         nsi={emptyNsi}
         onSave={onAdd}

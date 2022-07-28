@@ -88,7 +88,7 @@ function InternationalDocumentPopup({ isOpen, onClose, nsi, onSave, id, printDat
       onClose={onClose}
     >
       <form className="popup__form popup__form_type_large" name={`${type}-nsi-form-${id}`} action="#" noValidate onSubmit={handleSubmit}>
-          <h3 className="nsi-popup__title">{`${type === "edit" ? "Редактирование " : "Добавление "}`}Международный документ</h3>
+          <h3 className="nsi-popup__title">{`${type === "edit" ? "Редактирование " : "Добавление "}`}Международного документа</h3>
           <ul className="nsi-popup__list-input">
           <li className="nsi-popup__item-input">
             <h5 className="nsi-popup__input-name">Название документа</h5>
