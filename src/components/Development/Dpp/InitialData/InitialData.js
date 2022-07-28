@@ -44,6 +44,8 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
   const [profLevels, setProfLevels] = React.useState([]);
   const [selectedProfLevels, setSelectedProfLevels] = React.useState([]);
 
+  const [ministries, setMinistries] = React.useState([]);
+
   const [requirementFgos, setRequirementFgos] = React.useState([]);
   const [requirementFgosProgram, setRequirementFgosProgram] = React.useState([]);
   const [isRequirementFgosPopupOpen, setIsRequirementFgosPopupOpen] = React.useState(false);
@@ -1022,6 +1024,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
           setTypologies(initialData.typologies);
           setTypologiesParts(initialData.typology_parts);
           setProgramDescription(initialData.annotationDescription);
+          setMinistries(initialData.ministries);
           initialData.nsis.sort(function(a,b) {
             return parseInt(a.type.position) - parseInt(b.type.position)
           })
@@ -1052,6 +1055,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
       setTypologies([]);
       setTypologiesParts([]);
       setNsiProgram([]);
+      setMinistries([]);
       setOrganizationRulesProgram([]);
       setProgramDescription("");
       setCurrentProgramType({ class: "", text: "", type: "" });
@@ -1503,6 +1507,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
           isOpen={isNsiPopupOpen}
           onClose={closeInitialDataPopups} 
           nsiTypes={nsiTypes}
+          ministries={ministries}
           onAdd={handleAddNsi}
           isLoading={isLoading}
         />
@@ -1515,6 +1520,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
           isOpen={isEditNsiPopupOpen}
           onClose={closeInitialDataPopups}  
           nsi={currentNsiItem}
+          ministries={ministries}
           onEdit={handleEditNsi}
           isLoading={isLoading}
         />

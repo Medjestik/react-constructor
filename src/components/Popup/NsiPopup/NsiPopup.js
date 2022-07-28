@@ -44,10 +44,16 @@ import PNSTPopup from './PNSTPopup/PNSTPopup.js';
 import OfficialSitePopup from './OfficialSitePopup/OfficialSitePopup.js';
 import TextbookPopup from './TextbookPopup/TextbookPopup.js';
 import LocalOrganizationAct from './LocalOrganizationAct/LocalOrganizationAct.js';
+import ArticleFromMagazinePopup from './ArticleFromMagazinePopup/ArticleFromMagazinePopup.js';
+import ArticleFromCollectionPopup from './ArticleFromCollectionPopup/ArticleFromCollectionPopup.js';
+import OrderMinistryPopup from './OrderMinistryPopup/OrderMinistryPopup.js';
+import DispositionMinistryPopup from './DispositionMinistryPopup/DispositionMinistryPopup.js';
+import InternationalDocumentPopup from './InternationalDocumentPopup/InternationalDocumentPopup.js';
 import DefineNsiImg from '../../Define/DefineNsiImg/DefineNsiImg.js';
 
-function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {       
-  const [isFederalLawPopupOpen, setIsFederalLawPopupOpen] = React.useState(false);  
+function NsiPopup({ isOpen, onClose, nsiTypes, ministries, onAdd, isLoading }) {
+  
+  const [isFederalLawPopupOpen, setIsFederalLawPopupOpen] = React.useState(false);
   const [isRussiaLawPopupOpen, setIsRussiaLawPopupOpen] = React.useState(false);
   const [isRussiaCodexPopupOpen, setIsRussiaCodexPopupOpen] = React.useState(false);
   const [isPresidentEdictPopupOpen, setIsPresidentEdictPopupOpen] = React.useState(false);
@@ -90,6 +96,10 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {
   const [isOfficialSitePopupOpen, setIsOfficialSitePopupOpen] = React.useState(false);
   const [isTextbookPopupPopupOpen, setIsTextbookPopupPopupOpen] = React.useState(false);
   const [isLocalOrganizationActPopupOpen, setIsLocalOrganizationActPopupOpen] = React.useState(false);
+  const [isArticleFromMagazinePopupOpen, setIsArticleFromMagazinePopupOpen] = React.useState(false);
+  const [isArticleFromCollectionPopupOpen, setIsArticleFromCollectionPopupOpen] = React.useState(false);
+  const [isOrderMinistryPopupOpen, setIsOrderMinistryPopupOpen] = React.useState(false);
+  const [isDispositionMinistryPopupOpen, setIsDispositionMinistryPopupOpen] = React.useState(false);
   const [currentElemId, setCurrentElemId] = React.useState(0);
   const [searchText, setSearchText] = React.useState('');
   const [filteredNsiTypes, setFilteredNsiTypes] = React.useState([]);
@@ -112,6 +122,7 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {
     nsiPages: "",
     nsiLink: "",
     nsiFullName: "",
+    nsiMinistry: "",
   }
 
   function printDate(obj) {
@@ -148,7 +159,6 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {
     const currentNsi = nsiTypes.filter((item) => {
       return item.name.toLowerCase().includes(searchText.toLocaleLowerCase());
     })
-    console.log(currentNsi);
     setFilteredNsiTypes(currentNsi);
   }, [nsiTypes, searchText]);
 
@@ -376,6 +386,26 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {
     setCurrentElemId(id);
   }
 
+  function articleFromMagazinePopupOpen(id) {
+    setIsArticleFromMagazinePopupOpen(true);
+    setCurrentElemId(id);
+  }
+
+  function articleFromCollectionPopupOpen(id) {
+    setIsArticleFromCollectionPopupOpen(true);
+    setCurrentElemId(id);
+  }
+
+  function orderMinistryPopupOpen(id) {
+    setIsOrderMinistryPopupOpen(true);
+    setCurrentElemId(id);
+  }
+
+  function dispositionMinistryPopupOpen(id) {
+    setIsDispositionMinistryPopupOpen(true);
+    setCurrentElemId(id);
+  }
+
 
   function closeAllNsiPopup() {
     setIsFederalLawPopupOpen(false);
@@ -421,6 +451,10 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {
     setIsOfficialSitePopupOpen(false);
     setIsTextbookPopupPopupOpen(false);
     setIsLocalOrganizationActPopupOpen(false);
+    setIsArticleFromMagazinePopupOpen(false);
+    setIsArticleFromCollectionPopupOpen(false);
+    setIsOrderMinistryPopupOpen(false);
+    setIsDispositionMinistryPopupOpen(false);
   }
 
   function defineNsiPopup(type) {  
@@ -596,7 +630,27 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {
       case 52: /* Локальный акт организации */ 
         return (
           <button className="nsi-popup__item-btn" type="button" onClick={() => localOrganizationActPopupOpen(type.id)}>Выбрать</button>
-        )   
+        )
+      case 53: /* Статья из журнала */ 
+        return (
+          <button className="nsi-popup__item-btn" type="button" onClick={() => articleFromMagazinePopupOpen(type.id)}>Выбрать</button>
+        )
+      case 54: /* Статья из сборника */ 
+        return (
+          <button className="nsi-popup__item-btn" type="button" onClick={() => articleFromCollectionPopupOpen(type.id)}>Выбрать</button>
+        )
+      case 55: /* Приказ Министерства */ 
+        return (
+          <button className="nsi-popup__item-btn" type="button" onClick={() => orderMinistryPopupOpen(type.id)}>Выбрать</button>
+        )
+      case 56: /* Распоряжение Министерства */ 
+        return (
+          <button className="nsi-popup__item-btn" type="button" onClick={() => dispositionMinistryPopupOpen(type.id)}>Выбрать</button>
+        )
+      case 57: /* Международный документ */ 
+        return (
+          <button className="nsi-popup__item-btn" type="button" onClick={() => dispositionMinistryPopupOpen(type.id)}>Выбрать</button>
+        ) 
       default:
         return (<div>Тип не загрузился</div>) 
     }
@@ -940,7 +994,6 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {
       />
     }
 
-
     {
       isDispositionRussiaTransportPopupOpen &&
       <DispositionRussiaTransportPopup
@@ -1232,12 +1285,84 @@ function NsiPopup({ isOpen, onClose, nsiTypes, onAdd, isLoading }) {
         type={"add"}
         isLoading={isLoading}
       />
-    }
+    } 
 
     {
       isLocalOrganizationActPopupOpen &&
       <LocalOrganizationAct
         isOpen={isLocalOrganizationActPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
+
+    {
+      isArticleFromMagazinePopupOpen &&
+      <ArticleFromMagazinePopup
+        isOpen={isArticleFromMagazinePopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
+
+    {
+      isArticleFromCollectionPopupOpen &&
+      <ArticleFromCollectionPopup
+        isOpen={isArticleFromCollectionPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
+
+    {
+      isOrderMinistryPopupOpen &&
+      <OrderMinistryPopup
+        isOpen={isOrderMinistryPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+        ministries={ministries}
+      />
+    }
+
+    {
+      isDispositionMinistryPopupOpen &&
+      <DispositionMinistryPopup
+        isOpen={isDispositionMinistryPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+        ministries={ministries}
+      />
+    }
+
+    {
+      isDispositionMinistryPopupOpen &&
+      <InternationalDocumentPopup
+        isOpen={isDispositionMinistryPopupOpen}
         onClose={closeAllNsiPopup}
         nsi={emptyNsi}
         onSave={onAdd}

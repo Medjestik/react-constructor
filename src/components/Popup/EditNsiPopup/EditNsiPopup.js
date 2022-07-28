@@ -42,8 +42,13 @@ import PNSTPopup from '../NsiPopup/PNSTPopup/PNSTPopup.js';
 import OfficialSitePopup from '../NsiPopup/OfficialSitePopup/OfficialSitePopup.js';
 import TextbookPopup from '../NsiPopup/TextbookPopup/TextbookPopup.js';
 import LocalOrganizationAct from '../NsiPopup/LocalOrganizationAct/LocalOrganizationAct.js';
+import ArticleFromMagazinePopup from '../NsiPopup/ArticleFromMagazinePopup/ArticleFromMagazinePopup.js';
+import ArticleFromCollectionPopup from '../NsiPopup/ArticleFromCollectionPopup/ArticleFromCollectionPopup.js';
+import OrderMinistryPopup from '../NsiPopup/OrderMinistryPopup/OrderMinistryPopup.js';
+import DispositionMinistryPopup from '../NsiPopup/DispositionMinistryPopup/DispositionMinistryPopup.js';
+import InternationalDocumentPopup from '../NsiPopup/InternationalDocumentPopup/InternationalDocumentPopup.js';
 
-function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
+function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading, ministries }) {
 
   function printDate(obj) {
     let t=new Date(obj);
@@ -630,7 +635,74 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading }) {
             type={"edit"}
             isLoading={isLoading}
           />
-        )         
+        )
+      case 53: /* Статья из журнала */
+        return (
+          <ArticleFromMagazinePopup
+            isOpen={isOpen}
+            onClose={onClose}
+            nsi={nsi}
+            onSave={onEdit}
+            id={nsi.id}
+            printDate={printDate}
+            type={"edit"}
+            isLoading={isLoading}
+          />
+        )
+      case 54: /* Статья из сборника */
+        return (
+          <ArticleFromCollectionPopup
+            isOpen={isOpen}
+            onClose={onClose}
+            nsi={nsi}
+            onSave={onEdit}
+            id={nsi.id}
+            printDate={printDate}
+            type={"edit"}
+            isLoading={isLoading}
+          />
+        )
+      case 55: /* Приказ Министерства */
+        return (
+          <OrderMinistryPopup
+            isOpen={isOpen}
+            onClose={onClose}
+            nsi={nsi}
+            onSave={onEdit}
+            id={nsi.id}
+            printDate={printDate}
+            type={"edit"}
+            isLoading={isLoading}
+            ministries={ministries}
+          />
+        )
+      case 56: /* Распоряжение Министерства */ 
+        return (
+          <DispositionMinistryPopup
+            isOpen={isOpen}
+            onClose={onClose}
+            nsi={nsi}
+            onSave={onEdit}
+            id={nsi.id}
+            printDate={printDate}
+            type={"edit"}
+            isLoading={isLoading}
+            ministries={ministries}
+          />
+        )
+      case 57: /* Международный документ */ 
+        return (
+          <InternationalDocumentPopup
+            isOpen={isOpen}
+            onClose={onClose}
+            nsi={nsi}
+            onSave={onEdit}
+            id={nsi.id}
+            printDate={printDate}
+            type={"edit"}
+            isLoading={isLoading}
+          />
+        )    
       default:
         return (<div>Тип не загрузился</div>)
     }

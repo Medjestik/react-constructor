@@ -203,7 +203,27 @@ function DefineNsiImg({ nsiId }) {
       case 52: /* Локальный акт организации */ 
         return (
           <img className="nsi-img" src={organization} alt="иконка"></img>
-        )      
+        )
+      case 53: /* Статья из журнала */ 
+        return (
+          <img className="nsi-img" src={books} alt="иконка"></img>
+        )
+      case 54: /* Статья из сборника */ 
+        return (
+          <img className="nsi-img" src={books} alt="иконка"></img>
+        )
+      case 55: /* Приказ Министерства */ 
+        return (
+          <img className="nsi-img" src={order} alt="иконка"></img>
+        )
+      case 56: /* Распоряжение Министерства */ 
+        return (
+          <img className="nsi-img" src={disposition} alt="иконка"></img>
+        )
+      case 57: /* Международный документ */ 
+        return (
+          <img className="nsi-img" src={web} alt="иконка"></img>
+        )       
         default:
         return (<div>Тип не загрузился</div>)
     }

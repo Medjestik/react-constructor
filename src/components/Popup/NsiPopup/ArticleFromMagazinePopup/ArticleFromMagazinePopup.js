@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from '../../Popup.js';
 
-function TextbookPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLoading }) {
+function ArticleFromMagazinePopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLoading }) {
 
   const [addName, setAddName] = React.useState('');
   const [addNameError, setAddNameError] = React.useState(false);
@@ -9,18 +9,19 @@ function TextbookPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLo
   const [addAuthorsError, setAddAuthorsError] = React.useState(false);
   const [addEditor, setAddEditor] = React.useState('');
   const [addEditorError, setAddEditorError] = React.useState(false);
-  const [addCity, setAddCity] = React.useState('');
-  const [addCityError, setAddCityError] = React.useState(false);
   const [addYear, setAddYear] = React.useState('');
   const [addYearError, setAddYearError] = React.useState(false);
+  const [addNumber, setAddNumber] = React.useState('');
+  const [addNumberError, setAddNumberError] = React.useState(false);
   const [addPages, setAddPages] = React.useState('');
+  const [addPagesError, setAddPagesError] = React.useState(false);
   const [addFullName, setAddFullName] = React.useState('');
 
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
 
   function handleSubmit(e) {
     e.preventDefault();
-    const newNsi = { ...nsi, nsiName: addName, nsiAuthors: addAuthors, nsiEditor: addEditor, nsiCity: addCity, nsiYear: addYear, nsiPages: addPages, type_id: id, nsiFullName: addFullName };
+    const newNsi = { ...nsi, nsiName: addName, nsiAuthors: addAuthors, nsiEditor: addEditor, nsiYear: addYear, nsiPages: addPages, nsiNumber: addNumber, type_id: id, nsiFullName: addFullName };
     onSave(newNsi, onClose);
   }
 
@@ -51,15 +52,6 @@ function TextbookPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLo
     }
   }
 
-  function handleAddCity(e) {
-    setAddCity(e.target.value);
-    if (e.target.checkValidity()) {
-      setAddCityError(false);
-    } else {
-      setAddCityError(true);
-    }
-  }
-
   function handleAddYear(e) {
     setAddYear(e.target.value);
     if (e.target.checkValidity()) {
@@ -69,23 +61,38 @@ function TextbookPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLo
     }
   }
 
+  function handleAddNumber(e) {
+    setAddNumber(e.target.value);
+    if (e.target.checkValidity()) {
+      setAddNumberError(false);
+    } else {
+      setAddNumberError(true);
+    }
+  }
+
   function handleAddPages(e) {
     setAddPages(e.target.value);
+    if (e.target.checkValidity()) {
+      setAddPagesError(false);
+    } else {
+      setAddPagesError(true);
+    }
   }
 
   React.useEffect(() => {
     setAddName(nsi.nsiName);
     setAddAuthors(nsi.nsiAuthors);
     setAddEditor(nsi.nsiEditor);
-    setAddCity(nsi.nsiCity);
     setAddYear(nsi.nsiYear);
-    setAddPages(nsi.nsiPages || "");
+    setAddPages(nsi.nsiPages);
+    setAddNumber(nsi.nsiNumber);
     setAddFullName('');
     setAddNameError(false);
     setAddAuthorsError(false);
     setAddEditorError(false);
-    setAddCityError(false);
     setAddYearError(false);
+    setAddPagesError(false);
+    setAddNumberError(false);
     setIsBlockSubmitButton(true);
   }, [nsi, isOpen]);
 
@@ -97,29 +104,30 @@ function TextbookPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLo
       addAuthors.length < 1 ||
       addEditorError || 
       addEditor.length < 1 ||
-      addCityError ||
-      addCity.length < 1 ||
       addYearError ||
-      addYear.length < 1
+      addYear.length < 1 ||
+      addPagesError || 
+      addPages.length < 1 ||
+      addNumberError || 
+      addNumber.length < 1
       ) {
       setIsBlockSubmitButton(true);
     } else {
       setIsBlockSubmitButton(false);
     }
     // eslint-disable-next-line
-  }, [addName, addAuthors, addEditor, addCity, addYear])
+  }, [addName, addAuthors, addEditor, addYear, addPages, addNumber]);
 
   React.useEffect(() => { 
     let name = addName.length > 0 ? addName : "<наименование>"
     let authors = addAuthors.length > 0 ? addAuthors : "<Фамилия И.О. авторов>"
-    let editor = addEditor.length > 0 ? addEditor : "<издательство>"
-    let city = addCity.length > 0 ? addCity : "<город>"
+    let editor = addEditor.length > 0 ? addEditor : "<журнал>"
     let year = addYear.length > 0 ? addYear : "<год>"
-    let pages = addPages.length > 0 ? ". — " + addPages + " с." : ""
-    setAddFullName(authors + " " + name + ". — " + city + " : " + editor + ", " + year + "" + pages);
-
+    let number = addNumber.length > 0 ? addNumber : "<номер>"
+    let pages = addPages.length > 0 ? ". — С. " + addPages + "." : "<страницы>"
+    setAddFullName(authors + " " + name + " // " + editor + ". — " + year + ". — №" + number + " " + pages);
   // eslint-disable-next-line
-  }, [addName, addAuthors, addEditor, addCity, addYear, addPages])
+  }, [addName, addAuthors, addEditor, addYear, addPages, addNumber]);
 
   return (
     <Popup 
@@ -127,29 +135,13 @@ function TextbookPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLo
       onClose={onClose}
     >
       <form className="popup__form popup__form_type_large" name={`${type}-nsi-form-${id}`} action="#" noValidate onSubmit={handleSubmit}>
-          <h3 className="nsi-popup__title">{`${type === "edit" ? "Редактирование " : "Добавление "}`}учебников и монографий</h3>
+          <h3 className="nsi-popup__title">{`${type === "edit" ? "Редактирование " : "Добавление "}`}статьи из журнала</h3>
           <ul className="nsi-popup__list-input">
           <li className="nsi-popup__item-input">
-            <h5 className="nsi-popup__input-name">Наименование</h5>
-            <input 
-            className="nsi-popup__input"
-            placeholder="введите наименование"
-            type="text"
-            id={`${type}-nsi-input-name-${id}`}
-            name={`${type}-nsi-input-name-${id}`}
-            autoComplete="off"
-            value={addName}
-            onChange={handleAddName}
-            required
-            >
-            </input>
-            <span className={`nsi-popup__input-error ${addNameError ? "nsi-popup__input-error_type_show" : ""}`}>Заполните наименование</span>
-          </li>
-          <li className="nsi-popup__item-input">
-            <h5 className="nsi-popup__input-name">Автор</h5>
+            <h5 className="nsi-popup__input-name">Авторы</h5>
             <input  
             className="nsi-popup__input"
-            placeholder="введите фамилию и инициалы автора"
+            placeholder="введите фамилию и инициалы авторов"
             type="text"
             id={`${type}-nsi-input-authors-${id}`}
             name={`${type}-nsi-input-authors-${id}`}
@@ -159,13 +151,29 @@ function TextbookPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLo
             required
             >
             </input>
-            <span className={`nsi-popup__input-error ${addAuthorsError ? "nsi-popup__input-error_type_show" : ""}`}>Заполните фамилию и инициалы автора</span>
+            <span className={`nsi-popup__input-error ${addAuthorsError ? "nsi-popup__input-error_type_show" : ""}`}>Заполните фамилию и инициалы авторов</span>
           </li>
           <li className="nsi-popup__item-input">
-            <h5 className="nsi-popup__input-name">Издательство</h5>
+            <h5 className="nsi-popup__input-name">Название статьи</h5>
+            <input 
+            className="nsi-popup__input"
+            placeholder="введите название статьи"
+            type="text"
+            id={`${type}-nsi-input-name-${id}`}
+            name={`${type}-nsi-input-name-${id}`}
+            autoComplete="off"
+            value={addName}
+            onChange={handleAddName}
+            required
+            >
+            </input>
+            <span className={`nsi-popup__input-error ${addNameError ? "nsi-popup__input-error_type_show" : ""}`}>Заполните название статьи</span>
+          </li>
+          <li className="nsi-popup__item-input">
+            <h5 className="nsi-popup__input-name">Название журнала</h5>
             <input  
             className="nsi-popup__input"
-            placeholder="введите название издательства"
+            placeholder="введите название журнала"
             type="text"
             id={`${type}-nsi-input-editor-${id}`}
             name={`${type}-nsi-input-editor-${id}`}
@@ -175,23 +183,7 @@ function TextbookPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLo
             required
             >
             </input>
-            <span className={`nsi-popup__input-error ${addEditorError ? "nsi-popup__input-error_type_show" : ""}`}>Заполните название издательства</span>
-          </li>
-          <li className="nsi-popup__item-input">
-            <h5 className="nsi-popup__input-name">Город издания</h5>
-            <input  
-            className="nsi-popup__input"
-            placeholder="введите город издания"
-            type="text"
-            id={`${type}-nsi-input-city-${id}`}
-            name={`${type}-nsi-input-city-${id}`}
-            autoComplete="off"
-            value={addCity}
-            onChange={handleAddCity}
-            required
-            >
-            </input>
-            <span className={`nsi-popup__input-error ${addCityError ? "nsi-popup__input-error_type_show" : ""}`}>Заполните город издания</span>
+            <span className={`nsi-popup__input-error ${addEditorError ? "nsi-popup__input-error_type_show" : ""}`}>Заполните название журнала</span>
           </li>
           <li className="nsi-popup__item-input">
             <h5 className="nsi-popup__input-name">Год издания</h5>
@@ -214,20 +206,37 @@ function TextbookPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLo
             <span className={`nsi-popup__input-error ${addYearError ? "nsi-popup__input-error_type_show" : ""}`}>Заполните год издания</span>
           </li>
           <li className="nsi-popup__item-input">
-            <h5 className="nsi-popup__input-name">Количество страниц (Не обязательное поле)</h5>
+            <h5 className="nsi-popup__input-name">Номер журнала</h5>
             <input  
             className="nsi-popup__input"
-            placeholder="введите год издания"
+            placeholder="введите номер журнала"
             type="number"
+            id={`${type}-nsi-input-number-${id}`}
+            name={`${type}-nsi-input-number-${id}`}
+            autoComplete="off"
+            value={addNumber}
+            onChange={handleAddNumber}
+            onWheel={(e) => e.target.blur()}
+            required
+            >
+            </input>
+            <span className={`nsi-popup__input-error ${addNumberError ? "nsi-popup__input-error_type_show" : ""}`}>Заполните номер журнала</span>
+          </li>
+          <li className="nsi-popup__item-input">
+            <h5 className="nsi-popup__input-name">Страницы статьи в журнале</h5>
+            <input  
+            className="nsi-popup__input"
+            placeholder="Пример: 25-30"
+            type="text"
             id={`${type}-nsi-input-pages-${id}`}
             name={`${type}-nsi-input-pages-${id}`}
             autoComplete="off"
             value={addPages}
             onChange={handleAddPages}
-            onWheel={(e) => e.target.blur()}
             required
             >
             </input>
+            <span className={`nsi-popup__input-error ${addPagesError ? "nsi-popup__input-error_type_show" : ""}`}>Заполните cтраницы статьи</span>
           </li>
         </ul>
 
@@ -258,4 +267,4 @@ function TextbookPopup({ isOpen, onClose, nsi, onSave, id, printDate, type, isLo
     )
 }
 
-export default TextbookPopup;
+export default ArticleFromMagazinePopup;
