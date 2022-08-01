@@ -1,7 +1,7 @@
 .footer {
   width: 100%;
   padding: 30px 0px;
-  background-color: var(--secondary-light-color);
+  background-color: var(--main-color);
   position: relative;
   margin: auto 0px 0px 0px;
 }

@@ -1,18 +1,29 @@
 import React from 'react';
 import './HomePageMain.css';
-import HomePageCards from  '../HomePageCards/HomePageCards.js';
+import { Link } from "react-scroll";
 
-function HomePageMain() {
+function HomePageMain({ onOpenLoginPopup }) {
 
   return (
-    <main className="header-homepage" id="homepage-main">
+    <main className="homepage-main" id="homepage-main">
       <div className="container">
-        <div className="header-homepage__container">
-          <h1 className="header-homepage__title">Добро пожаловать в&nbsp;<span className="header-homepage__title_font_color">конструктор</span> Дополнительных профессиональных программ РУТ&nbsp;(МИИТ)</h1>
-          <p className="header-homepage__subtitle">На данном ресурсе проводится обсуждение и разработка Дополнительных&nbsp;образовательных&nbsp;программ&nbsp;(ДПП).</p>
+        <div className="homepage-main__container">
+          <div className="homepage-main__info">
+            <h1 className="homepage-main__title"><span className="homepage-main__title_font_color">Конструктор</span> Дополнительных профессиональных программ РУТ&nbsp;(МИИТ)</h1>
+            <p className="homepage-main__subtitle">Приложение для&nbsp;проектирования программ повышения квалификации и&nbsp;переподготовки по&nbsp;методологии <span className="homepage-main__title_font_weight">«от&nbsp;результата»</span></p>
+            <div>
+              <button className="homepage-main__btn" type="button" onClick={onOpenLoginPopup}>Вход</button>
+              <a className="homepage-main__link" rel='norefferer' target='_blanc' href='https://constructor-api.emiit.ru/promo'>Видео-ролик</a>
+            </div>
+          </div>
+          <div className="homepage-main__img-container">
+            <div className="homepage-main__img"></div>
+            <div className="homepage-main__background"></div>
+          </div>
         </div>
-        <HomePageCards />
+        
       </div>
+      <Link to="homepage-capabilities" smooth={true} offset={0} duration= {500}><div className="homepage-main__arrow"></div></Link>
     </main>
   )
 }

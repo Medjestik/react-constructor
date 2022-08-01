@@ -3,4 +3,47 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  background-color: var(--white-color);
+}
+.homepage__title {
+  margin: 0px auto;
+  max-width: 600px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 40px;
+  text-align: center;
+  color: var(--title-color);
+}
+.homepage__subtitle {
+  margin: 15px auto 0px;
+  max-width: 750px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  text-align: center;
+  color: var(--subtitle-color);
+}
+.homepage-background_type_white {
+  width: 100%;
+}
+.homepage__wave {
+  position: relative;
+  height: 150px;
+  width: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+.homepage__wave-svg {
+  height: 100%;
+  width: 100%;
+}
+.homepage__wave-path_color_blue {
+  stroke: none;
+  fill: var(--main-color);
+}
+.homepage__wave-path_color_background {
+  stroke: none;
+  fill: var(--background-third-color);
 }
