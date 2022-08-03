@@ -35,7 +35,7 @@ function HomePageMethodology() {
     <section className="homepage-methodology" id="homepage-methodology">
       <div className="container">
         <h3 className="homepage__title">Методология проектирования «от&nbsp;результата»</h3>
-        <p className="homepage__subtitle">Методология проектирования образовательных программ от&nbsp;результата заключается, по&nbsp;сути, в&nbsp;последовательном ответе на&nbsp;4&nbsp;вопроса:</p>
+        <p className="homepage__subtitle">методология проектирования образовательных программ от&nbsp;результата заключается, по&nbsp;сути, в&nbsp;последовательном ответе на&nbsp;4&nbsp;вопроса:</p>
         <ul className="homepage-methodology__list">
           {
             methodology.map((elem, i) => (

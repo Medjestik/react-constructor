@@ -11,7 +11,7 @@ function HomePageCapabilities() {
     <section className="homepage-capabilities" id="homepage-capabilities">
       <div className="container">
         <h3 className="homepage__title">Комплексный программный продукт для&nbsp;методистов и&nbsp;авторов</h3>
-        <p className="homepage__subtitle">позволяет запроектировать:</p>
+        <p className="homepage__subtitle">позволяет cпроектировать:</p>
 
         <ul className="homepage-capabilities__list">
           <li className="homepage-capabilities__item">

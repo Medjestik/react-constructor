@@ -5,8 +5,8 @@ function HomePageMethodologyItem({ item }) {
   const [isShowInfo, setIsShowInfo] = React.useState(false);
 
   return (
-    <li className="homepage-methodology__item">
-      <div className="homepage-methodology__item-info" onClick={() => setIsShowInfo(!isShowInfo)}></div>
+    <li className="homepage-methodology__item" onClick={() => setIsShowInfo(!isShowInfo)}>
+      <div className="homepage-methodology__item-info"></div>
       <h5 className="homepage-methodology__item-title">{item.title}</h5>
       {
         isShowInfo ?

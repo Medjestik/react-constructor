@@ -13,8 +13,7 @@ function HomePageHeader({ onOpenLoginPopup }) {
           <ul className="header-homepage__links">
             <li className="header-homepage__link"><Link to="homepage-capabilities" smooth={true} offset={0} duration= {500}>О конструкторе</Link></li>
             <li className="header-homepage__link"><Link to="homepage-methodology" smooth={true} offset={0} duration= {1000}>Методология</Link></li>
-            <li className="header-homepage__link"><Link to="" smooth={true} offset={0} duration= {1500}>Программы</Link></li>
-            <li className="header-homepage__link"><Link to="footer" smooth={true} offset={0} duration= {2000}>Контакты</Link></li>
+            <li className="header-homepage__link"><Link to="footer" smooth={true} offset={0} duration= {1500}>Контакты</Link></li>
           </ul>
           <button className="header-homepage__button" onClick={onOpenLoginPopup}>Вход в конструктор</button>
         </nav>

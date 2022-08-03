@@ -3,6 +3,7 @@ import './HomePage.css';
 import HomePageHeader from './HomePageHeader/HomePageHeader.js';
 import HomePageMain from './HomePageMain/HomePageMain.js';
 import HomePageCapabilities from './HomePageCapabilities/HomePageCapabilities.js';
+import HomePageAdvantages from './HomePageAdvantages/HomePageAdvantages.js';
 import HomePageMethodology from './HomePageMethodology/HomePageMethodology.js';
 import Login from '../Login/Login.js';
 import useOnClickOverlay from "../../hooks/useOnClickOverlay.js";
@@ -36,6 +37,8 @@ function HomePage({ onLogin, loginError, setLoginError }) {
       <HomePageMain onOpenLoginPopup={openLoginPopup} />
 
       <HomePageCapabilities />
+
+      <HomePageAdvantages />
 
       <div className="homepage__wave">
         <svg className="homepage__wave-svg" viewBox="0 0 500 50" preserveAspectRatio="none">
