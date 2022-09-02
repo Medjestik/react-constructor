@@ -21,6 +21,7 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
   const [data, setData] = React.useState([]);
   const [nsiProgram, setNsiProgram] = React.useState([]);
   const [nsiTypes, setNsiTypes] = React.useState([]);
+  const [ministries, setMinistries] = React.useState([]);
 
   const [isRendering, setIsRendering] = React.useState(true);
 
@@ -683,6 +684,8 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
       )
     })
   }
+
+  console.log(data);
     
   React.useEffect(() => {
     if (loggedIn) {
@@ -700,6 +703,7 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
         })
         setNsiProgram(nsi);
         setNsiTypes(nsiTypes);
+        setMinistries(data.ministries);
       })
       .catch((err) => {
         console.error(err);
@@ -944,6 +948,8 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
           onClose={closeNsiPopup}
           nsiTypes={nsiTypes}
           onAdd={handleAddNsi}
+          ministries={ministries}
+          isLoading={isLoadingZoonRequest}
           />
         }
 
@@ -955,6 +961,7 @@ function ZoonList({ dppDescription, loggedIn, isEditRights }) {
             onClose={closeNsiPopup}  
             nsi={currentNsiItem}
             onEdit={handleEditNsi}
+            ministries={ministries}
             isLoading={isLoadingZoonRequest}
           />
         }

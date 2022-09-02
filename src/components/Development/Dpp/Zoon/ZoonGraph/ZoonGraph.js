@@ -11,6 +11,7 @@ function ZoonGraph({ dppDescription, loggedIn, isEditRights }) {
   const [zoon, setZoon] = React.useState([]);
   const [zoonLinks, setZoonLinks] = React.useState([]);
   const [typologyParts, setTypologyParts] = React.useState([]);
+  const [ministries, setMinistries] = React.useState([]);
   const [nsiProgram, setNsiProgram] = React.useState([]);
   const [nsiTypes, setNsiTypes] = React.useState([]);
   const [isRemoveNsiPopupOpen, setIsRemoveNsiPopupOpen] = React.useState(false);
@@ -32,6 +33,7 @@ function ZoonGraph({ dppDescription, loggedIn, isEditRights }) {
           setZoon(zoon.zoons);
           setZoonLinks(zoon.links);
           setTypologyParts(zoon.typologyParts);
+          setMinistries(zoon.ministries);
           nsi.sort(function(a,b) {
             return parseInt(a.type.position) - parseInt(b.type.position)
           })
@@ -138,6 +140,7 @@ function ZoonGraph({ dppDescription, loggedIn, isEditRights }) {
           nodes={zoon} 
           nsi={nsiProgram} 
           nsiTypes={nsiTypes}
+          ministries={ministries}
           onAddNsi={handleAddNsi}
           onEditNsi={openEditNsiPopup}
           onRemoveNsi={openRemoveNsiPopup}
@@ -154,6 +157,7 @@ function ZoonGraph({ dppDescription, loggedIn, isEditRights }) {
         onClose={closeZoonPopups}  
         nsi={currentNsiItem}
         onEdit={handleEditNsi}
+        ministries={ministries}
         isLoading={isLoading}
       />
       }

@@ -4,8 +4,6 @@ import JustificationItem from '../JustificationItem/JustificationItem.js';
 
 function Justification({ nsi, type, onChooseJustificationType, onChangeExpertOpinion, onChangeNsiNote, onChooseNsi, onSwapType, addNsiPopupOpen, onEditNsi, onRemoveNsi, currentActionType, currentNode, isEditRights }) {
 
-  console.log(nsi);
-
   const [isJustificationType, setIsJustificationType] = React.useState("");
   const [isExpertOpinion, setIsExpertOpinion] = React.useState("");
   const [isNsiNote, setIsNsiNote] = React.useState("");

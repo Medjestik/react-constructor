@@ -585,7 +585,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
 
   /* WorldSkills */
 
-  function handleAddWorldSkills(newDocument, closeAddPopup) { 
+  function handleAddWorldSkills(newDocument, closeAddPopup) {
     setIsLoading(true);
     const token = localStorage.getItem("token");
     api.createWorldSkills({ token: token, document: newDocument })

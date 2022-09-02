@@ -14,7 +14,7 @@ import SwapChildrenPopup from '../SwapChildrenPopup/SwapChildrenPopup.js';
 import SortElementPopup from '../SortElementPopup/SortElementPopup.js';
 import ImportKnowledgePopup from '../ImportKnowledgePopup/ImportKnowledgePopup.js';
 
-function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, onRemoveNsi, onImportNsi, zoonLinks, typologyParts, isEditRights }) {
+function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, ministries, onAddNsi, onEditNsi, onRemoveNsi, onImportNsi, zoonLinks, typologyParts, isEditRights }) {
 
   const [zoonChart, setZoonChart] = React.useState({});
   const [currentNode, setCurrentNode] = React.useState({});
@@ -958,6 +958,7 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, onAddNsi, onEditNsi, 
       onClose={closeAddNsiPopup}
       nsiTypes={nsiTypes}
       onAdd={onAddNsi}
+      ministries={ministries}
       />
     }
 
