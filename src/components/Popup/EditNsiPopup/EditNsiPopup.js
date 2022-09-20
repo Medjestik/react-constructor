@@ -47,6 +47,7 @@ import ArticleFromCollectionPopup from '../NsiPopup/ArticleFromCollectionPopup/A
 import OrderMinistryPopup from '../NsiPopup/OrderMinistryPopup/OrderMinistryPopup.js';
 import DispositionMinistryPopup from '../NsiPopup/DispositionMinistryPopup/DispositionMinistryPopup.js';
 import InternationalDocumentPopup from '../NsiPopup/InternationalDocumentPopup/InternationalDocumentPopup.js';
+import OtherPopup from '../NsiPopup/OtherPopup/OtherPopup.js';
 
 function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading, ministries }) {
 
@@ -702,7 +703,20 @@ function EditNsiPopup({ isOpen, onClose, nsi, onEdit, isLoading, ministries }) {
             type={"edit"}
             isLoading={isLoading}
           />
-        )    
+        )
+      case 58: /* Другое */ 
+        return (
+          <OtherPopup
+            isOpen={isOpen}
+            onClose={onClose}
+            nsi={nsi}
+            onSave={onEdit}
+            id={nsi.id}
+            printDate={printDate}
+            type={"edit"}
+            isLoading={isLoading}
+          />
+        )       
       default:
         return (<div>Тип не загрузился</div>)
     }

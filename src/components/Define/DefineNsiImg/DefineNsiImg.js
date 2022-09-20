@@ -26,6 +26,7 @@ import course from '../../../images/nsi/course.png';
 import estimate from '../../../images/nsi/estimate.png';
 import odm from '../../../images/nsi/odm.png';
 import snip from '../../../images/nsi/snip.png';
+import other from '../../../images/nsi/other.png';
 
 function DefineNsiImg({ nsiId }) {
 
@@ -223,7 +224,11 @@ function DefineNsiImg({ nsiId }) {
       case 57: /* Международный документ */ 
         return (
           <img className="nsi-img" src={web} alt="иконка"></img>
-        )       
+        )
+      case 58: /* Другое */ 
+        return (
+          <img className="nsi-img" src={other} alt="иконка"></img>
+        )      
         default:
         return (<div>Тип не загрузился</div>)
     }

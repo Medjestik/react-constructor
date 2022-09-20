@@ -49,6 +49,7 @@ import ArticleFromCollectionPopup from './ArticleFromCollectionPopup/ArticleFrom
 import OrderMinistryPopup from './OrderMinistryPopup/OrderMinistryPopup.js';
 import DispositionMinistryPopup from './DispositionMinistryPopup/DispositionMinistryPopup.js';
 import InternationalDocumentPopup from './InternationalDocumentPopup/InternationalDocumentPopup.js';
+import OtherPopup from './OtherPopup/OtherPopup.js';
 import DefineNsiImg from '../../Define/DefineNsiImg/DefineNsiImg.js';
 
 function NsiPopup({ isOpen, onClose, nsiTypes, ministries, onAdd, isLoading }) {
@@ -101,6 +102,7 @@ function NsiPopup({ isOpen, onClose, nsiTypes, ministries, onAdd, isLoading }) {
   const [isOrderMinistryPopupOpen, setIsOrderMinistryPopupOpen] = React.useState(false);
   const [isDispositionMinistryPopupOpen, setIsDispositionMinistryPopupOpen] = React.useState(false);
   const [isInternationalDocumentPopupOpen, setIsInternationalDocumentPopupPopupOpen] = React.useState(false);
+  const [isOtherPopupOpen, setIsOtherPopupOpen] = React.useState(false);
   const [currentElemId, setCurrentElemId] = React.useState(0);
   const [searchText, setSearchText] = React.useState('');
   const [filteredNsiTypes, setFilteredNsiTypes] = React.useState([]);
@@ -412,6 +414,11 @@ function NsiPopup({ isOpen, onClose, nsiTypes, ministries, onAdd, isLoading }) {
     setCurrentElemId(id);
   }
 
+  function otherPopupOpen(id) {
+    setIsOtherPopupOpen(true);
+    setCurrentElemId(id);
+  }
+
   function closeAllNsiPopup() {
     setIsFederalLawPopupOpen(false);
     setIsRussiaLawPopupOpen(false);
@@ -461,6 +468,7 @@ function NsiPopup({ isOpen, onClose, nsiTypes, ministries, onAdd, isLoading }) {
     setIsOrderMinistryPopupOpen(false);
     setIsDispositionMinistryPopupOpen(false);
     setIsInternationalDocumentPopupPopupOpen(false);
+    setIsOtherPopupOpen(false);
   }
 
   function defineNsiPopup(type) {  
@@ -656,7 +664,11 @@ function NsiPopup({ isOpen, onClose, nsiTypes, ministries, onAdd, isLoading }) {
       case 57: /* Международный документ */ 
         return (
           <button className="nsi-popup__item-btn" type="button" onClick={() => internationalDocumentPopupPopupOpen(type.id)}>Выбрать</button>
-        ) 
+        )
+      case 58: /* Другое */ 
+        return (
+          <button className="nsi-popup__item-btn" type="button" onClick={() => otherPopupOpen(type.id)}>Выбрать</button>
+        )
       default:
         return (<div>Тип не загрузился</div>) 
     }
@@ -1369,6 +1381,20 @@ function NsiPopup({ isOpen, onClose, nsiTypes, ministries, onAdd, isLoading }) {
       isInternationalDocumentPopupOpen &&
       <InternationalDocumentPopup
         isOpen={isInternationalDocumentPopupOpen}
+        onClose={closeAllNsiPopup}
+        nsi={emptyNsi}
+        onSave={onAdd}
+        id={currentElemId}
+        printDate={printDate}
+        type={"add"}
+        isLoading={isLoading}
+      />
+    }
+
+    {
+      isOtherPopupOpen &&
+      <OtherPopup
+        isOpen={isOtherPopupOpen}
         onClose={closeAllNsiPopup}
         nsi={emptyNsi}
         onSave={onAdd}
