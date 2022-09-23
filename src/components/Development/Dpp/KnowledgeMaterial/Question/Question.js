@@ -6,14 +6,71 @@ import OpenAnswer from './OpenAnswer/OpenAnswer.js';
 import SequenceAnswer from './SequenceAnswer/SequenceAnswer.js';
 import ConformityAnswer from './ConformityAnswer/ConformityAnswer.js';
 import TextareaAutosize from 'react-textarea-autosize';
-
+import AddImgQuestionPopup from '../AddImgQuestionPopup/AddImgQuestionPopup.js';
+import AddImgAnswerPopup from '../AddImgAnswerPopup/AddImgAnswerPopup.js';
 
 function Question({ editQuestion, setEditQuestion, openChangeTypePopup }) {
 
   const [questionText, setQuestionText] = React.useState(editQuestion.text);
+  const [questionImg, setQuestionImg] = React.useState(editQuestion.image);
   const [questionAnswers, setQuestionAnswers] = React.useState(editQuestion.answers);
+  const [currentAnswerId, setCurrentAnswerId] = React.useState('');
 
   console.log(editQuestion);
+
+  const [isAddImgQuestionPopupOpen, setIsAddImgQuestionPopupOpen] = React.useState(false);
+  const [isAddImgAnswerPopupOpen, setIsAddImgAnswerPopupOpen] = React.useState(false);
+
+  function openAddImgQuestionPopup() {
+    setIsAddImgQuestionPopupOpen(true);
+  }
+
+  function openAddImgAnswerPopup(id) {
+    setIsAddImgAnswerPopupOpen(true);
+    setCurrentAnswerId(id);
+  }
+
+  function closeAddImgQuestionPopup() {
+    setIsAddImgQuestionPopupOpen(false);
+  }
+
+  function closeAddImgAnswerPopup() {
+    setIsAddImgAnswerPopupOpen(false);
+  }
+
+  function handleAddQuestionImg(data) {
+    setEditQuestion({ ...editQuestion, image: data });
+  }
+
+  function handleAddAnswerImg(data, id) {
+    let newAnswers = [];
+    questionAnswers.forEach((elem) => {
+      if (elem.id === id) {
+        newAnswers.push({ ...elem, image: data });
+      } else {
+        newAnswers.push(elem);
+      }
+    })
+    setQuestionAnswers(newAnswers);
+    setEditQuestion({ ...editQuestion, answers: newAnswers });
+  }
+
+  function handleRemoveQuestionImg() {
+    setEditQuestion({ ...editQuestion, image: null });
+  }
+
+  function handleRemoveAnswerImg(id) {
+    let newAnswers = [];
+    questionAnswers.forEach((elem) => {
+      if (elem.id === id) {
+        newAnswers.push({ ...elem, image: null });
+      } else {
+        newAnswers.push(elem);
+      }
+    })
+    setQuestionAnswers(newAnswers);
+    setEditQuestion({ ...editQuestion, answers: newAnswers });
+  }
  
   function handleChangeQuestionText(e) {
     setQuestionText(e.target.value);
@@ -63,6 +120,7 @@ function Question({ editQuestion, setEditQuestion, openChangeTypePopup }) {
     const newAnswers = [...questionAnswers, {
       id: parseInt(new Date().getTime()),
       text: '',
+      image: null,
       isCorrect: false
     }];
     setQuestionAnswers(newAnswers);
@@ -98,12 +156,47 @@ function Question({ editQuestion, setEditQuestion, openChangeTypePopup }) {
     setEditQuestion({ ...editQuestion, answers: newAnswers });
   }
 
+  function renderQuestionContainer(type) {
+    return (
+      <div className="question__text-container">
+        <TextareaAutosize
+          className="question__text"
+          id={`question__text_type_${type}`}
+          name={`question__text_type_${type}`}
+          placeholder="Введите вопрос..."
+          value={questionText || ""}
+          onChange={handleChangeQuestionText}
+          required
+        >
+        </TextareaAutosize>
+        {
+          editQuestion.image === null &&
+          <div className="question__text-img" onClick={openAddImgQuestionPopup}></div>
+        }
+        {
+          editQuestion.image !== null &&
+          <div className='question__text-caption'>
+            {
+              !editQuestion.image.includes('base64') &&
+              <a className='question__text-link' target='_blank' rel='noreferrer' href={`https://constructor-api.emiit.ru/storage/${editQuestion.image}`}> </a>
+            }
+            <div className='question__text-img-remove' onClick={handleRemoveQuestionImg}></div>
+            Изображение загружено!
+          </div>
+        }
+        <div></div>
+      </div>
+    )
+  }
+
   React.useEffect(() => {
     setQuestionText(editQuestion.text);
+    setQuestionImg(editQuestion.image);
     setQuestionAnswers(editQuestion.answers);
     return () => {
       setQuestionText('');
       setQuestionAnswers([]);
+      setQuestionImg(null);
     }
     // eslint-disable-next-line
   }, [editQuestion.answers, editQuestion.text]);
@@ -119,16 +212,7 @@ function Question({ editQuestion, setEditQuestion, openChangeTypePopup }) {
           }
           <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса: </span>Вопрос с множественным выбором</p>
         </div>
-        <TextareaAutosize
-          className="question__text"
-          id="question__text"
-          name="question__text"
-          placeholder="Введите вопрос..."
-          value={questionText || ""}
-          onChange={handleChangeQuestionText}
-          required
-        >
-        </TextareaAutosize>
+        {renderQuestionContainer(type)}
         <ul className="questions__answers">
           {
             questionAnswers.map((answer) => (
@@ -138,6 +222,8 @@ function Question({ editQuestion, setEditQuestion, openChangeTypePopup }) {
                 answer={answer}
                 onChangeAnswer={handleChangeAnswer}
                 onChangeAnswerText={handleChangeAnswerText}
+                onOpenImg={openAddImgAnswerPopup}
+                onRemoveImg={handleRemoveAnswerImg}
               /> 
             ))
           } 
@@ -151,16 +237,7 @@ function Question({ editQuestion, setEditQuestion, openChangeTypePopup }) {
         <div className="questions__type-info">
           <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса: </span>Вопрос с открытым ответом</p>
         </div>
-        <TextareaAutosize
-          className="question__text"
-          id="question__text"
-          name="question__text"
-          placeholder="Введите вопрос..."
-          value={questionText || ""}
-          onChange={handleChangeQuestionText}
-          required
-        >
-        </TextareaAutosize>
+        {renderQuestionContainer(type)}
         <ul className="questions__answers">
           {
             questionAnswers.map((answer, i) => (
@@ -183,16 +260,7 @@ function Question({ editQuestion, setEditQuestion, openChangeTypePopup }) {
         <div className="questions__type-info">
           <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса: </span>Вопрос с установлением последовательности</p>
         </div>
-        <TextareaAutosize
-          className="question__text"
-          id="question__text"
-          name="question__text"
-          placeholder="Введите вопрос..."
-          value={questionText || ""}
-          onChange={handleChangeQuestionText}
-          required
-        >
-        </TextareaAutosize>
+        {renderQuestionContainer(type)}
         <ul className="questions__answers">
           {
             questionAnswers.map((answer, i) => (
@@ -202,6 +270,8 @@ function Question({ editQuestion, setEditQuestion, openChangeTypePopup }) {
                 answer={answer}
                 index={i}
                 onChangeAnswerText={handleChangeAnswerText}
+                onOpenImg={openAddImgAnswerPopup}
+                onRemoveImg={handleRemoveAnswerImg}
               />
             ))
           } 
@@ -219,16 +289,7 @@ function Question({ editQuestion, setEditQuestion, openChangeTypePopup }) {
           }
           <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса: </span>Вопрос с установлением соответствия</p>
         </div>
-        <TextareaAutosize
-          className="question__text"
-          id="question__text"
-          name="question__text"
-          placeholder="Введите вопрос..."
-          value={questionText || ""}
-          onChange={handleChangeQuestionText}
-          required
-        >
-        </TextareaAutosize>
+        {renderQuestionContainer(type)}
         <ul className="questions__answers">
           {
             questionAnswers.map((answer, i) => (
@@ -255,16 +316,7 @@ function Question({ editQuestion, setEditQuestion, openChangeTypePopup }) {
         }
         <p className="questions__type"><span className="questions__type_font_weight">Тип вопроса: </span>Вопрос с одним вариантом ответа</p>
       </div>
-      <TextareaAutosize
-          className="question__text"
-          id="question__text"
-          name="question__text"
-          placeholder="Введите вопрос..."
-          value={questionText || ""}
-          onChange={handleChangeQuestionText}
-          required
-        >
-        </TextareaAutosize>
+      {renderQuestionContainer(type)}
       <ul className="questions__answers">
         {
           questionAnswers.map((answer) => (
@@ -274,6 +326,8 @@ function Question({ editQuestion, setEditQuestion, openChangeTypePopup }) {
               answer={answer}
               onChangeAnswer={handleChangeAnswer}
               onChangeAnswerText={handleChangeAnswerText}
+              onOpenImg={openAddImgAnswerPopup}
+              onRemoveImg={handleRemoveAnswerImg}
             />
           ))
         } 
@@ -283,10 +337,29 @@ function Question({ editQuestion, setEditQuestion, openChangeTypePopup }) {
   }
 
   return (
+    <>
     <div className="questions">
       {defineQuestionType(editQuestion.questionType)}
       <button className="questions__btn_type_add" type="button" onClick={handleAddAnswer}></button>
     </div>
+    {
+      isAddImgQuestionPopupOpen &&
+      <AddImgQuestionPopup
+        isOpen={isAddImgQuestionPopupOpen}
+        onClose={closeAddImgQuestionPopup}
+        onAdd={handleAddQuestionImg}
+      />
+    }
+    {
+      isAddImgAnswerPopupOpen &&
+      <AddImgAnswerPopup
+        isOpen={isAddImgAnswerPopupOpen}
+        onClose={closeAddImgAnswerPopup}
+        onAdd={handleAddAnswerImg}
+        id={currentAnswerId}
+      />
+    }
+    </>
   );
 }
 

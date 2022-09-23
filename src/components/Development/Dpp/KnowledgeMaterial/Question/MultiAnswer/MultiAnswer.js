@@ -2,7 +2,7 @@ import React from 'react';
 import './MultiAnswer.css';
 import TextareaAutosize from 'react-textarea-autosize';
 
-function MultiAnswer({ onDelete, answer, onChangeAnswer, onChangeAnswerText }) {
+function MultiAnswer({ onDelete, answer, onChangeAnswer, onChangeAnswerText, onOpenImg, onRemoveImg }) {
 
   function handleChangeAnswerText(e) {
     onChangeAnswerText(e.target.value, answer.id);
@@ -35,6 +35,21 @@ function MultiAnswer({ onDelete, answer, onChangeAnswer, onChangeAnswerText }) {
         required
       >
       </TextareaAutosize>
+
+      { 
+        answer.image === null 
+        ?
+        <div className="questions__btn_type_img" onClick={() => onOpenImg(answer.id)}></div>
+        :
+        <div className='question__text-caption question__answer-caption'>
+          {
+            !answer.image.includes('base64') &&
+            <a className='question__text-link' target='_blank' rel='noreferrer' href={`https://constructor-api.emiit.ru/storage/${answer.image}`}> </a>
+          }
+          <div className='question__text-img-remove' onClick={() => onRemoveImg(answer.id)}></div>
+          Изображение
+        </div>
+      }
 
       <button className="questions__btn_type_delete" type="button" onClick={handleClickDelete}></button>
       

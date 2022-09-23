@@ -221,3 +221,30 @@
 .popup__error-request_visible_hide {
   opacity: 0;
 }
+
+.popup__choose-file {
+  margin: 30px 0px 20px;
+  width: 100%;
+}
+.popup__choose-file-form {
+  margin: 0px;
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding: 25px 30px;
+  border-radius: 100px;
+  border: none;
+  outline: none;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 1.15px;
+  color: var(--title-color);
+  letter-spacing: 1.2px;
+  background-color: var(--white-color);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 20%);
+  box-sizing: border-box;
+  overflow: hidden;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}

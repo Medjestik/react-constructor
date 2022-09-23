@@ -124,27 +124,32 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
     const newQuestion = {
       knowledgeId: currentKnowledge.id,
       questionType: type,
+      image: null,
       id: 'new',
       text: '',
       answers: [
         {
           text: '',
           isCorrect: false,
+          image: null,
           id: parseInt(new Date().getTime()) + 1,
         },
         {
           text: '',
           isCorrect: false,
+          image: null,
           id: parseInt(new Date().getTime()) + 3,
         },
         {
           text: '',
           isCorrect: false,
+          image: null,
           id: parseInt(new Date().getTime()) + 5,
         },
         {
           text: '',
           isCorrect: false,
+          image: null,
           id: parseInt(new Date().getTime()) + 7,
         },
       ],
@@ -278,6 +283,7 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
           setKnowledges([...knowledges.slice(0, indexKnowledge), newKnowledge, ...knowledges.slice(indexKnowledge + 1)]);
           setCurrentQuestions([res, ...currentQuestions]);
           chooseQuestion(res);
+          setEditQuestion(res);
           setIsCreateNewQuestion(false);
           setErrorMessage({ text: "", isShow: false });
           setSuccessMessage({ ...successMessage, isShow: true });
@@ -293,12 +299,14 @@ function KnowledgeMaterial({ dppDescription, loggedIn, isEditRights }) {
         if (loggedIn) {
           evaluationMaterialApi.editQuestion({ token: token, omId: dppDescription.om_version_id, questionId: currentQuestion.id, questionData: editQuestion })
           .then((res) => {
+            console.log(res);
             const indexKnowledge = knowledges.indexOf(knowledges.find((elem) => (elem.id === currentKnowledge.id)));
             const indexQuestion = currentQuestions.indexOf(currentQuestions.find((elem) => (elem.id === res.id)));
             const newQuestions = ([...currentQuestions.slice(0, indexQuestion), res, ...currentQuestions.slice(indexQuestion + 1)]);
             const newKnowledge = {...knowledges[indexKnowledge], questions: newQuestions};
             setKnowledges([...knowledges.slice(0, indexKnowledge), newKnowledge, ...knowledges.slice(indexKnowledge + 1)]);
             setCurrentQuestions(newQuestions);
+            setEditQuestion(res);
             setErrorMessage({ text: "", isShow: false });
             setSuccessMessage({ ...successMessage, isShow: true });
           })

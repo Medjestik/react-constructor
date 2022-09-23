@@ -2,6 +2,7 @@
   margin: 0px 0px 15px 0px;
   display: flex;
   align-items: center;
+  position: relative;
 }
 .multi-answer__checkbox {
   margin: 0px;
