@@ -25,6 +25,8 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
   const [isLoadingTasks, setIsLoadingTasks] = React.useState(false);
   const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
 
+  const [totalTime, setTotalTime] = React.useState(0);
+
   function openAddPracticalTask() {
     setIsShowAddPracticalTask(true);
     setIsShowAddMenu(false);
@@ -605,6 +607,11 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
           setSkills(res.skills);
           setAbilities(res.abilities);
           setMTO(res.mtos);
+          const sum = res.tasks.map((elem) => Number(elem.time)).reduce(function summarize(sum, number) {
+            const updatedSum = sum + number;
+            return updatedSum;
+          }, 0);
+          setTotalTime(sum);
         })
         .catch((err) => {
             console.error(err);
@@ -657,7 +664,7 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
             </div>
             <a className="btn knowledge-item__btn knowledge-item__btn_export" href={`https://constructor-api.emiit.ru/dpps/${dppDescription.id}/export_tasks`} target="_blank" rel="noreferrer">Экспорт в Word</a>
           </div>
-          <h5 className="practical-task__item-name">Добавленные задания</h5>
+          <h5 className="practical-task__item-name">Добавленные задания (Общее время: {Math.round(totalTime / 45)} ч. или {totalTime} мин.)</h5>
           <ul className="task__list">
             {
               tasks.map((elem, i) => (
