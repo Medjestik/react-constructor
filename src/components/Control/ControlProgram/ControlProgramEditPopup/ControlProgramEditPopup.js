@@ -9,6 +9,8 @@ function ControlProgramEditPopup({ isOpen, onClose, users, roles, program, onEdi
   const [errorName, setErrorName] = React.useState(false);
   const [hours, setHours] = React.useState("");
   const [errorHours, setErrorHours] = React.useState(false);
+  const [year, setYear] = React.useState("");
+  const [errorYear, setErrorYear] = React.useState(false);
   const [isAddProgramParticipantPopupOpen, setIsAddProgramParticipantPopupOpen] = React.useState(false);
   const [isRemoveProgramParticipantPopupOpen, setIsRemoveProgramParticipantPopupOpen] = React.useState(false);
   const [participants, setParticipants] = React.useState([]);
@@ -23,6 +25,7 @@ function ControlProgramEditPopup({ isOpen, onClose, users, roles, program, onEdi
       ...program,
       name: name,
       totalHours: hours,
+      year: year,
       participants: participants,
       isArchieved: isArchieved,
     }
@@ -74,18 +77,28 @@ function ControlProgramEditPopup({ isOpen, onClose, users, roles, program, onEdi
     }
   }
 
-
+  function handleAddYear(e) {
+    setYear(e.target.value);
+    if (e.target.checkValidity()) {
+      setErrorYear(false);
+    } else {
+      setErrorYear(true);
+    }
+  }
 
   React.useEffect(() => {
     setName(program.name);
     setErrorName(false);
     setHours(program.totalHours);
     setErrorHours(false);
+    setYear(program.year);
+    setErrorYear(false);
     setIsBlockSubmitButton(true);
     setParticipants(program.participants);
     return () => {
       setName("");
       setHours("");
+      setYear("");
       setParticipants([]);
       setCurrentUser({});
     }
@@ -96,14 +109,16 @@ function ControlProgramEditPopup({ isOpen, onClose, users, roles, program, onEdi
       errorName || 
       name.length < 2 ||
       errorHours || 
-      hours.length < 1 
+      hours.length < 1 ||
+      errorYear ||
+      year.length < 1
       ) {
       setIsBlockSubmitButton(true);
     } else {
       setIsBlockSubmitButton(false);
     }
     // eslint-disable-next-line
-  }, [name, hours])
+  }, [name, hours, year])
 
   return (
     <>
@@ -143,6 +158,22 @@ function ControlProgramEditPopup({ isOpen, onClose, users, roles, program, onEdi
             >
             </input>
             <span className={`initial-popup__input-error ${errorHours ? "initial-popup__input-error_type_show" : ""}`}>Поле не может быть пустым</span>
+          </li>
+          <li className="initial-popup__item-input">
+            <h5 className="initial-popup__input-name">Год разработки</h5>
+            <input 
+            className="initial-popup__input"
+            placeholder="введите год"
+            type="number"
+            id="add-new-program-year"
+            name="add-new-program-year"
+            autoComplete="off"
+            value={year}
+            onChange={handleAddYear}
+            required
+            >
+            </input>
+            <span className={`initial-popup__input-error ${errorYear ? "initial-popup__input-error_type_show" : ""}`}>Поле не может быть пустым</span>
           </li> 
           <li className="initial-popup__item-input">
             <h5 className="initial-popup__input-name">Список участников</h5>

@@ -664,7 +664,7 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
             </div>
             <a className="btn knowledge-item__btn knowledge-item__btn_export" href={`https://constructor-api.emiit.ru/dpps/${dppDescription.id}/export_tasks`} target="_blank" rel="noreferrer">Экспорт в Word</a>
           </div>
-          <h5 className="practical-task__item-name">Добавленные задания (Общее время: {Math.round(totalTime / 45)} ч. или {totalTime} мин.)</h5>
+          <h5 className="practical-task__item-name">Добавленные задания (Общее время: {Math.round(totalTime / 45)} ак. ч. или {totalTime} мин.)</h5>
           <ul className="task__list">
             {
               tasks.map((elem, i) => (
