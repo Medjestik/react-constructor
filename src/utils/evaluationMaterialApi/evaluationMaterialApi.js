@@ -361,4 +361,27 @@ export const removeTaskStep = ({ token, omId, taskId, stepId }) => {
   .then(res => handleResponse(res));
 };
 
+export const getMaterialParameters = ({ token, omId }) => { 
+  return fetch(`${API_URL}/om/${omId}/parameters`, {
+    method: 'GET', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+  .then(res => handleResponse(res));
+};
 
+export const changeMaterialParameters = ({ token, omId, parameters }) => { 
+  return fetch(`${API_URL}/om/${omId}/parameters`, {
+    method: 'PATCH', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ parameters })
+  })
+  .then(res => handleResponse(res));
+};

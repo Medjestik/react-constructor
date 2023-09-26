@@ -4,6 +4,8 @@ import ExportProgramList from '../ExportProgramList/ExportProgramList.js';
 
 function ExportProgram({ dppDescription, programData }) {
 
+  //console.log(programData);
+
   return (
     <div className="export-program">
       <div className="export-program__container">
