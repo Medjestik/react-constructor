@@ -1,9 +1,9 @@
 import React from 'react';
 import Popup from '../../../Popup/Popup.js';
 import ControlProgramAddParticipantPopup from '../ControlProgramAddParticipantPopup/ControlProgramAddParticipantPopup.js';
+import Select from 'react-select';
 
 function ControlProgramAddPopup({ isOpen, onClose, users, roles, onAdd, isLoading, isShowError }) { 
-
 
   const [name, setName] = React.useState("");
   const [errorName, setErrorName] = React.useState(false);
@@ -11,7 +11,11 @@ function ControlProgramAddPopup({ isOpen, onClose, users, roles, onAdd, isLoadin
   const [errorHours, setErrorHours] = React.useState(false);
   const [isAddProgramParticipantPopupOpen, setIsAddProgramParticipantPopupOpen] = React.useState(false);
   const [participants, setParticipants] = React.useState([]);
-  
+  const [type, setType] = React.useState({ label: '', value: 0 });
+  const [isDigital, setIsDigital] = React.useState(false);
+
+  const types = [ { label: 'Повышение квалификации', value: 1 }, { label: 'Профессиональная переподготовка', value: 2 } ];
+
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(true);
 
   function handleSubmit(e) {
@@ -20,13 +24,18 @@ function ControlProgramAddPopup({ isOpen, onClose, users, roles, onAdd, isLoadin
     const newProgram = {
       name: name,
       totalHours: hours,
-      participants: participants
+      participants: participants,
+      type: type.value,
+      isDigital: isDigital,
     }
 
     onAdd(newProgram, onClose);
   }
 
-  
+  function handleChangeType(selectedOption) {
+    setType(selectedOption);
+    setIsDigital(false);
+  }
 
   function openAddProgramParticipantPopup() {
     setIsAddProgramParticipantPopupOpen(true);
@@ -65,9 +74,11 @@ function ControlProgramAddPopup({ isOpen, onClose, users, roles, onAdd, isLoadin
     setErrorName(false);
     setHours('');
     setErrorHours(false);
+    setType({ label: '', value: 0 });
     setIsBlockSubmitButton(true);
     return () => {
       setParticipants([]);
+      setType({});
     }
   }, [isOpen]);
 
@@ -108,6 +119,42 @@ function ControlProgramAddPopup({ isOpen, onClose, users, roles, onAdd, isLoadin
             </input>
             <span className={`initial-popup__input-error ${errorName ? "initial-popup__input-error_type_show" : ""}`}>Название должно быть не короче 2 символов</span>
           </li>
+          <li className="initial-popup__item-input">
+            <h5 className="initial-popup__input-name">Тип*</h5>
+          <Select 
+            className="select" 
+            options={types}
+            placeholder="Выберите тип.."
+            onChange={handleChangeType}
+            theme={(theme) => ({
+              ...theme,
+              borderRadius: 5,
+              colors: {
+                ...theme.colors,
+                primary25: '#DDDDDD',
+                primary: '#5EB9AF',
+              },
+            })}
+            />
+          </li>
+          {
+            type.value === 2 &&
+            <li className="">
+              <label className="checkbox">
+              <input 
+                name="prof-levels"
+                type="checkbox"
+                id='add-program-is-digital'
+                value={isDigital}
+                defaultChecked={isDigital}
+                onChange={() => setIsDigital(!isDigital)}
+                >
+              </input>
+                <span>Разрабатывается в рамках проекта «Цифровые кафедры»</span>
+              </label>
+            </li>
+          }
+
           <li className="initial-popup__item-input">
             <h5 className="initial-popup__input-name">Количество часов*</h5>
             <input 

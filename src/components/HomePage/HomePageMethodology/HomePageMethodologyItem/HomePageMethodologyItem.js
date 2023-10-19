@@ -14,7 +14,7 @@ function HomePageMethodologyItem({ item }) {
         <p className="homepage-methodology__item-text">{item.text}</p>
         {
           item.link.length > 0 &&
-          <a className="homepage-methodology__item-link" rel='norefferer' target='_blanc' href='https://edu.emiit.ru/webtutor/rut-2021-bor/video/2/res/index.html'>Видео</a>
+          <a className="homepage-methodology__item-link" rel='norefferer' target='_blanc' href='https://old.emiit.ru/webtutor/rut-2021-bor/video/2/res/index.html'>Видео</a>
         }
         </>
         :

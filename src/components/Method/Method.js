@@ -5,8 +5,6 @@ import MethodItem from './MethodItem/MethodItem';
 
 function Method() {
 
-  
-
   return (
     <div className="method">
       <h1 className="main__title">Методическая база</h1>

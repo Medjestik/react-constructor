@@ -68,9 +68,11 @@ function Program({ program, history, windowWidth }) {
   }
 
   function handleClickProgram () {
-    getDppDescription(program.dpp_id);
-    localStorage.setItem("currentProgramId", program.dpp_id);
+    getDppDescription(program.id);
+    localStorage.setItem("currentProgramId", program.id);
   }
+
+  console.log(program);
 
   const definePerformerRole = (role) => {
     if (role === 'Методист') {
@@ -97,10 +99,10 @@ function Program({ program, history, windowWidth }) {
         <h3 className="development__item-title">{program.name}</h3>
         <ul className="development__item-description">
           <li className="development__item-caption">
-            <img className="development__item-caption-img" src={status} alt="статус"></img>
+            <img className="development__item-caption-img" src={stage} alt="статус"></img>
             <div className="development__item-caption-container">
-              <h4 className="development__item-caption-title">Статус программы</h4>
-              <span className="development__item-caption-subtitle">{program.status_name}</span>
+              <h4 className="development__item-caption-title">Тип программы</h4>
+              <span className="development__item-caption-subtitle">{program.type.name}</span>
             </div> 
           </li>
           {
@@ -117,7 +119,7 @@ function Program({ program, history, windowWidth }) {
             <img className="development__item-caption-img" src={role} alt="роль"></img>
             <div className="development__item-caption-container">
               <h4 className="development__item-caption-title">Ваша роль</h4>
-              <span className="development__item-caption-subtitle">{program.user_role}</span>
+              <span className="development__item-caption-subtitle">{program.my_role.name}</span>
             </div> 
           </li>
         </ul>
@@ -135,8 +137,8 @@ function Program({ program, history, windowWidth }) {
               <li key={i} className="development__performers-item">
                 <img className="development__performers-img" src={avatar} alt="аватар"></img>
                 <div className="development__performers-info">
-                  <h5 className="development__performers-name">{performer.fullname}</h5>
-                  {definePerformerRole(performer.rolename)}
+                  <h5 className="development__performers-name">{performer.userFullname}</h5>
+                  {definePerformerRole(performer.roleName)}
                 </div>
                 <div className="development__performers-contacts">
                   <p className="development__performers-mail">{performer.email}</p>

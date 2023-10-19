@@ -19,13 +19,19 @@
   margin: 0px 5px 40px 5px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   transition: .3s ease-in-out;
   position: relative;
 }
-.initial-data__item_type_basis {
+.initial-data__item_type_initial {
   grid-row-start: 1;
   grid-column-start: 1;
+
+  grid-row-end: 2;
+  grid-column-end: 3;
+}
+.initial-data__item_type_basis {
+  grid-row-start: 1;
+  grid-column-start: 3;
 
   grid-row-end: 2;
   grid-column-end: 6;
@@ -795,7 +801,8 @@
   opacity: .7;
 }
 .initial-data__btn_type_add-nsi {
-  margin: 15px 0px 0px 0px;
+  margin: 15px auto 0px;
+  max-width: max-content;
 }
 .initial-data__target-input {
   margin: 15px 0px;

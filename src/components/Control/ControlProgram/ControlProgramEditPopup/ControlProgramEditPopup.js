@@ -27,6 +27,7 @@ function ControlProgramEditPopup({ isOpen, onClose, users, roles, program, onEdi
       totalHours: hours,
       year: year,
       participants: participants,
+      type: program.type.id,
       isArchieved: isArchieved,
     }
 

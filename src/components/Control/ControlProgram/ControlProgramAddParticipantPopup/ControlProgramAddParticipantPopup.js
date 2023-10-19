@@ -41,9 +41,6 @@ function ControlProgramAddParticipantPopup({ isOpen, onClose, users, roles, onAd
   }, [isOpen, roles]);
 
   React.useEffect(() => {
-    console.log(name)
-    console.log(role)
-    
     if (name.label.length < 1 || role.label.length < 1) {
       setIsBlockSubmitButton(true);
     } else {

@@ -13,7 +13,11 @@ function HomePageMain({ onOpenLoginPopup }) {
             <p className="homepage-main__subtitle">Продукт для&nbsp;проектирования программ повышения квалификации и&nbsp;переподготовки по&nbsp;методологии <span className="homepage-main__title_font_weight">«от&nbsp;результата»</span></p>
             <div>
               <button className="homepage-main__btn" type="button" onClick={onOpenLoginPopup}>Вход</button>
-              <a className="homepage-main__link" rel='norefferer' target='_blanc' href='https://constructor-api.emiit.ru/promo'>Видео-ролик</a>
+              {
+                /*
+                <a className="homepage-main__link" rel='norefferer' target='_blanc' href='https://constructor-api.emiit.ru/promo'>Видео-ролик</a>
+                */
+              }
             </div>
           </div>
           <div className="homepage-main__img-container">

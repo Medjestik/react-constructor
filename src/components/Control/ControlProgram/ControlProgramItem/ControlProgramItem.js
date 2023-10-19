@@ -19,7 +19,7 @@ function ControlProgramItem({ program, index, onEdit, onRemove }) {
       <div className="control-program__item-info">
         <h4 className="control-program__item-name">{program.name}</h4>
         <div className="control-program__contacts">
-          <p className="control-program__stage">{program.isArchieved ? "В архиве" : "В работе"}</p>
+          <p className="control-program__stage">{program.type.name}</p>
           <p className="control-program__hours">{program.totalHours}</p>
           <p className="control-program__participants">{program.participants.length}</p>
         </div>

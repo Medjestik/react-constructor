@@ -20,7 +20,7 @@ function Development({ history, windowWidth }) {
       setIsLoadingProgram(true);
       api.getPrograms({ token: token })
         .then((res) => {
-          res.forEach((program) => {
+          res.data.forEach((program) => {
             program.participants.find((performer) => {
               if (user.id === performer.user_id) {
                 program.user_role = performer.rolename;
@@ -28,8 +28,8 @@ function Development({ history, windowWidth }) {
               return false;
             })
           })
-          setAssignedPrograms(res);
-          setFilteredPrograms(res);
+          setAssignedPrograms(res.data);
+          setFilteredPrograms(res.data);
         })
         .catch((err) => {
             console.error(err);

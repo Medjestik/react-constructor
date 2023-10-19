@@ -101,7 +101,7 @@ function ControlUserEditPopup({ isOpen, onClose, user, onEdit, onReset, isLoadin
     setErrorEmail(false);
     setPhone(user.phone || "");
     setErrorPhone(false);
-    setPhone(user.isActive || 1);
+    setIsActive(user.isActive || 1);
     setIsBlockSubmitButton(true);
   }, [isOpen, user]);
 

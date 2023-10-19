@@ -54,9 +54,9 @@ function ZoonChart({ dppDescription, nodes, nsi, nsiTypes, ministries, onAddNsi,
 
   //OrgChart.templates.myTemplate.tooltip = '<foreignObject x="10" y="-35" width="365" height="80"><p class="field__tooltip">{val}</p></foreignObject>';
 
-  OrgChart.templates.myTemplate.valid = '<foreignObject x="330" y="8" width="22" height="22"><img class="field__warning" style="opacity: {val}" src="https://edu.emiit.ru/warning.png" alt="кнопка меню" control-node-menu-id="{id}"></img></foreignObject>';
+  OrgChart.templates.myTemplate.valid = '<foreignObject x="330" y="8" width="22" height="22"><img class="field__warning" style="opacity: {val}" src="https://old.emiit.ru/warning.png" alt="кнопка меню" control-node-menu-id="{id}"></img></foreignObject>';
 
-  OrgChart.templates.myTemplate.nodeMenuButton = '<foreignObject x="370" y="8" width="20" height="20"><img class="field__menu" src="https://edu.emiit.ru/menu-button.png" alt="кнопка меню" control-node-menu-id="{id}"></img></foreignObject>';
+  OrgChart.templates.myTemplate.nodeMenuButton = '<foreignObject x="370" y="8" width="20" height="20"><img class="field__menu" src="https://old.emiit.ru/menu-button.png" alt="кнопка меню" control-node-menu-id="{id}"></img></foreignObject>';
 
   OrgChart.templates.myTemplate.plus = '<circle cx="15" cy="15" r="15" fill="#ffffff" stroke="#aeaeae" stroke-width="1"></circle>'
     + '<text text-anchor="middle" style="font-size: 18px;cursor:pointer;" fill="#757575" x="15" y="22">{collapsed-children-count}</text>';

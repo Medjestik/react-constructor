@@ -37,7 +37,7 @@ function AdditionalMaterial({ additionalMaterial, onAddAdditionalMaterial, onRem
                 additionalMaterial.map((material, i) => (
                   <li key={`docx-${i}`} className="additional-material__documents-item">
                     <span className="additional-material__documents-item-count">{i + 1}.</span>
-                    <a className="additional-material__documents-link" href={`https://constructor.emiit.ru:8887/tasks/${currentTask.id}/additional_files/${material.id}/download`} target="_blank" rel="noreferrer">{material.name}</a>
+                    <a className="additional-material__documents-link" href={`https://constructor-api.emiit.ru/tasks/${currentTask.id}/additional_files/${material.id}/download`} target="_blank" rel="noreferrer">{material.name}</a>
                     <button className="additional-material__btn-remove" type="button" onClick={() => showRemovePopup(material.id)}></button>
                   </li>
                 ))

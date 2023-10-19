@@ -3,6 +3,9 @@ import './InitialData.css';
 import * as api from '../../../../utils/api.js';
 import Preloader from '../../../Preloader/Preloader.js';
 import ReferenceInformation from './ReferenceInformation/ReferenceInformation.js';
+import Requirements from './Requirements/Requirements.js';
+import Objective from './Objective/Objective.js';
+import Annotation from './Annotation/Annotation.js';
 import useOnPushEsc from '../../../../hooks/useOnPushEsc';
 import useOnClickOverlay from '../../../../hooks/useOnClickOverlay.js';
 import RequirementFgosPopup from '../../../Popup/RequirementFgosPopup/RequirementFgosPopup.js';
@@ -30,19 +33,18 @@ import organizationIcon from '../../../../images/documents/organization.png';
 
 function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
 
+  console.log(dppDescription);
+
   const [isRendering, setIsRendering] = React.useState(true);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isLoadingPopup, setIsLoadingPopup] = React.useState(false);
   const [isErrorRequest, setIsErrorRequest] = React.useState({
     text: "",
     isShow: false,
-  })
-
-  const [countHours, setCountHours] = React.useState(0);
-  const [currentProgramType, setCurrentProgramType] = React.useState({ class: "", text: "", type: "", })
+  });
 
   const [profLevels, setProfLevels] = React.useState([]);
-  const [selectedProfLevels, setSelectedProfLevels] = React.useState([]);
+  const [initialData, setInitialData] = React.useState({});
 
   const [ministries, setMinistries] = React.useState([]);
 
@@ -73,7 +75,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
   const [currentProgramDocument, setCurrentProgramDocument] = React.useState({ id: "", type: "", });
   const [isRemoveProgramDocumentPopupOpen, setIsRemoveProgramDocumentPopupOpen] = React.useState(false);
 
-  const [userQualification, setUserQualification] = React.useState('');
+
   const [typologies, setTypologies] = React.useState([]);
   const [typologiesParts, setTypologiesParts] = React.useState([]);
   const [requestMessageRequirements, setRequestMessageRequirements] = React.useState({ text: '', isShow: false, type: '' });
@@ -93,38 +95,14 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
   const [isEditNsiPopupOpen, setIsEditNsiPopupOpen] = React.useState(false);
   const [currentNsiItem, setCurrentNsiItem] = React.useState({});
 
-  const [programDescription, setProgramDescription] = React.useState('');
-
-  function handleChangeProfLevels(id) {
-    const newLevels = selectedProfLevels;
-    if (newLevels.some(elem => elem.id === id)) {
-      const index = newLevels.findIndex(elem => elem.id === id);
-      newLevels.splice(index, 1);
-    } else {
-      newLevels.push(profLevels[id - 1])
-    }
-    setSelectedProfLevels(newLevels);
-    setRequestMessageRequirements({ text: '', isShow: false, type: '',});
-  }
-
-  function handleChangeUserQualification(e) {
-    setUserQualification(e.target.value);
-    setRequestMessageRequirements({ text: '', isShow: false, type: '',});
-  }
-
-  function handleChangeProgramDescription(e) {
-    setProgramDescription(e.target.value);
-    setRequestMessageDescription({ text: '', isShow: false, type: '',});
-  }
-
-  function handleSaveRequirements() {
+  function handleSaveRequirements(qualification, levels) {
     const token = localStorage.getItem("token");
     if (loggedIn) {
       api.saveRequirements({ 
         token: token, 
-        initialDataVersion: dppDescription.ish_version_id, 
-        profLevels: selectedProfLevels,
-        userQualification: userQualification
+        initialDataVersion: dppDescription.ish_version_id,
+        userQualification: qualification,
+        profLevels: levels
       })
       .then(() => {
         setRequestMessageRequirements({ 
@@ -144,13 +122,13 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
     }
   }
 
-  function handleSaveDescription() {
+  function handleSaveDescription(data) {
     const token = localStorage.getItem("token");
     if (loggedIn) {
       api.saveDescription({ 
         token: token, 
         initialDataVersion: dppDescription.ish_version_id, 
-        programDescription: programDescription,
+        programDescription: data,
       })
       .then(() => {
         setRequestMessageDescription({ 
@@ -170,23 +148,13 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
     }
   }
 
-  function handleChangeCountHours(e) {
-    setCountHours(e.target.value);
-    setRequestMessageCompetence({ 
-      text: '',
-      isShow: false,
-      type: 'success',
-    })
-  }
-
-  function handleSaveNewCompetence() {
+  function handleSaveNewCompetence(countHours) {
     const token = localStorage.getItem("token");
     if (loggedIn) {
       api.saveCompetence({ 
         token: token, 
         initialDataVersion: dppDescription.ish_version_id, 
         countHours: countHours,
-        type: currentProgramType.type,
       })
       .then(() => {
         setRequestMessageCompetence({ 
@@ -986,22 +954,6 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
   useOnClickOverlay(closeOverlayPopups);
   useOnPushEsc(closeOverlayPopups);
 
-  function changeProgramType() {
-    if (currentProgramType.type === "1") {
-      setCurrentProgramType({ class: "second", text: "Профессиональная переподготовка", type: "2" });
-    } else {
-      setCurrentProgramType({ class: "first", text: "Повышение квалификации", type: "1" });
-    }
-  }
-
-  React.useEffect(() => {
-    if (countHours > 249) {
-      setCurrentProgramType({ class: "second", text: "Профессиональная переподготовка", type: "2" });
-    } else {
-      setCurrentProgramType({ class: "first", text: "Повышение квалификации", type: "1" });
-    }
-  }, [countHours]);
-
   React.useEffect(() => {
     if (loggedIn) {
         const token = localStorage.getItem("token");
@@ -1010,31 +962,23 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
           api.getInitialData({ token: token, dppId: dppDescription.id, initialDataVersion: dppDescription.ish_version_id, })
         ])
         .then(([ profLevels, initialData ]) => {
-          console.log(initialData)
+          console.log(initialData);
           setProfLevels(profLevels);
-          setCountHours(initialData.total_hours);
+          setInitialData(initialData);
           setProfStandartsProgram(initialData.prof_standarts);
           setJobСlassificationProgram(initialData.ektses);
           setJobDirectoryProgram(initialData.ekses);
           setWorldSkillsProgram(initialData.world_skills);
           setRequirementFgos(initialData.fgoses);
           setRequirementFgosProgram(initialData.fgoses);
-          setUserQualification(initialData.req_user_kval);
-          setSelectedProfLevels(initialData.prof_levels);
           setTypologies(initialData.typologies);
           setTypologiesParts(initialData.typology_parts);
-          setProgramDescription(initialData.annotationDescription);
           setMinistries(initialData.ministries);
           initialData.nsis.sort(function(a,b) {
             return parseInt(a.type.position) - parseInt(b.type.position)
           })
           setNsiProgram(initialData.nsis);
           setOrganizationRulesProgram(initialData.corporate_requirements);
-          if (initialData.type === 2) {
-            setCurrentProgramType({ class: "second", text: "Профессиональная переподготовка", type: "2" });
-          } else {
-            setCurrentProgramType({ class: "first", text: "Повышение квалификации", type: "1" });
-          }
         })
         .catch((err) => {
           console.error(err);
@@ -1042,7 +986,6 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
         .finally(() => setIsRendering(false));
     }
     return () => {
-      setCountHours(0);
       setProfLevels([]);
       setProfStandartsProgram([]);
       setJobСlassificationProgram([]);
@@ -1050,15 +993,11 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
       setWorldSkillsProgram([]);
       setRequirementFgos([]);
       setRequirementFgosProgram([]);
-      setUserQualification("");
-      setSelectedProfLevels([]);
       setTypologies([]);
       setTypologiesParts([]);
       setNsiProgram([]);
       setMinistries([]);
       setOrganizationRulesProgram([]);
-      setProgramDescription("");
-      setCurrentProgramType({ class: "", text: "", type: "" });
   }
   }, [loggedIn, dppDescription]);
   
@@ -1074,6 +1013,21 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
         <p className="main__subtitle">Заполните предложенные поля форм. Для сохранения данных, нажмите кнопку "Сохранить данные".</p>
 
         <ul className="initial-data__list">
+
+          <li className="initial-data__item initial-data__item_type_initial">
+            <h3 className="initial-data__item-name">Общая информация</h3>
+            <p className="initial-data__item-subtitle initial-data__item-subtitle_type_basis">Определите основные параметры программы.</p>
+            <h5 className="initial-data__item-title">Наименование</h5>
+            <p className="initial-data__item-subtitle">{dppDescription.name}</p>
+            <h5 className="initial-data__item-title">Тип</h5>
+            <p className="initial-data__item-subtitle">{dppDescription.type_name}</p>
+            {
+              /*
+                <h5 className="initial-data__item-title">Условие</h5>
+                <p className="initial-data__item-subtitle">&#10003; разрабатывается в рамках проекта «Цифровые кафедры»</p>
+              */
+            }
+          </li>
 
           <li className="initial-data__item initial-data__item_type_basis">
             <h3 className="initial-data__item-name">Нормативные правовые основания разработки</h3>
@@ -1212,114 +1166,31 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
           </li>
 
           <li className="initial-data__item initial-data__item_type_requirements">
-            <h3 className="initial-data__item-name">Требования к обучающимся</h3>
-            <h5 className="initial-data__item-title">Требования к уровню профессионального образования</h5>
-            <ul className="initial-data__item-requirements-list">
-              {
-                profLevels.map((level) => (
-                <li key={level.id} className="initial-data__item-requirements-item">
-                  <label className="checkbox">
-                  <input 
-                    name="prof-levels"
-                    type="checkbox"
-                    id={level.id}
-                    value={level.id}
-                    defaultChecked={selectedProfLevels.some(elem => elem.id === level.id)}
-                    onChange={() => handleChangeProfLevels(level.id)}
-                    >
-                  </input>
-                    <span>{level.text}</span>
-                  </label>
-                </li>
-                ))
-              }
-            </ul>
-            <h5 className="initial-data__item-title">Требования к квалификации</h5>
-            <textarea 
-              className="initial-data__item-qualification-text" 
-              name="qualification-text" 
-              placeholder="Опишите требования к квалификации обучающегося"
-              defaultValue={userQualification}
-              onChange={handleChangeUserQualification}
-            >
-            </textarea>
-            {
-              isEditRights &&
-              <div className="initial-data__buttons initial-data__buttons_type_requirements">
-                <button className="btn btn_type_save" type="button" onClick={handleSaveRequirements}>Сохранить данные</button>
-                <span className={`initial-data__buttons-message ${requestMessageRequirements.isShow ? "initial-data__buttons-message_type_show" : "initial-data__buttons-message_type_hide"} ${requestMessageRequirements.type === 'error' ? "initial-data__buttons-message_type_error" : "initial-data__buttons-message_type_success"}`}>{requestMessageRequirements.text}</span>
-              </div>
-            }
+            <Requirements 
+            profLevels={profLevels}
+            initialData={initialData} 
+            requestMessageRequirements={requestMessageRequirements} 
+            onSave={handleSaveRequirements} 
+            isEditRights={isEditRights} 
+            />
           </li>
 
           <li className="initial-data__item initial-data__item_type_target">
-            <h3 className="initial-data__item-name">Цель и задачи</h3>
-            <p className="initial-data__item-subtitle">Укажите, формирует ли ДПП новую компетенцию или совершенствует имеющуюся. Цель и задачи ДПП.</p>
-            <h5 className="initial-data__item-title">Цель</h5>
-            <p className="initial-data__item-subtitle">Целью программы являются совершенствование и (или) получение новой компетенции, необходимой для профессиональной деятельности, и (или) повышение профессионального уровня в рамках имеющейся квалификации в области профессиональной деятельности.</p>
-            <h5 className="initial-data__item-title">Задачи</h5>
-            <ul className="initial-data__item-target-tasks">
-              <li className="initial-data__item-target-task target-task_type_first">приобретение обучающимися знаний, умений и навыков в соответствии с учебным планом и календарным графиком учебного процесса</li>
-              <li className="initial-data__item-target-task target-task_type_second">оценка достижений обучающимися планируемых результатов обучения</li>
-            </ul>
-
-            <h5 className="initial-data__item-title">Трудоемкость освоения программы (в часах)</h5>
-
-            <input 
-              className="initial-popup__input initial-data__target-input"
-              placeholder="введите количество часов трудоемкости"
-              type="number"
-              id="initial-data-target-input-hours"
-              name="initial-data-target-input-hours"
-              autoComplete="off"
-              value={countHours}
-              onChange={handleChangeCountHours}
-              onWheel={(e) => e.target.blur()}
-              min="0"
-              required
-            >
-            </input>
-
-            {
-              countHours > 15 &&
-              <>
-                <div className={`initial-data__target-info target-info_type_${currentProgramType.class}`}>
-                  <h6 className="initial-data__target-title">{currentProgramType.text}</h6>
-                  {
-                    countHours > 249 &&
-                    <button className=" btn initial-data__btn-change" onClick={changeProgramType}>Изменить тип</button>
-                  }
-                </div>
-              </>
-            }
-            
-            {
-              isEditRights &&
-              <div className="initial-data__buttons initial-data__buttons_type_requirements">
-                <button className={`btn btn_type_save ${countHours > 15 ? "" : "btn_type_block" }`} type="button" onClick={handleSaveNewCompetence}>Сохранить данные</button>
-                <span className={`initial-data__buttons-message ${requestMessageCompetence.isShow ? "initial-data__buttons-message_type_show" : "initial-data__buttons-message_type_hide"} ${requestMessageCompetence.type === 'error' ? "initial-data__buttons-message_type_error" : "initial-data__buttons-message_type_success"}`}>{requestMessageCompetence.text}</span>
-              </div>
-            }
+            <Objective 
+            initialData={initialData} 
+            requestMessageCompetence={requestMessageCompetence} 
+            onSave={handleSaveNewCompetence} 
+            isEditRights={isEditRights} 
+            />
           </li>
 
           <li className="initial-data__item initial-data__item_type_description">
-            <h3 className="initial-data__item-name">Аннотация программы</h3>
-            <p className="initial-data__item-subtitle initial-data__item-subtitle_type_structure">Укажите информацию о программе (актуальность, новизна, теоретическая и практическая значимость).</p>
-            <textarea 
-              className="initial-data__item-qualification-text" 
-              name="description-text" 
-              placeholder="Введите описание программы.."
-              defaultValue={programDescription}
-              onChange={handleChangeProgramDescription}
-            >
-            </textarea>
-            {
-              isEditRights &&
-              <div className="initial-data__buttons initial-data__buttons_type_requirements">
-                <button className="btn btn_type_save" type="button" onClick={handleSaveDescription}>Сохранить данные</button>
-                <span className={`initial-data__buttons-message ${requestMessageDescription.isShow ? "initial-data__buttons-message_type_show" : "initial-data__buttons-message_type_hide"} ${requestMessageDescription.type === 'error' ? "initial-data__buttons-message_type_error" : "initial-data__buttons-message_type_success"}`}>{requestMessageDescription.text}</span>
-              </div>
-            }
+            <Annotation 
+            initialData={initialData} 
+            requestMessageDescription={requestMessageDescription} 
+            onSave={handleSaveDescription} 
+            isEditRights={isEditRights} 
+            />
           </li>
 
           <li className="initial-data__item initial-data__item_type_structure">
