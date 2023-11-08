@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.d1ea6f5f.chunk.css",
-    "main.js": "/static/js/main.94881145.chunk.js",
-    "main.js.map": "/static/js/main.94881145.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.a6ec94da.js",
-    "runtime-main.js.map": "/static/js/runtime-main.a6ec94da.js.map",
+    "main.css": "/static/css/main.a0b73735.chunk.css",
+    "main.js": "/static/js/main.1ff02d53.chunk.js",
+    "main.js.map": "/static/js/main.1ff02d53.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.c2a58c4f.js",
+    "runtime-main.js.map": "/static/js/runtime-main.c2a58c4f.js.map",
     "static/css/2.ae36708e.chunk.css": "/static/css/2.ae36708e.chunk.css",
-    "static/js/2.a039b1c1.chunk.js": "/static/js/2.a039b1c1.chunk.js",
-    "static/js/2.a039b1c1.chunk.js.map": "/static/js/2.a039b1c1.chunk.js.map",
-    "static/js/3.af61c09e.chunk.js": "/static/js/3.af61c09e.chunk.js",
-    "static/js/3.af61c09e.chunk.js.map": "/static/js/3.af61c09e.chunk.js.map",
+    "static/js/2.8df8f536.chunk.js": "/static/js/2.8df8f536.chunk.js",
+    "static/js/2.8df8f536.chunk.js.map": "/static/js/2.8df8f536.chunk.js.map",
+    "static/js/3.f7477fd0.chunk.js": "/static/js/3.f7477fd0.chunk.js",
+    "static/js/3.f7477fd0.chunk.js.map": "/static/js/3.f7477fd0.chunk.js.map",
     "index.html": "/index.html",
     "static/css/2.ae36708e.chunk.css.map": "/static/css/2.ae36708e.chunk.css.map",
-    "static/css/main.d1ea6f5f.chunk.css.map": "/static/css/main.d1ea6f5f.chunk.css.map",
-    "static/js/2.a039b1c1.chunk.js.LICENSE.txt": "/static/js/2.a039b1c1.chunk.js.LICENSE.txt",
+    "static/css/main.a0b73735.chunk.css.map": "/static/css/main.a0b73735.chunk.css.map",
+    "static/js/2.8df8f536.chunk.js.LICENSE.txt": "/static/js/2.8df8f536.chunk.js.LICENSE.txt",
     "static/media/index.css": "/static/media/Raleway-Thin.48c8c234.eot",
     "static/media/advantages-cube.68cb715a.png": "/static/media/advantages-cube.68cb715a.png",
     "static/media/advantages-gears.21c26580.png": "/static/media/advantages-gears.21c26580.png",
@@ -41,10 +41,10 @@
     "static/media/sequence-answer-icon.75a3aea8.png": "/static/media/sequence-answer-icon.75a3aea8.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.a6ec94da.js",
+    "static/js/runtime-main.c2a58c4f.js",
     "static/css/2.ae36708e.chunk.css",
-    "static/js/2.a039b1c1.chunk.js",
-    "static/css/main.d1ea6f5f.chunk.css",
-    "static/js/main.94881145.chunk.js"
+    "static/js/2.8df8f536.chunk.js",
+    "static/css/main.a0b73735.chunk.css",
+    "static/js/main.1ff02d53.chunk.js"
   ]
 }

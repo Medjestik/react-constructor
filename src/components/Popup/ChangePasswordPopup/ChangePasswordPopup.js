@@ -1,8 +1,7 @@
 import React from 'react';
 import Popup from '../../Popup/Popup.js';
 
-function ChangePasswordPopup({ isOpen, onClose, onChangePassword, user, isLoading, isShowError }) { 
-
+function ChangePasswordPopup({ isOpen, onClose, onChangePassword, user, isLoading, requestMessage }) { 
 
   const [password, setPassword] = React.useState("");
   const [errorPassword, setErrorPassword] = React.useState(false);
@@ -15,7 +14,6 @@ function ChangePasswordPopup({ isOpen, onClose, onChangePassword, user, isLoadin
     onChangePassword(password, user, onClose);
   }
 
-  
   function handleAddPassword(e) {
     setPassword(e.target.value);
     if (e.target.checkValidity()) {
@@ -61,14 +59,14 @@ function ChangePasswordPopup({ isOpen, onClose, onChangePassword, user, isLoadin
   return (
     <>
     <Popup isOpen={isOpen} onClose={onClose} >
-      <form className="popup__form popup__form_type_large" name="change-password" action="#" noValidate onSubmit={handleSubmit}>
-        <h3 className="initial-popup__title">Изменение пароля</h3>
-        <ul className="initial-popup__list-input">
-          <li className="initial-popup__item-input">
-            <h5 className="initial-popup__input-name">Введите новый пароль</h5>
-            <input 
-            className="initial-popup__input"
-            placeholder="введите новый пароль.."
+      <form className="popup__form popup__form_type_medium" name="change-password" action="#" noValidate onSubmit={handleSubmit}>
+        <h3 className="popup__title">Изменение пароля</h3>
+
+        <div className="form__field">
+          <span className="form__input-caption font_weight_bold">Введите новый пароль</span>
+          <input 
+            className={`form__input ${errorPassword && "form__input_type_error"}`}
+            placeholder="Введите новый пароль.."
             type="text"
             id="create-new-password"
             name="create-new-password"
@@ -77,16 +75,17 @@ function ChangePasswordPopup({ isOpen, onClose, onChangePassword, user, isLoadin
             value={password}
             onChange={handleAddPassword}
             required
-            >
-            </input>
-            <span className={`initial-popup__input-error ${errorPassword ? "initial-popup__input-error_type_show" : ""}`}>Пароль должен быть не короче 6 символов</span>
-          </li>
-          <li className="initial-popup__item-input">
-            <h5 className="initial-popup__input-name">Повторите новый пароль</h5>
-            <input 
-            className="initial-popup__input"
-            placeholder="повторите новый пароль.."
-            type="number"
+          >
+          </input>
+          <span className={`form__input-error ${errorPassword && "form__input-error_active"}`}>Пароль должен быть не короче 6 символов</span>
+        </div>
+
+        <div className="form__field form__field_margin_top-8">
+          <span className="form__input-caption font_weight_bold">Повторите новый пароль</span>
+          <input 
+            className={`form__input ${errorRepeatPassword && "form__input_type_error"}`}
+            placeholder="Повторите пароль.."
+            type="text"
             id="create-new-password-repeat"
             name="create-new-password-repeat"
             autoComplete="off"
@@ -96,11 +95,18 @@ function ChangePasswordPopup({ isOpen, onClose, onChangePassword, user, isLoadin
             required
             >
             </input>
-            <span className={`initial-popup__input-error ${errorRepeatPassword ? "initial-popup__input-error_type_show" : ""}`}>Пароли не совпадают</span>
-          </li> 
-        </ul>
+          <span className={`form__input-error ${errorRepeatPassword && "form__input-error_active"}`}>
+            Пароли не совпадают
+          </span>
+        </div>
 
-        <button className={`btn btn_type_save initial-popup__btn-save ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoading ? "btn_type_loading" : ""}`} type="submit">{isLoading ? "Сохранение.." : "Сохранить"}</button>
+        <div className="form__btn-container form__btn-container_margin_top-20">
+          <div className="form__btn-item">
+            <button className={`btn btn_type_save ${isBlockSubmitButton && "btn_type_block"} ${isLoading && "btn_type_loading"}`} type="submit">Сохранить данные</button>
+          </div>
+        </div>
+
+        <span className={`request-message ${(requestMessage.isShow && requestMessage.action === 'password') ? "request-message_type_show" : "request-message_type_hide"} ${requestMessage.type === 'error' ? "request-message_type_error" : "request-message_type_success"}`}>{requestMessage.text}</span>
       
       </form>
     </Popup>

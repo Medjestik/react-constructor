@@ -137,7 +137,7 @@ function Justification({ nsi, type, onChooseJustificationType, onChangeExpertOpi
       <p className="popup__subtitle add-node__subtitle">Выберите на основе какой информации формируется {type || ""}</p>
       <ul className="justification-choose">
         <li key="nsi" className="justification-radio">
-          <label className="radio">
+          <label className="radio radio_margin_top radio_margin_bottom">
           <input 
             name="justification"
             type="radio"
@@ -150,7 +150,7 @@ function Justification({ nsi, type, onChooseJustificationType, onChangeExpertOpi
           </label>
         </li>
         <li key="expert" className="justification-radio">
-          <label className="radio">
+          <label className="radio radio_margin_top radio_margin_bottom">
           <input 
             name="justification"
             type="radio"

@@ -1,36 +1,41 @@
 import React from 'react';
 
-function Annotation({ initialData, requestMessageDescription, onSave, isEditRights }) {
+function Annotation({ initialData, onSave, isLoading, requestMessage, clearRequestMessage, isEditRights }) {
 
   const [programDescription, setProgramDescription] = React.useState(initialData.annotationDescription);
 
   function handleChangeProgramDescription(e) {
     setProgramDescription(e.target.value);
-  }
-
-  function handleSubmit() {
-    onSave(programDescription);
+    clearRequestMessage();
   }
 
   return (
     <>
-    <h3 className="initial-data__item-name">Аннотация программы</h3>
-    <p className="initial-data__item-subtitle initial-data__item-subtitle_type_structure">Укажите информацию о программе (актуальность, новизна, теоретическая и практическая значимость).</p>
+    <h5 className="initial-data__item-title initial-data__item-title_margin_bottom">Аннотация программы</h5>
+
     <textarea 
-      className="initial-data__item-qualification-text" 
-      name="description-text" 
+      className="form__textarea"
+      name="program-data-annotation"
+      id="program-data-annotation"
       placeholder="Введите описание программы.."
-      defaultValue={programDescription}
+      value={programDescription}
       onChange={handleChangeProgramDescription}
     >
     </textarea>
+
     {
       isEditRights &&
-      <div className="initial-data__buttons initial-data__buttons_type_requirements">
-        <button className="btn btn_type_save" type="button" onClick={handleSubmit}>Сохранить данные</button>
-        <span className={`initial-data__buttons-message ${requestMessageDescription.isShow ? "initial-data__buttons-message_type_show" : "initial-data__buttons-message_type_hide"} ${requestMessageDescription.type === 'error' ? "initial-data__buttons-message_type_error" : "initial-data__buttons-message_type_success"}`}>{requestMessageDescription.text}</span>
-      </div>
+      <>
+        <div className="form__btn-container form__btn-container_margin_top-20">
+          <div className="form__btn-item">
+            <button className={`btn btn_type_save ${isLoading && "btn_type_loading"}`} type="button" onClick={() => onSave(programDescription)}>Сохранить данные</button>
+          </div>
+        </div>
+
+        <span className={`request-message ${(requestMessage.isShow && requestMessage.action === 'annotation') ? "request-message_type_show" : "request-message_type_hide"} ${requestMessage.type === 'error' ? "request-message_type_error" : "request-message_type_success"}`}>{requestMessage.text}</span>
+      </>
     }
+
     </>
   );
 }

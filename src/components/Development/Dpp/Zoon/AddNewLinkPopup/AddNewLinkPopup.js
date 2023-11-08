@@ -41,7 +41,7 @@ function AddNewLinkPopup({ isOpen, onClose, currentNode, nodes, onConfirm, zoonL
           {
             abilities.map((elem, i) => (
               <li className="initial-data__item-target-item" key={i}>
-                <label className="radio">
+                <label className="radio radio_margin_top radio_margin_bottom">
                   <input 
                     className="radio"
                     name="developingResult"

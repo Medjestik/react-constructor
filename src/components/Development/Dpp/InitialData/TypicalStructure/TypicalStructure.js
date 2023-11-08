@@ -3,7 +3,7 @@ import './TypicalStructure.css';
 import DragAndDrop from '../../../../DragAndDrop/DragAndDrop.js';
 import * as api from '../../../../../utils/api.js';
 
-function TypicalStructure({ typologyParts, initialDataVersion, loggedIn, onEdit, onRemove, onChoose, onChangeOrder, isEditRights }) {
+function TypicalStructure({ typologyParts, initialDataVersion, loggedIn, onEdit, onRemove, onChangeOrder, isEditRights }) {
 
   const [currentTypologiesParts, setCurrentTypologiesParts] = React.useState(typologyParts);
   const [addStructurePartName, setAddStructurePartName] = React.useState('');
@@ -56,10 +56,7 @@ function TypicalStructure({ typologyParts, initialDataVersion, loggedIn, onEdit,
     <div className="typical-structure">
       {
         isEditRights &&
-        <div className="typical-structure__buttons">
-          <button className={`btn btn_type_add initial-popup__btn-add ${showAddFormStructurePart ? "typical-structure__btn-add_type_show" : "typical-structure__btn-add_type_hide"}`} type="button" onClick={handleShowAddFormStructurePart}>Добавить новый раздел</button>
-          <button className="btn btn_type_choose" type="button" onClick={onChoose}>Выбрать существующую структуру</button>
-        </div>
+        <button className={`btn btn_type_add ${showAddFormStructurePart ? "typical-structure__btn-add_type_show" : "typical-structure__btn-add_type_hide"}`} type="button" onClick={handleShowAddFormStructurePart}>Добавить новый раздел</button>
       }
       <div className={`typical-structure__add ${showAddFormStructurePart ? "typical-structure__add_type_show" : "typical-structure__add_type_hide"}`}>
         <div className="typical-structure__add-container">

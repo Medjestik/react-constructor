@@ -490,7 +490,33 @@ export const removeProgramDocument = ({ token, initialDataVersion, id, type }) =
   .then(res => handleResponse(res))
 };
 
-export const saveRequirements = ({ token, initialDataVersion, profLevels, userQualification }) => {
+export const saveInformation = ({ token, initialDataVersion, currentDirection }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/direction`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ currentDirection })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const saveQualification = ({ token, initialDataVersion, data }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/update_sphere_field`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ qualification_field: data.qualificationField, qualification_sphere: data.qualificationSphere })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const saveRequirements = ({ token, initialDataVersion, profLevels, qualification, reqQualification }) => {
   return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/requirements`, {
     method: 'POST',
     headers: {
@@ -498,10 +524,24 @@ export const saveRequirements = ({ token, initialDataVersion, profLevels, userQu
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     },
-    body: JSON.stringify({ profLevels, userQualification })
+    body: JSON.stringify({ profLevels, qualification, reqQualification })
   })
   .then(res => handleResponse(res))
 };
+
+export const saveObjective = ({ token, initialDataVersion, digital_sphere }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/digital_sphere`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ digital_sphere })
+  })
+  .then(res => handleResponse(res))
+};
+
 
 export const saveDescription = ({ token, initialDataVersion, programDescription }) => {
   return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/description`, {
@@ -516,6 +556,32 @@ export const saveDescription = ({ token, initialDataVersion, programDescription 
   .then(res => handleResponse(res))
 };
 
+export const saveForm = ({ token, initialDataVersion, edu_form, edu_form_dot, edu_practic }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/form`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ edu_form, edu_form_dot, edu_practic })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const saveHours = ({ token, initialDataVersion, total_hours, edu_period_name, edu_period_duration }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/period`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ total_hours, edu_period_name, edu_period_duration })
+  })
+  .then(res => handleResponse(res))
+};
+
 export const saveCompetence = ({ token, initialDataVersion, countHours, type }) => {
   return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/results`, {
     method: 'POST',
@@ -525,6 +591,82 @@ export const saveCompetence = ({ token, initialDataVersion, countHours, type }) 
       'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify({ countHours, type })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const createQualificationRequirements = ({ token, initialDataVersion, text }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/qualification_requirements`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ text })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const editQualificationRequirements = ({ token, initialDataVersion, dataId, text }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/qualification_requirements/${dataId}`, {
+    method: 'PATCH',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ text })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const removeQualificationRequirements = ({ token, initialDataVersion, dataId }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/qualification_requirements/${dataId}`, {
+    method: 'DELETE',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(res => handleResponse(res))
+};
+
+export const createQualificationObject = ({ token, initialDataVersion, text }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/qualification_professional_objects`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ text })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const editQualificationObject = ({ token, initialDataVersion, dataId, text }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/qualification_professional_objects/${dataId}`, {
+    method: 'PATCH',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ text })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const removeQualificationObject = ({ token, initialDataVersion, dataId }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/qualification_professional_objects/${dataId}`, {
+    method: 'DELETE',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
   })
   .then(res => handleResponse(res))
 };

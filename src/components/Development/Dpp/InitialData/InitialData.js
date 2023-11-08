@@ -6,8 +6,12 @@ import ReferenceInformation from './ReferenceInformation/ReferenceInformation.js
 import Requirements from './Requirements/Requirements.js';
 import Objective from './Objective/Objective.js';
 import Annotation from './Annotation/Annotation.js';
-import useOnPushEsc from '../../../../hooks/useOnPushEsc';
-import useOnClickOverlay from '../../../../hooks/useOnClickOverlay.js';
+import Information from './Information/Information.js';
+import QualificationRequirements from './QualificationRequirements/QualificationRequirements.js';
+import QualificationField from './QualificationField/QualificationField.js';
+import QualificationObject from './QualificationObject/QualificationObject.js';
+import Form from './Form/Form.js';
+import Hours from './Hours/Hours.js';
 import RequirementFgosPopup from '../../../Popup/RequirementFgosPopup/RequirementFgosPopup.js';
 import ProfStandartPopup from '../../../Popup/ProfStandartPopup/ProfStandartPopup.js';
 import JobСlassificationPopup from '../../../Popup/JobСlassificationPopup/JobСlassificationPopup.js';
@@ -18,7 +22,6 @@ import RemoveProgramDocumentPopup from '../../../Popup/RemoveProgramDocumentPopu
 import TypicalStructure from './TypicalStructure/TypicalStructure.js';
 import EditPartPopup from '../../../Popup/EditPartPopup/EditPartPopup.js';
 import RemovePartPopup from '../../../Popup/RemovePartPopup/RemovePartPopup.js';
-import ChoosePartsPopup from '../../../Popup/ChoosePartsPopup/ChoosePartsPopup.js';
 import AccordionChooseNewDocumentType from '../../../Accordion/AccordionChooseNewDocumentType/AccordionChooseNewDocumentType.js';
 import NsiPopup from '../../../Popup/NsiPopup/NsiPopup.js';
 import EditNsiPopup from '../../../Popup/EditNsiPopup/EditNsiPopup.js';
@@ -33,8 +36,6 @@ import organizationIcon from '../../../../images/documents/organization.png';
 
 function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
 
-  console.log(dppDescription);
-
   const [isRendering, setIsRendering] = React.useState(true);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isLoadingPopup, setIsLoadingPopup] = React.useState(false);
@@ -42,6 +43,8 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
     text: "",
     isShow: false,
   });
+
+  const [currentProgramType, setCurrentProgramType] = React.useState('');
 
   const [profLevels, setProfLevels] = React.useState([]);
   const [initialData, setInitialData] = React.useState({});
@@ -75,16 +78,15 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
   const [currentProgramDocument, setCurrentProgramDocument] = React.useState({ id: "", type: "", });
   const [isRemoveProgramDocumentPopupOpen, setIsRemoveProgramDocumentPopupOpen] = React.useState(false);
 
+  const [qualificationRequirements, setQualificationRequirements] = React.useState([]);
+  const [qualificationObject, setQualificationObject] = React.useState([]);
 
-  const [typologies, setTypologies] = React.useState([]);
   const [typologiesParts, setTypologiesParts] = React.useState([]);
-  const [requestMessageRequirements, setRequestMessageRequirements] = React.useState({ text: '', isShow: false, type: '' });
-  const [requestMessageCompetence, setRequestMessageCompetence] = React.useState({ text: '', isShow: false, type: '' });
-  const [requestMessageDescription, setRequestMessageDescription] = React.useState({ text: '', isShow: false, type: '' });
+  
+  const [requestMessage, setRequestMessage] = React.useState({ text: '', isShow: false, type: '', action: '' });
 
   const [isOpenEditPartPopup, setIsOpenEditPartPopup] = React.useState(false);
   const [isOpenRemovePartPopup, setIsOpenRemovePartPopup] = React.useState(false);
-  const [isOpenChoosePartsPopup, setIsOpenChoosePartsPopup] = React.useState(false);
   const [currentPart, setCurrentPart] = React.useState({ name: "", })
   const [currentPartIndex, setCurrentPartIndex] = React.useState(0);
 
@@ -94,35 +96,143 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
   const [isRemoveNsiPopupOpen, setIsRemoveNsiPopupOpen] = React.useState(false);
   const [isEditNsiPopupOpen, setIsEditNsiPopupOpen] = React.useState(false);
   const [currentNsiItem, setCurrentNsiItem] = React.useState({});
+  
+  function handleSaveInformation(currentDirection) {
+    setIsLoading(true);
+    clearRequestMessage();
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.saveInformation({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id,
+        currentDirection: currentDirection,
+      })
+      .then((res) => {
+        setInitialData({...initialData, direction: res.data});
+        setRequestMessage({ text: 'Данные успешно сохранены!', isShow: true, type: 'success', action: 'info', });
+      })
+      .catch((err) =>{
+        setRequestMessage({ text: 'Произошла ошибка!', isShow: true, type: 'error', action: 'info', });
+        console.log(err);
+      })
+      .finally(() => setIsLoading(false));
+    }
+  }
 
-  function handleSaveRequirements(qualification, levels) {
+  function handleSaveQualificationField(data) {
+    setIsLoading(true);
+    clearRequestMessage();
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.saveQualification({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id,
+        data: data,
+      })
+      .then(() => {
+        setRequestMessage({ text: 'Данные успешно сохранены!', isShow: true, type: 'success', action: 'qualification-field', });
+      })
+      .catch((err) =>{
+        setRequestMessage({ text: 'Произошла ошибка!', isShow: true, type: 'error', action: 'qualification-field', });
+        console.log(err);
+      })
+      .finally(() => setIsLoading(false));
+    }
+  }
+
+  function handleSaveObjective(data) {
+    setIsLoading(true);
+    clearRequestMessage();
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.saveObjective({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id,
+        digital_sphere: { id: data.value },
+      })
+      .then(() => {
+        setRequestMessage({ text: 'Данные успешно сохранены!', isShow: true, type: 'success', action: 'objective', });
+      })
+      .catch((err) =>{
+        setRequestMessage({ text: 'Произошла ошибка!', isShow: true, type: 'error', action: 'objective', });
+        console.log(err);
+      })
+      .finally(() => setIsLoading(false));
+    }
+  }
+
+  function handleSaveRequirements(profLevels, qualification, reqQualification) {
+    setIsLoading(true);
+    clearRequestMessage();
     const token = localStorage.getItem("token");
     if (loggedIn) {
       api.saveRequirements({ 
         token: token, 
         initialDataVersion: dppDescription.ish_version_id,
-        userQualification: qualification,
-        profLevels: levels
+        profLevels: profLevels,
+        qualification: qualification,
+        reqQualification: reqQualification,
       })
       .then(() => {
-        setRequestMessageRequirements({ 
-          text: 'Данные успешно сохранены!',
-          isShow: true,
-          type: 'success',
-        })
+        setRequestMessage({ text: 'Данные успешно сохранены!', isShow: true, type: 'success', action: 'requirement', });
       })
       .catch((err) =>{
-        setRequestMessageRequirements({ 
-          text: 'К сожалению произошла ошибка, ваши данные не сохранены!',
-          isShow: true,
-          type: 'error',
-        })
+        setRequestMessage({ text: 'Произошла ошибка!', isShow: true, type: 'error', action: 'requirement', });
         console.log(err);
       })
+      .finally(() => setIsLoading(false));
+    }
+  }
+
+  function handleSaveForm(form, isDistance, isPractice) {
+    setIsLoading(true);
+    clearRequestMessage();
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.saveForm({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id,
+        edu_form: form,
+        edu_form_dot: isDistance,
+        edu_practic: isPractice,
+      })
+      .then(() => {
+        setRequestMessage({ text: 'Данные успешно сохранены!', isShow: true, type: 'success', action: 'form', });
+      })
+      .catch((err) =>{
+        setRequestMessage({ text: 'Произошла ошибка!', isShow: true, type: 'error', action: 'form', });
+        console.log(err);
+      })
+      .finally(() => setIsLoading(false));
+    }
+  }
+
+  function handleSaveHours(hours, durationForm, duration) {
+    setIsLoading(true);
+    clearRequestMessage();
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.saveHours({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id,
+        total_hours: hours,
+        edu_period_name: durationForm,
+        edu_period_duration: duration,
+      })
+      .then(() => {
+        setRequestMessage({ text: 'Данные успешно сохранены!', isShow: true, type: 'success', action: 'hours', });
+      })
+      .catch((err) =>{
+        setRequestMessage({ text: 'Произошла ошибка!', isShow: true, type: 'error', action: 'hours', });
+        console.log(err);
+      })
+      .finally(() => setIsLoading(false));
     }
   }
 
   function handleSaveDescription(data) {
+    setIsLoading(true);
+    clearRequestMessage();
     const token = localStorage.getItem("token");
     if (loggedIn) {
       api.saveDescription({ 
@@ -131,24 +241,19 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
         programDescription: data,
       })
       .then(() => {
-        setRequestMessageDescription({ 
-          text: 'Данные успешно сохранены!',
-          isShow: true,
-          type: 'success',
-        })
+        setRequestMessage({ text: 'Данные успешно сохранены!', isShow: true, type: 'success', action: 'annotation', });
       })
       .catch((err) =>{
-        setRequestMessageDescription({ 
-          text: 'К сожалению произошла ошибка, ваши данные не сохранены!',
-          isShow: true,
-          type: 'error',
-        })
+        setRequestMessage({ text: 'Произошла ошибка!', isShow: true, type: 'error', action: 'annotation', });
         console.log(err);
       })
+      .finally(() => setIsLoading(false));
     }
   }
 
   function handleSaveNewCompetence(countHours) {
+    setIsLoading(true);
+    clearRequestMessage();
     const token = localStorage.getItem("token");
     if (loggedIn) {
       api.saveCompetence({ 
@@ -157,20 +262,13 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
         countHours: countHours,
       })
       .then(() => {
-        setRequestMessageCompetence({ 
-          text: 'Данные успешно сохранены!',
-          isShow: true,
-          type: 'success',
-        })
+        setRequestMessage({ text: 'Данные успешно сохранены!', isShow: true, type: 'success', action: 'competence', });
       })
       .catch((err) =>{
-        setRequestMessageCompetence({ 
-          text: 'К сожалению произошла ошибка, ваши данные не сохранены!',
-          isShow: true,
-          type: 'error',
-        })
+        setRequestMessage({ text: 'Произошла ошибка!', isShow: true, type: 'error', action: 'competence', });
         console.log(err);
       })
+      .finally(() => setIsLoading(false));
     }
   }
 
@@ -730,6 +828,99 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
     .finally(() => setIsLoading(false));
   }
 
+  /* Qualification */
+  function handleAddQualificationRequirements(data, closePopup) { 
+    setIsLoading(true);
+    clearRequestMessage();
+    const token = localStorage.getItem("token");
+    api.createQualificationRequirements({ token: token, initialDataVersion:dppDescription.ish_version_id, text: data.text })
+    .then((res) => {
+      setQualificationRequirements([...qualificationRequirements, res]);
+      closePopup();
+    })
+    .catch((err) => {
+      console.error(err);
+      setRequestMessage({ text: 'Произошла ошибка, ваши данные не сохранены!', isShow: true, type: 'error', action: 'popup', });
+    })
+    .finally(() => setIsLoading(false));
+  }
+
+  function handleEditQualificationRequirements(data, closePopup) { 
+    setIsLoading(true);
+    clearRequestMessage();
+    const token = localStorage.getItem("token");
+    api.editQualificationRequirements({ token: token, initialDataVersion:dppDescription.ish_version_id, dataId: data.id, text: data.text })
+    .then((res) => {
+      const index = qualificationRequirements.indexOf(qualificationRequirements.find((elem) => (elem.id === res.id)));
+      setQualificationRequirements([...qualificationRequirements.slice(0, index), res, ...qualificationRequirements.slice(index + 1)]);
+      closePopup();
+    })
+    .catch((err) => {
+      console.error(err);
+      setRequestMessage({ text: 'Произошла ошибка, ваши данные не сохранены!', isShow: true, type: 'error', action: 'popup', });
+    })
+    .finally(() => setIsLoading(false));
+  }
+
+  function handleRemoveQualificationRequirements(data, closePopup) { 
+    setIsLoading(true);
+    clearRequestMessage();
+    const token = localStorage.getItem("token");
+    api.removeQualificationRequirements({ token: token, initialDataVersion:dppDescription.ish_version_id, dataId: data.id })
+    .then((res) => {
+      setQualificationRequirements(qualificationRequirements.filter((elem) => elem.id !== res));
+      closePopup();
+    })
+    .catch((err) => {
+      console.error(err);
+      setRequestMessage({ text: 'Произошла ошибка, попробуйте позже!', isShow: true, type: 'error', action: 'popup', });
+    })
+    .finally(() => setIsLoading(false));
+  }
+
+  function handleAddQualificationObject(data, closePopup) { 
+    setIsLoading(true);
+    const token = localStorage.getItem("token");
+    api.createQualificationObject({ token: token, initialDataVersion:dppDescription.ish_version_id, text: data.text })
+    .then((res) => {
+      setQualificationObject([...qualificationObject, res]);
+      closePopup();
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => setIsLoading(false));
+  }
+
+  function handleEditQualificationObject(data, closePopup) { 
+    setIsLoading(true);
+    const token = localStorage.getItem("token");
+    api.editQualificationObject({ token: token, initialDataVersion:dppDescription.ish_version_id, dataId: data.id, text: data.text })
+    .then((res) => {
+      const index = qualificationObject.indexOf(qualificationObject.find((elem) => (elem.id === res.id)));
+      setQualificationObject([...qualificationObject.slice(0, index), res, ...qualificationObject.slice(index + 1)]);
+      closePopup();
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => setIsLoading(false));
+  }
+
+  function handleRemoveQualificationObject(data, closePopup) { 
+    setIsLoading(true);
+    const token = localStorage.getItem("token");
+    api.removeQualificationObject({ token: token, initialDataVersion:dppDescription.ish_version_id, dataId: data.id })
+    .then((res) => {
+      setQualificationObject(qualificationObject.filter((elem) => elem.id !== res));
+      closePopup();
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => setIsLoading(false));
+  }
+
 
   /* Typology */
 
@@ -744,11 +935,6 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
     closeInitialDataPopups();
     setIsOpenRemovePartPopup(true);
     setCurrentPart(part);
-  }
-
-  function openChoosePartsPopup() {
-    closeInitialDataPopups();
-    setIsOpenChoosePartsPopup(true);
   }
 
   function changeTypologyParts(newTypology) {
@@ -825,7 +1011,6 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
         name: newPart.name
       })
       .then((res) => {
-        console.log(res);
         setTypologiesParts([...typologiesParts.slice(0, partIndex), res, ...typologiesParts.slice(partIndex + 1)]);
         closeInitialDataPopups();
       })
@@ -926,7 +1111,12 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
     .finally(() => setIsLoading(false));
   }
 
+  function clearRequestMessage() {
+    setRequestMessage({ text: '', isShow: false, type: '', action: '', })
+  }
+
   function closeInitialDataPopups() {
+    clearRequestMessage();
     setIsProfStandartPopupOpen(false);
     setIsJobСlassificationPopupOpen(false);
     setIsJobDirectoryPopupOpen(false);
@@ -935,24 +1125,11 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
     setIsRequirementFgosPopupOpen(false);
     setIsOpenEditPartPopup(false);
     setIsOpenRemovePartPopup(false);
-    setIsOpenChoosePartsPopup(false);
     setIsNsiPopupOpen(false);
     setIsRemoveNsiPopupOpen(false);
     setIsRemoveProgramDocumentPopupOpen(false);
     setIsEditNsiPopupOpen(false);
   }
-
-  function closeOverlayPopups() {
-    //setIsOpenEditPartPopup(false);
-    //setIsOpenRemovePartPopup(false);
-    //setIsOpenChoosePartsPopup(false);
-    //setIsRemoveNsiPopupOpen(false);
-    //setIsEditNsiPopupOpen(false);
-    //setIsRemoveProgramDocumentPopupOpen(false);
-  }
-
-  useOnClickOverlay(closeOverlayPopups);
-  useOnPushEsc(closeOverlayPopups);
 
   React.useEffect(() => {
     if (loggedIn) {
@@ -962,7 +1139,8 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
           api.getInitialData({ token: token, dppId: dppDescription.id, initialDataVersion: dppDescription.ish_version_id, })
         ])
         .then(([ profLevels, initialData ]) => {
-          console.log(initialData);
+          console.log('DppDescription: ', dppDescription);
+          console.log('InitialData: ', initialData);
           setProfLevels(profLevels);
           setInitialData(initialData);
           setProfStandartsProgram(initialData.prof_standarts);
@@ -971,7 +1149,8 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
           setWorldSkillsProgram(initialData.world_skills);
           setRequirementFgos(initialData.fgoses);
           setRequirementFgosProgram(initialData.fgoses);
-          setTypologies(initialData.typologies);
+          setQualificationRequirements(initialData.qualification_requirements);
+          setQualificationObject(initialData.qualification_professional_objects);
           setTypologiesParts(initialData.typology_parts);
           setMinistries(initialData.ministries);
           initialData.nsis.sort(function(a,b) {
@@ -979,6 +1158,15 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
           })
           setNsiProgram(initialData.nsis);
           setOrganizationRulesProgram(initialData.corporate_requirements);
+          if (dppDescription.type.id === 1) {
+            setCurrentProgramType('pk');
+          } else {
+            if (dppDescription.is_digital === 0) {
+              setCurrentProgramType('pp');
+            } else {
+              setCurrentProgramType('pp-digital');
+            }
+          }
         })
         .catch((err) => {
           console.error(err);
@@ -993,7 +1181,8 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
       setWorldSkillsProgram([]);
       setRequirementFgos([]);
       setRequirementFgosProgram([]);
-      setTypologies([]);
+      setQualificationRequirements([]);
+      setQualificationObject([]);
       setTypologiesParts([]);
       setNsiProgram([]);
       setMinistries([]);
@@ -1014,19 +1203,17 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
 
         <ul className="initial-data__list">
 
-          <li className="initial-data__item initial-data__item_type_initial">
-            <h3 className="initial-data__item-name">Общая информация</h3>
-            <p className="initial-data__item-subtitle initial-data__item-subtitle_type_basis">Определите основные параметры программы.</p>
-            <h5 className="initial-data__item-title">Наименование</h5>
-            <p className="initial-data__item-subtitle">{dppDescription.name}</p>
-            <h5 className="initial-data__item-title">Тип</h5>
-            <p className="initial-data__item-subtitle">{dppDescription.type_name}</p>
-            {
-              /*
-                <h5 className="initial-data__item-title">Условие</h5>
-                <p className="initial-data__item-subtitle">&#10003; разрабатывается в рамках проекта «Цифровые кафедры»</p>
-              */
-            }
+          <li className="initial-data__item initial-data__item_type_direction">
+            <Information
+              dppDescription={dppDescription}         
+              initialData={initialData} 
+              onSave={handleSaveInformation}
+              isLoading={isLoading}
+              requestMessage={requestMessage}
+              clearRequestMessage={clearRequestMessage}
+              isEditRights={isEditRights} 
+            />
+
           </li>
 
           <li className="initial-data__item initial-data__item_type_basis">
@@ -1039,17 +1226,6 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
               />
             }
 
-            {
-              requirementFgosProgram.length > 0 || 
-              profStandartsProgram.length > 0 ||
-              jobСlassificationProgram.length > 0 ||
-              jobDirectoryProgram.length > 0 ||
-              worldSkillsProgram.length > 0 ?
-              <h5 className="initial-data__item-title">Требования к квалификации установлены на основе:</h5>
-              :
-              <div></div>
-            }
-            
             <ul className="initial-data__documents-list">
               {
                 requirementFgosProgram.map((elem, i) => (
@@ -1165,44 +1341,129 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
             </ul>
           </li>
 
+          {
+            currentProgramType.includes('pp') &&
+            <>
+            <li className="initial-data__item initial-data__item_type_qualification-req">
+              <QualificationRequirements
+                qualificationRequirements={qualificationRequirements}
+                onAdd={handleAddQualificationRequirements}
+                onEdit={handleEditQualificationRequirements}
+                onRemove={handleRemoveQualificationRequirements}
+                isLoading={isLoading}
+                requestMessage={requestMessage}
+                clearRequestMessage={clearRequestMessage}
+                isEditRights={isEditRights}
+              />
+            </li>
+            <li className="initial-data__item initial-data__item_type_qualification-area">
+              <QualificationField    
+                initialData={initialData}
+                onSave={handleSaveQualificationField}
+                isLoading={isLoading}
+                requestMessage={requestMessage}
+                clearRequestMessage={clearRequestMessage}
+                isEditRights={isEditRights}
+              />
+
+            </li>
+            <li className="initial-data__item initial-data__item_type_qualification-obj">
+              <QualificationObject
+                qualificationObject={qualificationObject}
+                onAdd={handleAddQualificationObject}
+                onEdit={handleEditQualificationObject}
+                onRemove={handleRemoveQualificationObject}
+                isLoading={isLoading}
+                requestMessage={requestMessage}
+                clearRequestMessage={clearRequestMessage}
+                isEditRights={isEditRights}
+              />
+            </li>
+            </>
+          }
+
           <li className="initial-data__item initial-data__item_type_requirements">
             <Requirements 
-            profLevels={profLevels}
-            initialData={initialData} 
-            requestMessageRequirements={requestMessageRequirements} 
-            onSave={handleSaveRequirements} 
-            isEditRights={isEditRights} 
+              initialData={initialData}
+              profLevels={profLevels}
+              currentProgramType={currentProgramType}
+              onSave={handleSaveRequirements}
+              isLoading={isLoading}
+              requestMessage={requestMessage}
+              clearRequestMessage={clearRequestMessage}
+              isEditRights={isEditRights}
             />
           </li>
 
           <li className="initial-data__item initial-data__item_type_target">
             <Objective 
-            initialData={initialData} 
-            requestMessageCompetence={requestMessageCompetence} 
-            onSave={handleSaveNewCompetence} 
-            isEditRights={isEditRights} 
+              initialData={initialData} 
+              currentProgramType={currentProgramType}
+              onSave={handleSaveObjective}
+              isLoading={isLoading}
+              requestMessage={requestMessage}
+              clearRequestMessage={clearRequestMessage}
+              isEditRights={isEditRights}
             />
           </li>
 
-          <li className="initial-data__item initial-data__item_type_description">
-            <Annotation 
-            initialData={initialData} 
-            requestMessageDescription={requestMessageDescription} 
-            onSave={handleSaveDescription} 
-            isEditRights={isEditRights} 
-            />
-          </li>
+          { 
+            currentProgramType.includes('pp')
+            ?
+            <>
+            <li className="initial-data__item initial-data__item_type_form">
+              <Form 
+                initialData={initialData} 
+                onSave={handleSaveForm}
+                isLoading={isLoading}
+                requestMessage={requestMessage}
+                clearRequestMessage={clearRequestMessage}
+                isEditRights={isEditRights}
+              />
+            </li>
+            <li className="initial-data__item initial-data__item_type_hours">
+              <Hours 
+                initialData={initialData}
+                onSave={handleSaveHours}
+                isLoading={isLoading}
+                requestMessage={requestMessage}
+                clearRequestMessage={clearRequestMessage}
+                isEditRights={isEditRights}
+              />
+            </li>
+            <li className="initial-data__item initial-data__item_type_description-small">
+              <Annotation 
+                initialData={initialData}
+                onSave={handleSaveDescription}
+                isLoading={isLoading}
+                requestMessage={requestMessage}
+                clearRequestMessage={clearRequestMessage}
+                isEditRights={isEditRights}
+              />
+            </li>
+            </>
+            :
+            <li className="initial-data__item initial-data__item_type_description">
+              <Annotation 
+                initialData={initialData} 
+                onSave={handleSaveDescription}
+                isLoading={isLoading}
+                requestMessage={requestMessage}
+                clearRequestMessage={clearRequestMessage}
+                isEditRights={isEditRights}
+              />
+            </li>
+          }
 
           <li className="initial-data__item initial-data__item_type_structure">
             <h3 className="initial-data__item-name">Типовая структура ДПП</h3>
-            <p className="initial-data__item-subtitle initial-data__item-subtitle_type_structure">Выберите наиболее подходящую типовую структуру ДПП или создайте свою. Типовая структура состоит из разделов, которых следует придерживаться во время разработки ДПП.</p>
+            <p className="initial-data__item-subtitle initial-data__item-subtitle_type_structure">Типовая структура состоит из разделов, которых следует придерживаться во время разработки ДПП.</p>
             <TypicalStructure 
               typologyParts={typologiesParts}
               initialDataVersion={dppDescription.ish_version_id}
               loggedIn={loggedIn}
               onEdit={openEditPartPopup}
               onRemove={openRemovePartPopup}
-              onChoose={openChoosePartsPopup}
               onChangeOrder={changeTypologyPartsOrder}
               isEditRights={isEditRights}
             />
@@ -1224,8 +1485,6 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
           </li>
 
         </ul>
-
-        <button className="btn btn_type_next" type="button" onClick={() => history.push("/main/development/dpp/zoon")}>Перейти к следующему этапу</button>
 
       </div>
 
@@ -1311,7 +1570,6 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
 
       {
         isOrganizationRulesPopupOpen &&
-        
         <OrganizationRulesPopup
           isOpen={isOrganizationRulesPopupOpen}
           onClose={closeInitialDataPopups}
@@ -1362,17 +1620,6 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
       }
 
       {
-        isOpenChoosePartsPopup &&
-        <ChoosePartsPopup
-          isOpen={isOpenChoosePartsPopup}
-          onClose={closeInitialDataPopups}  
-          typologies={typologies}
-          onChangeTypologyParts={changeTypologyParts}
-          isLoading={isLoading}
-        />
-      }
-
-      {
         isNsiPopupOpen &&
         <NsiPopup 
           isOpen={isNsiPopupOpen}
@@ -1382,7 +1629,6 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
           onAdd={handleAddNsi}
           isLoading={isLoading}
         />
-
       }
 
       {
@@ -1407,7 +1653,6 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
           isLoading={isLoading}
         />
       }
-
 
     </section>
   );

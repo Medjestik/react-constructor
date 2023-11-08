@@ -36,7 +36,7 @@ function ChoosePartsPopup({ isOpen, onClose, typologies, onChangeTypologyParts, 
         {
           typologies.map((elem) => (
             <li className="popup-choose-parts__item popup-choose-parts__item_type_typologies" key={elem.id}>
-              <label className="radio">
+              <label className="radio radio_margin_top radio_margin_bottom">
                 <input 
                 className="radio" 
                 id={`typologies ${elem.id}`} 

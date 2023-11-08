@@ -16,7 +16,7 @@ function App() {
   const [isSavedPassword, setIsSavedPassword] = React.useState(false);
   const [isLoadingPage, setIsLoadingPage] = React.useState(false);
   const [isLoadingRequest, setIsLoadingRequest] = React.useState(false);
-  const [requestMessage, setRequestMessage] = React.useState({ text: '', isShow: false, type: '' });
+  const [requestMessage, setRequestMessage] = React.useState({ text: '', isShow: false, type: '', action: '', });
   const [feedbackMessage, setFeedbackMessage] = React.useState({ text: '', isShow: false, });
 
   const { pathname } = useLocation();
@@ -94,13 +94,15 @@ function App() {
   function handleChangePassword(password, user, onClose) {
     if (loggedIn) {
       setIsSavedPassword(true);
+      clearRequestMessage();
       api.changePassword(password, user, localStorage.token)
-      .then((res) => {
+      .then(() => {
         onClose();
         setRequestMessage({ 
           text: 'Данные успешно сохранены!',
           isShow: true,
           type: 'success',
+          action: 'password',
         })
       })
       .catch((err) => {
@@ -108,6 +110,7 @@ function App() {
           text: 'К сожалению произошла ошибка, ваши данные не сохранены!',
           isShow: true,
           type: 'error',
+          action: 'password',
         })
         console.log(err);
       })
@@ -128,13 +131,15 @@ function App() {
     }
     if (loggedIn) {
       setIsLoadingRequest(true);
+      clearRequestMessage();
       api.updateUserInfo(userInfoUpdate, localStorage.token)
-      .then((res) => {
+      .then(() => {
         setCurrentUser({ ...currentUser, firstname, lastname, middlename, phone, email });
         setRequestMessage({ 
           text: 'Данные успешно сохранены!',
           isShow: true,
           type: 'success',
+          action: 'userData',
         })
       })
       .catch((err) => {
@@ -142,6 +147,7 @@ function App() {
           text: 'К сожалению произошла ошибка, ваши данные не сохранены!',
           isShow: true,
           type: 'error',
+          action: 'userData',
         })
         console.log(err);
       })
@@ -149,6 +155,10 @@ function App() {
         setIsLoadingRequest(false);
       });
     }
+  }
+
+  function clearRequestMessage() {
+    setRequestMessage({ text: '', isShow: false, type: '', action: '', })
   }
 
   React.useEffect(() => {
@@ -185,8 +195,8 @@ function App() {
               isSavedPassword={isSavedPassword}
               requestMessage={requestMessage}
               feedbackMessage={feedbackMessage}
-              setRequestMessage={setRequestMessage}
               setFeedbackMessage={setFeedbackMessage}
+              clearRequestMessage={clearRequestMessage}
             />
           </Switch> 
         }

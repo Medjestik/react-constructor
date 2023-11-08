@@ -16,7 +16,7 @@ function KnowledgeTypology({ typologyParts, currentNode, currentActionType, onCh
         {
           typologyParts.map((part, i) => (
             <li className="initial-data__item-target-item" key={i}>
-              <label className="radio">
+              <label className="radio radio_margin_top radio_margin_bottom">
                 <input 
                   className="radio"
                   name="developingResult"
