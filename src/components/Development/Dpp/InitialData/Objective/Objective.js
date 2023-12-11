@@ -1,7 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 
-function Objective({ initialData, currentProgramType, onSave, isLoading, requestMessage, clearRequestMessage, isEditRights }) { 
+function Objective({ initialData, currentProgramType, onSave, onSaveHours, isLoading, requestMessage, clearRequestMessage, isEditRights }) { 
 
   const [digitalSphere, setDigitalSphere] = React.useState(
     initialData.digital_sphere
@@ -10,6 +10,14 @@ function Objective({ initialData, currentProgramType, onSave, isLoading, request
     :
     { label: "Выберите сферу..", value: "empty" }
   );
+
+  const [hours, setHours] = React.useState(initialData.total_hours);
+
+  function handleChangeHours(e) {
+    setHours(e.target.value);
+    clearRequestMessage();
+  }
+
 
   function handleChangeSphere(option) {
     clearRequestMessage();
@@ -45,11 +53,12 @@ function Objective({ initialData, currentProgramType, onSave, isLoading, request
           }
         </>
         :
-        <p className="initial-data__item-subtitle">Целью программы являются совершенствование и (или) получение новой компетенции, необходимой для профессиональной деятельности, и (или) повышение профессионального уровня в рамках имеющейся квалификации в области профессиональной деятельности.</p>
+        <p className="initial-data__item-subtitle">Целью обучения является совершенствование и (или) получение новой компетенции, необходимой для профессиональной деятельности.</p>
       }
       </>
       :
       <>
+        <p className="initial-data__item-subtitle">Целью обучения является совершенствование и (или) получение новой компетенции, необходимой для профессиональной деятельности.</p>
       </>
     }
 
@@ -62,7 +71,7 @@ function Objective({ initialData, currentProgramType, onSave, isLoading, request
     {
       initialData.direction &&
       <>
-          {
+      {
       initialData.direction.id === 2 &&
       <>
       <h5 className="initial-data__item-title initial-data__item-title_margin_top initial-data__item-title_margin_bottom">Цифровая сфера</h5>
@@ -101,6 +110,38 @@ function Objective({ initialData, currentProgramType, onSave, isLoading, request
       </>
     }
       
+      </>
+    }
+
+    {
+      !initialData.direction &&
+      <>
+        <h5 className="initial-data__item-title initial-data__item-title_margin_top initial-data__item-title_margin_bottom">Трудоемкость освоения (в ак. часах)</h5>
+        <input 
+          className={`form__input`}
+          placeholder="Введите количество часов.."
+          type="number"
+          id="program-data-add-hours"
+          name="program-data-add-hours"
+          autoComplete="off"
+          value={hours}
+          onChange={handleChangeHours}
+          onWheel={(e) => e.target.blur()}
+          min="0"
+        >
+        </input>
+        {
+          isEditRights &&
+          <>
+            <div className="form__btn-container form__btn-container_margin_top-20">
+              <div className="form__btn-item">
+                <button className={`btn btn_type_save ${isLoading && "btn_type_loading"}`} type="button" onClick={() => onSaveHours(hours)}>Сохранить данные</button>
+              </div>
+            </div>
+
+            <span className={`request-message ${(requestMessage.isShow && requestMessage.action === 'hours') ? "request-message_type_show" : "request-message_type_hide"} ${requestMessage.type === 'error' ? "request-message_type_error" : "request-message_type_success"}`}>{requestMessage.text}</span>
+          </>
+        }
       </>
     }
 

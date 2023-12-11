@@ -207,7 +207,30 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
     }
   }
 
-  function handleSaveHours(hours, durationForm, duration) {
+  function handleSavePeriod(hours, durationForm, duration) {
+    setIsLoading(true);
+    clearRequestMessage();
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
+      api.savePeriod({ 
+        token: token, 
+        initialDataVersion: dppDescription.ish_version_id,
+        total_hours: hours,
+        edu_period_name: durationForm,
+        edu_period_duration: duration,
+      })
+      .then(() => {
+        setRequestMessage({ text: 'Данные успешно сохранены!', isShow: true, type: 'success', action: 'hours', });
+      })
+      .catch((err) =>{
+        setRequestMessage({ text: 'Произошла ошибка!', isShow: true, type: 'error', action: 'hours', });
+        console.log(err);
+      })
+      .finally(() => setIsLoading(false));
+    }
+  }
+
+  function handleSaveHours(hours) {
     setIsLoading(true);
     clearRequestMessage();
     const token = localStorage.getItem("token");
@@ -216,8 +239,6 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
         token: token, 
         initialDataVersion: dppDescription.ish_version_id,
         total_hours: hours,
-        edu_period_name: durationForm,
-        edu_period_duration: duration,
       })
       .then(() => {
         setRequestMessage({ text: 'Данные успешно сохранены!', isShow: true, type: 'success', action: 'hours', });
@@ -1400,6 +1421,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
               initialData={initialData} 
               currentProgramType={currentProgramType}
               onSave={handleSaveObjective}
+              onSaveHours={handleSaveHours}
               isLoading={isLoading}
               requestMessage={requestMessage}
               clearRequestMessage={clearRequestMessage}
@@ -1424,7 +1446,7 @@ function InitialData({ loggedIn, history, dppDescription, isEditRights }) {
             <li className="initial-data__item initial-data__item_type_hours">
               <Hours 
                 initialData={initialData}
-                onSave={handleSaveHours}
+                onSave={handleSavePeriod}
                 isLoading={isLoading}
                 requestMessage={requestMessage}
                 clearRequestMessage={clearRequestMessage}

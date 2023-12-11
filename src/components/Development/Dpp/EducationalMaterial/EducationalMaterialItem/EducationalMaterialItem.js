@@ -112,9 +112,8 @@ function EducationalMaterialItem({ dppDescription, isShowItem, content, onUpload
                   <div className="educational-material-item__step-description">
                     <p className="educational-material-item__name">{defineItemTypeTitle(content.type)}</p>
                     <div>
-                      <a className="btn btn_type_export-word educational-material-item__btn-export" href={`https://constructor-api.emiit.ru/content/${content.id}/template`} target="_blank" rel="noreferrer">Скачать шаблон</a>
-                      <a className="btn btn_type_export-word educational-material-item__btn-export" href={`https://constructor-api.emiit.ru/content/${content.id}/template2`} target="_blank" rel="noreferrer">Скачать шаблон (версия 2)</a>
-                      <a className="btn btn_type_export-word educational-material-item__btn-export" href={`https://navydragon.notion.site/2-cfa1c3a005b749b8925daf5728f48d4d`} target="_blank" rel="noreferrer">Инструкция для шаблона (версия 2)</a>
+                      <a className="btn btn_type_export-word educational-material-item__btn-export" href={`https://constructor-api.emiit.ru/content/${content.id}/template2`} target="_blank" rel="noreferrer">Скачать шаблон</a>
+                      <a className="btn btn_type_export-word educational-material-item__btn-export" href={`https://navydragon.notion.site/2-cfa1c3a005b749b8925daf5728f48d4d`} target="_blank" rel="noreferrer">Инструкция для шаблона</a>
                     </div>
                   </div>
                 </div>

@@ -569,7 +569,7 @@ export const saveForm = ({ token, initialDataVersion, edu_form, edu_form_dot, ed
   .then(res => handleResponse(res))
 };
 
-export const saveHours = ({ token, initialDataVersion, total_hours, edu_period_name, edu_period_duration }) => {
+export const savePeriod = ({ token, initialDataVersion, total_hours, edu_period_name, edu_period_duration }) => {
   return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/period`, {
     method: 'POST',
     headers: {
@@ -578,6 +578,19 @@ export const saveHours = ({ token, initialDataVersion, total_hours, edu_period_n
       'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify({ total_hours, edu_period_name, edu_period_duration })
+  })
+  .then(res => handleResponse(res))
+};
+
+export const saveHours = ({ token, initialDataVersion, total_hours }) => {
+  return fetch(`${API_URL}/ish_version_data/${initialDataVersion}/total_hours`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ total_hours })
   })
   .then(res => handleResponse(res))
 };
