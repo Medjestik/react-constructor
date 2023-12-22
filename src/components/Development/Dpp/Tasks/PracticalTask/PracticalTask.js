@@ -43,6 +43,7 @@ function PracticalTask({
   const [placeError, setPlaceError] = React.useState(false);
   const [time, setTime] = React.useState("");
   const [timeError, setTimeError] = React.useState(false);
+  const [isRequired, setIsRequired] = React.useState(currentTask.required);
   const [isOpenAddAssessmentItemPopup, setIsOpenAddAssessmentItemPopup] = React.useState(false);
   const [isOpenAddAssessmentObjectPopup, setIsOpenAddAssessmentObjectPopup] = React.useState(false);
   const [isOpenEditAssessmentObjectPopup, setIsOpenEditAssessmentObjectPopup] = React.useState(false);
@@ -129,6 +130,7 @@ function PracticalTask({
       portfolioStructureReq: "",
       portfolioPresentationReq: "",
       portfolioProcedure: "",
+      required: isRequired,
     }
     if (currentTaskType === "edit") {
       onEdit(newTask, currentTask.id);
@@ -174,6 +176,7 @@ function PracticalTask({
     setTime(currentTask.time || "");
     setMTOTask(currentTask.mtos);
     setCurrentAdditionalMaterial(currentTask.additional_files);
+    setIsRequired(currentTask.required == 1 ? true : false);
     return () => {
       setDescription("");
       setPlace("");
@@ -187,7 +190,6 @@ function PracticalTask({
     };
   // eslint-disable-next-line
   }, [currentTask]);
-
 
   return (
     <>
@@ -246,6 +248,18 @@ function PracticalTask({
               </input>
             </li>
           </ul>
+          <label className="checkbox">
+            <input 
+              name="practical-task-required"
+              type="checkbox"
+              id="practical-task-required"
+              value={isRequired}
+              defaultChecked={isRequired}
+              onChange={() => setIsRequired(!isRequired)}
+              >
+            </input>
+            <span>Обязательно к выполнения</span>
+          </label>
           <button className={`btn btn_type_save practical-task__save-btn ${isBlockSubmitButton ? "btn_type_block" : ""} ${isLoadingRequest ? "btn_type_loading" : ""}`} type="submit" onClick={onAddTask}>{isLoadingRequest ? "Сохранение.." : "Сохранить"}</button>
         </TabPanel> 
         <TabPanel>

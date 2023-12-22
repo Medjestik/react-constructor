@@ -520,6 +520,12 @@ html, body {
 .form__input_type_error:hover {
   border: 2px solid var(--third-light-color);
 }
+.form__input_type_block {
+  background-color: var(--background-third-color);
+}
+.form__input_type_block:hover {
+  border: 2px solid var(--border-card-color);
+}
 .form__input::placeholder {
   margin: 0px;
   font-size: 14px;

@@ -43,6 +43,7 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
       nsis: [],
       mtos: [],
       taskSteps: [],
+      required: true,
     });
     setIsShowAddTaskType(false);
   }
@@ -63,6 +64,7 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
       nsis: [],
       mtos: [],
       taskSteps: [],
+      required: true,
     });
     setIsShowAddTaskType(false);
   }
@@ -83,6 +85,7 @@ function Tasks({ loggedIn, dppDescription, isEditRights }) {
       nsis: [],
       mtos: [],
       taskSteps: [],
+      required: true,
     });
     setIsShowAddTaskType(false);
   }

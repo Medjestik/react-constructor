@@ -17,7 +17,13 @@ function TaskItem({ task, index, onEdit, onRemove, isEditRights }) {
     <li className="task__item" >
       <span className="task__item-count">{`${index+ 1}.`}</span>
       <div className="task__item-info">
-        <span className="task__item-tag">{task.type_name}</span> 
+        <div className='task__item-tag-container'>
+          {
+            task.required == 1 &&
+            <span className="task__item-tag task__item-tag_color_blue">Обязательное задание</span>
+          }
+          <span className="task__item-tag task__item-tag_color_red">{task.type_name}</span>
+        </div>
         <h4 className="task__item-name">{task.name}</h4>
         <p className="task__item-caption"></p>
       </div>

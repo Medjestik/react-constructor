@@ -19,12 +19,14 @@ function OrderMinistryPopup({ isOpen, onClose, nsi, onSave, id, printDate, type,
   function handleSubmit(e) {
     e.preventDefault();
     const newNsi = { ...nsi, nsiMinistry: addMinistry.id, nsiName: addName, nsiProtocolNumber: addProtocolNumber, nsiProtocolDate: addProtocolDate, nsiEdit: addEdition, type_id: id, nsiFullName: addFullName };
+    console.log(newNsi);
     onSave(newNsi, onClose);
   }
 
+  console.log(nsi);
+
   function handleAddMinistry(e) {
     setAddMinistryValue(e.target.value);
-
     setAddMinistry(ministries.find((elem) => elem.id === Number(e.target.value)));
   }
 
@@ -60,8 +62,14 @@ function OrderMinistryPopup({ isOpen, onClose, nsi, onSave, id, printDate, type,
   }
 
   React.useEffect(() => {
-    setAddMinistryValue(type === 'edit' ? nsi.nsiMinistry : 'placeholder');
-    setAddMinistry(type === 'edit' ? nsi : {});
+    if (type === 'edit') {
+      const ministry = ministries.find((elem) => elem.id === nsi.nsiMinistry)
+      setAddMinistryValue(ministry.id);
+      setAddMinistry(ministry);
+    } else {
+      setAddMinistryValue('placeholder');
+      setAddMinistry({});
+    }
     setAddName(nsi.nsiName);
     setAddEdition(nsi.nsiEdit || "");
     setAddProtocolNumber(nsi.nsiProtocolNumber);
@@ -71,6 +79,7 @@ function OrderMinistryPopup({ isOpen, onClose, nsi, onSave, id, printDate, type,
     setAddProtocolNumberError(false);
     setAddProtocolDateError(false)
     setIsBlockSubmitButton(true);
+    // eslint-disable-next-line
   }, [nsi, isOpen, type]);
 
   React.useEffect(() => {

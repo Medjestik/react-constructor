@@ -77,6 +77,11 @@
   margin: 0px;
   width: 100%;
 }
+.task__item-tag-container {
+  margin: 0px;
+  display: flex;
+  align-items: center;
+}
 .task__item-tag {
   margin: 0px 15px 0px 0px;
   padding: 2px 8px;
@@ -91,7 +96,12 @@
   -webkit-user-select: none;
   user-select: none;
   width: max-content;
+}
+.task__item-tag_color_red {
   background-color: var(--third-light-color);
+}
+.task__item-tag_color_blue {
+  background-color: var(--main-color);
 }
 .task__item-name {
   margin: 10px 0px 0px 0px;
