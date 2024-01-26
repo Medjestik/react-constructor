@@ -2,15 +2,18 @@ import React from 'react';
 import Popup from '../../../Popup/Popup.js';
 import ControlProgramAddParticipantPopup from '../ControlProgramAddParticipantPopup/ControlProgramAddParticipantPopup.js';
 import Select from 'react-select';
+import { CurrentUserContext } from '../../../../contexts/CurrentUserContext.js';
 
 function ControlProgramAddPopup({ isOpen, onClose, users, roles, onAdd, isLoading, isShowError }) { 
+  
+  const user = React.useContext(CurrentUserContext);
 
   const [name, setName] = React.useState("");
   const [errorName, setErrorName] = React.useState(false);
   const [hours, setHours] = React.useState("");
   const [errorHours, setErrorHours] = React.useState(false);
   const [isAddProgramParticipantPopupOpen, setIsAddProgramParticipantPopupOpen] = React.useState(false);
-  const [participants, setParticipants] = React.useState([]);
+  const [participants, setParticipants] = React.useState([{ userId: user.id, userFullname: user.fullname, roleId: roles[0].value, roleName: roles[0].label, }]);
   const [type, setType] = React.useState({ label: '', value: 0 });
   const [isDigital, setIsDigital] = React.useState(false);
 

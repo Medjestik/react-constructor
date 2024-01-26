@@ -96,3 +96,28 @@ export const reorderPerformer = ({ token, dppId, ids }) => {
   })
   .then(res => handleResponse(res));
 };
+
+export const getSignatory = ({ token, dppId }) => { 
+  return fetch(`${API_URL}/dpps/${dppId}/signatory`, {
+    method: 'GET', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+  .then(res => handleResponse(res));
+};
+
+export const changeSignatory = ({ token, dppId, signatoryFio, signatoryJob }) => { 
+  return fetch(`${API_URL}/dpps/${dppId}/signatory`, {
+    method: 'PATCH', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ signatoryFio, signatoryJob })
+  })
+  .then(res => handleResponse(res));
+};

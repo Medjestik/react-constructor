@@ -4,23 +4,32 @@ import './KnowledgeItem.css';
 function KnowledgeItem({ knowledges, chooseKnowledge, dppDescription, onDown, onUp }) {
 
   const [searchName, setSearchName] = React.useState('');
+  const [questionName, setQuestionName] = React.useState('');
   const [currentKnowledges, setCurrentKnowledges] = React.useState([]);
 
   function handleSearchByName(e) {
+    setQuestionName('');
     setSearchName(e.target.value);
+    const filteredKnowledges = knowledges.filter((item) => {
+      return item.name.toLowerCase().includes(e.target.value.toLowerCase());
+    })
+    setCurrentKnowledges(filteredKnowledges);
+  }
+
+  function handleSearchByQuestion(e) {
+    setSearchName('');
+    setQuestionName(e.target.value);
+    const filteredKnowledges = knowledges.filter((item) => {
+      return item.questions.some((elem) => elem.text.toLowerCase().includes(e.target.value.toLowerCase()));
+    })
+    console.log(filteredKnowledges);
+    setCurrentKnowledges(filteredKnowledges);
   }
 
   function handleChooseKnowledge(knowledge) {
     chooseKnowledge(knowledge);
     setSearchName('');
   }
-
-  React.useEffect(() => {
-    const filteredKnowledges = knowledges.filter((item) => {
-      return item.name.toLowerCase().includes(searchName.toLowerCase());
-    })
-    setCurrentKnowledges(filteredKnowledges)
-  }, [knowledges, searchName]);
 
   React.useEffect(() => {
     setSearchName('');
@@ -55,6 +64,20 @@ function KnowledgeItem({ knowledges, chooseKnowledge, dppDescription, onDown, on
       autoComplete="off"
       value={searchName}
       onChange={handleSearchByName}
+      >
+      </input>
+    </div>
+    <div className="search">
+      <input
+      className="input-search"
+      placeholder="поиск по тексту вопроса"
+      type="text"
+      id="search-knowledge-input-question"
+      name="search-knowledge-input-question"
+      spellCheck="true"
+      autoComplete="off"
+      value={questionName}
+      onChange={handleSearchByQuestion}
       >
       </input>
     </div>

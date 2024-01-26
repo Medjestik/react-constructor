@@ -120,8 +120,6 @@ function ControlProgram({ loggedIn }) {
         ])
         .then(([ programs, users, roles ]) => {
           setPrograms(programs.data);
-          console.log(programs);
-          // eslint-disable-next-line
           const activeUsers = users.data.filter((elem) => elem.isActive == 1);
           const chooseUsers = activeUsers.map((elem) => {
             return { value: elem.id, label: elem.fullname }
@@ -154,8 +152,8 @@ function ControlProgram({ loggedIn }) {
     <>
       <div className="control">
        <h3 className="main__title control-user__title">Количество созданных программ: {programs.length}</h3>
-        <button className="btn btn_type_add control-user__btn-add" type="button" onClick={openAddProgramPopup}>Создать программу</button>
-        <p className="main__subtitle control-user__subtitle">Ниже представлен список всех созданных программ</p>
+      <button className="btn btn_type_add control-user__btn-add" type="button" onClick={openAddProgramPopup}>Создать программу</button>
+      <p className="main__subtitle control-user__subtitle">Ниже представлен список всех созданных программ</p>
 
         <div className="">
           <label className="checkbox">

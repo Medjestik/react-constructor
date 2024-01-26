@@ -18,7 +18,7 @@ function Annotation({ initialData, onSave, isLoading, requestMessage, clearReque
       name="program-data-annotation"
       id="program-data-annotation"
       placeholder="Введите описание программы.."
-      value={programDescription}
+      value={programDescription || ''}
       onChange={handleChangeProgramDescription}
     >
     </textarea>

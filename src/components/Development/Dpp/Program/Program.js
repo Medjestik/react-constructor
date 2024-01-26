@@ -7,7 +7,7 @@ import status from '../../../../images/status.png';
 import stage from '../../../../images/stage.png';
 import role from '../../../../images/role.png';
 
-function Program({ program, history, windowWidth }) {
+function Program({ user, program, history, windowWidth, onEdit }) {
 
   const [isShowPerformers, setIsShowPerformers] = React.useState(false);
   
@@ -72,8 +72,6 @@ function Program({ program, history, windowWidth }) {
     localStorage.setItem("currentProgramId", program.id);
   }
 
-  console.log(program);
-
   const definePerformerRole = (role) => {
     if (role === 'Методист') {
       return (<span className="development__performers-role performers-role_type_methodist">{role}</span>)
@@ -126,9 +124,12 @@ function Program({ program, history, windowWidth }) {
       </div>
       <div className="development__item-control">
         <button className={`development__item-button-performer ${isShowPerformers ? "button-performer_type_show" : "button-performer_type_hide"}`} type="button" onClick={toggleProgramPerformers}>{windowWidth > 760 ? "Показать список всех исполнителей" : "Cписок исполнителей" }</button>
+        {
+          user.id === program.author.id &&
+          <button className="btn btn_type_edit btn_margin_left-auto btn_margin_right" type="button" onClick={() => onEdit(program)}>Редактировать</button>
+        }
         <button className="btn btn_type_next" type="button" onClick={handleClickProgram}>Продолжить работу</button>
       </div>
-
 
       <Collapse isOpened={isShowPerformers}>
         <ul className="development__performers-list">

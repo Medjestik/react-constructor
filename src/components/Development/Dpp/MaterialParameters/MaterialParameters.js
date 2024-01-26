@@ -1,6 +1,7 @@
 import React from 'react';
 import * as evaluationMaterialApi from '../../../../utils/evaluationMaterialApi/evaluationMaterialApi.js';
 import Preloader from '../../../Preloader/Preloader.js';
+import Select from 'react-select';
 
 function MaterialParameters({ dppDescription, loggedIn, isEditRights }) {
 
@@ -15,6 +16,9 @@ function MaterialParameters({ dppDescription, loggedIn, isEditRights }) {
   const [taskOptionValue, setTaskOptionValue] = React.useState(0);
   const [taskOptionValueError, setTaskOptionValueError] = React.useState(false);
 
+  const [controlOptions, setControlOptions] = React.useState([{value: 1, label: 'Зачет'}, {value: 2, label: 'Экзамен'}]);
+  const [currentControlOption, setCurrentControlOption] = React.useState({});
+
   const [requestMessage, setRequestMessage] = React.useState({ text: '', isShow: false, type: '' });
 
   const [isLoadingPage, setIsLoadingPage] = React.useState(true);
@@ -28,11 +32,13 @@ function MaterialParameters({ dppDescription, loggedIn, isEditRights }) {
       setIsLoadingPage(true);
       evaluationMaterialApi.getMaterialParameters({ token: token, omId: dppDescription.om_version_id })
         .then((res) => {
+          console.log(res);
           setTestQuestions(res.testQuestions);
           setTestPercent(res.testPercent);
           setTaskReq(res.requiredTasks);
           setTaskOptionCount(res.maxOptionalTasks);
           setTaskOptionValue(res.optionalTasks);
+          setCurrentControlOption(res.attType === 'Экзамен' ? {value: 2, label: 'Экзамен'} :  {value: 1, label: 'Зачет'});
         })
         .catch((err) => {
           console.error(err);
@@ -47,7 +53,12 @@ function MaterialParameters({ dppDescription, loggedIn, isEditRights }) {
     e.preventDefault();
     setIsLoadingRequest(true);
     const token = localStorage.getItem("token");
-    const parameters = { testQuestions: testQuestions, testPercent: testPercent, optionalTasks: taskOptionValue };
+    const parameters = { 
+      testQuestions: testQuestions, 
+      testPercent: testPercent, 
+      optionalTasks: taskOptionValue, 
+      attType: currentControlOption.label 
+    };
     if (loggedIn) {
       evaluationMaterialApi.changeMaterialParameters({ token: token, omId: dppDescription.om_version_id, parameters: parameters })
         .then((res) => {
@@ -91,6 +102,10 @@ function MaterialParameters({ dppDescription, loggedIn, isEditRights }) {
     } else {
       setTaskOptionValueError(true);
     }
+  }
+
+  function handleChangeControlOption(option) {
+    setCurrentControlOption(option);
   }
 
   React.useEffect(() => {
@@ -158,6 +173,27 @@ function MaterialParameters({ dppDescription, loggedIn, isEditRights }) {
         >
         </input>
         <span className={`form__input-error ${testPercentError && "form__input-error_active"}`}>Некорректное значение</span>
+      </div>
+
+      <div className="form__field form__field_margin_top-8">
+        <span className="form__input-caption font_weight_bold">Форма итоговой аттестации</span>
+        <Select 
+          className="select" 
+          options={controlOptions}
+          placeholder="Выберите форму.."
+          onChange={handleChangeControlOption}
+          defaultValue={currentControlOption}
+          theme={(theme) => ({
+            ...theme,
+            borderRadius: 10,
+            borderWidth: 2,
+            colors: {
+              ...theme.colors,
+              primary25: '#DDDDDD',
+              primary: '#5EB9AF',
+            },
+          })}
+        />
       </div>
 
       <div className="form__field form__field_margin_top-8">

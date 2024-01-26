@@ -8,13 +8,16 @@ import PerformersColumn from './PerformersColumn/PerformersColumn.js';
 import AddPerformersPopup from './AddPerformersPopup/AddPerformersPopup.js';
 import EditPerformersPopup from './EditPerformersPopup/EditPerformersPopup.js';
 import RemovePerformersPopup from './RemovePerformersPopup/RemovePerformersPopup.js';
+import SignatoryPopup from './SignatoryPopup/SignatoryPopup.js';
 
 function PerformersList({ dppDescription, loggedIn, isEditRights }) { 
 
   const [isAddPerformersPopupOpen, setIsAddPerformersPopupOpen] = React.useState(false);
   const [isEditPerformersPopupOpen, setIsEditPerformersPopupOpen] = React.useState(false);
   const [isRemovePerformersPopupOpen, setIsRemovePerformersPopupOpen] = React.useState(false); 
+  const [isSignatoryPopupOpen, setIsSignatoryPopupOpen] = React.useState(false);
   const [performers, setPerformers] = React.useState([]);
+  const [signatory, setSignatory] = React.useState({signatoryFio: '', signatoryJob: ''});
   const [currentPerformer, setCurrentPerformer] = React.useState({});
   const [isLoading, setIsLoading] = React.useState(false);
   const [isRendering, setIsRendering] = React.useState(true);
@@ -35,10 +38,15 @@ function PerformersList({ dppDescription, loggedIn, isEditRights }) {
     setIsRemovePerformersPopupOpen(true);
   }
 
+  function openSignatoryPopup() {
+    setIsSignatoryPopupOpen(true);
+  }
+
   function closePerformersPopup() {
     setIsAddPerformersPopupOpen(false);
     setIsEditPerformersPopupOpen(false);
     setIsRemovePerformersPopupOpen(false);
+    setIsSignatoryPopupOpen(false);
   }
 
   function handleAdd(performer) {
@@ -96,6 +104,20 @@ function PerformersList({ dppDescription, loggedIn, isEditRights }) {
     .catch((err) => {
       console.error(err);
     })
+  }
+
+  function handleChangeSignatory(signatoryFio, signatoryJob) {
+    setIsLoading(true);
+    const token = localStorage.getItem("token");
+    approvalApi.changeSignatory({ token: token, dppId: dppDescription.id, signatoryFio: signatoryFio, signatoryJob: signatoryJob })
+    .then((res) => {
+      setSignatory(res);
+      closePerformersPopup();
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => setIsLoading(false));
   }
 
   React.useEffect(() => {
@@ -156,10 +178,14 @@ function PerformersList({ dppDescription, loggedIn, isEditRights }) {
   React.useEffect(() => {
     if (loggedIn) {
       const token = localStorage.getItem("token");
-      approvalApi.getPerformers({ token: token, dppId: dppDescription.id, })
-      .then((res) => {
-        console.log(res);
-        setPerformers(res.data);
+      Promise.all([
+        approvalApi.getPerformers({ token: token, dppId: dppDescription.id, }),
+        approvalApi.getSignatory({ token: token, dppId: dppDescription.id, }),
+      ])
+      .then(([ performersList, signatoryValue ]) => {
+        setPerformers(performersList.data);
+        setSignatory(signatoryValue);
+        console.log(signatoryValue)
       })
       .catch((err) => {
         console.error(err);
@@ -168,6 +194,7 @@ function PerformersList({ dppDescription, loggedIn, isEditRights }) {
     }
     return () => {
       setPerformers([]);
+      setSignatory({});
       setCurrentPerformer({});
       setDataQuestion([]);
     }
@@ -180,6 +207,12 @@ function PerformersList({ dppDescription, loggedIn, isEditRights }) {
     :
     <>
     <div className="performers-list">
+      <h2 className="performers-list__title">Подписант программы: {signatory.signatoryFio} - {signatory.signatoryJob}</h2>
+      {
+        isEditRights && 
+        <button className="btn btn_type_confirm performers-list__btn-add" onClick={openSignatoryPopup}>Установить подписанта</button>
+      }
+      
       <h2 className="performers-list__title">Список исполнителей по программе</h2>
       {
         isEditRights && 
@@ -240,6 +273,18 @@ function PerformersList({ dppDescription, loggedIn, isEditRights }) {
         onClose={closePerformersPopup}
         onRemove={handleRemove}
         performer={currentPerformer}
+        isLoading={isLoading}
+        isShowError={false}
+      />
+    }
+
+    {
+      isSignatoryPopupOpen &&
+      <SignatoryPopup
+        isOpen={isSignatoryPopupOpen}
+        onClose={closePerformersPopup}
+        onChange={handleChangeSignatory}
+        signatory={signatory}
         isLoading={isLoading}
         isShowError={false}
       />

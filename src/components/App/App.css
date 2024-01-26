@@ -1,6 +1,12 @@
 html, body {
   user-select: auto !important;
 }
+textarea {
+  font-family: Arial, sans-serif;
+}
+input {
+  font-family: Arial, sans-serif;
+}
 .page {
   --title-color: #404040;
   --subtitle-color: #4F5665;
@@ -63,6 +69,12 @@ html, body {
 }
 .btn_margin_top {
   margin: 12px 0px 0px 0px;
+}
+.btn_margin_right {
+  margin-right: 12px;
+}
+.btn_margin_left-auto {
+  margin-left: auto;
 }
 .btn_width_content {
   width: max-content;
@@ -210,6 +222,21 @@ html, body {
 .btn_type_add::after {
   content: '';
   background-image: url('../../images/add.png');
+  background-size: 20px;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  right: 12px;
+  top: 10px;
+  z-index: 5;
+  transition: .3s ease-in-out;
+}
+.btn_type_edit {
+  background-color: var(--fourth-light-color);
+}
+.btn_type_edit::after {
+  content: '';
+  background-image: url('../../images/edit-plan.png');
   background-size: 20px;
   width: 20px;
   height: 20px;
@@ -610,7 +637,7 @@ html, body {
   background-color: #fff;
   border-radius: 100px;
   padding: 10px 50px 10px 20px;
-  width: calc(100% - 70px);
+  width: 100%;
   outline: none;
   font-style: normal;
   font-weight: 400;
@@ -618,6 +645,7 @@ html, body {
   line-height: 1.15px;
   color: var(--title-color);
   border: 2px solid var(--border-card-color);
+  box-sizing: border-box;
   transition: all ease-in-out .3s;
 }
 .input-search:focus {
