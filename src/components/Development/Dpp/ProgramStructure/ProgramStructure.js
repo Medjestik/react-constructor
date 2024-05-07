@@ -4,8 +4,10 @@ import * as programStructureApi from '../../../../utils/programStructureApi/prog
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Preloader from '../../../Preloader/Preloader.js';
 import LearningPlan from '../LearningPlan/LearningPlan.js';
+import LearningPlanPP from '../LearningPlan/LearningPlanPP/LearningPlanPP.js';
 import LearningResult from '../LearningResult/LearningResult.js';
 import EditLearningPlanPopup from '../../../Popup/EditLearningPlanPopup/EditLearningPlanPopup.js';
+import EditLearningPlanPPPopup from '../../../Popup/EditLearningPlanPPPopup/EditLearningPlanPPPopup.js';
 
 function ProgramStructure({ dppDescription, loggedIn, isEditRights }) { 
 
@@ -13,6 +15,7 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
   const [isLoadingProgramStructure, setIsLoadingProgramStructure] = React.useState(false);
   const [currentLearningPlanElem, setCurrentLearningPlanElem] = React.useState({});
   const [isOpenEditLearningPopup, setIsOpenEditLearningPopup] = React.useState(false);
+  const [isOpenEditLearningPPPopup, setIsOpenEditLearningPPPopup] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isCurrentTypeChoose, setIsCurrentTypeChoose] = React.useState("");
 
@@ -21,8 +24,14 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
     setIsOpenEditLearningPopup(true);
   }
 
+  function openEditLearningPlanPP(elem) {
+    setCurrentLearningPlanElem(elem);
+    setIsOpenEditLearningPPPopup(true);
+  }
+
   function closeProgramStructurePopups() {
     setIsOpenEditLearningPopup(false);
+    setIsOpenEditLearningPPPopup(false);
   }
 
   function chooseType(type) {
@@ -138,6 +147,9 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
     }
   }
 
+  console.log(dppDescription);
+  console.log(programStructure);
+
   React.useEffect(() => {
     getStructure();
     return () => {
@@ -213,17 +225,29 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
                 <p className={`program-structure__hours-name ${isCurrentTypeChoose === "att" ? "program-structure__hours-name_type_active" : ""}`}>Аттестация: {defineHoursAtt()}</p>
               </li>
             </ul>
+
+            {
+              dppDescription.dpp_type_id === 1
+              ?
+              <LearningPlan 
+                programStructure={programStructure} 
+                onEdit={openEditLearningPlan}
+                onChangeOrder={onChangeOrder}
+                isEditRights={isEditRights}
+                isCurrentTypeChoose={isCurrentTypeChoose}
+              />
+              :
+              <LearningPlanPP 
+                programStructure={programStructure} 
+                onEdit={openEditLearningPlanPP}
+                isEditRights={isEditRights}
+                isCurrentTypeChoose={isCurrentTypeChoose}
+              />
+            }
             
-            <LearningPlan 
-            programStructure={programStructure} 
-            onEdit={openEditLearningPlan}
-            onChangeOrder={onChangeOrder}
-            isEditRights={isEditRights}
-            isCurrentTypeChoose={isCurrentTypeChoose}
-            />
           </TabPanel>
           <TabPanel>
-            <LearningResult dppDescription={dppDescription} loggedIn={loggedIn} />
+            <LearningResult dppDescription={dppDescription} loggedIn={loggedIn} /> 
           </TabPanel>
         </Tabs>
       }
@@ -233,13 +257,24 @@ function ProgramStructure({ dppDescription, loggedIn, isEditRights }) {
     {
       isOpenEditLearningPopup &&
       <EditLearningPlanPopup
-      isOpen={isOpenEditLearningPopup}
-      currentLearningPlanElem={currentLearningPlanElem}
-      onClose={closeProgramStructurePopups}
-      onEdit={handleEditProgramStructure}
-      isLoading={isLoading}
+        isOpen={isOpenEditLearningPopup}
+        currentLearningPlanElem={currentLearningPlanElem}
+        onClose={closeProgramStructurePopups}
+        onEdit={handleEditProgramStructure}
+        isLoading={isLoading}
       />
     }
+
+    {
+      isOpenEditLearningPPPopup &&
+      <EditLearningPlanPPPopup
+        isOpen={isOpenEditLearningPPPopup}
+        currentLearningPlanElem={currentLearningPlanElem}
+        onClose={closeProgramStructurePopups}
+        onEdit={handleEditProgramStructure}
+        isLoading={isLoading}
+      />
+    } 
 
     </>
   );

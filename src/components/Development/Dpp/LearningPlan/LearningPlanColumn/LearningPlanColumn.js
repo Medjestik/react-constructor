@@ -1,6 +1,6 @@
 import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
-import ZoonTypologyItem from '../LearningPlanItem/LearningPlanItem.js';
+import LearningPlanItem from '../LearningPlanItem/LearningPlanItem.js';
 
 function LearningPlanColumn({ parts, partIndex, onEdit, isEditRights, isCurrentTypeChoose }) {
 
@@ -14,14 +14,14 @@ function LearningPlanColumn({ parts, partIndex, onEdit, isEditRights, isCurrentT
               {...provided.droppableProps}
             >
               {parts.map((theme, themeIndex) => ( 
-                <ZoonTypologyItem
-                key={theme.id} 
-                theme={theme} 
-                partIndex={partIndex}
-                themeIndex={ themeIndex}
-                onEdit={onEdit}
-                isEditRights={isEditRights}
-                isCurrentTypeChoose={isCurrentTypeChoose}
+                <LearningPlanItem
+                  key={theme.id} 
+                  theme={theme} 
+                  partIndex={partIndex}
+                  themeIndex={themeIndex}
+                  onEdit={onEdit}
+                  isEditRights={isEditRights}
+                  isCurrentTypeChoose={isCurrentTypeChoose}
                 />
               ))}
                 {provided.placeholder} 

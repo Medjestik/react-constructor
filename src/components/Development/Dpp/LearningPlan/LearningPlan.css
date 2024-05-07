@@ -10,6 +10,13 @@
   list-style-type: none;
   padding: 0px;
 }
+.learning-plan__table-container {
+  margin: 0px;
+  padding: 0px;
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+}
 .learning-plan__table-head-column-name {
   font-size: 24px;
   line-height: 1.3;
@@ -22,6 +29,7 @@
   line-height: 1.3;
   font-weight: normal;
   color: var(--subtitle-color);
+  text-align: center;
 }
 .learning-plan__table-head-column-caption_font_weight {
   font-weight: bold;
@@ -99,8 +107,33 @@
 .learning-plan__table-head-column-item {
   width: 70px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+.learning-plan__table-head-column-item_type_pp {
+  width: 120px;
+  border-right: 1px solid var(--subtitle-color);
+  min-height: 50px;
+}
+.learning-plan__table-head-column-item_border_left {
+  border-left: 1px solid var(--subtitle-color);
+}
+.learning-plan-pp__cell {
+  margin: 8px 0px 0px 0px;
+  width: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.learning-plan-pp__cell-item {
+  width: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.learning-plan-pp__cell-item_type_border {
+  border-left: 1px solid var(--subtitle-color);
 }
 .learning-plan__table-body {
   margin: 0px;

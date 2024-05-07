@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from '../Popup.js';
 
-function EditLearningPlanPopup({ isOpen, currentLearningPlanElem, onClose, onEdit, isLoading }) {
+function EditLearningPlanPopup({ isOpen, currentLearningPlanElem, onClose, onEdit, isLoading }) { 
 
   const [addName, setAddName] = React.useState('');
   const [addNameError, setAddNameError] = React.useState(false);
@@ -29,8 +29,6 @@ function EditLearningPlanPopup({ isOpen, currentLearningPlanElem, onClose, onEdi
      self_hours: addSam,
      attestation_hours: addAtt,
     }
-
-    console.log(newElem);
 
     onEdit(newElem, currentLearningPlanElem.id, onClose);
   }
