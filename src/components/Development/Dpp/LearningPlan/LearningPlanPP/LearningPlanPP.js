@@ -66,7 +66,7 @@ function LearningPlanPP({ programStructure, onEdit, isEditRights, isCurrentTypeC
                     <li className="learning-plan__table-body-row table-body-row_type_name">
                       <span className="learning-plan__table-body-row-name table-body-row-name_type_title">{`${elemIndex + 1}. ${elem.name}`}</span>
                       {
-                        isEditRights && 
+                        (elem.name !== "Итоговая аттестация") && (isEditRights) && 
                         <button className="learning-plan__btn-edit" onClick={() => onEdit(elem)}></button>
                       }
                     </li>
@@ -123,6 +123,53 @@ function LearningPlanPP({ programStructure, onEdit, isEditRights, isCurrentTypeC
                         <ul className="learning-plan__table-head">
                           <li className="learning-plan__table-body-row table-body-row_type_name">
                             <span className="learning-plan__table-body-row-name learning-plan__table-body-row-name_type_themes">{`${elemIndex + 1}.${themeIndex + 1}. ${theme.name}`}</span>
+                            {
+                              isEditRights && 
+                              <button className="learning-plan__btn-edit" onClick={() => onEdit(theme)}></button>
+                            }
+                          </li>
+                          <li className="learning-plan__table-body-row table-body-row_type_hours">
+                            <ul className="learning-plan__table-head-column-list">
+                              <li className="learning-plan__table-head-column-item">
+                                <span className={`learning-plan__table-head-column-caption learning-plan__table-head-column-caption_font_weight 
+                                ${((isCurrentTypeChoose === "att") && (theme.name === "Итоговая аттестация")) ? "learning-plan__table-head-column-caption_type_total" : ""}`}>{theme.total_hours}</span>
+                              </li>
+                              <li className="learning-plan__table-head-column-item learning-plan__table-head-column-item_type_pp learning-plan__table-head-column-item_border_left">
+                                <div className="learning-plan-pp__cell">
+                                  <div className='learning-plan-pp__cell-item'>
+                                    <span className="learning-plan__table-head-column-caption">{theme.name === "Итоговая аттестация" ? "" : theme.lection_hours_o || 0}</span>
+                                  </div>
+                                  <div className='learning-plan-pp__cell-item learning-plan-pp__cell-item_type_border'>
+                                    <span className="learning-plan__table-head-column-caption">{theme.name === "Итоговая аттестация" ? "" : theme.lection_hours_z || 0}</span>
+                                  </div>
+                                </div>
+                              </li>
+                              <li className="learning-plan__table-head-column-item learning-plan__table-head-column-item_type_pp">
+                                <div className="learning-plan-pp__cell">
+                                  <div className='learning-plan-pp__cell-item'>
+                                    <span className="learning-plan__table-head-column-caption">{theme.name === "Итоговая аттестация" ? "" : theme.practice_hours_o || 0}</span>
+                                  </div>
+                                  <div className='learning-plan-pp__cell-item learning-plan-pp__cell-item_type_border'>
+                                    <span className="learning-plan__table-head-column-caption">{theme.name === "Итоговая аттестация" ? "" : theme.practice_hours_z || 0}</span>
+                                  </div>
+                                </div>
+                              </li>
+                              <li className="learning-plan__table-head-column-item learning-plan__table-head-column-item_type_pp">
+                                <div className="learning-plan-pp__cell">
+                                  <div className='learning-plan-pp__cell-item'>
+                                    <span className="learning-plan__table-head-column-caption"></span>
+                                  </div>
+                                  <div className='learning-plan-pp__cell-item learning-plan-pp__cell-item_type_border'>
+                                    <span className="learning-plan__table-head-column-caption"></span>
+                                  </div>
+                                </div>
+                              </li>
+                              <li className="learning-plan__table-head-column-item learning-plan__table-head-column-item_type_pp">
+                                <span 
+                                className="learning-plan__table-head-column-caption learning-plan__table-head-column-caption_font_weight"> 
+                                </span>
+                              </li>
+                            </ul>
                           </li>
                         </ul> 
                       </div>

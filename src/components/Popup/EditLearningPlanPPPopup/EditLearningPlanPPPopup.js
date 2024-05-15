@@ -139,6 +139,7 @@ function EditLearningPlanPPPopup({ isOpen, currentLearningPlanElem, onClose, onE
     setAddConsultO(currentLearningPlanElem.consult_hours_o || 0);
     setAddConsultZ(currentLearningPlanElem.consult_hours_z || 0);
     setAddAtt(currentLearningPlanElem.attestation_hours || 0);
+    setAttForm(currentLearningPlanElem.attestation_form || '');
     setAddNameError(false);
     setAddLecOError(false);
     setAddLecZError(false);
@@ -151,21 +152,32 @@ function EditLearningPlanPPPopup({ isOpen, currentLearningPlanElem, onClose, onE
   }, [currentLearningPlanElem, isOpen]);
 
   React.useEffect(() => {
-    if (
-      addNameError ||
-      addLecOError || 
-      addLecZError ||
-      addPrakOError || 
-      addPrakZError ||
-      addConsultOError || 
-      addConsultZError ||
-      addAttError ||
-      (attForm !== 'Зачет' && attForm !== 'Зачет с оценкой')
-      ) {
-      setIsBlockSubmitButton(true);
+    if (currentLearningPlanElem.parent_id !== null) {
+      if (
+        addNameError ||
+        addLecOError || 
+        addLecZError ||
+        addPrakOError || 
+        addPrakZError
+        ) {
+        setIsBlockSubmitButton(true);
+      } else {
+        setIsBlockSubmitButton(false);
+      }
     } else {
-      setIsBlockSubmitButton(false);
+      if (
+        addNameError ||
+        addConsultOError || 
+        addConsultZError ||
+        addAttError ||
+        (attForm !== 'Зачет' && attForm !== 'Зачет с оценкой')
+        ) {
+        setIsBlockSubmitButton(true);
+      } else {
+        setIsBlockSubmitButton(false);
+      }
     }
+
     // eslint-disable-next-line
   }, [addName, addLecO, addLecZ, addPrakO, addPrakZ, addConsultO, addConsultZ, addAtt, attForm]);
 
@@ -192,172 +204,183 @@ function EditLearningPlanPPPopup({ isOpen, currentLearningPlanElem, onClose, onE
             <span className={`initial-popup__input-error ${addNameError ? "initial-popup__input-error_type_show" : ""}`}>Заполните название элемента</span>
           </li>
 
-          <li className="initial-popup__item-input">
-            <h5 className="initial-popup__input-name">Количество часов очных лекций</h5>
-            <input 
-            className="initial-popup__input"
-            placeholder="введите количество часов очных лекций"
-            type="number"
-            id="edit-pp-input-hours-lek-o"
-            name="edit-pp-input-hours-lek-o"
-            autoComplete="off"
-            value={addLecO}
-            onChange={handleAddLecO}
-            required
-            min="0"
-            pattern="[0-9]*"
-            step="any"
-            onWheel={(e) => e.target.blur()}
-            >
-            </input>
-            <span className={`initial-popup__input-error ${addLecOError ? "initial-popup__input-error_type_show" : ""}`}>Заполните количество часов лекций</span>
-          </li>
+          {
+            currentLearningPlanElem.parent_id !== null &&
+            <>
+            <li className="initial-popup__item-input">
+              <h5 className="initial-popup__input-name">Количество часов очных лекций</h5>
+              <input 
+              className="initial-popup__input"
+              placeholder="введите количество часов очных лекций"
+              type="number"
+              id="edit-pp-input-hours-lek-o"
+              name="edit-pp-input-hours-lek-o"
+              autoComplete="off"
+              value={addLecO}
+              onChange={handleAddLecO}
+              required
+              min="0"
+              pattern="[0-9]*"
+              step="any"
+              onWheel={(e) => e.target.blur()}
+              >
+              </input>
+              <span className={`initial-popup__input-error ${addLecOError ? "initial-popup__input-error_type_show" : ""}`}>Заполните количество часов лекций</span>
+            </li>
 
-          <li className="initial-popup__item-input">
-            <h5 className="initial-popup__input-name">Количество часов заочных лекций</h5>
-            <input 
-            className="initial-popup__input"
-            placeholder="введите количество часов заочных лекций"
-            type="number"
-            id="edit-pp-input-hours-lek-z"
-            name="edit-pp-input-hours-lek-z"
-            autoComplete="off"
-            value={addLecZ}
-            onChange={handleAddLecZ}
-            required
-            min="0"
-            pattern="[0-9]*"
-            step="any"
-            onWheel={(e) => e.target.blur()}
-            >
-            </input>
-            <span className={`initial-popup__input-error ${addLecZError ? "initial-popup__input-error_type_show" : ""}`}>Заполните количество часов лекций</span>
-          </li>
+            <li className="initial-popup__item-input">
+              <h5 className="initial-popup__input-name">Количество часов заочных лекций</h5>
+              <input 
+              className="initial-popup__input"
+              placeholder="введите количество часов заочных лекций"
+              type="number"
+              id="edit-pp-input-hours-lek-z"
+              name="edit-pp-input-hours-lek-z"
+              autoComplete="off"
+              value={addLecZ}
+              onChange={handleAddLecZ}
+              required
+              min="0"
+              pattern="[0-9]*"
+              step="any"
+              onWheel={(e) => e.target.blur()}
+              >
+              </input>
+              <span className={`initial-popup__input-error ${addLecZError ? "initial-popup__input-error_type_show" : ""}`}>Заполните количество часов лекций</span>
+            </li>
 
-          <li className="initial-popup__item-input">
-            <h5 className="initial-popup__input-name">Количество часов очных практик</h5>
-            <input 
-            className="initial-popup__input"
-            placeholder="введите количество часов очных практик"
-            type="number"
-            id="edit-pp-input-hours-prak-o"
-            name="edit-pp-input-hours-prak-o"
-            autoComplete="off"
-            value={addPrakO}
-            onChange={handleAddPrakO}
-            required
-            min="0"
-            pattern="[0-9]*"
-            step="any"
-            onWheel={(e) => e.target.blur()}
-            >
-            </input>
-            <span className={`initial-popup__input-error ${addPrakOError ? "initial-popup__input-error_type_show" : ""}`}>Заполните количество часов практик</span>
-          </li>
+            <li className="initial-popup__item-input">
+              <h5 className="initial-popup__input-name">Количество часов очных практик</h5>
+              <input 
+              className="initial-popup__input"
+              placeholder="введите количество часов очных практик"
+              type="number"
+              id="edit-pp-input-hours-prak-o"
+              name="edit-pp-input-hours-prak-o"
+              autoComplete="off"
+              value={addPrakO}
+              onChange={handleAddPrakO}
+              required
+              min="0"
+              pattern="[0-9]*"
+              step="any"
+              onWheel={(e) => e.target.blur()}
+              >
+              </input>
+              <span className={`initial-popup__input-error ${addPrakOError ? "initial-popup__input-error_type_show" : ""}`}>Заполните количество часов практик</span>
+            </li>
 
-          <li className="initial-popup__item-input">
-            <h5 className="initial-popup__input-name">Количество часов заочных практик</h5>
-            <input 
-            className="initial-popup__input"
-            placeholder="введите количество часов заочных практик"
-            type="number"
-            id="edit-pp-input-hours-prak-z"
-            name="edit-pp-input-hours-prak-z"
-            autoComplete="off"
-            value={addPrakZ}
-            onChange={handleAddPrakZ}
-            required
-            min="0"
-            pattern="[0-9]*"
-            step="any"
-            onWheel={(e) => e.target.blur()}
-            >
-            </input>
-            <span className={`initial-popup__input-error ${addPrakZError ? "initial-popup__input-error_type_show" : ""}`}>Заполните количество часов практик</span>
-          </li>
+            <li className="initial-popup__item-input">
+              <h5 className="initial-popup__input-name">Количество часов заочных практик</h5>
+              <input 
+              className="initial-popup__input"
+              placeholder="введите количество часов заочных практик"
+              type="number"
+              id="edit-pp-input-hours-prak-z"
+              name="edit-pp-input-hours-prak-z"
+              autoComplete="off"
+              value={addPrakZ}
+              onChange={handleAddPrakZ}
+              required
+              min="0"
+              pattern="[0-9]*"
+              step="any"
+              onWheel={(e) => e.target.blur()}
+              >
+              </input>
+              <span className={`initial-popup__input-error ${addPrakZError ? "initial-popup__input-error_type_show" : ""}`}>Заполните количество часов практик</span>
+            </li>
+            </>
+          }
 
-          <li className="initial-popup__item-input">
-            <h5 className="initial-popup__input-name">Количество часов очных консультаций</h5>
-            <input 
-            className="initial-popup__input"
-            placeholder="введите количество часов очных консультаций"
-            type="number"
-            id="edit-pp-input-hours-consult-o"
-            name="edit-pp-input-hours-consult-o"
-            autoComplete="off"
-            value={addConsultO}
-            onChange={handleAddConsultO}
-            required
-            min="0"
-            pattern="[0-9]*"
-            step="any"
-            onWheel={(e) => e.target.blur()}
-            >
-            </input>
-            <span className={`initial-popup__input-error ${addConsultOError ? "initial-popup__input-error_type_show" : ""}`}>Заполните количество часов консультаций</span>
-          </li>
+          {
+            currentLearningPlanElem.parent_id === null &&
+            <>
+            <li className="initial-popup__item-input">
+              <h5 className="initial-popup__input-name">Количество часов очных консультаций</h5>
+              <input 
+              className="initial-popup__input"
+              placeholder="введите количество часов очных консультаций"
+              type="number"
+              id="edit-pp-input-hours-consult-o"
+              name="edit-pp-input-hours-consult-o"
+              autoComplete="off"
+              value={addConsultO}
+              onChange={handleAddConsultO}
+              required
+              min="0"
+              pattern="[0-9]*"
+              step="any"
+              onWheel={(e) => e.target.blur()}
+              >
+              </input>
+              <span className={`initial-popup__input-error ${addConsultOError ? "initial-popup__input-error_type_show" : ""}`}>Заполните количество часов консультаций</span>
+            </li>
 
-          <li className="initial-popup__item-input">
-            <h5 className="initial-popup__input-name">Количество часов заочных консультаций</h5>
-            <input 
-            className="initial-popup__input"
-            placeholder="введите количество часов заочных консультаций"
-            type="number"
-            id="edit-pp-input-hours-consult-z"
-            name="edit-pp-input-hours-consult-z"
-            autoComplete="off"
-            value={addConsultZ}
-            onChange={handleAddConsultZ}
-            required
-            min="0"
-            pattern="[0-9]*"
-            step="any"
-            onWheel={(e) => e.target.blur()}
-            >
-            </input>
-            <span className={`initial-popup__input-error ${addConsultZError ? "initial-popup__input-error_type_show" : ""}`}>Заполните количество часов консультаций</span>
-          </li>
+            <li className="initial-popup__item-input">
+              <h5 className="initial-popup__input-name">Количество часов заочных консультаций</h5>
+              <input 
+              className="initial-popup__input"
+              placeholder="введите количество часов заочных консультаций"
+              type="number"
+              id="edit-pp-input-hours-consult-z"
+              name="edit-pp-input-hours-consult-z"
+              autoComplete="off"
+              value={addConsultZ}
+              onChange={handleAddConsultZ}
+              required
+              min="0"
+              pattern="[0-9]*"
+              step="any"
+              onWheel={(e) => e.target.blur()}
+              >
+              </input>
+              <span className={`initial-popup__input-error ${addConsultZError ? "initial-popup__input-error_type_show" : ""}`}>Заполните количество часов консультаций</span>
+            </li>
 
-          <li className="initial-popup__item-input">
-            <h5 className="initial-popup__input-name">Форма аттестации</h5>
-            <Select 
-              className="select" 
-              options={formOptions}
-              placeholder="Выберите форму аттестации.."
-              defaultValue={{ label: currentLearningPlanElem.attestation_form || 'Выберите форму..', value: currentLearningPlanElem.attestation_form }}
-              onChange={handleChangeForm}
-              theme={(theme) => ({
-                ...theme,
-                borderRadius: 5,
-                colors: {
-                  ...theme.colors,
-                  primary25: '#DDDDDD',
-                  primary: '#5EB9AF',
-                },
-              })}
-            />
-          </li>
+            <li className="initial-popup__item-input">
+              <h5 className="initial-popup__input-name">Форма аттестации</h5>
+              <Select 
+                className="select" 
+                options={formOptions}
+                placeholder="Выберите форму аттестации.."
+                defaultValue={{ label: currentLearningPlanElem.attestation_form || 'Выберите форму..', value: currentLearningPlanElem.attestation_form }}
+                onChange={handleChangeForm}
+                theme={(theme) => ({
+                  ...theme,
+                  borderRadius: 5,
+                  colors: {
+                    ...theme.colors,
+                    primary25: '#DDDDDD',
+                    primary: '#5EB9AF',
+                  },
+                })}
+              />
+            </li>
 
-          <li className="initial-popup__item-input">
-            <h5 className="initial-popup__input-name">Количество часов аттестации</h5>
-            <input 
-            className="initial-popup__input"
-            placeholder="введите количество часов аттестации"
-            type="number"
-            id="edit-lp-input-hours-att"
-            name="edit-lp-input-hours-att"
-            autoComplete="off"
-            value={addAtt}
-            onChange={handleAddAtt}
-            required
-            min="0"
-            pattern="[0-9]*"
-            step="any"
-            onWheel={(e) => e.target.blur()}
-            >
-            </input>
-            <span className={`initial-popup__input-error ${addAttError ? "initial-popup__input-error_type_show" : ""}`}>Заполните количество часов аттестации</span>
-          </li>
+            <li className="initial-popup__item-input">
+              <h5 className="initial-popup__input-name">Количество часов аттестации</h5>
+              <input 
+              className="initial-popup__input"
+              placeholder="введите количество часов аттестации"
+              type="number"
+              id="edit-lp-input-hours-att"
+              name="edit-lp-input-hours-att"
+              autoComplete="off"
+              value={addAtt}
+              onChange={handleAddAtt}
+              required
+              min="0"
+              pattern="[0-9]*"
+              step="any"
+              onWheel={(e) => e.target.blur()}
+              >
+              </input>
+              <span className={`initial-popup__input-error ${addAttError ? "initial-popup__input-error_type_show" : ""}`}>Заполните количество часов аттестации</span>
+            </li>
+
+            </>
+          }
 
         </ul>
        
