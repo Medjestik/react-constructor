@@ -66,7 +66,7 @@ function LearningPlanPP({ programStructure, onEdit, isEditRights, isCurrentTypeC
                     <li className="learning-plan__table-body-row table-body-row_type_name">
                       <span className="learning-plan__table-body-row-name table-body-row-name_type_title">{`${elemIndex + 1}. ${elem.name}`}</span>
                       {
-                        (elem.name !== "Итоговая аттестация") && (isEditRights) && 
+                        (isEditRights) && 
                         <button className="learning-plan__btn-edit" onClick={() => onEdit(elem)}></button>
                       }
                     </li>
@@ -79,37 +79,37 @@ function LearningPlanPP({ programStructure, onEdit, isEditRights, isCurrentTypeC
                         <li className="learning-plan__table-head-column-item learning-plan__table-head-column-item_type_pp learning-plan__table-head-column-item_border_left">
                           <div className="learning-plan-pp__cell">
                             <div className='learning-plan-pp__cell-item'>
-                              <span className="learning-plan__table-head-column-caption">{elem.name === "Итоговая аттестация" ? "" : elem.lection_hours_o || 0}</span>
+                              <span className="learning-plan__table-head-column-caption">{elem.lection_hours_o || 0}</span>
                             </div>
                             <div className='learning-plan-pp__cell-item learning-plan-pp__cell-item_type_border'>
-                              <span className="learning-plan__table-head-column-caption">{elem.name === "Итоговая аттестация" ? "" : elem.lection_hours_z || 0}</span>
+                              <span className="learning-plan__table-head-column-caption">{elem.lection_hours_z || 0}</span>
                             </div>
                           </div>
                         </li>
                         <li className="learning-plan__table-head-column-item learning-plan__table-head-column-item_type_pp">
                           <div className="learning-plan-pp__cell">
                             <div className='learning-plan-pp__cell-item'>
-                              <span className="learning-plan__table-head-column-caption">{elem.name === "Итоговая аттестация" ? "" : elem.practice_hours_o || 0}</span>
+                              <span className="learning-plan__table-head-column-caption">{elem.practice_hours_o || 0}</span>
                             </div>
                             <div className='learning-plan-pp__cell-item learning-plan-pp__cell-item_type_border'>
-                              <span className="learning-plan__table-head-column-caption">{elem.name === "Итоговая аттестация" ? "" : elem.practice_hours_z || 0}</span>
+                              <span className="learning-plan__table-head-column-caption">{elem.practice_hours_z || 0}</span>
                             </div>
                           </div>
                         </li>
                         <li className="learning-plan__table-head-column-item learning-plan__table-head-column-item_type_pp">
                           <div className="learning-plan-pp__cell">
                             <div className='learning-plan-pp__cell-item'>
-                              <span className="learning-plan__table-head-column-caption">{elem.name === "Итоговая аттестация" ? "" : elem.consult_hours_o || 0}</span>
+                              <span className="learning-plan__table-head-column-caption">{elem.consult_hours_o || 0}</span>
                             </div>
                             <div className='learning-plan-pp__cell-item learning-plan-pp__cell-item_type_border'>
-                              <span className="learning-plan__table-head-column-caption">{elem.name === "Итоговая аттестация" ? "" : elem.consult_hours_z || 0}</span>
+                              <span className="learning-plan__table-head-column-caption">{elem.consult_hours_z || 0}</span>
                             </div>
                           </div>
                         </li>
                         <li className="learning-plan__table-head-column-item learning-plan__table-head-column-item_type_pp">
                           <span 
                           className="learning-plan__table-head-column-caption learning-plan__table-head-column-caption_font_weight">
-                            {elem.name === "Итоговая аттестация" ? "" : elem.attestation_form || ''}, {elem.name === "Итоговая аттестация" ? "" : elem.attestation_hours || 0}
+                            {elem.attestation_form || ''}, {elem.attestation_hours || 0}
                           </span>
                         </li>
                       </ul>

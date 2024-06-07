@@ -9,6 +9,11 @@ function EditLearningPlanPPPopup({ isOpen, currentLearningPlanElem, onClose, onE
     { value: "Зачет с оценкой", label: "Зачет с оценкой", }, 
   ];
 
+  const attestationOptions = [
+    { value: "Защита ВКР", label: "Защита ВКР", }, 
+    { value: "Итоговая работа", label: "Итоговая работа", }, 
+  ];
+
   const [addName, setAddName] = React.useState('');
   const [addNameError, setAddNameError] = React.useState(false);
 
@@ -170,7 +175,7 @@ function EditLearningPlanPPPopup({ isOpen, currentLearningPlanElem, onClose, onE
         addConsultOError || 
         addConsultZError ||
         addAttError ||
-        (attForm !== 'Зачет' && attForm !== 'Зачет с оценкой')
+        (attForm !== 'Зачет' && attForm !== 'Зачет с оценкой' && attForm !== 'Защита ВКР' && attForm !== 'Итоговая работа')
         ) {
         setIsBlockSubmitButton(true);
       } else {
@@ -207,7 +212,7 @@ function EditLearningPlanPPPopup({ isOpen, currentLearningPlanElem, onClose, onE
           </li>
 
           {
-            (currentLearningPlanElem.parent_id !== null) &&
+            (currentLearningPlanElem.parent_id !== null) && 
             <>
             <li className="initial-popup__item-input">
               <h5 className="initial-popup__input-name">Количество часов очных лекций</h5>
@@ -296,10 +301,10 @@ function EditLearningPlanPPPopup({ isOpen, currentLearningPlanElem, onClose, onE
           }
 
           {
-            currentLearningPlanElem.parent_id === null &&
+            (currentLearningPlanElem.parent_id === null) &&
             <>
             {
-              currentLearningPlanElem.themes.length === 0 &&
+              (currentLearningPlanElem.themes.length === 0) && (currentLearningPlanElem.name !== "Итоговая аттестация") &&
               <>
               <li className="initial-popup__item-input">
                 <h5 className="initial-popup__input-name">Количество часов очных лекций</h5>
@@ -432,7 +437,7 @@ function EditLearningPlanPPPopup({ isOpen, currentLearningPlanElem, onClose, onE
               <h5 className="initial-popup__input-name">Форма аттестации</h5>
               <Select 
                 className="select" 
-                options={formOptions}
+                options={currentLearningPlanElem.name !== "Итоговая аттестация" ? formOptions : attestationOptions}
                 placeholder="Выберите форму аттестации.."
                 defaultValue={{ label: currentLearningPlanElem.attestation_form || 'Выберите форму..', value: currentLearningPlanElem.attestation_form }}
                 onChange={handleChangeForm}
