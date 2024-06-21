@@ -32,10 +32,12 @@ function ControlUserEditPopup({ isOpen, onClose, user, onEdit, onReset, isLoadin
       isActive: isActive,
     }
 
-    console.log(newUser);
-
     onEdit(newUser, onClose);
   }
+
+  console.log(user);
+
+  console.log(isActive);
 
   function handleAddFirstname(e) {
     setFirstname(e.target.value);
@@ -101,7 +103,7 @@ function ControlUserEditPopup({ isOpen, onClose, user, onEdit, onReset, isLoadin
     setErrorEmail(false);
     setPhone(user.phone || "");
     setErrorPhone(false);
-    setIsActive(user.isActive || 1);
+    setIsActive(user.isActive);
     setIsBlockSubmitButton(true);
   }, [isOpen, user]);
 
@@ -222,7 +224,7 @@ function ControlUserEditPopup({ isOpen, onClose, user, onEdit, onReset, isLoadin
               id={user.id}
               value={isActive}
               defaultChecked={user.isActive}
-              onChange={() => setIsActive(!isActive)}
+              onChange={() => setIsActive(isActive ? false : true)}
               >
             </input>
               <span>Активный пользователь</span>
