@@ -58,6 +58,9 @@ function ProjectTask({
   const [isBlockSubmitButton, setIsBlockSubmitButton] = React.useState(false);
   const [currentAdditionalMaterial, setCurrentAdditionalMaterial] = React.useState([]);
 
+  const [time, setTime] = React.useState("");
+  const [timeError, setTimeError] = React.useState(false);
+
   function openEditMTOPopup(elem) {
     setCurrentMTO(elem);
     setIsOpenTechnicalProvisionTaskPopup(true);
@@ -124,6 +127,7 @@ function ProjectTask({
       description: description,
       instruction: instruction,
       control: control,
+      time: time,
       type: 2,
       portfolioStructureReq: "",
       portfolioPresentationReq: "",
@@ -145,6 +149,15 @@ function ProjectTask({
     setInstruction(content);
   }
 
+  function handleChangeTime(e) {
+    setTime(e.target.value);
+    if (e.target.checkValidity()) {
+      setTimeError(false);
+    } else {
+      setTimeError(true);
+    }
+  }
+
   function handleChangeControl(content) {
     setControl(content);
   }
@@ -153,6 +166,7 @@ function ProjectTask({
     setDescription(currentTask.description || "");
     setInstruction(currentTask.instruction || "");
     setControl(currentTask.control || "");
+    setTime(currentTask.time || "");
     setMTOTask(currentTask.mtos);
     setCurrentAdditionalMaterial(currentTask.additional_files);
     setIsRequired(currentTask.required == 1 ? true : false);
@@ -160,6 +174,7 @@ function ProjectTask({
       setDescription("");
       setInstruction("");
       setControl("");
+      setTime("");
       setIsBlockSubmitButton(false);
       setCurrentSubject({});
       setCurrentObject({});
@@ -169,6 +184,15 @@ function ProjectTask({
     };
   // eslint-disable-next-line
   }, [currentTask]);
+
+  React.useEffect(() => {
+    if (timeError || time.length < 1) {
+      setIsBlockSubmitButton(true);
+    } else {
+      setIsBlockSubmitButton(false);
+    }
+
+  }, [time, timeError]);
 
 
   return (
@@ -211,6 +235,23 @@ function ProjectTask({
               currentTaskType={currentTaskType}
               currentTaskValue={currentTask.control} 
               />
+            </li>
+            <li className="practical-task__item">
+              <h5 className="practical-task__item-name">Максимальное время выполнения (в минутах)</h5>
+              <input 
+              className="practical-task__item-input"
+              placeholder="введите время выполнения в минутах"
+              type="number"
+              id="project-task-time"
+              name="project-task-time"
+              autoComplete="off"
+              pattern="[0-9]*"
+              value={time}
+              onChange={handleChangeTime}
+              required
+              onWheel={(e) => e.target.blur()}
+              >
+              </input>
             </li>
           </ul>
           <label className="checkbox">
