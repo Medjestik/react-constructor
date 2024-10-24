@@ -9,8 +9,8 @@ function HomePageMain({ onOpenLoginPopup }) {
       <div className="container">
         <div className="homepage-main__container">
           <div className="homepage-main__info">
-            <h1 className="homepage-main__title"><span className="homepage-main__title_font_color">Конструктор</span> Дополнительных профессиональных программ РУТ&nbsp;(МИИТ)</h1>
-            <p className="homepage-main__subtitle">Продукт для&nbsp;проектирования программ повышения квалификации и&nbsp;переподготовки по&nbsp;методологии <span className="homepage-main__title_font_weight">«от&nbsp;результата»</span></p>
+            <h1 className="homepage-main__title"><span className="homepage-main__title_font_color">Конструктор</span> дополнительных профессиональных программ</h1>
+            <p className="homepage-main__subtitle">Продукт для&nbsp;проектирования программ повышения квалификации и&nbsp;профессиональной переподготовки <span className="homepage-main__title_font_weight">в&nbsp;методологии обратного дизайна ("от результата")</span></p>
             <div>
               <button className="homepage-main__btn" type="button" onClick={onOpenLoginPopup}>Вход</button>
               {
